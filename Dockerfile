@@ -15,14 +15,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 WORKDIR /var/www
 
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
 COPY . .
 
-RUN chmod +x docker-entrypoint.sh
-
-RUN composer install --no-dev --optimize-autoloader
-
-RUN chmod -R 755 storage bootstrap/cache
+RUN chmod -R 755 /var/www/storage /var/www/bootstrap/cache
+RUN chmod +x /var/www/docker-entrypoint.sh
 
 EXPOSE 9000
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["php-fpm"]

@@ -21,7 +21,11 @@ Route::get('/', 'HomeController@index');
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::auth();
+    // Auth routes - manual definitions
+    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+    
     Route::resource('kandidat', 'KandidatController');
     Route::get('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sport');
     Route::post('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sportStore');
