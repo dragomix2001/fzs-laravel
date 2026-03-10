@@ -6,30 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
-            $table->date('datum2')->nullable()->after('datum');
+            $table->time('vreme')->nullable()->change();
         });
     }
 
     public function down(): void
     {
         Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
-            $table->dropColumn('datum2');
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('zapisnik', function (Blueprint $table) {
-            //
+            $table->time('vreme')->change();
         });
     }
 };
