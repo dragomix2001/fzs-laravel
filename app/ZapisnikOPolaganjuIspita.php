@@ -8,7 +8,9 @@ class ZapisnikOPolaganjuIspita extends AndroModel
 {
     protected $table = 'zapisnik_o_polaganju_ispita';
 
-    protected $dates = ['datum', 'datum2'];
+    protected $casts = [
+        'datum,datum2' => 'datetime',
+    ];
 
     protected $fillable = ['kandidat_id','predmet_id', 'rok_id', 'brojPolaganja', 'datum', 'datum2',
         'vreme', 'ucionica', 'prijavaIspita_id', 'profesor_id'];

@@ -9,7 +9,9 @@ class UpisGodine extends AndroModel
 {
     protected $table = 'upis_godine';
 
-    protected $dates = ['datumUpisa','datumPromene'];
+    protected $casts = [
+        'datumUpisa,datumPromene' => 'datetime',
+    ];
 
     public function status()
     {

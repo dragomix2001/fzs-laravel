@@ -10,7 +10,10 @@ class Kandidat extends AndroModel
 {
     protected $table = 'kandidat';
 
-    protected $dates = ['datumRodjenja','datumStatusa'];
+    protected $casts = [
+        'datumRodjenja' => 'datetime',
+        'datumStatusa' => 'datetime',
+    ];
 
     public function angazovanja()
     {

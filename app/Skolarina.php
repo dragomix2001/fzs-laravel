@@ -8,7 +8,9 @@ class Skolarina extends AndroModel
 {
     protected $table = "skolarina";
 
-    protected $dates = ['datum'];
+    protected $casts = [
+        'datum' => 'datetime',
+    ];
 
     protected $guarded = [];
 

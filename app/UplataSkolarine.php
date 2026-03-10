@@ -8,7 +8,9 @@ class UplataSkolarine extends Model
 {
     protected $table = 'uplata_skolarine';
 
-    protected $dates = ['datum'];
+    protected $casts = [
+        'datum' => 'datetime',
+    ];
 
     protected $guarded = ['formatDatum'];
 
