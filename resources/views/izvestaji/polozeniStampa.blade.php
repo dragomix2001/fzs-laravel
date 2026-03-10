@@ -44,7 +44,7 @@
             </thead>
             @foreach($ispiti as $index => $ispit)
                 <tr>
-                    <td style="border: 1px solid black; width:35px;">{{$index + 1}}</td>
+                    <td style="border: 1px solid black; width:35px;">{{$totalIspiti}}</td>
                     <td style="border: 1px solid black; width:300px;">{{$ispit->naziv}}</td>
                     <td style="border: 1px solid black; width:50px; text-align: center;">{{$ispit->espb}}</td>
                     <td style="border: 1px solid black; width:50px; text-align: center;">{{$ispit->konacnaOcena}}</td>
@@ -63,7 +63,7 @@
                 </tr>
             @endforeach
         </table>
-        Закључно са редним бројем {{$index + 1}}.
+        Закључно са редним бројем {{$totalIspiti}}.
     </div>
     <div>Просечна оцена у току студија {{ number_format($prosek, 2) }}.</div>
 @else
