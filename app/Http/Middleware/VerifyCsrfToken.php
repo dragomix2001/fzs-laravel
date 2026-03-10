@@ -6,12 +6,18 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 
 class VerifyCsrfToken extends BaseVerifier
 {
-    /**
-     * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array
-     */
     protected $except = [
-        //
+        'izvestaji/spisakZaSmer',
+        'izvestaji/nastavniPlan',
+        'izvestaji/spisakPoGodini',
+        'izvestaji/spisakPoProgramu',
+        'izvestaji/spisakPoPredmetima',
+        'izvestaji/spisakPoSlavama',
+        'izvestaji/spisakPoProfesorima',
+        'izvestaji/spisakPoSmerovimaAktivni',
+        'izvestaji/spisakPoSmerovimaOstali',
+        'izvestaji/excelStampa',
+        'izvestaji/diplomaAdd',
+        'izvestaji/diplomskiAdd',
     ];
 }

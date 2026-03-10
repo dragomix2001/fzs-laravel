@@ -63,9 +63,9 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $pdf_settings = \Config::get('tcpdf2');
+        $pdf_settings = \Config::get('tcpdf');
 
-        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf2');
+        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf');
 
         $view = View::make('izvestaji.test')->with('studijskiProgram', $program)->with('kandidat', $kandidat)->with('godina', $godina)->with('uslov', $picks3);
 
@@ -108,9 +108,9 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $pdf_settings = \Config::get('tcpdf2');
+        $pdf_settings = \Config::get('tcpdf');
 
-        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf2');
+        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf');
 
         $view = View::make('izvestaji.integralno')->with('kandidat', $kandidat)->with('tip', $tip)->with('tipSvi', $tipSvi);
 
@@ -176,9 +176,9 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $pdf_settings = \Config::get('tcpdf2');
+        $pdf_settings = \Config::get('tcpdf');
 
-        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf2');
+        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf');
 
         $view = View::make('izvestaji.spisakSvihStudenataOstalo')->with('kandidat', $kandidat);
 
@@ -241,9 +241,9 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $pdf_settings = \Config::get('tcpdf2');
+        $pdf_settings = \Config::get('tcpdf');
 
-        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf2');
+        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf');
 
         $view = View::make('izvestaji.spisakSvihStudenata')->with('kandidat', $kandidat)->with('tip', $tip)->with('tipSvi', $tipSvi)->with('godina', $godina)->with('godinaSve', $godinaSve);
 
@@ -336,7 +336,7 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $pdf_settings = \Config::get('tcpdf2');
+        $pdf_settings = \Config::get('tcpdf');
 
         $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf');
 
@@ -736,8 +736,11 @@ class IzvestajiController extends Controller
     }
 
 
-    public function polozeniStampa(Kandidat $student)
+    public function polozeniStampa($id)
     {
+        // Manual model resolution since implicit binding isn't working
+        $student = Kandidat::with('program.tipStudija')->findOrFail($id);
+        
         try {
 
             $ispitiIds = [1,5];
@@ -817,7 +820,7 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $view = View::make('izvestaji.polozeniStampa')->with('student', $student)->with('ispiti', $ispiti)->with('datum', date("d.m.Y", strtotime($datum)))->with('prosek', $prosek)->with('espbArray', $espbArray);
+        $view = View::make('izvestaji.polozeniStampa')->with('student', $student)->with('ispiti', $ispiti)->with('datum', date("d.m.Y", strtotime($datum)))->with('prosek', $prosek)->with('espbArray', $espbArray)->with('totalIspiti', count($ispiti));
 
 
 
@@ -849,9 +852,9 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $pdf_settings = \Config::get('tcpdf2');
+        $pdf_settings = \Config::get('tcpdf');
 
-        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf2');
+        $pdf = new \Elibyy\TCPDF\TCPDF([$pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false], 'tcpdf');
 
         $view = View::make('izvestaji.nastavniPlan')->with('program', $program)->with('predmeti', $predmeti);
 
@@ -1013,16 +1016,13 @@ class IzvestajiController extends Controller
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
 
-        $kandidat = array_map(function ($x) {
-            return (array)$x;
-        }, $kandidat);
+        $kandidat = $kandidat->toArray();
 
-        \Excel::create('studenti', function ($excel) use ($kandidat) {
-            $excel->sheet('Sheet 1', function ($sheet) use ($kandidat) {
-                $sheet->fromModel($kandidat);
-            });
-        })->export('xlsx');
-
+        return \Excel::download(new class($kandidat) implements \Maatwebsite\Excel\Concerns\FromArray {
+            private $data;
+            public function __construct(array $data) { $this->data = $data; }
+            public function array(): array { return $this->data; }
+        }, 'studenti.xlsx');
     }
 
 }
