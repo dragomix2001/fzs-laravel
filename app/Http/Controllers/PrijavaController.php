@@ -106,6 +106,12 @@ class PrijavaController extends Controller
         $ispitniRok = AktivniIspitniRokovi::where(['indikatorAktivan' => 1])->get();
 
         $profesor = Profesor::all();
+        
+        $godinaStudija = GodinaStudija::all();
+        $tipPredmeta = TipPredmeta::all();
+        $tipStudija = TipStudija::all();
+        $tipPrijave = TipPrijave::all();
+        $studijskiProgram = StudijskiProgram::whereIn('id', $studijskiProgrami)->get();
 
         return view('prijava.createManyPredmet', compact('kandidati', 'predmet', 'studijskiProgram', 'godinaStudija',
             'tipPredmeta', 'tipStudija', 'ispitniRok', 'profesor', 'tipPrijave'));
