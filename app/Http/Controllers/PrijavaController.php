@@ -44,6 +44,8 @@ class PrijavaController extends Controller
 
         $predmeti = Predmet::all();
 
+        $studijskiProgrami = StudijskiProgram::all();
+
         return view('prijava.spisakPredmeta', compact('tipStudija','studijskiProgrami','predmeti'));
     }
 
