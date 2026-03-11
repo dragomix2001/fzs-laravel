@@ -99,9 +99,26 @@ class PrijavaController extends Controller
 
         $studijskiProgrami = PredmetProgram::where(['predmet_id' => $id])->pluck('studijskiProgram_id')->all();
 
-        $kandidati = Kandidat::where([
-            'statusUpisa_id' => 1
-        ])->whereIn('studijskiProgram_id', $studijskiProgrami)->get();
+        // Ako predmet ima studijske programe, filtriraj studente
+        if (!empty($studijskiProgrami)) {
+            $kandidati = Kandidat::where([
+                'statusUpisa_id' => 1
+            ])->whereIn('studijskiProgram_id', $studijskiProgrami)->orderBy('brojIndeksa')->get();
+        } else {
+            // Ako nema studijskih programa, prikaži sve aktivne studente
+            $kandidati = Kandidat::where([
+                'statusUpisa_id' => 1
+            ])->orderBy('brojIndeksa')->get();
+        }
+
+        // Za autocomplete - niz studentata za JavaScript
+        $kandidatiJson = $kandidati->map(function($k) {
+            return [
+                'id' => $k->id,
+                'label' => $k->brojIndeksa . ' - ' . $k->imeKandidata . ' ' . $k->prezimeKandidata,
+                'value' => $k->id
+            ];
+        });
 
         $ispitniRok = AktivniIspitniRokovi::where(['indikatorAktivan' => 1])->get();
 
@@ -113,7 +130,7 @@ class PrijavaController extends Controller
         $tipPrijave = TipPrijave::all();
         $studijskiProgram = StudijskiProgram::whereIn('id', $studijskiProgrami)->get();
 
-        return view('prijava.createManyPredmet', compact('kandidati', 'predmet', 'studijskiProgram', 'godinaStudija',
+        return view('prijava.createManyPredmet', compact('kandidati', 'kandidatiJson', 'predmet', 'studijskiProgram', 'godinaStudija',
             'tipPredmeta', 'tipStudija', 'ispitniRok', 'profesor', 'tipPrijave'));
     }
 
@@ -133,8 +150,12 @@ class PrijavaController extends Controller
         ], $messages);
 
         if(isset($request->Submit2)){
-            $zapisnik = new ZapisnikOPolaganjuIspita($request->all());
+            $zapisnik = new ZapisnikOPolaganjuIspita();
+            $zapisnik->predmet_id = $request->predmet_id;
+            $zapisnik->datum = $request->datum;
             $zapisnik->datum2 = $request->datum2;
+            $zapisnik->rok_id = $request->rok_id;
+            $zapisnik->profesor_id = $request->profesor_id;
             $zapisnik->save();
 
             $smerovi = array();
@@ -155,26 +176,30 @@ class PrijavaController extends Controller
                 continue;
             }
 
-            $prijava = new PrijavaIspita($request->all());
-
             $predmetProgramZaPrijavu = PredmetProgram::where([
                 'studijskiProgram_id' => $kandidat->studijskiProgram_id,
                 'tipStudija_id' => $kandidat->tipStudija_id,
                 'predmet_id' => $request->predmet_id
             ])->first();
 
-            if($predmetProgramZaPrijavu != null){
-                $prijava->predmet_id = $predmetProgramZaPrijavu->id;
-                if(isset($request->Submit2)){
-                    $zapisnik->predmet_id = $request->predmet_id;
-                    $zapisnik->save();
-                }
-            }else{
+            if($predmetProgramZaPrijavu == null){
                 continue;
             }
 
-            $prijava->brojPolaganja = 1;
+            $prijava = new PrijavaIspita();
             $prijava->kandidat_id = $kandidatId;
+            $prijava->predmet_id = $predmetProgramZaPrijavu->id;
+            $prijava->rok_id = $request->rok_id;
+            $prijava->profesor_id = $request->profesor_id;
+            $prijava->brojPolaganja = 1;
+            $prijava->datum = $request->datum;
+            $prijava->tipPrijave_id = $request->tipPrijave_id;
+
+            if(isset($request->Submit2)){
+                $zapisnik->predmet_id = $request->predmet_id;
+                $zapisnik->save();
+            }
+
             $saved = $prijava->save();
 
             if(isset($request->Submit2)){
@@ -412,7 +437,7 @@ class PrijavaController extends Controller
     {
         $kandidat = Kandidat::find($request->id);
         return "<tr>" .
-        "<td><input type='checkbox' name='odabir[$kandidat->id]' value='$kandidat->id' checked></td>" .
+        "<td><input type='checkbox' name='odabir[]' value='$kandidat->id' checked></td>" .
         "<td>{$kandidat->brojIndeksa}</td>" .
         "<td>" . $kandidat->imeKandidata . " " . $kandidat->prezimeKandidata . "</td>" .
         "<td>{$kandidat->godinaStudija->nazivRimski}</td></tr>";

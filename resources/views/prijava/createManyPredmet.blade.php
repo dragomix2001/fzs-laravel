@@ -22,13 +22,11 @@
                 <form id="formaKandidatiOdabir" action="{{ $putanja }}/prijava/predmetVise" method="post">
                     {{ csrf_field() }}
 
-                    <input type="hidden" name="predmet_id" id="predmet_id" value="{{ $predmet->id }}">
+                    <input type="hidden" name="predmet_id" id="predmet_id_hidden" value="{{ $predmet->id }}">
 
                     <div class="form-group" style="width: 50%;">
-                        <label for="predmet_id">Пријављујем се за полагање испита из предмета</label>
-                        <select class="form-control" id="predmet_id" name="predmet_id" disabled>
-                            <option value="{{ $predmet->id }}">{{ $predmet->naziv }}</option>
-                        </select>
+                        <label for="predmet_display">Пријављујем се за полагање испита из предмета</label>
+                        <input type="text" class="form-control" id="predmet_display" value="{{ $predmet->naziv }}" disabled>
                     </div>
 
                     <div class="clearfix"></div>
@@ -57,6 +55,15 @@
                         </div>
 
                         <div class="form-group col-lg-4">
+                            <label for="tipPrijave_id">Тип пријаве</label>
+                            <select class="form-control" id="tipPrijave_id" name="tipPrijave_id">
+                                @foreach($tipPrijave as $tip)
+                                    <option value="{{$tip->id}}">{{$tip->naziv}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-lg-4">
                             <label for="formatDatum">Датум</label>
                             <input id="formatDatum" class="form-control dateMask" type="text" name="formatDatum"
                                    value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}"/>
@@ -74,18 +81,17 @@
                     <div class="clearfix"></div>
                     <hr>
 
-                    <div class="form-group col-lg-4">
-                        <label for="addStudentList">Студенти</label>
-                        <select class="form-control auto-combobox" id="addStudentList" name="addStudentList">
-                            <option value=""></option>
-                            @foreach($kandidati as $index => $kandidat)
-                                <option value="{{$kandidat->id}}">{{$kandidat->brojIndeksa}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-lg-1">
-                        <label for="addStudentButton">&nbsp;</label>
-                        <input type="button" value="Додај" name="button" id="addStudentButton" class="btn btn-success">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label for="studentSearch">Претрага студента ( број индекса )</label>
+                                <input type="text" id="studentSearch" class="form-control" placeholder="Унесите број индекса за претрагу...">
+                            </div>
+                        </div>
+                        <input type="hidden" id="addStudentList" name="addStudentList" value="">
+                        <div class="col-lg-3" style="margin-top: 25px;">
+                            <input type="button" value="Додај студента" name="button" id="addStudentButton" class="btn btn-success btn-block">
+                        </div>
                     </div>
                     <table id="tabela" class="table">
                         <thead>
@@ -116,19 +122,42 @@
     <br>
     <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
     <script>
+        var studenti = @json($kandidatiJson);
+        
         $(document).ready(function () {
             var forma = $('#formaKandidatiOdabir');
 
-            $('#addStudentButton').click(function () {
-                addStudentToList();
-                $('div.form-group:nth-child(14) > span:nth-child(3) > input:nth-child(1)').val('');
+            // Autocomplete za studente
+            $("#studentSearch").autocomplete({
+                source: function(request, response) {
+                    var searchTerm = request.term.toLowerCase();
+                    var matchedOptions = studenti.filter(function(s) {
+                        return s.label.toLowerCase().indexOf(searchTerm) !== -1;
+                    });
+                    response(matchedOptions);
+                },
+                select: function(event, ui) {
+                    $("#studentSearch").val(ui.item.label);
+                    $("#addStudentList").val(ui.item.value);
+                    return false;
+                },
+                minLength: 1
             });
 
-            $("div.form-group:nth-child(13) > span:nth-child(3) > input:nth-child(1)").keypress(function(e){
+            $('#addStudentButton').click(function () {
+                addStudentToList();
+                $('#studentSearch').val('');
+                $('#addStudentList').val('');
+            });
+
+            $("#studentSearch").keypress(function(e){
                 var k=e.keyCode || e.which;
                 if(k==13){
                     e.preventDefault();
-                    addStudentToList();
+                    var selectedVal = $('#addStudentList').val();
+                    if(selectedVal) {
+                        addStudentToList();
+                    }
                 }
             });
 
@@ -139,16 +168,23 @@
             });
 
             function addStudentToList(){
+                var studentId = $('#addStudentList').val();
+                if(!studentId) {
+                    alert('Молимо изаберите студента из листе!');
+                    return;
+                }
+                
                 $.ajax({
                     url: '{{$putanja}}/prijava/vratiKandidataPoBroju',
                     type: 'post',
                     data: {
-                        id: $('#addStudentList').val(),
+                        id: studentId,
                         _token: $('input[name=_token]').val()
                     },
                     success: function (result) {
                         $("#tabela tr:last").after(result);
-                        $("div.form-group:nth-child(13) > span:nth-child(3) > input:nth-child(1)").val("");
+                        $('#studentSearch').val('');
+                        $('#addStudentList').val('');
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         alert(errorThrown);

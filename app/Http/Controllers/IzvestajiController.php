@@ -926,7 +926,9 @@ class IzvestajiController extends Controller
                 ->where(['polozeni_ispiti.zapisnik_id' => $request->id])
                 ->join('kandidat', 'polozeni_ispiti.kandidat_id', '=', 'kandidat.id')
                 ->join('prijava_ispita', 'polozeni_ispiti.prijava_id', '=', 'prijava_ispita.id')
-                ->select('kandidat.*', 'kandidat.brojIndeksa as indeks', 'prijava_ispita.brojPolaganja as polaganja')
+                ->select('kandidat.*', 'kandidat.brojIndeksa as indeks', 'prijava_ispita.brojPolaganja as polaganja', 
+                    'polozeni_ispiti.brojBodova as brojBodova', 'polozeni_ispiti.konacnaOcena as konacnaOcena', 
+                    'polozeni_ispiti.statusIspita as statusIspita')
                 ->orderByRaw('SUBSTR(indeks, 5)')->orderBy('indeks')->get();
 
             //dd($polozeniIspiti);
@@ -970,8 +972,8 @@ class IzvestajiController extends Controller
         PDF::SetAutoPageBreak(TRUE, 5);
         PDF::SetTitle('Записник о полагању испита');
         PDF::AddPage();
-        PDF::SetFont('freeserif', '', 10);
-        PDF::WriteHtml($contents);
+        PDF::SetFont('dejavusans', '', 10);
+        PDF::WriteHtml($contents, true);
         PDF::Output('Zapisnik.pdf');
     }
 

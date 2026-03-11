@@ -1,0 +1,10 @@
+# CodeQL configuration to exclude third-party/vendor JavaScript files
+
+paths-ignore:
+  - public/js/bootstrap.js
+  - public/js/jquery
+  - public/assets/scripts/bootstrap.js
+  - public/assets/scripts/frontend.js
+  - node_modules/
+  - vendor/
+  - public/assets/

@@ -135,7 +135,7 @@
             <div class="col-lg-4" style="margin-top: 20px">
                 <h4>Време полагања: {{ substr($zapisnik->vreme, 0, -3) }}</h4>
                 <h4>Учионица: {{ $zapisnik->ucionica }}</h4>
-                <h4>Датум: {{ ($zapisnik->datum == null ? '' : $zapisnik->datum->format('d.m.Y.')) . ' / ' . ($zapisnik->datum2 == null ? '' : $zapisnik->datum2->format('d.m.Y.')) }}</h4>
+                <h4>Датум: {{ ($zapisnik->datum == null ? '' : \Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')) . ' / ' . ($zapisnik->datum2 == null ? '' : \Carbon\Carbon::parse($zapisnik->datum2)->format('d.m.Y.')) }}</h4>
             </div>
             <div class="col-lg-2" style="margin-top: 20px">
                 <form target="_blank" action="{{$putanja}}/izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post">

@@ -272,11 +272,11 @@ class IspitController extends Controller
 //                continue;
 //            }
             $polozeniIspit = PolozeniIspiti::find($ispit);
-            $polozeniIspit->ocenaPismeni = $request->ocenaPismeni[$index];
-            $polozeniIspit->ocenaUsmeni = $request->ocenaUsmeni[$index];
-            $polozeniIspit->konacnaOcena = $request->konacnaOcena[$index];
-            $polozeniIspit->brojBodova = $request->brojBodova[$index];
-            $polozeniIspit->statusIspita = $request->statusIspita[$index];
+            $polozeniIspit->ocenaPismeni = $request->ocenaPismeni[$index] ?? null;
+            $polozeniIspit->ocenaUsmeni = $request->ocenaUsmeni[$index] ?? null;
+            $polozeniIspit->konacnaOcena = $request->konacnaOcena[$index] ?? null;
+            $polozeniIspit->brojBodova = $request->brojBodova[$index] ?? null;
+            $polozeniIspit->statusIspita = $request->statusIspita[$index] ?? null;
             $polozeniIspit->indikatorAktivan = 1;
             $polozeniIspit->save();
 

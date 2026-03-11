@@ -37,7 +37,7 @@
                 @if(!empty($kandidat->datumRodjenja))
                     <li class="list-group-item">Датум рођења:
                         <strong>
-                            {{ $kandidat->datumRodjenja->format('d.m.Y') }}
+                            {{ \Carbon\Carbon::parse($kandidat->datumRodjenja)->format('d.m.Y') }}
                         </strong>
                     </li>
                 @endif

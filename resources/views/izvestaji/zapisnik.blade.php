@@ -1,3 +1,4 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <div style="height: 70px;">
     <img src="{{$putanja}}/images/zaglavlje.png" alt="test alt attribute" width="250" height="65" border="0"/>
 </div>
@@ -43,66 +44,48 @@
                 <th style="border: 1px solid black; width: 40px; background-color: grey;"><b>Р. бр.</b></th>
                 <th style="border: 1px solid black; background-color: grey;"><b>Број индекса</b>
                 </th>
-                <th style="border: 1px solid black; width:155px; background-color: grey;"><b>Презиме и име</b>
+                <th style="border: 1px solid black; width:140px; background-color: grey;"><b>Презиме и име</b>
                 </th>
                 <th style="border: 1px solid black; background-color: grey;"><b>Број полагања</b>
                 </th>
-                <th style="border: 1px solid black; width:70px; background-color: grey;"><b>Број бодова</b>
+                <th style="border: 1px solid black; width:60px; background-color: grey;"><b>Број бодова</b>
                 </th>
-                <th style="border: 1px solid black; width:100px; background-color: grey;"><b>Коначна оцена</b>
+                <th style="border: 1px solid black; width:80px; background-color: grey;"><b>Оцена</b>
+                </th>
+                <th style="border: 1px solid black; width:60px; background-color: grey;"><b>Статус</b>
                 </th>
             </tr>
             </thead>
             @foreach($polozeniIspiti as $index => $ispit)
+                <?php 
+                    $statusText = '';
+                    if($ispit->statusIspita == 1) $statusText = 'П';
+                    elseif($ispit->statusIspita == 2) $statusText = 'Н';
+                    elseif($ispit->statusIspita == 3) $statusText = 'О';
+                    elseif($ispit->statusIspita == 4) $statusText = 'НИ';
+                    elseif($ispit->statusIspita == 5) $statusText = 'ПР';
+                ?>
                 <tr>
                     <td style="border: 1px solid black; width: 40px;">{{$index + 1}}</td>
                     <td style="border: 1px solid black; text-align: left;">{{SUBSTR($ispit->indeks, 5)}}/{{SUBSTR($ispit->indeks, 0, 4)}}</td>
-                    <td style="border: 1px solid black; text-align: left; width:155px;">{{$ispit->prezimeKandidata}} {{$ispit->imeKandidata}}</td>
+                    <td style="border: 1px solid black; text-align: left; width:140px;">{{$ispit->prezimeKandidata}} {{$ispit->imeKandidata}}</td>
                     <td style="border: 1px solid black; text-align: center;">{{$ispit->polaganja}}</td>
-                    <td style="border: 1px solid black; width:70px;"></td>
-                    <td style="border: 1px solid black; text-align: left; width:100px;"></td>
+                    <td style="border: 1px solid black; width:60px; text-align: center;">{{$ispit->brojBodova}}</td>
+                    <td style="border: 1px solid black; width:80px; text-align: center;">{{$ispit->konacnaOcena}}</td>
+                    <td style="border: 1px solid black; width:60px; text-align: center;">{{$statusText}}</td>
                 </tr>
             @endforeach
-            <tr>
-                <td style="border: 1px solid black; width: 40px;"></td>
-                <td style="border: 1px solid black; text-align: left;"></td>
-                <td style="border: 1px solid black; text-align: left; width:155px;"></td>
-                <td style="border: 1px solid black; text-align: center;"></td>
-                <td style="border: 1px solid black; width:70px;"></td>
-                <td style="border: 1px solid black; text-align: left; width:100px;"></td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid black; width: 40px;"></td>
-                <td style="border: 1px solid black; text-align: left;"></td>
-                <td style="border: 1px solid black; text-align: left; width:155px;"></td>
-                <td style="border: 1px solid black; text-align: center;"></td>
-                <td style="border: 1px solid black; width:70px;"></td>
-                <td style="border: 1px solid black; text-align: left; width:100px;"></td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid black; width: 40px;"></td>
-                <td style="border: 1px solid black; text-align: left;"></td>
-                <td style="border: 1px solid black; text-align: left; width:155px;"></td>
-                <td style="border: 1px solid black; text-align: center;"></td>
-                <td style="border: 1px solid black; width:70px;"></td>
-                <td style="border: 1px solid black; text-align: left; width:100px;"></td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid black; width: 40px;"></td>
-                <td style="border: 1px solid black; text-align: left;"></td>
-                <td style="border: 1px solid black; text-align: left; width:155px;"></td>
-                <td style="border: 1px solid black; text-align: center;"></td>
-                <td style="border: 1px solid black; width:70px;"></td>
-                <td style="border: 1px solid black; text-align: left; width:100px;"></td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid black; width: 40px;"></td>
-                <td style="border: 1px solid black; text-align: left;"></td>
-                <td style="border: 1px solid black; text-align: left; width:155px;"></td>
-                <td style="border: 1px solid black; text-align: center;"></td>
-                <td style="border: 1px solid black; width:70px;"></td>
-                <td style="border: 1px solid black; text-align: left; width:100px;"></td>
-            </tr>
+            @for($i = count($polozeniIspiti); $i < 15; $i++)
+                <tr>
+                    <td style="border: 1px solid black; width: 40px;"></td>
+                    <td style="border: 1px solid black; text-align: left;"></td>
+                    <td style="border: 1px solid black; text-align: left; width:140px;"></td>
+                    <td style="border: 1px solid black; text-align: center;"></td>
+                    <td style="border: 1px solid black; width:60px;"></td>
+                    <td style="border: 1px solid black; width:80px;"></td>
+                    <td style="border: 1px solid black; width:60px;"></td>
+                </tr>
+            @endfor
         </table>
     </div>
 
@@ -114,9 +97,17 @@
             <tr>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>Потпис испитивача</td>
             </tr>
             <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td style="padding-bottom: 10px;"></td>
                 <td style="border-bottom: 1px solid black;"></td>
