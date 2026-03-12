@@ -217,3 +217,7 @@ Route::delete('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeCon
 Route::get('/obavestenja/{obavestenje}/toggle', 'App\Http\Controllers\ObavestenjeController@toggleStatus')->name('obavestenja.toggle');
 Route::get('/obavestenja/javna', 'App\Http\Controllers\ObavestenjeController@javna')->name('obavestenja.javna');
 Route::get('/moja-obavestenja', 'App\Http\Controllers\ObavestenjeController@moja')->name('obavestenja.moja');
+
+Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
+Route::get('/dashboard/studenti', 'App\Http\Controllers\DashboardController@studenti')->name('dashboard.studenti');
+Route::get('/dashboard/ispiti', 'App\Http\Controllers\DashboardController@ispiti')->name('dashboard.ispiti');
