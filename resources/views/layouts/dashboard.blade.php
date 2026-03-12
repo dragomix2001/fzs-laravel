@@ -258,7 +258,7 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li >
-                            <a href="#"><i class="glyphicon glyphicon-user"></i>&nbsp;�ifarnici<span class="fa arrow"></span></a>
+                            <a href="#"><i class="glyphicon glyphicon-user"></i>&nbsp;�ifarnici<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li {{ (Request::is('*panels') ? 'class="active"' : '') }}>
                                     <a href="{{ url ('panels') }}">Tip studija</a>
@@ -273,7 +273,7 @@
                                     <a href="{{ url ('buttons' ) }}">Sportovi</a>
                                 </li>
                                 <li {{ (Request::is('*buttons') ? 'class="active"' : '') }}>
-                                    <a href="{{ url ('buttons' ) }}">Sportsko anga�ovanje</a>
+                                    <a href="{{ url ('buttons' ) }}">Sportsko anga�ovanje</a>
                                 </li>
                                 <li {{ (Request::is('*buttons') ? 'class="active"' : '') }}>
                                     <a href="{{ url ('buttons' ) }}">Status studiranja</a>
@@ -282,7 +282,7 @@
                                     <a href="{{ url ('buttons' ) }}">Predmet</a>
                                 </li>
                                 <li {{ (Request::is('*buttons') ? 'class="active"' : '') }}>
-                                    <a href="{{ url ('buttons' ) }}">Srednje �kole i fakulteti</a>
+                                    <a href="{{ url ('buttons' ) }}">Srednje �kole i fakulteti</a>
                                 </li>
                                 <li {{ (Request::is('*buttons') ? 'class="active"' : '') }}>
                                     <a href="{{ url ('buttons' ) }}">Krsna slava</a>
@@ -292,6 +292,26 @@
                         </li>
                         <li {{ (Request::is('/') ? 'class="active"' : '') }}>
                             <a href="{{ url ('') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-calendar"></i> Нови модули<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ route('prisustvo.index') }}">Присуство</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('aktivnost.index') }}">Активности</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('raspored.index') }}">Распоред</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('obavestenja.index') }}">Обавештења</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('dashboard.index') }}">Аналитика</a>
+                                </li>
+                            </ul>
                         </li>
                         <li {{ (Request::is('*charts') ? 'class="active"' : '') }}>
                             <a href="{{ url ('charts') }}"><i class="fa fa-bar-chart-o fa-fw"></i> Charts</a>
