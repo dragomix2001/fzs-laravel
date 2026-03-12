@@ -43,7 +43,7 @@ class RasporedController extends Controller
 
         $studijskiProgrami = StudijskiProgram::all();
         $semestri = Semestar::all();
-        $skolskeGodine = SkolskaGodUpisa::orderBy('godina', 'desc')->get();
+        $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
 
         return view('raspored.index', compact('raspored', 'studijskiProgrami', 'semestri', 'skolskeGodine'));
     }
@@ -55,7 +55,7 @@ class RasporedController extends Controller
         $studijskiProgrami = StudijskiProgram::all();
         $godineStudija = GodinaStudija::all();
         $semestri = Semestar::all();
-        $skolskeGodine = SkolskaGodUpisa::orderBy('godina', 'desc')->get();
+        $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
         $obliciNastave = OblikNastave::all();
 
         return view('raspored.create', compact(
@@ -93,7 +93,7 @@ class RasporedController extends Controller
         $studijskiProgrami = StudijskiProgram::all();
         $godineStudija = GodinaStudija::all();
         $semestri = Semestar::all();
-        $skolskeGodine = SkolskaGodUpisa::orderBy('godina', 'desc')->get();
+        $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
         $obliciNastave = OblikNastave::all();
 
         return view('raspored.edit', compact(
@@ -169,7 +169,7 @@ class RasporedController extends Controller
             ];
         }
 
-        $skolskeGodine = SkolskaGodUpisa::orderBy('godina', 'desc')->get();
+        $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
 
         return view('raspored.pregled', compact('rasporedPoDanima', 'skolskeGodine'));
     }

@@ -20,20 +20,20 @@ class DashboardController extends Controller
 
         $ukupnoStudenata = Kandidat::where('statusUpisa_id', 3)->count();
         
-        $studentiPoGodini = Kandidat::selectRaw('godinaUpisa_id, COUNT(*) as broj')
+        $studentiPoGodini = Kandidat::selectRaw('skolskaGodinaUpisa_id, COUNT(*) as broj')
             ->where('statusUpisa_id', 3)
-            ->groupBy('godinaUpisa_id')
+            ->groupBy('skolskaGodinaUpisa_id')
             ->with('godinaUpisa')
             ->get();
 
         $studentiPoProgramu = Kandidat::selectRaw('studijskiProgram_id, COUNT(*) as broj')
             ->where('statusUpisa_id', 3)
             ->groupBy('studijskiProgram_id')
-            ->with('studijskiProgram')
+            ->with('program')
             ->get();
 
-        $polozeniIspiti = PolozeniIspiti::whereYear('datum', date('Y'))->count();
-        $prijavljeniIspiti = PrijavaIspita::whereYear('datumPrijave', date('Y'))->count();
+        $polozeniIspiti = PolozeniIspiti::whereYear('created_at', date('Y'))->count();
+        $prijavljeniIspiti = PrijavaIspita::whereYear('created_at', date('Y'))->count();
         
         $aktivnaObavestenja = Obavestenje::aktivna()->count();
         
@@ -42,22 +42,22 @@ class DashboardController extends Controller
             $prolaznost = round(($polozeniIspiti / $prijavljeniIspiti) * 100, 1);
         }
 
-        $ispitiPoRoku = ZapisnikOPolaganjuIspita::selectRaw('ispitni_rok_id, COUNT(*) as broj')
+        $ispitiPoRoku = ZapisnikOPolaganjuIspita::selectRaw('rok_id, COUNT(*) as broj')
             ->whereYear('datum', date('Y'))
-            ->groupBy('ispitni_rok_id')
+            ->groupBy('rok_id')
             ->with('ispitniRok')
             ->get();
 
         $najcesciNeuspesni = PolozeniIspiti::selectRaw('predmet_id, COUNT(*) as broj')
-            ->where('konacna_ocena', '<', 6)
-            ->whereYear('datum', date('Y'))
+            ->where('konacnaOcena', '<', 6)
+            ->whereYear('created_at', date('Y'))
             ->groupBy('predmet_id')
             ->orderByDesc('broj')
             ->limit(5)
             ->with('predmet')
             ->get();
 
-        $skolskeGodine = SkolskaGodUpisa::orderBy('godina', 'desc')->limit(5)->get();
+        $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->limit(5)->get();
 
         return view('dashboard.index', compact(
             'ukupnoStudenata',
@@ -86,12 +86,12 @@ class DashboardController extends Controller
         }
         
         if ($godinaId) {
-            $query->where('godinaUpisa_id', $godinaId);
+            $query->where('skolskaGodinaUpisa_id', $godinaId);
         }
         
-        $studenti = $query->with(['studijskiProgram', 'godinaUpisa'])->get();
+        $studenti = $query->with(['program', 'godinaUpisa'])->get();
         $programi = StudijskiProgram::all();
-        $godine = SkolskaGodUpisa::orderBy('godina', 'desc')->get();
+        $godine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
         
         return view('dashboard.studenti', compact('studenti', 'programi', 'godine', 'programId', 'godinaId'));
     }
@@ -100,23 +100,23 @@ class DashboardController extends Controller
     {
         $godina = $request->godina ?? date('Y');
         
-        $polozeniPoMesecima = PolozeniIspiti::selectRaw('MONTH(datum) as mesec, COUNT(*) as broj')
-            ->whereYear('datum', $godina)
+        $polozeniPoMesecima = PolozeniIspiti::selectRaw('MONTH(created_at) as mesec, COUNT(*) as broj')
+            ->whereYear('created_at', $godina)
             ->groupBy('mesec')
             ->orderBy('mesec')
             ->get();
             
-        $prijavePoMesecima = PrijavaIspita::selectRaw('MONTH(datumPrijave) as mesec, COUNT(*) as broj')
-            ->whereYear('datumPrijave', $godina)
+        $prijavePoMesecima = PrijavaIspita::selectRaw('MONTH(created_at) as mesec, COUNT(*) as broj')
+            ->whereYear('created_at', $godina)
             ->groupBy('mesec')
             ->orderBy('mesec')
             ->get();
             
         $uspehPoPredmetu = PolozeniIspiti::selectRaw('predmet_id, 
             COUNT(*) as ukupno,
-            SUM(CASE WHEN konacna_ocena >= 6 THEN 1 ELSE 0 END) as polozeni,
-            AVG(konacna_ocena) as prosek')
-            ->whereYear('datum', $godina)
+            SUM(CASE WHEN konacnaOcena >= 6 THEN 1 ELSE 0 END) as polozeni,
+            AVG(konacnaOcena) as prosek')
+            ->whereYear('created_at', $godina)
             ->groupBy('predmet_id')
             ->with('predmet')
             ->orderByDesc('ukupno')
