@@ -204,6 +204,26 @@
                                 </li>-->
                             </ul>
                         </li>
+                        <li>
+                            <a href="#"><i class="fa fa-plus-circle"></i>&nbsp;Нови модули<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/prisustvo') }}">Присуство</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/aktivnost') }}">Активности</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/raspored') }}">Распоред</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/obavestenja') }}">Обавештења</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/dashboard') }}">Аналитика</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
