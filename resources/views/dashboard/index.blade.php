@@ -11,7 +11,7 @@
                 <select name="skolska_godina_id" class="form-control" onchange="this.form.submit()">
                     @foreach($skolskeGodine as $godina)
                         <option value="{{ $godina->id }}" {{ $skolskaGodinaId == $godina->id ? 'selected' : '' }}>
-                            {{ $godina->godina }}/{{ $godina->godina + 1 }}
+                            {{ $godina->naziv }}
                         </option>
                     @endforeach
                 </select>
