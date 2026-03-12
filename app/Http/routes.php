@@ -401,3 +401,40 @@ Route::post('/testPost', 'KandidatController@testPost');
 Route::get('/home', 'HomeController@index');
 
 Route::get('/regk/{id}', 'KandidatController@registracijaKandidata');
+
+// Nove rute za module
+Route::get('/prisustvo', 'PrisustvoController@index');
+Route::get('/prisustvo/create', 'PrisustvoController@create');
+Route::post('/prisustvo', 'PrisustvoController@store');
+Route::get('/prisustvo/report', 'PrisustvoController@report');
+
+Route::get('/aktivnost', 'AktivnostController@index');
+Route::get('/aktivnost/create', 'AktivnostController@create');
+Route::post('/aktivnost', 'AktivnostController@store');
+Route::get('/aktivnost/{aktivnost}', 'AktivnostController@show');
+Route::get('/aktivnost/{aktivnost}/ocenjivanje', 'AktivnostController@ocenjivanje');
+Route::post('/aktivnost/{aktivnost}/ocenjivanje', 'AktivnostController@saveOcenjivanje');
+Route::get('/aktivnost/rezime', 'AktivnostController@rezime');
+
+Route::get('/raspored', 'RasporedController@index');
+Route::get('/raspored/create', 'RasporedController@create');
+Route::post('/raspored', 'RasporedController@store');
+Route::get('/raspored/{raspored}/edit', 'RasporedController@edit');
+Route::put('/raspored/{raspored}', 'RasporedController@update');
+Route::delete('/raspored/{raspored}', 'RasporedController@destroy');
+Route::get('/raspored/pregled', 'RasporedController@pregled');
+
+Route::get('/obavestenja', 'ObavestenjeController@index');
+Route::get('/obavestenja/create', 'ObavestenjeController@create');
+Route::post('/obavestenja', 'ObavestenjeController@store');
+Route::get('/obavestenja/{obavestenje}', 'ObavestenjeController@show');
+Route::get('/obavestenja/{obavestenje}/edit', 'ObavestenjeController@edit');
+Route::put('/obavestenja/{obavestenje}', 'ObavestenjeController@update');
+Route::delete('/obavestenja/{obavestenje}', 'ObavestenjeController@destroy');
+Route::get('/obavestenja/{obavestenje}/toggle', 'ObavestenjeController@toggleStatus');
+Route::get('/obavestenja/javna', 'ObavestenjeController@javna');
+Route::get('/moja-obavestenja', 'ObavestenjeController@moja');
+
+Route::get('/dashboard', 'DashboardController@index');
+Route::get('/dashboard/studenti', 'DashboardController@studenti');
+Route::get('/dashboard/ispiti', 'DashboardController@ispiti');
