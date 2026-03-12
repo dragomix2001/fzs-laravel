@@ -190,3 +190,11 @@ Route::get('/prisustvo', 'App\Http\Controllers\PrisustvoController@index')->name
 Route::get('/prisustvo/create', 'App\Http\Controllers\PrisustvoController@create')->name('prisustvo.create');
 Route::post('/prisustvo', 'App\Http\Controllers\PrisustvoController@store')->name('prisustvo.store');
 Route::get('/prisustvo/report', 'App\Http\Controllers\PrisustvoController@report')->name('prisustvo.report');
+
+Route::get('/aktivnost', 'App\Http\Controllers\AktivnostController@index')->name('aktivnost.index');
+Route::get('/aktivnost/create', 'App\Http\Controllers\AktivnostController@create')->name('aktivnost.create');
+Route::post('/aktivnost', 'App\Http\Controllers\AktivnostController@store')->name('aktivnost.store');
+Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->name('aktivnost.show');
+Route::get('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@ocenjivanje')->name('aktivnost.ocenjivanje');
+Route::post('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@saveOcenjivanje')->name('aktivnost.saveOcenjivanje');
+Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
