@@ -185,3 +185,8 @@ Route::get('/test3', 'App\Http\Controllers\KandidatController@test3');
 Route::post('/testPost', 'App\Http\Controllers\KandidatController@testPost');
 
 Route::get('/regk/{id}', 'App\Http\Controllers\KandidatController@registracijaKandidata');
+
+Route::get('/prisustvo', 'App\Http\Controllers\PrisustvoController@index')->name('prisustvo.index');
+Route::get('/prisustvo/create', 'App\Http\Controllers\PrisustvoController@create')->name('prisustvo.create');
+Route::post('/prisustvo', 'App\Http\Controllers\PrisustvoController@store')->name('prisustvo.store');
+Route::get('/prisustvo/report', 'App\Http\Controllers\PrisustvoController@report')->name('prisustvo.report');
