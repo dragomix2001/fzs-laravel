@@ -206,3 +206,14 @@ Route::get('/raspored/{raspored}/edit', 'App\Http\Controllers\RasporedController
 Route::put('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@update')->name('raspored.update');
 Route::delete('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@destroy')->name('raspored.destroy');
 Route::get('/raspored/pregled', 'App\Http\Controllers\RasporedController@pregled')->name('raspored.pregled');
+
+Route::get('/obavestenja', 'App\Http\Controllers\ObavestenjeController@index')->name('obavestenja.index');
+Route::get('/obavestenja/create', 'App\Http\Controllers\ObavestenjeController@create')->name('obavestenja.create');
+Route::post('/obavestenja', 'App\Http\Controllers\ObavestenjeController@store')->name('obavestenja.store');
+Route::get('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@show')->name('obavestenja.show');
+Route::get('/obavestenja/{obavestenje}/edit', 'App\Http\Controllers\ObavestenjeController@edit')->name('obavestenja.edit');
+Route::put('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@update')->name('obavestenja.update');
+Route::delete('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@destroy')->name('obavestenja.destroy');
+Route::get('/obavestenja/{obavestenje}/toggle', 'App\Http\Controllers\ObavestenjeController@toggleStatus')->name('obavestenja.toggle');
+Route::get('/obavestenja/javna', 'App\Http\Controllers\ObavestenjeController@javna')->name('obavestenja.javna');
+Route::get('/moja-obavestenja', 'App\Http\Controllers\ObavestenjeController@moja')->name('obavestenja.moja');
