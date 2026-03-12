@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\DiplomskiPolaganje;
-use App\DiplomskiPrijavaOdbrane;
-use App\DiplomskiPrijavaTeme;
-use App\DiplomskiRad;
+use App\Models\DiplomskiPolaganje;
+use App\Models\DiplomskiPrijavaOdbrane;
+use App\Models\DiplomskiPrijavaTeme;
+use App\Models\DiplomskiRad;
 use App\Kandidat;
 use App\Profesor;
 use App\ProfesorPredmet;

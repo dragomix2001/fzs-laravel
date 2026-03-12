@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\AktivniIspitniRokovi;
-use App\DiplomskiPolaganje;
-use App\DiplomskiPrijavaOdbrane;
-use App\DiplomskiPrijavaTeme;
+use App\Models\DiplomskiPolaganje;
+use App\Models\DiplomskiPrijavaOdbrane;
+use App\Models\DiplomskiPrijavaTeme;
 use App\GodinaStudija;
 use App\Kandidat;
 use App\PolozeniIspiti;
