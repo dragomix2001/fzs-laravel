@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Raspored extends Model
 {
+    protected $table = 'raspored';
+    
     protected $fillable = [
         'predmet_id',
         'profesor_id',

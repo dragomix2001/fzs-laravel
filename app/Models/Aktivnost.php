@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Aktivnost extends Model
 {
+    protected $table = 'aktivnosti';
+    
     protected $fillable = [
         'predmet_id',
         'naziv',
