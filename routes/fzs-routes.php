@@ -198,3 +198,11 @@ Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@s
 Route::get('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@ocenjivanje')->name('aktivnost.ocenjivanje');
 Route::post('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@saveOcenjivanje')->name('aktivnost.saveOcenjivanje');
 Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
+
+Route::get('/raspored', 'App\Http\Controllers\RasporedController@index')->name('raspored.index');
+Route::get('/raspored/create', 'App\Http\Controllers\RasporedController@create')->name('raspored.create');
+Route::post('/raspored', 'App\Http\Controllers\RasporedController@store')->name('raspored.store');
+Route::get('/raspored/{raspored}/edit', 'App\Http\Controllers\RasporedController@edit')->name('raspored.edit');
+Route::put('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@update')->name('raspored.update');
+Route::delete('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@destroy')->name('raspored.destroy');
+Route::get('/raspored/pregled', 'App\Http\Controllers\RasporedController@pregled')->name('raspored.pregled');
