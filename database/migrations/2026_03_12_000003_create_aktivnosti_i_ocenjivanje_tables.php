@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('aktivnosti', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('predmet_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('predmet_id');
             $table->string('naziv');
             $table->enum('tip', ['kolokvijum', 'seminarski', 'projekat', 'prakticni', 'usmeni']);
             $table->decimal('max_bodova', 5, 2)->default(100);
@@ -21,18 +21,22 @@ return new class extends Migration
             $table->text('napomena')->nullable();
             $table->boolean('aktivan')->default(true);
             $table->timestamps();
+            
+            $table->index('predmet_id');
         });
 
         Schema::create('ocenjivanje', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('kandidat')->onDelete('cascade');
-            $table->foreignId('aktivnost_id')->constrained('aktivnosti')->onDelete('cascade');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('aktivnost_id');
             $table->decimal('bodovi', 5, 2)->nullable();
             $table->decimal('ocena', 3, 2)->nullable();
             $table->text('napomena')->nullable();
-            $table->foreignId('profesor_id')->constrained()->onDelete('set null');
+            $table->unsignedBigInteger('profesor_id')->nullable();
             $table->timestamps();
             
+            $table->index('student_id');
+            $table->index('aktivnost_id');
             $table->unique(['student_id', 'aktivnost_id']);
         });
     }

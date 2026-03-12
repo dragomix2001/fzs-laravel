@@ -12,7 +12,7 @@
 */
 
 $app = new Illuminate\Foundation\Application(
-    '/var/www'
+    dirname(__DIR__)
 );
 
 /*

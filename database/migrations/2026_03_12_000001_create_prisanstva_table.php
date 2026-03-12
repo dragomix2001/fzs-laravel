@@ -10,14 +10,17 @@ return new class extends Migration
     {
         Schema::create('prisanstva', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('kandidat')->onDelete('cascade');
-            $table->foreignId('predmet_id')->constrained()->onDelete('cascade');
-            $table->foreignId('nastavna_nedelja_id')->constrained('nastavne_nedelje')->onDelete('cascade');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('predmet_id');
+            $table->unsignedBigInteger('nastavna_nedelja_id');
             $table->enum('status', ['prisutan', 'odsutan', 'opravdan', 'kasnio'])->default('odsutan');
             $table->text('napomena')->nullable();
-            $table->foreignId('profesor_id')->constrained()->onDelete('set null');
+            $table->unsignedBigInteger('profesor_id')->nullable();
             $table->timestamps();
             
+            $table->index('student_id');
+            $table->index('predmet_id');
+            $table->index('nastavna_nedelja_id');
             $table->unique(['student_id', 'predmet_id', 'nastavna_nedelja_id']);
         });
     }
