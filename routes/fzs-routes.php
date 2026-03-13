@@ -283,4 +283,17 @@ Route::group(['middleware' => ['web', 'auth', 'role:admin']], function () {
     Route::post('/backup/create', 'App\Http\Controllers\BackupController@create')->name('backup.create');
     Route::get('/backup/download/{filename}', 'App\Http\Controllers\BackupController@download')->name('backup.download');
     Route::delete('/backup/delete/{filename}', 'App\Http\Controllers\BackupController@delete')->name('backup.delete');
+    
+    // User management routes
+    Route::get('/users', 'App\Http\Controllers\UserController@index')->name('user.index');
+    Route::get('/users/create', 'App\Http\Controllers\UserController@create')->name('user.create');
+    Route::post('/users', 'App\Http\Controllers\UserController@store')->name('user.store');
+    Route::get('/users/{user}', 'App\Http\Controllers\UserController@show')->name('user.show');
+    Route::get('/users/{user}/edit', 'App\Http\Controllers\UserController@edit')->name('user.edit');
+    Route::put('/users/{user}', 'App\Http\Controllers\UserController@update')->name('user.update');
+    Route::delete('/users/{user}', 'App\Http\Controllers\UserController@destroy')->name('user.destroy');
+    Route::get('/users/{user}/toggle', 'App\Http\Controllers\UserController@toggleStatus')->name('user.toggle');
+    
+    // Audit log routes
+    Route::get('/audit-logs', 'App\Http\Controllers\AuditLogController@index')->name('audit.index');
 });
