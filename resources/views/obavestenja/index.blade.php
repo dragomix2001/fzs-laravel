@@ -77,6 +77,8 @@
 <a href="{{ route('obavestenja.show', ['obavestenje' => $obavestenje->id]) }}" class="btn btn-sm btn-info">Прикажи</a>
 <a href="{{ route('obavestenja.edit', ['obavestenje' => $obavestenje->id]) }}" class="btn btn-sm btn-primary">Измени</a>
 <a href="{{ route('obavestenja.toggle', ['obavestenje' => $obavestenje->id]) }}" class="btn btn-sm btn-warning">
+                            {{ $obavestenje->aktivan ? 'Деактивирај' : 'Активирај' }}
+                        </a>
 <form action="{{ route('obavestenja.destroy', ['obavestenje' => $obavestenje->id]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
