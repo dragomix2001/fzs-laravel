@@ -50,7 +50,7 @@
                 </div>
                 <div class="card-footer">
                     <a href="{{ route('obavestenja.index') }}" class="btn btn-secondary">Назад</a>
-                    <a href="{{ url('/obavestenja/' . $obavestenje->id . '/edit') }}" class="btn btn-primary">Измени</a>
+                    <a href="{{ url('/obavestenja/' . ($obavestenje->id ?? '0') . '/edit') }}" class="btn btn-primary">Измени</a>
                 </div>
             </div>
         </div>

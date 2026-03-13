@@ -75,7 +75,7 @@
                     </td>
                     <td>
 <a href="{{ url('/obavestenja/' . $obavestenje->id) }}" class="btn btn-sm btn-info">Прикажи</a>
-<a href="{{ url('/obavestenja/' . $obavestenje->id . '/edit') }}" class="btn btn-sm btn-primary">Измени</a>
+<a href="{{ url('/obavestenja/' . ($obavestenje->id ?? '0') . '/edit') }}" class="btn btn-sm btn-primary">Измени</a>
 <a href="{{ url('/obavestenja/' . $obavestenje->id . '/toggle') }}" class="btn btn-sm btn-warning">
 {{ $obavestenje->aktivan ? 'Деактивирај' : 'Активирај' }}
 </a>
