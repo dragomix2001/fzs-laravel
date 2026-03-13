@@ -267,4 +267,20 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 Route::group(['middleware' => ['web']], function () {
     Route::get('/obavestenja/javna', 'App\Http\Controllers\ObavestenjeController@javna')->name('obavestenja.javna');
     Route::get('/api/docs', 'App\Http\Controllers\ApiDocsController@index')->name('api.docs');
+    Route::get('/language/switch', 'App\Http\Controllers\LanguageController@switch')->name('language.switch');
+});
+
+// Import/Export routes (admin only)
+Route::group(['middleware' => ['web', 'auth', 'role:admin']], function () {
+    Route::get('/import-export', 'App\Http\Controllers\ImportExportController@index')->name('import-export.index');
+    Route::post('/import-export/import', 'App\Http\Controllers\ImportExportController@import')->name('import-export.import');
+    Route::get('/import-export/export', 'App\Http\Controllers\ImportExportController@export')->name('import-export.export');
+    Route::get('/import-export/export-studenti', 'App\Http\Controllers\ImportExportController@exportStudenti')->name('import-export.export-studenti');
+    Route::get('/import-export/export-ispiti', 'App\Http\Controllers\ImportExportController@exportPolozeniIspiti')->name('import-export.export-ispiti');
+    
+    // Backup routes
+    Route::get('/backup', 'App\Http\Controllers\BackupController@index')->name('backup.index');
+    Route::post('/backup/create', 'App\Http\Controllers\BackupController@create')->name('backup.create');
+    Route::get('/backup/download/{filename}', 'App\Http\Controllers\BackupController@download')->name('backup.download');
+    Route::delete('/backup/delete/{filename}', 'App\Http\Controllers\BackupController@delete')->name('backup.delete');
 });
