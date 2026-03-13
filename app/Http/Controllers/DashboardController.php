@@ -59,6 +59,17 @@ class DashboardController extends Controller
 
         $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->limit(5)->get();
 
+        $widgets = session('dashboard_widgets', [
+            'studenti_ukupno' => true,
+            'polozeni_ispiti' => true,
+            'prijavljeni_ispiti' => true,
+            'aktivna_obavestenja' => true,
+            'studenti_po_programu' => true,
+            'studenti_po_godini' => true,
+            'prolaznost' => true,
+            'neuspesni_predmeti' => true,
+        ]);
+
         return view('dashboard.index', compact(
             'ukupnoStudenata',
             'studentiPoGodini',
@@ -70,8 +81,27 @@ class DashboardController extends Controller
             'ispitiPoRoku',
             'najcesciNeuspesni',
             'skolskeGodine',
-            'skolskaGodinaId'
+            'skolskaGodinaId',
+            'widgets'
         ));
+    }
+    
+    public function saveWidgets(Request $request)
+    {
+        $widgets = [
+            'studenti_ukupno' => $request->has('studenti_ukupno'),
+            'polozeni_ispiti' => $request->has('polozeni_ispiti'),
+            'prijavljeni_ispiti' => $request->has('prijavljeni_ispiti'),
+            'aktivna_obavestenja' => $request->has('aktivna_obavestenja'),
+            'studenti_po_programu' => $request->has('studenti_po_programu'),
+            'studenti_po_godini' => $request->has('studenti_po_godini'),
+            'prolaznost' => $request->has('prolaznost'),
+            'neuspesni_predmeti' => $request->has('neuspesni_predmeti'),
+        ];
+        
+        session(['dashboard_widgets' => $widgets]);
+        
+        return redirect()->route('dashboard.index');
     }
 
     public function studenti(Request $request)

@@ -3,7 +3,16 @@
 @section('section')
 
 <div class="col-sm-12 col-lg-10">
-<h2>Аналитика и статистика</h2>
+<div class="row">
+    <div class="col-md-8">
+        <h2>Аналитика и статистика</h2>
+    </div>
+    <div class="col-md-4 text-right">
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#widgetSettings">
+            <span class="fa fa-cog"></span> Виџети
+        </button>
+    </div>
+</div>
 
     <form method="GET" action="{{ route('dashboard.index') }}" class="mb-4">
         <div class="row">
@@ -21,6 +30,7 @@
     </form>
 
     <div class="row mt-4">
+        @if($widgets['studenti_ukupno'])
         <div class="col-md-3">
             <div class="card text-white bg-primary mb-3">
                 <div class="card-body">
@@ -29,6 +39,8 @@
                 </div>
             </div>
         </div>
+        @endif
+        @if($widgets['polozeni_ispiti'])
         <div class="col-md-3">
             <div class="card text-white bg-success mb-3">
                 <div class="card-body">
@@ -37,6 +49,8 @@
                 </div>
             </div>
         </div>
+        @endif
+        @if($widgets['prijavljeni_ispiti'])
         <div class="col-md-3">
             <div class="card text-white bg-warning mb-3">
                 <div class="card-body">
@@ -45,6 +59,8 @@
                 </div>
             </div>
         </div>
+        @endif
+        @if($widgets['aktivna_obavestenja'])
         <div class="col-md-3">
             <div class="card text-white bg-info mb-3">
                 <div class="card-body">
@@ -53,9 +69,11 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     <div class="row mt-4">
+        @if($widgets['studenti_po_programu'])
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -72,7 +90,7 @@
                         <tbody>
                             @foreach($studentiPoProgramu as $sp)
                             <tr>
-                                <td>{{ $sp->studijskiProgram->naziv ?? '-' }}</td>
+                                <td>{{ $sp->program->naziv ?? '-' }}</td>
                                 <td>{{ $sp->broj }}</td>
                             </tr>
                             @endforeach
@@ -81,7 +99,9 @@
                 </div>
             </div>
         </div>
+        @endif
         
+        @if($widgets['studenti_po_godini'])
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -107,9 +127,11 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     <div class="row mt-4">
+        @if($widgets['prolaznost'])
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header bg-success text-white">
@@ -121,7 +143,9 @@
                 </div>
             </div>
         </div>
+        @endif
         
+        @if($widgets['neuspesni_predmeti'])
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
@@ -151,10 +175,55 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
     <div class="mt-4">
         <a href="{{ route('dashboard.studenti') }}" class="btn btn-primary">Детаљни преглед студената</a>
         <a href="{{ route('dashboard.ispiti') }}" class="btn btn-info">Аналитика испита</a>
+    </div>
+</div>
+
+<div class="modal fade" id="widgetSettings" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form method="POST" action="{{ route('dashboard.widgets') }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Подешавање виџета</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="studenti_ukupno" {{ $widgets['studenti_ukupno'] ? 'checked' : '' }}> Укупно студената</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="polozeni_ispiti" {{ $widgets['polozeni_ispiti'] ? 'checked' : '' }}> Положени испити</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="prijavljeni_ispiti" {{ $widgets['prijavljeni_ispiti'] ? 'checked' : '' }}> Пријављени испити</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="aktivna_obavestenja" {{ $widgets['aktivna_obavestenja'] ? 'checked' : '' }}> Активна обавештења</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="studenti_po_programu" {{ $widgets['studenti_po_programu'] ? 'checked' : '' }}> Студенти по програму</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="studenti_po_godini" {{ $widgets['studenti_po_godini'] ? 'checked' : '' }}> Студенти по години</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="prolaznost" {{ $widgets['prolaznost'] ? 'checked' : '' }}> Пролазност</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="neuspesni_predmeti" {{ $widgets['neuspesni_predmeti'] ? 'checked' : '' }}> Неуспешни предмети</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Сачувај</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Откажи</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

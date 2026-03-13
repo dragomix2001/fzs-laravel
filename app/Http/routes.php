@@ -423,6 +423,8 @@ Route::get('/raspored/{raspored}/edit', 'RasporedController@edit')->name('raspor
 Route::put('/raspored/{raspored}', 'RasporedController@update')->name('raspored.update');
 Route::delete('/raspored/{raspored}', 'RasporedController@destroy')->name('raspored.destroy');
 Route::get('/raspored/pregled', 'RasporedController@pregled')->name('raspored.pregled');
+Route::get('/raspored/kalendar', 'RasporedController@kalendar')->name('raspored.kalendar');
+Route::get('/raspored/kalendar/events', 'RasporedController@kalendarEvents')->name('raspored.kalendar.events');
 
 Route::get('/obavestenja', 'ObavestenjeController@index')->name('obavestenja.index');
 Route::get('/obavestenja/create', 'ObavestenjeController@create')->name('obavestenja.create');
@@ -436,5 +438,6 @@ Route::get('/obavestenja/javna', 'ObavestenjeController@javna')->name('obavesten
 Route::get('/moja-obavestenja', 'ObavestenjeController@moja')->name('obavestenja.moja');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
+Route::post('/dashboard/widgets', 'DashboardController@saveWidgets')->name('dashboard.widgets');
 Route::get('/dashboard/studenti', 'DashboardController@studenti')->name('dashboard.studenti');
 Route::get('/dashboard/ispiti', 'DashboardController@ispiti')->name('dashboard.ispiti');

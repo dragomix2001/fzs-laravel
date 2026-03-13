@@ -45,6 +45,15 @@
             </div>
         </div>
     </form>
+    
+    <div class="mb-3">
+        <a href="{{ route('raspored.kalendar') }}" class="btn btn-info">
+            <span class="fa fa-calendar"></span> Календар
+        </a>
+        <a href="{{ route('raspored.pregled') }}" class="btn btn-default">
+            <span class="fa fa-list"></span> Табеларни преглед
+        </a>
+    </div>
 
     @if($raspored->count() > 0)
         <table class="table table-bordered mt-4">
