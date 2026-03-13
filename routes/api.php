@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\ApiIspitController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ObavestenjeController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\RasporedController;
+use App\Http\Controllers\Api\AktivnostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +51,18 @@ Route::prefix('v1')->group(function () {
         Route::get('/prijave', [StudentController::class, 'prijave']);
         Route::get('/upis', [StudentController::class, 'upis']);
         Route::get('/stats', [StudentController::class, 'stats']);
+    });
+
+    Route::prefix('raspored')->group(function () {
+        Route::get('/', [RasporedController::class, 'index']);
+        Route::get('/today', [RasporedController::class, 'today']);
+        Route::get('/{raspored}', [RasporedController::class, 'show']);
+    });
+
+    Route::prefix('aktivnost')->group(function () {
+        Route::get('/', [AktivnostController::class, 'index']);
+        Route::get('/today', [AktivnostController::class, 'today']);
+        Route::get('/{aktivnost}', [AktivnostController::class, 'show']);
+        Route::get('/moje', [AktivnostController::class, 'myActivities'])->middleware('auth:sanctum');
     });
 });
