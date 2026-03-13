@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.layout')
 
-@section('content')
+@section('section')
 <div class="container">
     <h2>Измени обавештење</h2>
     
