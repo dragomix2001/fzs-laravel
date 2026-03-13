@@ -207,17 +207,98 @@ Route::put('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@upda
 Route::delete('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@destroy')->name('raspored.destroy');
 Route::get('/raspored/pregled', 'App\Http\Controllers\RasporedController@pregled')->name('raspored.pregled');
 
-Route::get('/obavestenja', 'App\Http\Controllers\ObavestenjeController@index')->name('obavestenja.index');
-Route::get('/obavestenja/create', 'App\Http\Controllers\ObavestenjeController@create')->name('obavestenja.create');
-Route::post('/obavestenja', 'App\Http\Controllers\ObavestenjeController@store')->name('obavestenja.store');
-Route::get('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@show')->name('obavestenja.show');
-Route::get('/obavestenja/{obavestenje}/edit', 'App\Http\Controllers\ObavestenjeController@edit')->name('obavestenja.edit');
-Route::put('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@update')->name('obavestenja.update');
-Route::delete('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@destroy')->name('obavestenja.destroy');
-Route::get('/obavestenja/{obavestenje}/toggle', 'App\Http\Controllers\ObavestenjeController@toggleStatus')->name('obavestenja.toggle');
-Route::get('/obavestenja/javna', 'App\Http\Controllers\ObavestenjeController@javna')->name('obavestenja.javna');
-Route::get('/moja-obavestenja', 'App\Http\Controllers\ObavestenjeController@moja')->name('obavestenja.moja');
+// Require authentication for all new modules
+Route::group(['middleware' => ['web', 'auth']], function () {
+    
+    Route::group(['middleware' => ['role:admin']], function () {
+        Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
+        Route::get('/dashboard/studenti', 'App\Http\Controllers\DashboardController@studenti')->name('dashboard.studenti');
+        Route::get('/dashboard/ispiti', 'App\Http\Controllers\DashboardController@ispiti')->name('dashboard.ispiti');
+        Route::get('/dashboard/saveWidgets', 'App\Http\Controllers\DashboardController@saveWidgets')->name('dashboard.saveWidgets');
+        
+        // Admin only - obavestenja management
+        Route::get('/obavestenja/create', 'App\Http\Controllers\ObavestenjeController@create')->name('obavestenja.create');
+        Route::post('/obavestenja', 'App\Http\Controllers\ObavestenjeController@store')->name('obavestenja.store');
+        Route::get('/obavestenja/{obavestenje}/edit', 'App\Http\Controllers\ObavestenjeController@edit')->name('obavestenja.edit');
+        Route::put('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@update')->name('obavestenja.update');
+        Route::delete('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@destroy')->name('obavestenja.destroy');
+        Route::get('/obavestenja/{obavestenje}/toggle', 'App\Http\Controllers\ObavestenjeController@toggleStatus')->name('obavestenja.toggle');
+        
+        // Admin only - raspored management
+        Route::get('/raspored/create', 'App\Http\Controllers\RasporedController@create')->name('raspored.create');
+        Route::post('/raspored', 'App\Http\Controllers\RasporedController@store')->name('raspored.store');
+        Route::get('/raspored/{raspored}/edit', 'App\Http\Controllers\RasporedController@edit')->name('raspored.edit');
+        Route::put('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@update')->name('raspored.update');
+        Route::delete('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@destroy')->name('raspored.destroy');
+        
+        // Admin only - aktivnost management
+        Route::get('/aktivnost/create', 'App\Http\Controllers\AktivnostController@create')->name('aktivnost.create');
+        Route::post('/aktivnost', 'App\Http\Controllers\AktivnostController@store')->name('aktivnost.store');
+        Route::get('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@ocenjivanje')->name('aktivnost.ocenjivanje');
+        Route::post('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@saveOcenjivanje')->name('aktivnost.saveOcenjivanje');
+        
+        // Admin only - prisustvo management
+        Route::get('/prisustvo/create', 'App\Http\Controllers\PrisustvoController@create')->name('prisustvo.create');
+        Route::post('/prisustvo', 'App\Http\Controllers\PrisustvoController@store')->name('prisustvo.store');
+    });
 
-Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
-Route::get('/dashboard/studenti', 'App\Http\Controllers\DashboardController@studenti')->name('dashboard.studenti');
-Route::get('/dashboard/ispiti', 'App\Http\Controllers\DashboardController@ispiti')->name('dashboard.ispiti');
+    // Admin and Professor
+    Route::group(['middleware' => ['role:admin,professor']], function () {
+        // Obavestenja - view for all, edit for admin/professor
+        Route::get('/obavestenja', 'App\Http\Controllers\ObavestenjeController@index')->name('obavestenja.index');
+        Route::get('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@show')->name('obavestenja.show');
+        
+        // Raspored - view for all, edit for admin/professor
+        Route::get('/raspored', 'App\Http\Controllers\RasporedController@index')->name('raspored.index');
+        Route::get('/raspored/pregled', 'App\Http\Controllers\RasporedController@pregled')->name('raspored.pregled');
+        
+        // Aktivnost
+        Route::get('/aktivnost', 'App\Http\Controllers\AktivnostController@index')->name('aktivnost.index');
+        Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->name('aktivnost.show');
+        Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
+        
+        // Prisustvo
+        Route::get('/prisustvo', 'App\Http\Controllers\PrisustvoController@index')->name('prisustvo.index');
+        Route::get('/prisustvo/report', 'App\Http\Controllers\PrisustvoController@report')->name('prisustvo.report');
+    });
+
+    // Student - can view obavestenja and their own data
+    Route::get('/moja-obavestenja', 'App\Http\Controllers\ObavestenjeController@moja')->name('obavestenja.moja');
+});
+
+// Public - obavestenja javna (no auth required)
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/obavestenja/javna', 'App\Http\Controllers\ObavestenjeController@javna')->name('obavestenja.javna');
+    Route::get('/api/docs', 'App\Http\Controllers\ApiDocsController@index')->name('api.docs');
+});
+
+// Admin and Professor
+Route::group(['middleware' => ['web', 'auth', 'role:admin,professor']], function () {
+    // Obavestenja - view for all, edit for admin/professor
+    Route::get('/obavestenja', 'App\Http\Controllers\ObavestenjeController@index')->name('obavestenja.index');
+    Route::get('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@show')->name('obavestenja.show');
+    
+    // Raspored - view for all, edit for admin/professor
+    Route::get('/raspored', 'App\Http\Controllers\RasporedController@index')->name('raspored.index');
+    Route::get('/raspored/pregled', 'App\Http\Controllers\RasporedController@pregled')->name('raspored.pregled');
+    
+    // Aktivnost
+    Route::get('/aktivnost', 'App\Http\Controllers\AktivnostController@index')->name('aktivnost.index');
+    Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->name('aktivnost.show');
+    Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
+    
+    // Prisustvo
+    Route::get('/prisustvo', 'App\Http\Controllers\PrisustvoController@index')->name('prisustvo.index');
+    Route::get('/prisustvo/report', 'App\Http\Controllers\PrisustvoController@report')->name('prisustvo.report');
+});
+
+// Student - can view obavestenja and their own data
+Route::group(['middleware' => ['web', 'auth', 'role:student']], function () {
+    Route::get('/moja-obavestenja', 'App\Http\Controllers\ObavestenjeController@moja')->name('obavestenja.moja');
+    Route::get('/obavestenja/javna', 'App\Http\Controllers\ObavestenjeController@javna')->name('obavestenja.javna');
+});
+
+// Public - obavestenja javna
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/obavestenja/javna', 'App\Http\Controllers\ObavestenjeController@javna')->name('obavestenja.javna');
+});
