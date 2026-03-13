@@ -1,7 +1,8 @@
 @extends('layouts.layout')
-
+@section('page_heading','Приказ обавештења')
 @section('section')
-<div class="container">
+
+<div class="col-sm-12 col-lg-10">
     <div class="row">
         <div class="col-md-12">
             <div class="card">

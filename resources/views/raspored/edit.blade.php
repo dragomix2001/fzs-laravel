@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Измени час у распореду')
 @section('section')
-<div class="container">
-    <h2>Измени час у распореду</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Измени час у распореду</h2>
     
     <form method="POST" action="{{ route('raspored.update', $raspored->id) }}">
         @csrf

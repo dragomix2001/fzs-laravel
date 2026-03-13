@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Измени обавештење')
 @section('section')
-<div class="container">
-    <h2>Измени обавештење</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Измени обавештење</h2>
     
     <form method="POST" action="{{ route('obavestenja.update', $obavestenje->id) }}">
         @csrf

@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Јавна обавештења')
 @section('section')
-<div class="container">
-    <h2>Обавештења</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Обавештења</h2>
 
     @if($obavestenja->count() > 0)
         <div class="timeline mt-4">

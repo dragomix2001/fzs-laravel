@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Континуирано оцењивање')
 @section('section')
-<div class="container">
-    <h2>Континуирано оцењивање</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Континуирано оцењивање</h2>
     
     <a href="{{ route('aktivnost.create') }}" class="btn btn-success mb-3">Нова активност</a>
     <a href="{{ route('aktivnost.rezime') }}" class="btn btn-info mb-3">Преглед свих активности</a>

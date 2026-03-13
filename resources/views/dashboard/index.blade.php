@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Аналитика и статистика')
 @section('section')
-<div class="container">
-    <h2>Аналитика и статистика</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Аналитика и статистика</h2>
 
     <form method="GET" action="{{ route('dashboard.index') }}" class="mb-4">
         <div class="row">
@@ -151,7 +152,6 @@
             </div>
         </div>
     </div>
-
     <div class="mt-4">
         <a href="{{ route('dashboard.studenti') }}" class="btn btn-primary">Детаљни преглед студената</a>
         <a href="{{ route('dashboard.ispiti') }}" class="btn btn-info">Аналитика испита</a>

@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Обавештења')
 @section('section')
-<div class="container">
-    <h2>Обавештења</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Обавештења</h2>
     
     <form method="GET" action="{{ route('obavestenja.index') }}" class="mb-4">
         <div class="row">

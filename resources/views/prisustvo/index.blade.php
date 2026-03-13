@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Евиденција присуства')
 @section('section')
-<div class="container">
-    <h2>Евиденција присуства на настави</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Евиденција присуства на настави</h2>
     
     <form method="GET" action="{{ route('prisustvo.index') }}" class="mb-4">
         <div class="row">

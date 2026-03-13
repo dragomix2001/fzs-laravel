@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Преглед студената')
 @section('section')
-<div class="container">
-    <h2>Преглед студената</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Преглед студената</h2>
 
     <form method="GET" action="{{ route('dashboard.studenti') }}" class="mb-4">
         <div class="row">

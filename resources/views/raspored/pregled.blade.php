@@ -1,8 +1,9 @@
 @extends('layouts.layout')
-
+@section('page_heading','Преглед распореда часова')
 @section('section')
-<div class="container">
-    <h2>Преглед распореда часова</h2>
+
+<div class="col-sm-12 col-lg-10">
+<h2>Преглед распореда часова</h2>
     
     <form method="GET" action="{{ route('raspored.pregled') }}" class="mb-4">
         <div class="row">
