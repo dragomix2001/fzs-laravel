@@ -36,11 +36,11 @@
             </thead>
             @foreach($ispitniRokovi as $rok)
                 <tr>
-                    <td>{{$rok->nadredjeniRok->naziv}}</td>
+                    <td>{{$rok->nadredjeniRok->naziv ?? '-'}}</td>
                     <td>{{$rok->naziv}}</td>
-                    <td data-order="{{$rok->pocetak->timestamp}}">{{$rok->pocetak->format('d.m.Y.')}}</td>
-                    <td data-order="{{$rok->kraj->timestamp}}">{{$rok->kraj->format('d.m.Y.')}}</td>
-                    <td>{{\App\AktivniIspitniRokovi::tipRoka($rok->tipRoka_id)}}</td>
+                    <td>{{\Carbon\Carbon::parse($rok->pocetak)->format('d.m.Y.')}}</td>
+                    <td>{{\Carbon\Carbon::parse($rok->kraj)->format('d.m.Y.')}}</td>
+                    <td>{{\App\Models\AktivniIspitniRokovi::tipRoka($rok->tipRoka_id)}}</td>
                     <td>{{$rok->komentar}}</td>
                     <td>
                         <a class="btn btn-warning" href="{{$putanja}}/kalendar/editRok/{{ $rok->id }}">

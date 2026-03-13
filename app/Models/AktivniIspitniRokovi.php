@@ -8,7 +8,10 @@ class AktivniIspitniRokovi extends AndroModel
 {
     protected $table = 'aktivni_ispitni_rokovi';
 
-    protected $casts = ['pocetak', 'kraj'];
+    protected $casts = [
+        'pocetak' => 'datetime:Y-m-d',
+        'kraj' => 'datetime:Y-m-d',
+    ];
 
     protected $fillable = ['rok_id','naziv','pocetak', 'kraj', 'komentar', 'tipRoka_id', 'indikatorAktivan'];
 
