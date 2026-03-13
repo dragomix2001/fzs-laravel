@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiKandidatController;
 use App\Http\Controllers\Api\ApiIspitController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ObavestenjeController;
+use App\Http\Controllers\Api\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +30,24 @@ Route::prefix('v1')->group(function () {
         'kandidati' => ApiKandidatController::class,
         'ispiti' => ApiIspitController::class,
     ]);
+    
+    Route::prefix('auth')->group(function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+        Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
+        Route::put('/profile', [AuthController::class, 'updateProfile'])->middleware('auth:sanctum');
+        Route::post('/change-password', [AuthController::class, 'changePassword'])->middleware('auth:sanctum');
+    });
+
+    Route::get('/obavestenja/javna', [ObavestenjeController::class, 'javna']);
+    Route::get('/obavestenja', [ObavestenjeController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/obavestenja/{obavestenje}', [ObavestenjeController::class, 'show'])->middleware('auth:sanctum');
+
+    Route::prefix('student')->middleware('auth:sanctum')->group(function () {
+        Route::get('/profile', [StudentController::class, 'profile']);
+        Route::get('/ispiti', [StudentController::class, 'polozeniIspiti']);
+        Route::get('/prijave', [StudentController::class, 'prijave']);
+        Route::get('/upis', [StudentController::class, 'upis']);
+        Route::get('/stats', [StudentController::class, 'stats']);
+    });
 });

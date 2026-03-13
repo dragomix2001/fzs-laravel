@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Obavestenje;
 use App\Models\Profesor;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class ObavestenjeController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function index(Request $request)
     {
         $query = Obavestenje::with('profesor');
@@ -49,12 +56,22 @@ class ObavestenjeController extends Controller
             'aktivan' => 'boolean',
             'datum_objave' => 'required',
             'datum_isteka' => 'nullable|after:datum_objave',
+            'posalji_email' => 'boolean',
         ]);
 
         $data = $request->all();
         $data['profesor_id'] = auth()->user()->profesor_id ?? $request->profesor_id;
 
-        Obavestenje::create($data);
+        $obavestenje = Obavestenje::create($data);
+
+        // Send email notification if requested
+        if ($request->boolean('posalji_email')) {
+            $this->notificationService->sendObavestenjeToAllStudents(
+                $obavestenje->naslov,
+                $obavestenje->sadrzaj,
+                $obavestenje->tip
+            );
+        }
 
         return redirect()->route('obavestenja.index')->with('success', 'Обавештење креирано');
     }

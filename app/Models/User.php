@@ -23,13 +23,42 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    const ROLE_ADMIN = 'admin';
+    const ROLE_PROFESSOR = 'professor';
+    const ROLE_STUDENT = 'student';
+
     public function isAdmin()
     {
-        if ($this->role == "admin")
-        {
-            return true;
-        }
+        return $this->role === self::ROLE_ADMIN;
+    }
 
-        return false;
+    public function isProfessor()
+    {
+        return $this->role === self::ROLE_PROFESSOR;
+    }
+
+    public function isStudent()
+    {
+        return $this->role === self::ROLE_STUDENT;
+    }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
+    public function hasAnyRole($roles)
+    {
+        return in_array($this->role, $roles);
+    }
+
+    public function profesor()
+    {
+        return $this->belongsTo(Profesor::class, 'email', 'email');
+    }
+
+    public function kandidat()
+    {
+        return $this->belongsTo(Kandidat::class, 'email', 'email');
     }
 }
