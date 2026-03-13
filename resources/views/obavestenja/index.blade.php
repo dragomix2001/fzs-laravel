@@ -74,12 +74,10 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('obavestenja.show', $obavestenje->id) }}" class="btn btn-sm btn-info">Прикажи</a>
-                        <a href="{{ route('obavestenja.edit', $obavestenje->id) }}" class="btn btn-sm btn-primary">Измени</a>
-                        <a href="{{ route('obavestenja.toggle', $obavestenje->id) }}" class="btn btn-sm btn-warning">
-                            {{ $obavestenje->aktivan ? 'Деактивирај' : 'Активирај' }}
-                        </a>
-                        <form action="{{ route('obavestenja.destroy', $obavestenje->id) }}" method="POST" style="display:inline;">
+<a href="{{ route('obavestenja.show', ['obavestenje' => $obavestenje->id]) }}" class="btn btn-sm btn-info">Прикажи</a>
+<a href="{{ route('obavestenja.edit', ['obavestenje' => $obavestenje->id]) }}" class="btn btn-sm btn-primary">Измени</a>
+<a href="{{ route('obavestenja.toggle', ['obavestenje' => $obavestenje->id]) }}" class="btn btn-sm btn-warning">
+<form action="{{ route('obavestenja.destroy', ['obavestenje' => $obavestenje->id]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Да ли сте сигурни?')">Обриши</button>

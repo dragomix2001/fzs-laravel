@@ -5,7 +5,7 @@
 <div class="col-sm-12 col-lg-10">
 <h2>Измени обавештење</h2>
     
-    <form method="POST" action="{{ route('obavestenja.update', $obavestenje->id) }}">
+    <form method="POST" action="{{ route('obavestenja.update', ['obavestenje' => $obavestenje->id]) }}">
         @csrf
         @method('PUT')
         
