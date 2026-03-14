@@ -1,16 +1,19 @@
 <?php
-use Illuminate\Database\Eloquent\Model;
 
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redirect;
 
 class UpisGodine extends AndroModel
 {
     protected $table = 'upis_godine';
 
-    protected $casts = ['datumUpisa','datumPromene'];
+    protected $casts = [
+        'datumUpisa' => 'datetime',
+        'datumPromene' => 'datetime',
+    ];
 
     public function status()
     {
