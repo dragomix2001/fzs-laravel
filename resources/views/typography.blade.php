@@ -73,7 +73,7 @@
 		<small>Someone famous in <cite title="Source Title">Source Title</cite> </small> 
 		</blockquote> 
 		<h4>Right Aligned Blockquote</h4>
-		 <blockquote class="pull-right"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p> 
+		 <blockquote class="float-end"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p> 
 		 </blockquote> 
 		 @endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo5'))

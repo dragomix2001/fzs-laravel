@@ -69,8 +69,8 @@
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <span class="pull-left">Износ: {{$trenutnaSkolarina->komentar}}</span>
-                            <span class="pull-right"><i class="fa fa-comment-o"></i></span>
+                            <span class="float-start">Износ: {{$trenutnaSkolarina->komentar}}</span>
+                            <span class="float-end"><i class="fa fa-comment-o"></i></span>
 
                             <div class="clearfix"></div>
                         </div>
@@ -90,8 +90,8 @@
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <span class="pull-left">Уплаћено</span>
-                            <span class="pull-right"><i class="fa fa-check-circle"></i></span>
+                            <span class="float-start">Уплаћено</span>
+                            <span class="float-end"><i class="fa fa-check-circle"></i></span>
 
                             <div class="clearfix"></div>
                         </div>
@@ -111,8 +111,8 @@
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <span class="pull-left">Дуговање</span>
-                            <span class="pull-right"><i class="fa fa-exclamation"></i></span>
+                            <span class="float-start">Дуговање</span>
+                            <span class="float-end"><i class="fa fa-exclamation"></i></span>
 
                             <div class="clearfix"></div>
                         </div>
