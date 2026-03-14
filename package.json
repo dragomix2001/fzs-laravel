@@ -6,8 +6,21 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@tailwindcss/vite": "^4.2.1",
+        "autoprefixer": "^10.4.27",
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.0",
+        "postcss": "^8.5.8",
+        "sass": "^1.98.0",
+        "tailwindcss": "^4.2.1",
         "vite": "^5.0.0"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.7.2",
+        "@popperjs/core": "^2.11.8",
+        "bootstrap": "^5.3.8",
+        "datatables.net": "^2.3.7",
+        "datatables.net-bs5": "^2.3.7",
+        "jquery": "^3.7.1"
     }
 }
