@@ -33,7 +33,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             \Log::info('Auth successful for: ' . $credentials['email']);
             $request->session()->regenerate();
-            return redirect()->intended('/home');
+            return redirect()->intended('/');
         }
 
         \Log::info('Auth failed for: ' . $credentials['email']);
