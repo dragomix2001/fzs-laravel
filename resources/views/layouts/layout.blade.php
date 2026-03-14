@@ -16,7 +16,6 @@
     <style>
         :root {
             --sidebar-width: 250px;
-            --primary-color: #0d6efd;
             --header-height: 56px;
         }
         
@@ -29,7 +28,7 @@
             min-height: 100vh;
         }
         
-        /* Sidebar - svetla pozadina */
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: #f8f9fa;
@@ -42,56 +41,77 @@
             border-right: 1px solid #dee2e6;
         }
         
-        .sidebar .nav-link {
-            color: #333;
-            padding: 12px 20px;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            align-items: center;
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
         
-        .sidebar .nav-link:hover {
+        .sidebar-menu > li > a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu > li > a:hover {
             background: #e9ecef;
             color: #000;
         }
         
-        .sidebar .nav-link i {
+        .sidebar-menu > li > a i:first-child {
             width: 25px;
             margin-right: 10px;
         }
         
-        .sidebar .nav-link .arrow {
+        .sidebar-menu > li > a .arrow {
             margin-left: auto;
             font-size: 12px;
             transition: transform 0.2s;
         }
         
-        .sidebar .nav-second-level {
-            background: #fff;
+        .sidebar-menu > li.open > a .arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* Submenu */
+        .submenu {
             list-style: none;
             padding: 0;
             margin: 0;
             display: none;
+            background: #fff;
             border-bottom: 1px solid #e9ecef;
         }
         
-        .sidebar .nav-second-level.show {
+        .submenu.show {
             display: block;
         }
         
-        .sidebar .nav-second-level .nav-link {
+        .submenu li a {
+            display: block;
             padding: 10px 20px 10px 55px;
-            font-size: 14px;
             color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
         }
         
-        .sidebar .nav-item.active > .nav-link {
-            background: var(--primary-color);
+        .submenu li a:hover {
+            background: #e9ecef;
+        }
+        
+        /* Active state */
+        .sidebar-menu > li.active > a {
+            background: #0d6efd;
             color: #fff;
         }
         
-        .sidebar .nav-item.active .nav-second-level .nav-link.active {
-            background: var(--primary-color);
+        .sidebar-menu > li.active .submenu li a.active {
+            background: #0d6efd;
             color: #fff;
         }
         
@@ -189,26 +209,6 @@
                 display: block;
             }
         }
-        
-        /* Cards */
-        .card-custom {
-            background: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .card-custom .card-header {
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-            padding: 12px 20px;
-            font-weight: 600;
-        }
-        
-        .card-custom .card-body {
-            padding: 20px;
-        }
     </style>
 </head>
 <body>
@@ -218,111 +218,111 @@
         
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <ul class="nav flex-column" id="side-menu">
-                <li class="nav-item {{ Request::is('*kandidat*') ? 'active' : '' }}">
-                    <a class="nav-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#kandidatSubmenu">
+            <ul class="sidebar-menu" id="side-menu">
+                <li class="{{ Request::is('*kandidat*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'kandidatSubmenu')">
                         <i class="fas fa-user"></i>
                         <span>Кандидати</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="nav collapse" id="kandidatSubmenu">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('kandidat/create') }}">&nbsp;&nbsp;&nbsp;Додавање</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('kandidat?studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Преглед</a></li>
+                    <ul class="submenu" id="kandidatSubmenu">
+                        <li><a href="{{ url('kandidat/create') }}">&nbsp;&nbsp;&nbsp;Додавање</a></li>
+                        <li><a href="{{ url('kandidat?studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Преглед</a></li>
                     </ul>
                 </li>
                 
-                <li class="nav-item {{ Request::is('*master*') ? 'active' : '' }}">
-                    <a class="nav-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#masterSubmenu">
+                <li class="{{ Request::is('*master*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'masterSubmenu')">
                         <i class="fas fa-book"></i>
                         <span>Мастер кандидати</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="nav collapse" id="masterSubmenu">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('master/create') }}">&nbsp;&nbsp;&nbsp;Додавање</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('master') }}">&nbsp;&nbsp;&nbsp;Преглед</a></li>
+                    <ul class="submenu" id="masterSubmenu">
+                        <li><a href="{{ url('master/create') }}">&nbsp;&nbsp;&nbsp;Додавање</a></li>
+                        <li><a href="{{ url('master') }}">&nbsp;&nbsp;&nbsp;Преглед</a></li>
                     </ul>
                 </li>
                 
-                <li class="nav-item {{ Request::is('*student*') ? 'active' : '' }}">
-                    <a class="nav-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#studentiSubmenu">
+                <li class="{{ Request::is('*student*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'studentiSubmenu')">
                         <i class="fas fa-graduation-cap"></i>
                         <span>Активни студенти</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="nav collapse" id="studentiSubmenu">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('student/index/1?godina=1&studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Основне студије</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('student/index/2?studijskiProgramId=4') }}">&nbsp;&nbsp;&nbsp;Мастер студије</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('student/zamrznuti') }}">&nbsp;&nbsp;&nbsp;Статус мировања</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('student/ispisani') }}">&nbsp;&nbsp;&nbsp;Исписани студенти</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('student/diplomirani?tipStudijaId=1&studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Дипломирани</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/izvestaji/spiskoviStudenti') }}">&nbsp;&nbsp;&nbsp;Извештаји</a></li>
+                    <ul class="submenu" id="studentiSubmenu">
+                        <li><a href="{{ url('student/index/1?godina=1&studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Основне студије</a></li>
+                        <li><a href="{{ url('student/index/2?studijskiProgramId=4') }}">&nbsp;&nbsp;&nbsp;Мастер студије</a></li>
+                        <li><a href="{{ url('student/zamrznuti') }}">&nbsp;&nbsp;&nbsp;Статус мировања</a></li>
+                        <li><a href="{{ url('student/ispisani') }}">&nbsp;&nbsp;&nbsp;Исписани студенти</a></li>
+                        <li><a href="{{ url('student/diplomirani?tipStudijaId=1&studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Дипломирани</a></li>
+                        <li><a href="{{ url('/izvestaji/spiskoviStudenti') }}">&nbsp;&nbsp;&nbsp;Извештаји</a></li>
                     </ul>
                 </li>
                 
-                <li class="nav-item {{ Request::is('*kalendar*') || Request::is('*predmeti*') || Request::is('*zapisnik*') ? 'active' : '' }}">
-                    <a class="nav-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#ispitiSubmenu">
+                <li class="{{ Request::is('*kalendar*') || Request::is('*predmeti*') || Request::is('*zapisnik*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'ispitiSubmenu')">
                         <i class="fas fa-calendar"></i>
                         <span>Испити</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="nav collapse" id="ispitiSubmenu">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/kalendar/') }}">&nbsp;&nbsp;&nbsp;Календар</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/predmeti/') }}">&nbsp;&nbsp;&nbsp;Пријава испита</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/zapisnik/') }}">&nbsp;&nbsp;&nbsp;Записник</a></li>
+                    <ul class="submenu" id="ispitiSubmenu">
+                        <li><a href="{{ url('/kalendar/') }}">&nbsp;&nbsp;&nbsp;Календар</a></li>
+                        <li><a href="{{ url('/predmeti/') }}">&nbsp;&nbsp;&nbsp;Пријава испита</a></li>
+                        <li><a href="{{ url('/zapisnik/') }}">&nbsp;&nbsp;&nbsp;Записник</a></li>
                     </ul>
                 </li>
                 
-                <li class="nav-item {{ Request::is('*tipStudija*') || Request::is('*studijskiProgram*') ? 'active' : '' }}">
-                    <a class="nav-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#adminSifarniciSubmenu">
+                <li class="{{ Request::is('*tipStudija*') || Request::is('*studijskiProgram*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'adminSifarniciSubmenu')">
                         <i class="fas fa-cogs"></i>
                         <span>Админ шифарници</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="nav collapse" id="adminSifarniciSubmenu">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/tipStudija') }}">&nbsp;&nbsp;&nbsp;Тип студија</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/studijskiProgram') }}">&nbsp;&nbsp;&nbsp;Студијски програм</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/godinaStudija') }}">&nbsp;&nbsp;&nbsp;Година студија</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('statusStudiranja') }}">&nbsp;&nbsp;&nbsp;Статус студирања</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('semestar') }}">&nbsp;&nbsp;&nbsp;Семестар</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('ispitniRok') }}">&nbsp;&nbsp;&nbsp;Испитни рок</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('oblikNastave') }}">&nbsp;&nbsp;&nbsp;Облик наставe</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('tipPredmeta') }}">&nbsp;&nbsp;&nbsp;Тип предмета</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('bodovanje') }}">&nbsp;&nbsp;&nbsp;Бодовање</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('statusKandidata') }}">&nbsp;&nbsp;&nbsp;Статус годыдине</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('statusIspita') }}">&nbsp;&nbsp;&nbsp;Статус испита</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('statusProfesora') }}">&nbsp;&nbsp;&nbsp;Статус професора</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('tipPrijave') }}">&nbsp;&nbsp;&nbsp;Тип пријаве</a></li>
+                    <ul class="submenu" id="adminSifarniciSubmenu">
+                        <li><a href="{{ url('/tipStudija') }}">&nbsp;&nbsp;&nbsp;Тип студија</a></li>
+                        <li><a href="{{ url('/studijskiProgram') }}">&nbsp;&nbsp;&nbsp;Студијски програм</a></li>
+                        <li><a href="{{ url('/godinaStudija') }}">&nbsp;&nbsp;&nbsp;Година студија</a></li>
+                        <li><a href="{{ url('statusStudiranja') }}">&nbsp;&nbsp;&nbsp;Статус студирања</a></li>
+                        <li><a href="{{ url('semestar') }}">&nbsp;&nbsp;&nbsp;Семестар</a></li>
+                        <li><a href="{{ url('ispitniRok') }}">&nbsp;&nbsp;&nbsp;Испитни рок</a></li>
+                        <li><a href="{{ url('oblikNastave') }}">&nbsp;&nbsp;&nbsp;Облик наставe</a></li>
+                        <li><a href="{{ url('tipPredmeta') }}">&nbsp;&nbsp;&nbsp;Тип предмета</a></li>
+                        <li><a href="{{ url('bodovanje') }}">&nbsp;&nbsp;&nbsp;Бодовање</a></li>
+                        <li><a href="{{ url('statusKandidata') }}">&nbsp;&nbsp;&nbsp;Статус годыдине</a></li>
+                        <li><a href="{{ url('statusIspita') }}">&nbsp;&nbsp;&nbsp;Статус испита</a></li>
+                        <li><a href="{{ url('statusProfesora') }}">&nbsp;&nbsp;&nbsp;Статус професора</a></li>
+                        <li><a href="{{ url('tipPrijave') }}">&nbsp;&nbsp;&nbsp;Тип пријаве</a></li>
                     </ul>
                 </li>
                 
-                <li class="nav-item {{ Request::is('*sport*') || Request::is('*predmet*') || Request::is('*profesor*') ? 'active' : '' }}">
-                    <a class="nav-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#sifarniciSubmenu">
+                <li class="{{ Request::is('*sport*') || Request::is('*predmet*') || Request::is('*profesor*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'sifarniciSubmenu')">
                         <i class="fas fa-list"></i>
                         <span>Шифарници</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="nav collapse" id="sifarniciSubmenu">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('sport') }}">&nbsp;&nbsp;&nbsp;Спортови</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('predmet') }}">&nbsp;&nbsp;&nbsp;Предмет</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('profesor') }}">&nbsp;&nbsp;&nbsp;Професор</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('krsnaSlava') }}">&nbsp;&nbsp;&nbsp;Крсна слава</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('region') }}">&nbsp;&nbsp;&nbsp;Регион</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('opstina') }}">&nbsp;&nbsp;&nbsp;Општина</a></li>
+                    <ul class="submenu" id="sifarniciSubmenu">
+                        <li><a href="{{ url('sport') }}">&nbsp;&nbsp;&nbsp;Спортови</a></li>
+                        <li><a href="{{ url('predmet') }}">&nbsp;&nbsp;&nbsp;Предмет</a></li>
+                        <li><a href="{{ url('profesor') }}">&nbsp;&nbsp;&nbsp;Професор</a></li>
+                        <li><a href="{{ url('krsnaSlava') }}">&nbsp;&nbsp;&nbsp;Крсна слава</a></li>
+                        <li><a href="{{ url('region') }}">&nbsp;&nbsp;&nbsp;Регион</a></li>
+                        <li><a href="{{ url('opstina') }}">&nbsp;&nbsp;&nbsp;Општина</a></li>
                     </ul>
                 </li>
                 
-                <li class="nav-item {{ Request::is('*prisustvo*') || Request::is('*aktivnost*') || Request::is('*raspored*') || Request::is('*obavestenja*') || Request::is('*dashboard*') ? 'active' : '' }}">
-                    <a class="nav-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#noviModuliSubmenu">
+                <li class="{{ Request::is('*prisustvo*') || Request::is('*aktivnost*') || Request::is('*raspored*') || Request::is('*obavestenja*') || Request::is('*dashboard*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'noviModuliSubmenu')">
                         <i class="fas fa-plus-circle"></i>
                         <span>Нови модули</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="nav collapse" id="noviModuliSubmenu">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/prisustvo') }}">&nbsp;&nbsp;&nbsp;Присуство</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/aktivnost') }}">&nbsp;&nbsp;&nbsp;Активности</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/raspored') }}">&nbsp;&nbsp;&nbsp;Распоред</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/obavestenja') }}">&nbsp;&nbsp;&nbsp;Обавештења</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/dashboard') }}">&nbsp;&nbsp;&nbsp;Аналитика</a></li>
+                    <ul class="submenu" id="noviModuliSubmenu">
+                        <li><a href="{{ url('/prisustvo') }}">&nbsp;&nbsp;&nbsp;Присуство</a></li>
+                        <li><a href="{{ url('/aktivnost') }}">&nbsp;&nbsp;&nbsp;Активности</a></li>
+                        <li><a href="{{ url('/raspored') }}">&nbsp;&nbsp;&nbsp;Распоред</a></li>
+                        <li><a href="{{ url('/obavestenja') }}">&nbsp;&nbsp;&nbsp;Обавештења</a></li>
+                        <li><a href="{{ url('/dashboard') }}">&nbsp;&nbsp;&nbsp;Аналитика</a></li>
                     </ul>
                 </li>
             </ul>
@@ -373,6 +373,17 @@
     @stack('scripts')
     
     <script>
+        // Toggle submenu function
+        function toggleSubmenu(event, submenuId) {
+            event.preventDefault();
+            var submenu = document.getElementById(submenuId);
+            var parentLi = submenu.parentElement;
+            
+            // Toggle current submenu
+            submenu.classList.toggle('show');
+            parentLi.classList.toggle('open');
+        }
+        
         // Mobile sidebar toggle
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('show');
@@ -382,17 +393,6 @@
         document.getElementById('sidebarOverlay').addEventListener('click', function() {
             document.getElementById('sidebar').classList.remove('show');
             document.getElementById('sidebarOverlay').classList.remove('show');
-        });
-        
-        // Arrow rotation on collapse
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(toggle) {
-            toggle.addEventListener('click', function() {
-                var arrow = this.querySelector('.arrow');
-                if (arrow) {
-                    arrow.classList.toggle('fa-chevron-down');
-                    arrow.classList.toggle('fa-chevron-up');
-                }
-            });
         });
     </script>
 </body>
