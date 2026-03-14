@@ -27,7 +27,7 @@
                             <a href="#">
                                 <div>
                                     <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
+                                    <span class="float-end text-muted">
                                         <em>Yesterday</em>
                                     </span>
                                 </div>
@@ -39,7 +39,7 @@
                             <a href="#">
                                 <div>
                                     <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
+                                    <span class="float-end text-muted">
                                         <em>Yesterday</em>
                                     </span>
                                 </div>
@@ -51,7 +51,7 @@
                             <a href="#">
                                 <div>
                                     <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
+                                    <span class="float-end text-muted">
                                         <em>Yesterday</em>
                                     </span>
                                 </div>
@@ -79,7 +79,7 @@
                                 <div>
                                     <p>
                                         <strong>Task 1</strong>
-                                        <span class="pull-right text-muted">40% Complete</span>
+                                        <span class="float-end text-muted">40% Complete</span>
                                     </p>
                                    
                                         <div>
@@ -96,7 +96,7 @@
                                 <div>
                                     <p>
                                         <strong>Task 2</strong>
-                                        <span class="pull-right text-muted">20% Complete</span>
+                                        <span class="float-end text-muted">20% Complete</span>
                                     </p>
                                    
                                         <div>
@@ -113,7 +113,7 @@
                                 <div>
                                     <p>
                                         <strong>Task 3</strong>
-                                        <span class="pull-right text-muted">60% Complete</span>
+                                        <span class="float-end text-muted">60% Complete</span>
                                     </p>
                                     
                                         <div>
@@ -130,7 +130,7 @@
                                 <div>
                                     <p>
                                         <strong>Task 4</strong>
-                                        <span class="pull-right text-muted">80% Complete</span>
+                                        <span class="float-end text-muted">80% Complete</span>
                                     </p>
                                     
                                         <div>
