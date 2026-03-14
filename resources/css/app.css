@@ -2,60 +2,200 @@
 
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
+/* Page wrapper */
+#page-wrapper {
+    margin-left: 250px;
+    padding: 20px;
+    min-height: calc(100vh - 50px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    position: fixed;
+    left: 0;
+    top: 50px;
+    bottom: 0;
+    background: #f8f9fa;
+    border-right: 1px solid #e7e7e7;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar-nav {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav .nav li a {
+    display: block;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.sidebar-nav .nav li a:hover {
+    background: #e9ecef;
+    text-decoration: none;
+}
+
+.sidebar-nav .nav li.active > a {
+    background: #337ab7;
+    color: #fff;
+}
+
+/* Second level */
+.sidebar-nav .nav .nav-second-level {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    background: #fff;
+}
+
+.sidebar-nav .nav li.active .nav-second-level {
+    display: block;
+}
+
+.sidebar-nav .nav .nav-second-level li a {
+    padding: 10px 15px 10px 35px;
+    font-size: 14px;
+    background: #fafafa;
+}
+
+.sidebar-nav .nav .nav-second-level li a:hover {
+    background: #e9ecef;
+}
+
+.sidebar-nav .nav .nav-second-level li.active > a {
+    background: #337ab7;
+    color: #fff;
+}
+
+/* Arrow */
+.fa-angle-down {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+/* Navbar */
+.navbar {
+    min-height: 50px;
+    margin-bottom: 0;
+}
+
+.navbar-brand {
+    font-size: 18px;
+    line-height: 30px;
+    height: 50px;
+    padding: 10px 15px;
+}
+
+/* Logo */
+.navbar-header img {
+    margin: 10px;
+}
+
+/* Page header */
 .page-header {
-    margin-bottom: 20px;
-    padding-bottom: 9px;
-    border-bottom: 1px solid #eee;
+    margin: 0 0 20px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #ddd;
     font-size: 24px;
     font-weight: 500;
 }
 
-#side-menu .nav-link {
-    color: #333;
+/* Panel styles */
+.panel {
+    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.panel-heading {
     padding: 10px 15px;
-    border-bottom: 1px solid #eee;
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    font-weight: 600;
 }
 
-#side-menu .nav-link:hover {
-    background: #e9ecef;
+.panel-body {
+    padding: 15px;
 }
 
-#side-menu .nav-link[data-bs-toggle="collapse"] {
-    background: #f8f9fa;
-    font-weight: 500;
+/* Form */
+.form-group {
+    margin-bottom: 15px;
 }
 
-#side-menu .nav-link i {
-    width: 20px;
+.help-block {
+    color: #777;
+    font-size: 13px;
 }
 
-#side-menu .nav .nav-item .nav-link {
-    padding-left: 35px;
-    font-size: 14px;
+/* Table */
+.table {
+    width: 100%;
+    margin-bottom: 20px;
 }
 
-#side-menu .nav .nav-item .nav-link:hover {
-    background: #e9ecef;
+.table th {
+    background: #f5f5f5;
+    font-weight: 600;
 }
 
-.sidebar {
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+.table td, .table th {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
 
-.navbar-brand {
-    font-size: 18px !important;
+/* Buttons */
+.btn {
+    border-radius: 3px;
 }
 
-#page-wrapper {
-    min-height: calc(100vh - 50px);
+/* Alerts */
+.alert {
+    border-radius: 4px;
 }
 
+/* Mobile */
 @media (max-width: 768px) {
-    .col-md-10.ms-sm-auto {
-        margin-left: 0 !important;
+    #page-wrapper {
+        margin-left: 0;
     }
+    
     .sidebar {
-        position: static !important;
-        width: 100% !important;
+        display: none;
     }
+    
+    .sidebar.in {
+        display: block;
+        position: relative;
+        width: 100%;
+        top: 0;
+    }
+}
+
+/* Dropdown caret */
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+
+/* Icon bar for mobile menu */
+.icon-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #ccc;
+    margin: 4px 0;
 }
