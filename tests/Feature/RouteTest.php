@@ -105,4 +105,84 @@ class RouteTest extends TestCase
         
         $response->assertStatus(200);
     }
+
+    public function test_godina_studija_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/godinaStudija');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_student_diplomirani_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/student/diplomirani');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_student_zamrznuti_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/student/zamrznuti');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_prijava_za_studenta_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $kandidat = Kandidat::first();
+        if (!$kandidat) {
+            $this->markTestSkipped('No Kandidat records found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get("/prijava/zaStudenta/{$kandidat->id}");
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_database_has_kandidat_records(): void
+    {
+        $count = DB::table('kandidat')->count();
+        $this->assertGreaterThan(0, $count, 'Kandidat table should have records');
+    }
+
+    public function test_database_has_user_records(): void
+    {
+        $count = DB::table('users')->count();
+        $this->assertGreaterThan(0, $count, 'Users table should have records');
+    }
+
+    public function test_database_has_skolska_god_upisa_records(): void
+    {
+        $count = DB::table('skolska_god_upisa')->count();
+        $this->assertGreaterThan(0, $count, 'skolska_god_upisa table should have records');
+    }
 }
