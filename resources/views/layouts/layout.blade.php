@@ -4,21 +4,21 @@
 
     <div id="wrapper">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" style="margin-bottom: 0; min-height: 50px;">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                <div class="d-flex align-items-center">
+                    <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <a href="{{ url('') }}">
-                        <img src="{{ asset('images/logo_fzs.png') }}" height="40" style="margin: 5px 10px 5px 10px">
+                        <img src="{{ asset('images/logo_fzs.png') }}" height="35" class="d-inline-block align-text-top">
                     </a>
-                    <a class="navbar-brand" href="{{ url('') }}"> Факултет за спорт</a>
+                    <a class="navbar-brand ms-2" href="{{ url('') }}">Факултет за спорт</a>
                 </div>
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/pretraga') }}"><i class="fas fa-search"></i> <b>Претрага</b></a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right" style="margin-right: 5%">
+                <ul class="nav navbar-nav navbar-right me-3">
                     @if (Auth::guest())
                         <li><a href="/login">Пријава</a></li>
                         <li><a href="/register">Регистрација</a></li>
@@ -34,167 +34,113 @@
             </div>
         </nav>
 
-        <div class="navbar-default sidebar" role="navigation" style="background: #f8f9fa; min-height: 100vh; width: 250px; position: fixed; left: 0; top: 50px; overflow-y: auto;">
-            <div class="sidebar-nav">
-                <ul class="nav" id="side-menu" style="padding: 0;">
-                    <li class="{{ Request::is('*kandidat*') ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-user"></i>&nbsp;Кандидати<span class="fas fa-chevron-down float-end"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li {{ (Request::is('*kandidat/create') ? 'class="active"' : '') }}>
-                                <a href="{{ url('kandidat/create') }}">Додавање</a>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <nav id="sidebarMenu" class="col-md-2 collapse d-md-block bg-light sidebar" style="min-height: calc(100vh - 50px); width: 220px; position: fixed; left: 0; top: 50px; overflow-y: auto; border-right: 1px solid #ddd;">
+                    <div class="position-sticky pt-2">
+                        <ul class="nav flex-column" id="side-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#submenuKandidati" data-bs-toggle="collapse">
+                                    <i class="fas fa-user"></i>&nbsp;Кандидати<span class="fas fa-angle-down float-end"></span>
+                                </a>
+                                <ul class="nav collapse" id="submenuKandidati" data-bs-parent="#side-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('kandidat/create') }}">&nbsp;&nbsp;&nbsp;Додавање</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('kandidat?studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Преглед</a></li>
+                                </ul>
                             </li>
-                            <li {{ (Request::is('*kandidat?*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('kandidat?studijskiProgramId=1') }}">Преглед</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#submenuMaster" data-bs-toggle="collapse">
+                                    <i class="fas fa-book"></i>&nbsp;Мастер кандидати<span class="fas fa-angle-down float-end"></span>
+                                </a>
+                                <ul class="nav collapse" id="submenuMaster" data-bs-parent="#side-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('master/create') }}">&nbsp;&nbsp;&nbsp;Додавање</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('master') }}">&nbsp;&nbsp;&nbsp;Преглед</a></li>
+                                </ul>
                             </li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('*master*') ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-book"></i>&nbsp;Мастер кандидати<span class="fas fa-chevron-down float-end"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li {{ (Request::is('*master/create') ? 'class="active"' : '') }}>
-                                <a href="{{ url('master/create') }}">Додавање</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#submenuStudenti" data-bs-toggle="collapse">
+                                    <i class="fas fa-graduation-cap"></i>&nbsp;Активни студенти<span class="fas fa-angle-down float-end"></span>
+                                </a>
+                                <ul class="nav collapse" id="submenuStudenti" data-bs-parent="#side-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('student/index/1?godina=1&studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Основне студије</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('student/index/2?studijskiProgramId=4') }}">&nbsp;&nbsp;&nbsp;Мастер студије</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('student/zamrznuti') }}">&nbsp;&nbsp;&nbsp;Статус мировања</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('student/ispisani') }}">&nbsp;&nbsp;&nbsp;Исписани студенти</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('student/diplomirani?tipStudijaId=1&studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Дипломирани студенти</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/izvestaji/spiskoviStudenti') }}">&nbsp;&nbsp;&nbsp;Извештаји</a></li>
+                                </ul>
                             </li>
-                            <li {{ (Request::is('*master') ? 'class="active"' : '') }}>
-                                <a href="{{ url('master') }}">Преглед</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#submenuIspiti" data-bs-toggle="collapse">
+                                    <i class="fas fa-calendar"></i>&nbsp;Испити<span class="fas fa-angle-down float-end"></span>
+                                </a>
+                                <ul class="nav collapse" id="submenuIspiti" data-bs-parent="#side-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/kalendar/') }}">&nbsp;&nbsp;&nbsp;Календар</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/predmeti/') }}">&nbsp;&nbsp;&nbsp;Пријава испита</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/zapisnik/') }}">&nbsp;&nbsp;&nbsp;Записник о полагању испита</a></li>
+                                </ul>
                             </li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('*student*') ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-graduation-cap"></i>&nbsp;Активни студенти<span class="fas fa-chevron-down float-end"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li {{ (Request::is('*student/index/1*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('student/index/1?godina=1&studijskiProgramId=1') }}">Основне студије</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#submenuSifarniciAdmin" data-bs-toggle="collapse">
+                                    <i class="fas fa-cog"></i>&nbsp;Админ шифарници<span class="fas fa-angle-down float-end"></span>
+                                </a>
+                                <ul class="nav collapse" id="submenuSifarniciAdmin" data-bs-parent="#side-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/tipStudija') }}">&nbsp;&nbsp;&nbsp;Тип студија</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/studijskiProgram') }}">&nbsp;&nbsp;&nbsp;Студијски програм</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/godinaStudija') }}">&nbsp;&nbsp;&nbsp;Година студија</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('statusStudiranja') }}">&nbsp;&nbsp;&nbsp;Статус студирања</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('semestar') }}">&nbsp;&nbsp;&nbsp;Семестар</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('ispitniRok') }}">&nbsp;&nbsp;&nbsp;Испитни рок</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('oblikNastave') }}">&nbsp;&nbsp;&nbsp;Облик наставe</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('tipPredmeta') }}">&nbsp;&nbsp;&nbsp;Тип предмета</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('bodovanje') }}">&nbsp;&nbsp;&nbsp;Бодовање</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('statusKandidata') }}">&nbsp;&nbsp;&nbsp;Статус године</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('statusIspita') }}">&nbsp;&nbsp;&nbsp;Статус испита</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('statusProfesora') }}">&nbsp;&nbsp;&nbsp;Статус професора</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('tipPrijave') }}">&nbsp;&nbsp;&nbsp;Тип пријаве</a></li>
+                                </ul>
                             </li>
-                            <li {{ (Request::is('*student/index/2*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('student/index/2?studijskiProgramId=4') }}">Мастер студије</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#submenuSifarnici" data-bs-toggle="collapse">
+                                    <i class="fas fa-table"></i>&nbsp;Шифарници<span class="fas fa-angle-down float-end"></span>
+                                </a>
+                                <ul class="nav collapse" id="submenuSifarnici" data-bs-parent="#side-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('sport') }}">&nbsp;&nbsp;&nbsp;Спортови</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('predmet') }}">&nbsp;&nbsp;&nbsp;Предмет</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('profesor') }}">&nbsp;&nbsp;&nbsp;Професор</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('krsnaSlava') }}">&nbsp;&nbsp;&nbsp;Крсна слава</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('region') }}">&nbsp;&nbsp;&nbsp;Регион</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('opstina') }}">&nbsp;&nbsp;&nbsp;Општина</a></li>
+                                </ul>
                             </li>
-                            <li {{ (Request::is('*student/zamrznuti*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('student/zamrznuti') }}">Статус мировања</a>
-                            </li>
-                            <li {{ (Request::is('*student/ispisani*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('student/ispisani') }}">Исписани студенти</a>
-                            </li>
-                            <li {{ (Request::is('*student/diplomirani*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('student/diplomirani?tipStudijaId=1&studijskiProgramId=1') }}">Дипломирани студенти</a>
-                            </li>
-                            <li {{ (Request::is('*izvestaji/spiskoviStudenti*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/izvestaji/spiskoviStudenti') }}">Извештаји</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('*kalendar*') || Request::is('*predmeti*') || Request::is('*zapisnik*') ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-calendar"></i>&nbsp;Испити<span class="fas fa-chevron-down float-end"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li {{ (Request::is('*kalendar*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/kalendar/') }}">Календар</a>
-                            </li>
-                            <li {{ (Request::is('*predmeti*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/predmeti/') }}">Пријава испита</a>
-                            </li>
-                            <li {{ (Request::is('*zapisnik*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/zapisnik/') }}">Записник о полагању испита</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('*tipStudija*') || Request::is('*studijskiProgram*') || Request::is('*sifarnici*') || Request::is('*sifarniciAdmin*') ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-cog"></i>&nbsp;Админ шифарници<span class="fas fa-chevron-down float-end"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li {{ (Request::is('*tipStudija*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/tipStudija') }}">Тип студија</a>
-                            </li>
-                            <li {{ (Request::is('*studijskiProgram*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/studijskiProgram') }}">Студијски програм</a>
-                            </li>
-                            <li {{ (Request::is('*godinaStudija*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/godinaStudija') }}">Година студија</a>
-                            </li>
-                            <li {{ (Request::is('*statusStudiranja*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('statusStudiranja') }}">Статус студирања</a>
-                            </li>
-                            <li {{ (Request::is('*semestar*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('semestar') }}">Семестар</a>
-                            </li>
-                            <li {{ (Request::is('*ispitniRok*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('ispitniRok') }}">Испитни рок</a>
-                            </li>
-                            <li {{ (Request::is('*oblikNastave*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('oblikNastave') }}">Облик наставe</a>
-                            </li>
-                            <li {{ (Request::is('*tipPredmeta*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('tipPredmeta') }}">Тип предмета</a>
-                            </li>
-                            <li {{ (Request::is('*bodovanje*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('bodovanje') }}">Бодовање</a>
-                            </li>
-                            <li {{ (Request::is('*statusKandidata*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('statusKandidata') }}">Статус године</a>
-                            </li>
-                            <li {{ (Request::is('*statusIspita*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('statusIspita') }}">Статус испита</a>
-                            </li>
-                            <li {{ (Request::is('*statusProfesora*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('statusProfesora') }}">Статус професора</a>
-                            </li>
-                            <li {{ (Request::is('*tipPrijave*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('tipPrijave') }}">Тип пријаве</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#submenuNovi" data-bs-toggle="collapse">
+                                    <i class="fas fa-plus-circle"></i>&nbsp;Нови модули<span class="fas fa-angle-down float-end"></span>
+                                </a>
+                                <ul class="nav collapse" id="submenuNovi" data-bs-parent="#side-menu">
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/prisustvo') }}">&nbsp;&nbsp;&nbsp;Присуство</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/aktivnost') }}">&nbsp;&nbsp;&nbsp;Активности</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/raspored') }}">&nbsp;&nbsp;&nbsp;Распоред</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/obavestenja') }}">&nbsp;&nbsp;&nbsp;Обавештења</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ url('/dashboard') }}">&nbsp;&nbsp;&nbsp;Аналитика</a></li>
+                                </ul>
                             </li>
                         </ul>
-                    </li>
-                    <li class="{{ Request::is('*sport*') || Request::is('*predmet*') || Request::is('*profesor*') || Request::is('*krsnaSlava*') ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-table"></i>&nbsp;Шифарници<span class="fas fa-chevron-down float-end"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li {{ (Request::is('*sport*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('sport') }}">Спортови</a>
-                            </li>
-                            <li {{ (Request::is('*predmet*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('predmet') }}">Предмет</a>
-                            </li>
-                            <li {{ (Request::is('*profesor*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('profesor') }}">Професор</a>
-                            </li>
-                            <li {{ (Request::is('*krsnaSlava*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('krsnaSlava') }}">Крсна слава</a>
-                            </li>
-                            <li {{ (Request::is('*region*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('region') }}">Регион</a>
-                            </li>
-                            <li {{ (Request::is('*opstina*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('opstina') }}">Општина</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('*prisustvo*') || Request::is('*aktivnost*') || Request::is('*raspored*') || Request::is('*obavestenja*') || Request::is('*dashboard*') ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-plus-circle"></i>&nbsp;Нови модули<span class="fas fa-chevron-down float-end"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li {{ (Request::is('*prisustvo*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/prisustvo') }}">Присуство</a>
-                            </li>
-                            <li {{ (Request::is('*aktivnost*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/aktivnost') }}">Активности</a>
-                            </li>
-                            <li {{ (Request::is('*raspored*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/raspored') }}">Распоред</a>
-                            </li>
-                            <li {{ (Request::is('*obavestenja*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/obavestenja') }}">Обавештења</a>
-                            </li>
-                            <li {{ (Request::is('*dashboard*') ? 'class="active"' : '') }}>
-                                <a href="{{ url('/dashboard') }}">Аналитика</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                    </div>
+                </nav>
 
-        <div id="page-wrapper" style="margin-left: 250px; padding: 20px;">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="page-header">@yield('page_heading')</h2>
-                </div>
-            </div>
-            <div class="row">
-                @yield('section')
+                <!-- Main content -->
+                <main class="col-md-10 ms-sm-auto" style="margin-left: 220px; padding: 20px;">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="page-header">@yield('page_heading')</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @yield('section')
+                    </div>
+                </main>
             </div>
         </div>
     </div>
