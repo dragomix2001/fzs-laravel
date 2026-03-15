@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\GodinaStudija;
 use App\Kandidat;
+use App\SkolskaGodUpisa;
 use App\StudijskiProgram;
 use App\TipStudija;
 use Illuminate\Support\Facades\DB;
@@ -301,9 +302,21 @@ class StudentListService extends BasePdfService
             ->orderBy('brojIndeksa')
             ->get();
 
+        $program = StudijskiProgram::all();
+        $skolskaGodina6 = SkolskaGodUpisa::all();
+
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.spiskoviStudenti')
-            ->with('kandidat', $kandidat);
+            ->with('kandidat', $kandidat)
+            ->with('program', $program)
+            ->with('programS', $program)
+            ->with('programPlan', $program)
+            ->with('programE', $program)
+            ->with('skolskaGodina6', $skolskaGodina6)
+            ->with('skolskaGodina3', $skolskaGodina6)
+            ->with('skolskaGodina', $skolskaGodina6)
+            ->with('skolskaGodina4', $skolskaGodina6)
+            ->with('tipStudija', TipStudija::all());
 
         $contents = $view->render();
         $pdf->SetTitle('Списци студената');

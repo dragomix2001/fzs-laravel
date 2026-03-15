@@ -4,7 +4,7 @@
 @section('section')
 
     <div>
-        <form class="btn" method="GET" action="{{$putanja}}/statusKandidata/add">
+        <form class="btn" method="GET" action="{{ url('/statusKandidata/add') }}">
             <input type="submit" class="btn btn-primary" value="Додавање">
         </form>
     </div>
@@ -26,10 +26,10 @@
                         <td>{{$status->naziv}}</td>
                         <td>
                             <div class="btn-group">
-                                <form class="btn" action="statusKandidata/{{$status->id}}/edit">
+                                <form class="btn" action="{{ url('/statusKandidata/' . $status->id . '/edit') }}">
                                     <input type="submit" class="btn btn-primary btn-sm" value="Измени">
                                 </form>
-                                <form onsubmit="return confirm('Да ли сте сигурни да желите да обришете податке?');" class="btn" action="statusKandidata/{{$status->id}}/delete">
+                                <form onsubmit="return confirm('Да ли сте сигурни да желите да обришете податке?');" class="btn" action="{{ url('/statusKandidata/' . $status->id . '/delete') }}">
                                     <input type="submit" class="btn btn-danger btn-sm" value="Обриши">
                                 </form>
                             </div>

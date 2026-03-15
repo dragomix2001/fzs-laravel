@@ -447,8 +447,8 @@ class RouteTest extends TestCase
             return;
         }
         
-        // Skip - view has undefined $program variable (existing bug)
-        $this->markTestSkipped('View has undefined $program variable - existing bug');
+        // Skip - view requires many complex variables not properly passed
+        $this->markTestSkipped('View has multiple undefined variables - complex fix needed');
         
         $response = $this->actingAs($user)->get('/izvestaji/spiskoviStudenti');
         
@@ -547,9 +547,6 @@ class RouteTest extends TestCase
             $this->markTestSkipped('No users found');
             return;
         }
-        
-        // Skip - view has missing $putanja variable (existing bug)
-        $this->markTestSkipped('View has undefined $putanja variable - existing bug');
         
         $response = $this->actingAs($user)->get('/statusKandidata');
         
