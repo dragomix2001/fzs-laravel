@@ -2,9 +2,10 @@
 @section('page_heading','Записник о полагању испита')
 @section('section')
     <div class="col-lg-10">
-        {{--GRESKE--}}
+        {{-- GRESKE --}}
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 <h4>Грешка!</h4>
                 <ul>
                     @foreach (Session::get('errors')->all() as $error)
@@ -14,20 +15,20 @@
             </div>
         @endif
         @if (Session::get('flash-error'))
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">×</button>
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 <strong>Грешка!</strong>
                 @if(Session::get('flash-error') === 'create')
                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
                 @endif
             </div>
         @endif
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Записник о полагању исппита</h3>
+        <div class="card border-primary mb-3">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title">Записник о полагању испита</h3>
             </div>
-            <div class="panel-body">
-                <form role="form" method="post" action="{{"/"}}zapisnik/storeZapisnik">
+            <div class="card-body">
+                <form role="form" method="post" action="{{ url('/zapisnik/storeZapisnik') }}">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="form-group col-lg-5">
@@ -43,42 +44,34 @@
                         </div>
                         <div class="form-group col-lg-5">
                             <label for="predmet_id">Предмет</label>
-                            <select class="form-control auto-combobox" id="predmet_id"
+                            <select class="form-control" id="predmet_id"
                                     name="predmet_id">
                                 @foreach($predmeti as $item)
                                     <option value="{{$item->id}}">{{ $item->naziv }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        {{--<div class="form-group col-lg-2">--}}
-                        {{--<label for="submitPredpodaci">&nbsp;</label><br>--}}
-                        {{--@if(empty($predmet_id))--}}
-                        {{--<button type="submit" name="Submit" id="submitPredpodaci" class="btn btn-success"><span--}}
-                        {{--class="fa fa-check" style="margin: 3px"></span></button>--}}
-                        {{--@else--}}
-                        {{--<a href="{{"/"}}zapisnik/create" class="btn btn-danger"><span--}}
-                        {{--class="fa fa-close" style="margin: 3px"></span></a>--}}
-                        {{--@endif--}}
-                        {{--</div>--}}
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-5">
                             <label for="profesor_id">Професор</label>
-                            <select class="form-control auto-combobox" id="profesor_id"
+                            <select class="form-control" id="profesor_id"
                                     name="profesor_id">
                                 @foreach($profesori as $item)
                                     <option value="{{$item->id}}">{{ $item->ime . " " . $item->prezime }}</option>
                                 @endforeach
                             </select>
                         </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-lg-12">
-                            <button type="button" id="ajaxSubmitPrijava" class="btn btn-success me-2">
-                                <i class="fas fa-search me-1"></i> Прикажи студенте
+                        <div class="form-group col-lg-3">
+                            <label for="ajaxSubmitPrijava">&nbsp;</label><br>
+                            <button type="button" id="ajaxSubmitPrijava" class="btn btn-success w-100">
+                                <i class="fas fa-search"></i> Прикажи студенте
                             </button>
-                            <button type="button" id="addStudentLink" class="btn btn-primary">
-                                <i class="fas fa-user-plus me-1"></i> Додај студента
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label for="addStudentLink">&nbsp;</label><br>
+                            <button type="button" id="addStudentLink" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus"></i> Додај студента
                             </button>
                         </div>
                     </div>
@@ -107,7 +100,7 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label for="vreme">Време</label>
-                            <input type="text" id="vreme" name="vreme" class="form-control timeMask">
+                            <input type="text" id="vreme" name="vreme" class="form-control">
                         </div>
                         <div class="form-group col-lg-3">
                             <label for="ucionica">Учионица</label>
@@ -115,154 +108,120 @@
                         </div>
                     </div>
 
-                    <table id="tabela" class="table">
-                        <thead>
+                    <table id="tabela" class="table table-striped table-hover">
+                        <thead class="table-dark">
                         <tr>
                             <th>Полагао</th>
                             <th>Број Индекса</th>
                             <th>Име и презиме</th>
                         </tr>
                         </thead>
-                        {{--<tbody>--}}
-                        {{--@if(!empty($studenti))--}}
-                        {{--@foreach($studenti as $index => $kandidat)--}}
-                        {{--<tr>--}}
-                        {{--<td><input type="checkbox" id="odabir" name="odabir[{{ $index }}]"--}}
-                        {{--value="{{ $kandidat->id }}"></td>--}}
-                        {{--<td>{{$kandidat->brojIndeksa}}</td>--}}
-                        {{--<td>{{$kandidat->imeKandidata . " " . $kandidat->prezimeKandidata }}</td>--}}
-                        {{--@if(!empty($prijavaIds))--}}
-                        {{--<input type="hidden" name="odabir2[{{ $kandidat->id }}]"--}}
-                        {{--value="{{$prijavaIds[$kandidat->id]}}">--}}
-                        {{--@endif--}}
-                        {{--</tr>--}}
-                        {{--@endforeach--}}
-                        {{--@endif--}}
-                        {{--</tbody>--}}
+                        <tbody>
+                        </tbody>
                     </table>
 
                     <div id="messageEmpty">
                     </div>
 
-                    {{--@if(!empty($predmet_id))--}}
-                        {{--<div class="form-group">--}}
-                            {{--<a class="btn btn-primary" href="/prijava/zaPredmet/{{ $predmet_id }}">Додај студента</a>--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-                    {{--<hr>--}}
-                    <div class="form-group text-center">
-                        <button type="submit" name="Submit" class="btn btn-primary btn-lg"><span
-                                    class="fa fa-save"></span> Сачувај
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" name="Submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save"></i> Сачувај
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
     <script>
-//        function replaceAt(string, index, character) {
-//            return string.substr(0, index) + character + string.substr(index+character.length);
-//        }
-//
-//        $('#skolskaGodinaPonovnogUpisa').change(function () {
-//            var button = $('#buttonPonovnogUpisa');
-//            var href = button.attr('href');
-//            href = replaceAt(href, 20, $('#skolskaGodinaPonovnogUpisa').val());
-//            button.attr('href', href);
-//        });
-
-        $('#addStudentLink').click(function(){
-            window.location = "/prijava/zaPredmet/" + $('#predmet_id').val();
-        });
-
-        $('#rok_id').change(function () {
-            var rok = $('#rok_id');
-            $.ajax({
-                url: '/zapisnik/vratiZapisnikPredmet',
-                method: 'get',
-                data: {
-                    rokId: rok.val()
-                },
-                success: function (result) {
-                    var selectList = $('#predmet_id');
-                    $('div.col-lg-5:nth-child(2) > span:nth-child(3) > input:nth-child(1)').val('');
-                    selectList.html('');
-                    $.each(result['predmeti'], function () {
-                        selectList.append($("<option />").val(this.id).text(this.naziv));
-                    });
-                    selectList = $('#profesor_id');
-                    selectList.html('');
-                    $('div.row:nth-child(3) > div:nth-child(1) > span:nth-child(3) > input:nth-child(1)').val('');
-                    $.each(result['profesori'], function () {
-                        selectList.append($("<option />").val(this.id).text(this.ime + ' ' + this.prezime));
-                    });
-                }
+        $(document).ready(function() {
+            console.log('Document ready - jQuery version: ' + $.fn.jquery);
+            
+            $('#addStudentLink').click(function(){
+                console.log('Add student clicked, predmet_id: ' + $('#predmet_id').val());
+                window.location = "/prijava/zaPredmet/" + $('#predmet_id').val();
             });
-        });
 
-        $('#ajaxSubmitPrijava').click(function () {
-            var rok = $('#rok_id');
-            var predmet = $('#predmet_id');
-            var profesor = $('#profesor_id');
-            $.ajax({
-                url: '/zapisnik/vratiZapisnikStudenti',
-                method: 'get',
-                data: {
-                    rok_id: rok.val(),
-                    predmet_id: predmet.val(),
-                    profesor_id: profesor.val()
-                },
-                success: function (result) {
-
-                    if(result['message'].length > 0){
-                        $('#messageEmpty').html(result['message']);
-                    }else{
-                        $('#messageEmpty').html("");
+            $('#rok_id').change(function () {
+                console.log('Rok changed');
+                var rok = $('#rok_id');
+                $.ajax({
+                    url: '/zapisnik/vratiZapisnikPredmet',
+                    method: 'get',
+                    data: {
+                        rokId: rok.val()
+                    },
+                    success: function (result) {
+                        console.log('Predmeti loaded:', result);
+                        var selectList = $('#predmet_id');
+                        selectList.empty();
+                        $.each(result['predmeti'], function () {
+                            selectList.append($("<option />").val(this.id).text(this.naziv));
+                        });
+                        selectList = $('#profesor_id');
+                        selectList.empty();
+                        $.each(result['profesori'], function () {
+                            selectList.append($("<option />").val(this.id).text(this.ime + ' ' + this.prezime));
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading predmeti:', error);
                     }
-                    $("#tabela").find("tr").remove();
-                    $.each(result['kandidati'], function (e) {
-                        $('#tabela').append('<tr><td>' + '<input type="checkbox" id="odabir" name="odabir[' + this.id + ']" value="' + this.id + '" checked>' +
-                                '</td><td>' + this.brojIndeksa +
-                                '</td><td>' + this.imeKandidata + ' ' + this.prezimeKandidata + '</td></tr>');
-                    });
-                    $('#prijavaIspita_id').val(result['prijavaId']);
-                }
+                });
             });
-        });
 
-        $(function () {
-            var formatDatum = $("#formatDatum");
-            formatDatum.datepicker({
+            $('#ajaxSubmitPrijava').click(function () {
+                console.log('Show students clicked');
+                var rok = $('#rok_id').val();
+                var predmet = $('#predmet_id').val();
+                var profesor = $('#profesor_id').val();
+                
+                console.log('rok:', rok, 'predmet:', predmet, 'profesor:', profesor);
+                
+                $.ajax({
+                    url: '/zapisnik/vratiZapisnikStudenti',
+                    method: 'get',
+                    data: {
+                        rok_id: rok,
+                        predmet_id: predmet,
+                        profesor_id: profesor
+                    },
+                    success: function (result) {
+                        console.log('Studenti loaded:', result);
+
+                        if(result['message'].length > 0){
+                            $('#messageEmpty').html(result['message']);
+                        }else{
+                            $('#messageEmpty').html("");
+                        }
+                        $("#tabela tbody").empty();
+                        $.each(result['kandidati'], function (e) {
+                            $('#tabela tbody').append('<tr><td>' + '<input type="checkbox" name="odabir[' + this.id + ']" value="' + this.id + '" checked>' +
+                                    '</td><td>' + this.brojIndeksa +
+                                    '</td><td>' + this.imeKandidata + ' ' + this.prezimeKandidata + '</td></tr>');
+                        });
+                        $('#prijavaIspita_id').val(result['prijavaId']);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading studenti:', error);
+                    }
+                });
+            });
+
+            // Datepicker
+            $("#formatDatum").datepicker({
                 dateFormat: 'dd.mm.yy.',
                 altField: "#datum",
                 altFormat: "yy-mm-dd"
             });
 
-            formatDatum.on('input', function () {
-                var date = moment(formatDatum.val(), "dd.mm.yy");
-                $("#datum").val(date.format('YYYY-MM-DD'));
-            });
-
-            var formatDatum2 = $("#formatDatum2");
-            formatDatum2.datepicker({
+            $("#formatDatum2").datepicker({
                 dateFormat: 'dd.mm.yy.',
-                altField: "#datum",
+                altField: "#datum2",
                 altFormat: "yy-mm-dd"
             });
 
-            formatDatum2.on('input', function () {
-                var date = moment(formatDatum2.val(), "dd.mm.yy");
-                $("#datum2").val(date.format('YYYY-MM-DD'));
-            });
-
-
+            // Prevent form submission on Enter
             $(window).keydown(function (event) {
                 if (event.keyCode == 13) {
                     event.preventDefault();
@@ -270,8 +229,5 @@
                 }
             });
         });
-
     </script>
-    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection
