@@ -10,13 +10,16 @@ use App\Models\PrijavaIspita;
 use App\Models\ZapisnikOPolaganjuIspita;
 use App\Models\Obavestenje;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
         $skolskaGodinaId = $request->skolska_godina_id ?? 
-            SkolskaGodUpisa::where('aktivan', true)->value('id');
+            Cache::remember('active_skolska_godina', 3600, function() {
+                return SkolskaGodUpisa::where('aktivan', true)->value('id');
+            });
 
         $ukupnoStudenata = Kandidat::where('statusUpisa_id', 3)->count();
         
