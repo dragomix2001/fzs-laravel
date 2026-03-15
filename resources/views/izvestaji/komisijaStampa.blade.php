@@ -1,4 +1,4 @@
-<div style="height: 70px;"><img src="{{$putanja}}/images/zaglavlje.png" alt="test alt attribute" width="250" height="65" border="0"/>
+<div style="height: 70px;"><img src="{{"/"}}images/zaglavlje.png" alt="test alt attribute" width="250" height="65" border="0"/>
 </div>
 <hr>
 @if($student && $diplomski && $podaci)

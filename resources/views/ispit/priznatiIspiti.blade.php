@@ -48,7 +48,7 @@
                 <h3 class="panel-title">Признати испити за студента</h3>
             </div>
             <div class="panel-body">
-                <form id="formaPredmetOdabir" action="{{ $putanja }}/storePriznatiIspiti" method="post">
+                <form id="formaPredmetOdabir" action="{{"/"}}storePriznatiIspiti" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="kandidat_id" value="{{$kandidat->id}}">
                     <table id="tabela" class="table">

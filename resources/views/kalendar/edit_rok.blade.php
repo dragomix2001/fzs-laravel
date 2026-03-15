@@ -28,7 +28,7 @@
                 <h3 class="panel-title">Измена испитног рока</h3>
             </div>
             <div class="panel-body">
-                <form role="form" method="post" action="{{$putanja}}/kalendar/updateRok">
+                <form role="form" method="post" action="{{"/"}}kalendar/updateRok">
                     {{ csrf_field() }}
 
                     <input type="hidden" name="rokId" value="{{ $rok->id }}">
@@ -90,7 +90,7 @@
 
                     <div class="form-group text-center">
                         <button type="submit" name="Submit" class="btn btn-success btn-lg"><span class="fa fa-save"></span> Сачувај</button>
-                        <a class="btn btn-danger btn-lg" href="{{ $putanja }}/kalendar/deleteRok/{{ $rok->id }}"><span class="fa fa-trash"> </span> Бриши рок</a>
+                        <a class="btn btn-danger btn-lg" href="{{"/"}}kalendar/deleteRok/{{ $rok->id }}"><span class="fa fa-trash"> </span> Бриши рок</a>
                     </div>
 
 
@@ -114,5 +114,5 @@
 
         } );
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

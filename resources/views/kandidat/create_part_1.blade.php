@@ -213,7 +213,7 @@
             </div>
         </form>
     </div>
-    <script type="text/javascript" src="{{ $putanja }}/js/kandidat-create-part-1.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/kandidat-create-part-1.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
 @endsection

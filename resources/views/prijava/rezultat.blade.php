@@ -67,6 +67,6 @@
             <div class="alert alert-success">
                 <strong>Студенти су успешно пријављени.</strong>
             </div>
-        <a href="{{ $putanja }}/prijava/zaPredmet/{{ $predmetId }}">&lt;&lt; Назад на предмет</a>
+        <a href="{{"/"}}prijava/zaPredmet/{{ $predmetId }}">&lt;&lt; Назад на предмет</a>
     </div>
 @endsection

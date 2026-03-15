@@ -14,7 +14,7 @@
             </div>
         @endif
 
-        <form role="form" method="post" action="{{$putanja}}/master/{{ $kandidat->id }}/edit"
+        <form role="form" method="post" action="{{"/"}}master/{{ $kandidat->id }}/edit"
               enctype="multipart/form-data">
             {{ csrf_field() }}
 
@@ -103,7 +103,7 @@
                     {{--@endif--}}
                     <div class="row">
                         <div class="col-lg-4 text-center">
-                            <img src="{{$putanja}}/uploads/images/{{$kandidat->slika}}" class="img-thumbnail"
+                            <img src="{{"/"}}uploads/images/{{$kandidat->slika}}" class="img-thumbnail"
                                  style="max-height: 300px">
                         </div>
                         <div class="row col-lg-8">
@@ -241,6 +241,6 @@
             });
         });
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
 @endsection

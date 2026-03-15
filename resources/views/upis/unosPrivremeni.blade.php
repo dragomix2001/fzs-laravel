@@ -9,7 +9,7 @@
         <div>
             <h4>Подаци о студенту &nbsp;
                 <a class="btn btn-warning"
-                   href="{{$putanja}}/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                   href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                     <div title="Измена">
                         <span class="fa fa-edit"></span>
                     </div>
@@ -56,7 +56,7 @@
                        class="btn btn-success">
             </div>
             <div class="col-lg-10">
-                <form action="{{$putanja}}/prijava/dodajPolozeneIspite" method="post">
+                <form action="{{"/"}}prijava/dodajPolozeneIspite" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="kandidat_id" value="{{$kandidat->id}}">
                     <table id="tabela" class="table">
@@ -91,7 +91,7 @@
                             <td>{{$ispit->predmet->predmet->naziv}}</td>
                             <td>{{$ispit->konacnaOcena}}</td>
                             <td>
-                                <a class="btn btn-danger" href="{{$putanja}}/deletePrivremeniIspit/{{$ispit->id}}"
+                                <a class="btn btn-danger" href="{{"/"}}deletePrivremeniIspit/{{$ispit->id}}"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
                                     <div title="Брисање"><i class="fa fa-trash"></i></div>
                                 </a>
@@ -166,7 +166,7 @@
 
             function addIspitToList() {
                 $.ajax({
-                    url: '{{$putanja}}/prijava/vratiIspitPoId',
+                    url: '{{"/"}}prijava/vratiIspitPoId',
                     type: 'post',
                     data: {
                         id: $('#addIspitList').val(),
@@ -183,6 +183,6 @@
             }
         });
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

@@ -27,7 +27,7 @@
                 <h3 class="panel-title">Измена школарине</h3>
             </div>
             <div class="panel-body">
-                <form role="form" method="post" action="{{$putanja}}/skolarina/store">
+                <form role="form" method="post" action="{{"/"}}skolarina/store">
                     {{ csrf_field() }}
 
                     <input type="hidden" name="id" value="{{ $skolarina->id }}">

@@ -61,18 +61,18 @@
                         <td>{{$kandidat->prezimeKandidata}}</td>
                         <td>{{$kandidat->jmbg}}</td>
                         <td>
-                            <a class="btn btn-warning" href="{{$putanja}}/master/{{ $kandidat->id }}/edit">
+                            <a class="btn btn-warning" href="{{"/"}}master/{{ $kandidat->id }}/edit">
                                 <div title="Измена">
                                     <span class="fa fa-edit"></span>
                                 </div>
                             </a>
-                            <a class="btn btn-danger" href="{{$putanja}}/master/{{ $kandidat->id }}/delete"
+                            <a class="btn btn-danger" href="{{"/"}}master/{{ $kandidat->id }}/delete"
                                onclick="return confirm('Да ли сте сигурни да желите да обришете податке овог кандидата?');">
                                 <div title="Брисање">
                                     <span class="fa fa-trash"></span>
                                 </div>
                             </a>
-                            <a class="btn btn-success btn-sm" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/upis">Упис кандидата</a>
+                            <a class="btn btn-success btn-sm" href="{{"/"}}kandidat/{{ $kandidat->id }}/upis">Упис кандидата</a>
                         </td>
                     </tr>
                 @endforeach
@@ -95,12 +95,12 @@
         var forma = $('#formaKandidatiOdabir');
 
         $('#masovnaUplata').click(function () {
-            forma.attr("action", "{{ $putanja }}/master/masovnaUplata");
+            forma.attr("action", "{{"/"}}master/masovnaUplata");
             forma.submit();
         });
 
         $('#masovniUpis').click(function () {
-            forma.attr("action", "{{ $putanja }}/master/masovniUpis");
+            forma.attr("action", "{{"/"}}master/masovniUpis");
             forma.submit();
         });
 

@@ -3,7 +3,7 @@
 @section('section')
 
 <div class="col-sm-12 col-lg-10">
-    <a href="{{$putanja}}/kalendar/indexRok/" class="btn btn-primary">
+    <a href="{{"/"}}kalendar/indexRok/" class="btn btn-primary">
         <span class="fa fa-envelope-square"></span>
         Сви рокови
     </a>
@@ -36,7 +36,7 @@
                 }
             ],
             eventClick: function(calEvent, jsEvent, view) {
-                window.location.href = '{{$putanja}}/kalendar/editRok/' + calEvent.id;
+                window.location.href = '{{"/"}}kalendar/editRok/' + calEvent.id;
             }
         })
     });

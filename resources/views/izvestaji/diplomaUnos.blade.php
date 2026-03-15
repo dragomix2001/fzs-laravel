@@ -94,8 +94,8 @@
         </div>
     @endif
 
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 
     <script>
         $(document).ready(function () {

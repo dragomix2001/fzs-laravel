@@ -40,15 +40,15 @@
             </ul>
         </div>
         @if(!empty($trenutnaSkolarina))
-            <a href="{{$putanja}}/skolarina/izmena/{{$trenutnaSkolarina->id}}" class="btn btn-primary"><span
+            <a href="{{"/"}}skolarina/izmena/{{$trenutnaSkolarina->id}}" class="btn btn-primary"><span
                         class="fa fa-edit"></span> Измена школарине</a>
-            <a href="{{$putanja}}/skolarina/arhiva/{{$kandidat->id}}" class="btn btn-warning"><span
+            <a href="{{"/"}}skolarina/arhiva/{{$kandidat->id}}" class="btn btn-warning"><span
                         class="fa fa-list"></span> Архива школарине</a>
         @else
             <div class="form-group text-center">
-                <a href="{{$putanja}}/skolarina/dodavanje/{{$kandidat->id}}" class="btn btn-success btn-lg"><span
+                <a href="{{"/"}}skolarina/dodavanje/{{$kandidat->id}}" class="btn btn-success btn-lg"><span
                             class="fa fa-plus"></span> Унос школарине</a>
-                <a href="{{$putanja}}/skolarina/arhiva/{{$kandidat->id}}" class="btn btn-warning btn-lg"><span
+                <a href="{{"/"}}skolarina/arhiva/{{$kandidat->id}}" class="btn btn-warning btn-lg"><span
                             class="fa fa-list"></span> Архива школарине</a>
             </div>
         @endif
@@ -126,7 +126,7 @@
                 <div class="panel-body">
 
                     <div class="form-group">
-                        <a href="{{$putanja}}/skolarina/uplata/{{$trenutnaSkolarina->id}}" class="btn btn-success">
+                        <a href="{{"/"}}skolarina/uplata/{{$trenutnaSkolarina->id}}" class="btn btn-success">
                             <span class="fa fa-plus"></span> Нова уплата
                         </a>
                     </div>
@@ -151,13 +151,13 @@
                                     <td>{{$uplata->naziv}}</td>
                                     <td>
                                         <a class="btn btn-warning"
-                                           href="{{$putanja}}/skolarina/uplata/edit/{{$uplata->id}}">
+                                           href="{{"/"}}skolarina/uplata/edit/{{$uplata->id}}">
                                             <div title="Измена">
                                                 <span class="fa fa-edit"></span>
                                             </div>
                                         </a>
                                         <a class="btn btn-danger"
-                                           href="{{$putanja}}/skolarina/uplata/delete/{{$uplata->id}}"
+                                           href="{{"/"}}skolarina/uplata/delete/{{$uplata->id}}"
                                            onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
                                             <div title="Брисање">
                                                 <span class="fa fa-trash"></span>

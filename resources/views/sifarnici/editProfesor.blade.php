@@ -4,7 +4,7 @@
 @section('section')
 
 
-            <form role="form" method="post" action="{{$putanja}}/profesor/{{$profesor->id}}">
+            <form role="form" method="post" action="{{"/"}}profesor/{{$profesor->id}}">
                 {{csrf_field()}}
                 {{method_field('PATCH')}}
 

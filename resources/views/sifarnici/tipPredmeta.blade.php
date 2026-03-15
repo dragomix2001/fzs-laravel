@@ -4,7 +4,7 @@
 @section('section')
 
     <div>
-        <form class="btn" method="GET" action="{{$putanja}}/tipPredmeta/add">
+        <form class="btn" method="GET" action="{{"/"}}tipPredmeta/add">
             <input type="submit" class="btn btn-primary" value="Додавање">
         </form>
     </div>

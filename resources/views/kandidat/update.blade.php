@@ -95,7 +95,7 @@
                             {{--@endif--}}
                             <div class="row">
                                 <div class="col-lg-6 text-center">
-                                    <img src="{{$putanja}}/uploads/images/{{$kandidat->slika}}" class="img-thumbnail"
+                                    <img src="{{"/"}}uploads/images/{{$kandidat->slika}}" class="img-thumbnail"
                                          style="max-height: 300px">
                                 </div>
                                 <div class="row col-lg-6">
@@ -359,7 +359,7 @@
                                         <tr>
                                             <th>Спорт</th>
                                             <th><a class="btn btn-primary"
-                                                   href="{{ $putanja }}/kandidat/{{ $kandidat->id }}/sportskoangazovanje">Додај</a>
+                                                   href="{{"/"}}kandidat/{{ $kandidat->id }}/sportskoangazovanje">Додај</a>
                                             </th>
                                         </tr>
                                         </thead>
@@ -502,8 +502,8 @@
             </div>
         </div>
     </form>
-    <script type="text/javascript" src="{{ $putanja }}/js/kandidat-create-part-1.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/kandidat-create-part-2.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/kandidat-create-part-1.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/kandidat-create-part-2.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
 @endsection

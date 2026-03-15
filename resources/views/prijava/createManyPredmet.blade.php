@@ -19,7 +19,7 @@
                 <h3 class="panel-title">Пријава за полагање испита</h3>
             </div>
             <div class="panel-body">
-                <form id="formaKandidatiOdabir" action="{{ $putanja }}/prijava/predmetVise" method="post">
+                <form id="formaKandidatiOdabir" action="{{"/"}}prijava/predmetVise" method="post">
                     {{ csrf_field() }}
 
                     <input type="hidden" name="predmet_id" id="predmet_id_hidden" value="{{ $predmet->id }}">
@@ -120,7 +120,7 @@
     <br>
     <br>
     <br>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
     <script>
         var studenti = @json($kandidatiJson);
         
@@ -175,7 +175,7 @@
                 }
                 
                 $.ajax({
-                    url: '{{$putanja}}/prijava/vratiKandidataPoBroju',
+                    url: '{{"/"}}prijava/vratiKandidataPoBroju',
                     type: 'post',
                     data: {
                         id: studentId,
@@ -218,5 +218,5 @@
         });
 
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

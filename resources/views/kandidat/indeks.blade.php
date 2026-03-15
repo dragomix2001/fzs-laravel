@@ -62,18 +62,18 @@
                         <td>{{$kandidat->jmbg}}</td>
                         <td>{{$kandidat->godinaStudija->nazivRimski}}</td>
                         <td>
-                            <a class="btn btn-warning" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/edit">
+                            <a class="btn btn-warning" href="{{"/"}}kandidat/{{ $kandidat->id }}/edit">
                                 <div title="Измена">
                                     <span class="fa fa-edit"></span>
                                 </div>
                             </a>
-                            <a class="btn btn-danger" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/delete"
+                            <a class="btn btn-danger" href="{{"/"}}kandidat/{{ $kandidat->id }}/delete"
                                onclick="return confirm('Да ли сте сигурни да желите да обришете податке овог кандидата?');">
                                 <div title="Брисање">
                                     <span class="fa fa-trash"></span>
                                 </div>
                             </a>
-                            <a class="btn btn-success btn-sm" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/upis">
+                            <a class="btn btn-success btn-sm" href="{{"/"}}kandidat/{{ $kandidat->id }}/upis">
                                 Упис кандидата
                             </a>
                         </td>
@@ -104,7 +104,7 @@
                 {{ csrf_field() }}
                 <div class="form-group">
                     <a class="btn btn-primary pull-left" target="_blank"
-                       href="{{$putanja}}/izvestaji/spisakPoSmerovima">Студијски програми</a>
+                       href="{{"/"}}izvestaji/spisakPoSmerovima">Студијски програми</a>
                 </div>
             </div>
         </div>
@@ -113,12 +113,12 @@
         var forma = $('#formaKandidatiOdabir');
 
         $('#masovnaUplata').click(function () {
-            forma.attr("action", "{{ $putanja }}/kandidat/masovnaUplata");
+            forma.attr("action", "{{"/"}}kandidat/masovnaUplata");
             forma.submit();
         });
 
         $('#masovniUpis').click(function () {
-            forma.attr("action", "{{ $putanja }}/kandidat/masovniUpis");
+            forma.attr("action", "{{"/"}}kandidat/masovniUpis");
             forma.submit();
         });
 

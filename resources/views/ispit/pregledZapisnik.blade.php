@@ -17,7 +17,7 @@
                         <h4 class="modal-title" id="myModalLabel">Додавање студената</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="{{$putanja}}/zapisnik/pregled/dodajStudenta" method="post">
+                        <form action="{{"/"}}zapisnik/pregled/dodajStudenta" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="zapisnikId" value="{{$zapisnik->id}}">
 
@@ -68,7 +68,7 @@
                         <h4 class="modal-title" id="myModalLabel">Измена</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="{{$putanja}}/zapisnik/pregled/izmeniPodatke" method="post">
+                        <form action="{{"/"}}zapisnik/pregled/izmeniPodatke" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="zapisnikId" value="{{$zapisnik->id}}">
                             <input type="hidden" id="datum" name="datum" value="{{$zapisnik->datum}}">
@@ -138,7 +138,7 @@
                 <h4>Датум: {{ ($zapisnik->datum == null ? '' : \Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')) . ' / ' . ($zapisnik->datum2 == null ? '' : \Carbon\Carbon::parse($zapisnik->datum2)->format('d.m.Y.')) }}</h4>
             </div>
             <div class="col-lg-2" style="margin-top: 20px">
-                <form target="_blank" action="{{$putanja}}/izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post">
+                <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <input type="hidden" name="predmet" value="{{$zapisnik->predmet->naziv}}">
@@ -159,7 +159,7 @@
         </div>
         <hr>
         @if(!empty($polozeniIspiti))
-            <form action="{{ $putanja }}/zapisnik/polozeniIspit" method="post">
+            <form action="{{"/"}}zapisnik/polozeniIspit" method="post">
                 {{ csrf_field() }}
                 <table class="table">
                     <thead>
@@ -240,7 +240,7 @@
                             </td>
                             <td>
                                 <a class="btn btn-danger" style="padding: 9px 12px"
-                                   href="{{$putanja}}/zapisnik/pregled/{{ $zapisnik->id }}/{{ $ispit->kandidat->id }}/delete"
+                                   href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}/{{ $ispit->kandidat->id }}/delete"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете овог студента?');">
                                     <div title="Брисање">
                                         <span class="fa fa-trash"></span>
@@ -339,7 +339,7 @@
 
             function addStudentToList() {
                 $.ajax({
-                    url: '{{$putanja}}/prijava/vratiKandidataPoBroju',
+                    url: '{{"/"}}prijava/vratiKandidataPoBroju',
                     type: 'post',
                     data: {
                         id: $('#addStudentList').val(),
@@ -383,8 +383,8 @@
         });
 
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection
 
 

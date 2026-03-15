@@ -14,7 +14,7 @@
             </div>
         @endif
 
-        <form role="form" method="post" action="{{$putanja}}/storeMaster" enctype="multipart/form-data">
+        <form role="form" method="post" action="{{"/"}}storeMaster" enctype="multipart/form-data">
             {{ csrf_field() }}
             <input type="hidden" name="page" id="page" value="1"/>
 
@@ -205,5 +205,5 @@
             });
         });
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
 @endsection

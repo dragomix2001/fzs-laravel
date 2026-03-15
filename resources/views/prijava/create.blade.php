@@ -325,7 +325,7 @@
             var pathname = window.location.pathname;
             $('#asdasd').click(function () {
                 $.ajax({
-                    url: '{{$putanja}}/prijava/vratiKandidataPrijava',
+                    url: '{{"/"}}prijava/vratiKandidataPrijava',
                     type: 'post',
                     data: {
                         id: $('#brojIndeksa').val(),
@@ -352,7 +352,7 @@
 
             $('#predmet_id').change(function () {
                 $.ajax({
-                    url: '{{$putanja}}/prijava/vratiPredmetPrijava',
+                    url: '{{"/"}}prijava/vratiPredmetPrijava',
                     type: 'post',
                     data: {
                         id: $('#predmet_id').val(),
@@ -372,6 +372,6 @@
             });
         });
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

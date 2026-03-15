@@ -18,7 +18,7 @@
         @endif
     </div>
     <hr>
-    <a href="{{$putanja}}/kalendar/createRok/" class="btn btn-primary"><span class="fa fa-plus"></span> Нови рок</a>
+    <a href="{{"/"}}kalendar/createRok/" class="btn btn-primary"><span class="fa fa-plus"></span> Нови рок</a>
     <br>
     <br>
     @if(!empty($ispitniRokovi))
@@ -43,12 +43,12 @@
                     <td>{{\App\Models\AktivniIspitniRokovi::tipRoka($rok->tipRoka_id)}}</td>
                     <td>{{$rok->komentar}}</td>
                     <td>
-                        <a class="btn btn-warning" href="{{$putanja}}/kalendar/editRok/{{ $rok->id }}">
+                        <a class="btn btn-warning" href="{{"/"}}kalendar/editRok/{{ $rok->id }}">
                             <div title="Измена">
                                 <span class="fa fa-edit"></span>
                             </div>
                         </a>
-                        <a class="btn btn-danger" href="{{$putanja}}/kalendar/deleteRok/{{ $rok->id }}"
+                        <a class="btn btn-danger" href="{{"/"}}kalendar/deleteRok/{{ $rok->id }}"
                            onclick="return confirm('Да ли сте сигурни да желите да обришете испитни рок?');">
                             <div title="Брисање">
                                 <span class="fa fa-trash"></span>

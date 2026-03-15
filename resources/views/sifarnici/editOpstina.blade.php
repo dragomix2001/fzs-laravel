@@ -3,7 +3,7 @@
 @section('page_heading','Измени општину')
 @section('section')
 
-    <form role="form" method="post" action="{{$putanja}}/opstina/{{$opstina->id}}">
+    <form role="form" method="post" action="{{"/"}}opstina/{{$opstina->id}}">
         {{csrf_field()}}
         {{method_field('PATCH')}}
 

@@ -115,19 +115,19 @@
                                     <td>{{ optional($kandidat->godinaStudija)->naziv }}</td>
                                     <td>{{ optional($kandidat->statusUpisa)->naziv }}</td>
                                     <td>
-                                        <a class="btn btn-warning btn-sm" href="{{$putanja}}/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                                        <a class="btn btn-warning btn-sm" href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                                             <span class="fa fa-edit"></span>
                                         </a>
-                                        <a class="btn btn-primary btn-sm" href="{{$putanja}}/student/{{ $kandidat->id }}/upis">
+                                        <a class="btn btn-primary btn-sm" href="{{"/"}}student/{{ $kandidat->id }}/upis">
                                             Статус
                                         </a>
-                                        <a class="btn btn-primary btn-sm" href="{{$putanja}}/prijava/zaStudenta/{{ $kandidat->id }}">
+                                        <a class="btn btn-primary btn-sm" href="{{"/"}}prijava/zaStudenta/{{ $kandidat->id }}">
                                             Испити
                                         </a>
-                                        <a class="btn btn-primary btn-sm" href="{{$putanja}}/izvestaji/potvrdeStudent/{{$kandidat->id}}">
+                                        <a class="btn btn-primary btn-sm" href="{{"/"}}izvestaji/potvrdeStudent/{{$kandidat->id}}">
                                             Потврде
                                         </a>
-                                        <a class="btn btn-primary btn-sm" href="{{$putanja}}/skolarina/{{$kandidat->id}}">
+                                        <a class="btn btn-primary btn-sm" href="{{"/"}}skolarina/{{$kandidat->id}}">
                                             Школарина
                                         </a>
                                     </td>
@@ -165,7 +165,7 @@
                                     <td>{{$predmet->naziv}}</td>
                                     <td>{{$predmet->espb}}</td>
                                     <td>
-                                        <a class="btn btn-warning btn-sm" href="{{$putanja}}/predmet/{{ $predmet->id }}/edit">
+                                        <a class="btn btn-warning btn-sm" href="{{"/"}}predmet/{{ $predmet->id }}/edit">
                                             <span class="fa fa-edit"></span> Измени
                                         </a>
                                     </td>

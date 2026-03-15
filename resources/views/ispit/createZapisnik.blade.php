@@ -27,7 +27,7 @@
                 <h3 class="panel-title">Записник о полагању исппита</h3>
             </div>
             <div class="panel-body">
-                <form role="form" method="post" action="{{$putanja}}/zapisnik/storeZapisnik">
+                <form role="form" method="post" action="{{"/"}}zapisnik/storeZapisnik">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="form-group col-lg-5">
@@ -56,7 +56,7 @@
                         {{--<button type="submit" name="Submit" id="submitPredpodaci" class="btn btn-success"><span--}}
                         {{--class="fa fa-check" style="margin: 3px"></span></button>--}}
                         {{--@else--}}
-                        {{--<a href="{{$putanja}}/zapisnik/create" class="btn btn-danger"><span--}}
+                        {{--<a href="{{"/"}}zapisnik/create" class="btn btn-danger"><span--}}
                         {{--class="fa fa-close" style="margin: 3px"></span></a>--}}
                         {{--@endif--}}
                         {{--</div>--}}
@@ -272,6 +272,6 @@
         });
 
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

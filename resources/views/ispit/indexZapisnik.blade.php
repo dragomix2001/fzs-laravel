@@ -17,14 +17,14 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <a href="{{$putanja}}/zapisnik/create/" class="btn btn-primary"><span class="fa fa-plus"></span> Нов
+                <a href="{{"/"}}zapisnik/create/" class="btn btn-primary"><span class="fa fa-plus"></span> Нов
                     записник</a>
-                <a href="{{$putanja}}/zapisnik/arhiva/" class="btn btn-warning"><i class="fa fa-archive"></i> Архива</a>
+                <a href="{{"/"}}zapisnik/arhiva/" class="btn btn-warning"><i class="fa fa-archive"></i> Архива</a>
             </div>
         </div>
         <hr>
         <h4>Филтрирање записника</h4>
-        <form role="form" method="get" action="{{$putanja}}/zapisnik">
+        <form role="form" method="get" action="{{"/"}}zapisnik">
             {{ csrf_field() }}
             <div class="row">
 
@@ -69,7 +69,7 @@
                 </div>
                 <div class="form-group col-lg-1">
                     <label for="a">&nbsp;</label>
-                    <a href="{{$putanja}}/zapisnik/" class="btn btn-danger"><i class="fa fa-close"></i> Поништи филтар</a>
+                    <a href="{{"/"}}zapisnik/" class="btn btn-danger"><i class="fa fa-close"></i> Поништи филтар</a>
                 </div>
             </div>
         </form>
@@ -95,7 +95,7 @@
                     <td>{{$zapisnik->studenti->count()}}</td>
                     <td>
                             <div>
-                            <form target="_blank" action="{{$putanja}}/izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post" style="margin-bottom: 0px">
+                            <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post" style="margin-bottom: 0px">
                                 {{ csrf_field() }}
                                 <div style="display:none;">
                                     <input type="hidden" name="predmet" value="{{$zapisnik->predmet->naziv}}">
@@ -104,15 +104,15 @@
                                            value="{{$zapisnik->profesor->ime . " " . $zapisnik->profesor->prezime}}">
                                     <input type="hidden" name="id" value="{{$zapisnik->id}}">
                                 </div>
-                                <a class="btn btn-primary" href="{{$putanja}}/zapisnik/pregled/{{ $zapisnik->id }}">Преглед</a>
-                                <a class="btn btn-danger" href="{{$putanja}}/zapisnik/delete/{{ $zapisnik->id }}"
+                                <a class="btn btn-primary" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед</a>
+                                <a class="btn btn-danger" href="{{"/"}}zapisnik/delete/{{ $zapisnik->id }}"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">
                                     <div title="Брисање" style="padding: 2pt;">
                                         <i class="fa fa-trash"></i>
                                     </div>
                                 </a>
                                 <a class="btn btn-warning"
-                                   href="{{$putanja}}/zapisnik/arhiviraj/{{ $zapisnik->id }}">
+                                   href="{{"/"}}zapisnik/arhiviraj/{{ $zapisnik->id }}">
                                     <div title="архива">
                                         <i class="fa fa-archive"></i> У архиву
                                     </div>
@@ -129,7 +129,7 @@
         <br>
     </div>
     <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>
-    <script type="text/javascript" src="{{ $putanja }}/js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
 @endsection
 
 

@@ -68,30 +68,30 @@
                     <td>{{$kandidat->prezimeKandidata}}</td>
                     <td>{{$kandidat->jmbg}}</td>
                     <td>
-                        <a class="btn btn-warning" href="{{$putanja}}/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                        <a class="btn btn-warning" href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                             <div title="Измена">
                                 <span class="fa fa-edit"></span>
                             </div>
                         </a>
-                        <a class="btn btn-danger" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/delete"
+                        <a class="btn btn-danger" href="{{"/"}}kandidat/{{ $kandidat->id }}/delete"
                            onclick="return confirm('Да ли сте сигурни да желите да обришете податке овог студента?');">
                             <div title="Брисање">
                                 <span class="fa fa-trash"></span>
                             </div>
                         </a>
-                        <a class="btn btn-primary btn-sm" href="{{$putanja}}/student/{{ $kandidat->id }}/upis">
+                        <a class="btn btn-primary btn-sm" href="{{"/"}}student/{{ $kandidat->id }}/upis">
                             Статус
                         </a>
                         <a class="btn btn-primary btn-sm"
-                           href="{{$putanja}}/prijava/zaStudenta/{{ $kandidat->id }}">
+                           href="{{"/"}}prijava/zaStudenta/{{ $kandidat->id }}">
                             Испити
                         </a>
                         <a class="btn btn-primary btn-sm"
-                           href="{{$putanja}}/izvestaji/potvrdeStudent/{{$kandidat->id}}">
+                           href="{{"/"}}izvestaji/potvrdeStudent/{{$kandidat->id}}">
                             Потврде
                         </a>
                         <a class="btn btn-primary btn-sm"
-                           href="{{$putanja}}/skolarina/{{$kandidat->id}}">
+                           href="{{"/"}}skolarina/{{$kandidat->id}}">
                             Школарина
                         </a>
                     </td>

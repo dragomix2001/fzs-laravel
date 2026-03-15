@@ -2,7 +2,7 @@
 @section('page_heading',"Измена године")
 @section('section')
     <div class="col-lg-10">
-        <form action="{{$putanja}}/student/{{ $upisGodine->id }}/izmenaGodine" method="post">
+        <form action="{{"/"}}student/{{ $upisGodine->id }}/izmenaGodine" method="post">
             {{ csrf_field() }}
             <div class="row">
                 <input type="hidden" name="id" id="id" value="{{ $upisGodine->id }}">
@@ -98,5 +98,5 @@
 //            $("#datumPromene").val(date.format('YYYY-MM-DD'));
 //        });
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

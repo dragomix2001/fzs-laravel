@@ -4,7 +4,7 @@
 @section('section')
 
     <div class="col-md-9">
-        <form role="form" method="post" action="{{$putanja}}/tipPrijave/{{$tip->id}}">
+        <form role="form" method="post" action="{{"/"}}tipPrijave/{{$tip->id}}">
             {{csrf_field()}}
             {{method_field('PATCH')}}
 

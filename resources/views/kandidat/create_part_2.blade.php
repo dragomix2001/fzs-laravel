@@ -251,5 +251,5 @@
             </div>
         </form>
     </div>
-    <script type="text/javascript" src="{{ $putanja }}/js/kandidat-create-part-2.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/kandidat-create-part-2.js"></script>
 @endsection

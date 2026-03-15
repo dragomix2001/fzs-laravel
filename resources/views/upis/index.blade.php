@@ -7,7 +7,7 @@
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form action="{{$putanja}}/student/{{ $kandidat->id }}/upisMasterStudija">
+                    <form action="{{"/"}}student/{{ $kandidat->id }}/upisMasterStudija">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                         aria-hidden="true">&times;</span></button>
@@ -45,7 +45,7 @@
         {{--Modal za upis na master studije KRAJ--}}
         <div>
             <h4>Подаци о студенту &nbsp;
-                <a class="btn btn-warning" href="{{$putanja}}/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                <a class="btn btn-warning" href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                     <div title="Измена">
                         <span class="fa fa-edit"></span>
                     </div>
@@ -166,16 +166,16 @@
                                     <td>
                                         @if($godina->statusGodine_id == 1)
                                             <a class="btn btn-danger btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
+                                               href="{{"/"}}student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
                                                 <i class="fa fa-ban"></i> Поништи упис
                                             </a>
                                             <a class="btn btn-primary btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
+                                               href="{{"/"}}student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
                                                 <i class="fa fa-check"></i> Завршио годину
                                             </a>
                                         @elseif($godina->statusGodine_id == 3)
                                             <a class="btn btn-success btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао
+                                               href="{{"/"}}student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао
                                                 годину
                                             </a>
                                         @endif
@@ -188,18 +188,18 @@
 
                                         @if($godina->pokusaj == 1 && ($godina->statusGodine_id == 1 || $godina->statusGodine_id == 4))
                                             <a class="btn btn-warning btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
+                                               href="{{"/"}}student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
                                                 Обнови годину
                                             </a>
                                         @elseif($godina->pokusaj > 1)
                                             <a class="btn btn-danger btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
+                                               href="{{"/"}}student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
                                                onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
                                                 <span style="margin: 3px" class="fa fa-trash"></span>
                                             </a>
                                         @endif
                                         <a class="btn btn-warning"
-                                           href="{{$putanja}}/student/{{ $godina->id }}/izmenaGodine">
+                                           href="{{"/"}}student/{{ $godina->id }}/izmenaGodine">
                                             <div title="Измена">
                                                 <span class="fa fa-edit"></span>
                                             </div>
@@ -258,16 +258,16 @@
                                     <td>
                                         @if($godina->statusGodine_id == 1)
                                             <a class="btn btn-danger btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
+                                               href="{{"/"}}student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
                                                 <i class="fa fa-ban"></i> Поништи упис
                                             </a>
                                             <a class="btn btn-primary btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
+                                               href="{{"/"}}student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
                                                 <i class="fa fa-check"></i> Завршио годину
                                             </a>
                                         @elseif($godina->statusGodine_id == 3)
                                             <a class="btn btn-success btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао
+                                               href="{{"/"}}student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао
                                                 годину
                                             </a>
                                         @endif
@@ -280,18 +280,18 @@
 
                                         @if($godina->pokusaj == 1 && ($godina->statusGodine_id == 1 || $godina->statusGodine_id == 4))
                                             <a class="btn btn-warning btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
+                                               href="{{"/"}}student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
                                                 Обнови годину
                                             </a>
                                         @elseif($godina->pokusaj > 1)
                                             <a class="btn btn-danger btn-sm"
-                                               href="{{$putanja}}/student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
+                                               href="{{"/"}}student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
                                                onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
                                                 <span style="margin: 3px" class="fa fa-trash"></span>
                                             </a>
                                         @endif
                                         <a class="btn btn-warning"
-                                           href="{{$putanja}}/student/{{ $godina->id }}/izmenaGodine">
+                                           href="{{"/"}}student/{{ $godina->id }}/izmenaGodine">
                                             <div title="Измена">
                                                 <span class="fa fa-edit"></span>
                                             </div>

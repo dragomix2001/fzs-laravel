@@ -17,7 +17,7 @@
 
         <div class="row">
             <div class="col-lg-8">
-                <a href="{{$putanja}}/zapisnik/" class="btn btn-default"><i class="fa fa-backward"></i> Назад на
+                <a href="{{"/"}}zapisnik/" class="btn btn-default"><i class="fa fa-backward"></i> Назад на
                     преглед</a>
             </div>
             <br>
@@ -26,7 +26,7 @@
             <br>
             <div class="col-lg-8">
                 <div class="row">
-                    <form role="form" method="post" action="{{$putanja}}/zapisnik/arhivirajRok">
+                    <form role="form" method="post" action="{{"/"}}zapisnik/arhivirajRok">
                         {{ csrf_field() }}
                         <div class="form-group col-lg-4">
                             <label for="rok_id">Архивирај записнике за испитни рок</label>
@@ -68,9 +68,9 @@
                     <td>{{\Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')}}</td>
                     <td>{{$zapisnik->studenti->count()}}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{$putanja}}/zapisnik/pregled/{{ $zapisnik->id }}">Преглед
+                        <a class="btn btn-primary" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед
                             полагања</a>
-                        <a class="btn btn-danger" href="{{$putanja}}/zapisnik/delete/{{ $zapisnik->id }}"
+                        <a class="btn btn-danger" href="{{"/"}}zapisnik/delete/{{ $zapisnik->id }}"
                            onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">Бриши</a>
                     </td>
                 </tr>

@@ -44,13 +44,13 @@
                 <h3 class="panel-title">Пријава за полагање испита</h3>
             </div>
             <div class="panel-body">
-                <a href="{{$putanja}}/prijava/student/{{$kandidat->id}}" class="btn btn-primary"><span
+                <a href="{{"/"}}prijava/student/{{$kandidat->id}}" class="btn btn-primary"><span
                             class="fa fa-plus"></span> Нова пријава</a>
 
-                <a href="{{$putanja}}/priznavanjeIspita/{{$kandidat->id}}" class="btn btn-info"><span
+                <a href="{{"/"}}priznavanjeIspita/{{$kandidat->id}}" class="btn btn-info"><span
                             class="fa fa-plus"></span> Признати испити</a>
 
-                <a href="{{$putanja}}/prijava/unosPrivremeni/{{$kandidat->id}}" class="btn btn-warning">
+                <a href="{{"/"}}prijava/unosPrivremeni/{{$kandidat->id}}" class="btn btn-warning">
                     <i class="fa fa-plus"></i> Додај испите</a>
 
                 <div id="messages">
@@ -104,9 +104,9 @@
                             <td>{{$prijava->brojPolaganja}}</td>
                             <td data-order="{{$prijava->datum->timestamp}}">{{$prijava->datum->format('d.m.Y')}}</td>
                             <td>
-                                {{--<a class="btn btn-primary" href="{{$putanja}}/master/{{ $kandidat->id }}/edit">Измени</a>--}}
+                                {{--<a class="btn btn-primary" href="{{"/"}}master/{{ $kandidat->id }}/edit">Измени</a>--}}
                                 <a class="btn btn-danger"
-                                   href="{{$putanja}}/prijava/delete/{{ $prijava->id }}?prijava=student"
+                                   href="{{"/"}}prijava/delete/{{ $prijava->id }}?prijava=student"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете ову пријаву?');">Бриши</a>
                             </td>
                         </tr>
@@ -155,12 +155,12 @@
                             {{--<td>{{$diplomskiRadTema->datum->format('d.m.Y')}}</td>--}}
                             {{--<td>-</td>--}}
                             <td>
-                                <a class="btn btn-warning" href="{{$putanja}}/prijava/diplomskiTema/{{ $kandidat->id }}/edit">
+                                <a class="btn btn-warning" href="{{"/"}}prijava/diplomskiTema/{{ $kandidat->id }}/edit">
                                     <div title="Измена">
                                         <span class="fa fa-edit"></span>
                                     </div>
                                 </a>
-                                <a class="btn btn-danger" href="{{$putanja}}/deleteDiplomskiTema/{{ $kandidat->id }}/delete"
+                                <a class="btn btn-danger" href="{{"/"}}deleteDiplomskiTema/{{ $kandidat->id }}/delete"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете?');">
                                     <div title="Брисање">
                                         <span class="fa fa-trash"></span>
@@ -186,12 +186,12 @@
                                 {{--<td>{{$diplomskiRadOdbrana->datumPrijave->format('d.m.Y')}}</td>--}}
                                 {{--<td>{{$diplomskiRadOdbrana->datumOdbrane->format('d.m.Y')}}</td>--}}
                                 <td>
-                                    <a class="btn btn-warning" href="{{$putanja}}/prijava/diplomskiOdbrana/{{ $kandidat->id }}/edit">
+                                    <a class="btn btn-warning" href="{{"/"}}prijava/diplomskiOdbrana/{{ $kandidat->id }}/edit">
                                         <div title="Измена">
                                             <span class="fa fa-edit"></span>
                                         </div>
                                     </a>
-                                    <a class="btn btn-danger" href="{{$putanja}}/deleteDiplomskiOdbrana/{{ $kandidat->id }}/delete"
+                                    <a class="btn btn-danger" href="{{"/"}}deleteDiplomskiOdbrana/{{ $kandidat->id }}/delete"
                                        onclick="return confirm('Да ли сте сигурни да желите да обришете?');">
                                         <div title="Брисање">
                                             <span class="fa fa-trash"></span>
@@ -215,12 +215,12 @@
                                 {{--<td>-</td>--}}
                                 {{--<td>{{$diplomskiRadPolaganje->datum->format('d.m.Y')}}</td>--}}
                                 <td>
-                                    <a class="btn btn-warning" href="{{$putanja}}/prijava/diplomskiPolaganje/{{ $kandidat->id }}/edit">
+                                    <a class="btn btn-warning" href="{{"/"}}prijava/diplomskiPolaganje/{{ $kandidat->id }}/edit">
                                         <div title="Измена">
                                             <span class="fa fa-edit"></span>
                                         </div>
                                     </a>
-                                    <a class="btn btn-danger" href="{{$putanja}}/deleteDiplomskiPolaganje/{{ $kandidat->id }}/delete"
+                                    <a class="btn btn-danger" href="{{"/"}}deleteDiplomskiPolaganje/{{ $kandidat->id }}/delete"
                                        onclick="return confirm('Да ли сте сигурни да желите да обришете?');">
                                         <div title="Брисање">
                                             <span class="fa fa-trash"></span>
@@ -232,15 +232,15 @@
                         </tbody>
                     </table>
                 @endif
-                <a href="{{$putanja}}/prijava/diplomskiTema/{{$kandidat->id}}" class="btn btn-success"
+                <a href="{{"/"}}prijava/diplomskiTema/{{$kandidat->id}}" class="btn btn-success"
                 @if($diplomskiRadTema != null) {{ 'disabled' }}@endif>
                     <i class="fa fa-plus"></i> Пријава теме дипломског рада</a>
 
-                <a href="{{$putanja}}/prijava/diplomskiOdbrana/{{$kandidat->id}}" class="btn btn-success"
+                <a href="{{"/"}}prijava/diplomskiOdbrana/{{$kandidat->id}}" class="btn btn-success"
                 @if($diplomskiRadOdbrana != null) {{ 'disabled' }}@endif>
                     <i class="fa fa-plus"></i> Пријава одбране дипломског рада</a>
 
-                <a href="{{$putanja}}/prijava/diplomskiPolaganje/{{$kandidat->id}}" class="btn btn-success"
+                <a href="{{"/"}}prijava/diplomskiPolaganje/{{$kandidat->id}}" class="btn btn-success"
                 @if($diplomskiRadPolaganje != null) {{ 'disabled' }}@endif>
                     <i class="fa fa-plus"></i> Пријава за полагање дипломског испита</a>
 
@@ -253,10 +253,10 @@
                 <div class="panel-body">
                         <input type="hidden" value="{{$kandidat->id}}">
                         <a class="btn btn-primary form-group" target="_blank"
-                           href="{{$putanja}}/izvestaji/diplomaStampa/{{$kandidat->id}}">Штампа уверења о дипломирању</a>
-                        <a target="_blank" class="btn btn-primary" href="{{$putanja}}/izvestaji/komisijaStampa/{{$kandidat->id}}">Комисија</a>
-                        <a target="_blank" class="btn btn-primary" href="{{$putanja}}/izvestaji/polozeniStampa/{{$kandidat->id}}">Уверење о положеним испитима</a>
-                        <a target="_blank" class="btn btn-primary" href="{{$putanja}}/izvestaji/zapisnikDiplomski/{{$kandidat->id}}">Записник са одбране дипломског</a>
+                           href="{{"/"}}izvestaji/diplomaStampa/{{$kandidat->id}}">Штампа уверења о дипломирању</a>
+                        <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/komisijaStampa/{{$kandidat->id}}">Комисија</a>
+                        <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/polozeniStampa/{{$kandidat->id}}">Уверење о положеним испитима</a>
+                        <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/zapisnikDiplomski/{{$kandidat->id}}">Записник са одбране дипломског</a>
                 </div>
             </div>
         @if(!empty($ispiti))
@@ -282,10 +282,10 @@
                             <td>{{$ispit->konacnaOcena}}</td>
                             <td>
                                 <a class="btn btn-danger"
-                                   href="{{$putanja}}/ispit/delete/{{ $ispit->id }}?brisiZapisnik=0"
+                                   href="{{"/"}}ispit/delete/{{ $ispit->id }}?brisiZapisnik=0"
                                    onclick="return confirm('Ова акција брише само оцену и враћа испит у почетно стање на записнику. Да ли сте сигурни да желите да наставите?');">Бриши оцену</a>
                                 <a class="btn btn-danger"
-                                   href="{{$putanja}}/ispit/delete/{{ $ispit->id }}?brisiZapisnik=1"
+                                   href="{{"/"}}ispit/delete/{{ $ispit->id }}?brisiZapisnik=1"
                                    onclick="return confirm('Ова акција брише оцену и упис студента на записнику. Да ли сте сигурни да желите да наставите?');">Бриши оцену и записник</a>
                             </td>
                         </tr>

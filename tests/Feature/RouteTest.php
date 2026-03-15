@@ -622,4 +622,53 @@ class RouteTest extends TestCase
         
         $response->assertStatus(200);
     }
+
+    public function test_skolarina_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        // Route is /skolarina/{id} - try with a kandidat id
+        $kandidat = Kandidat::first();
+        if (!$kandidat) {
+            $this->markTestSkipped('No kandidat found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/skolarina/' . $kandidat->id);
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_obavestenja_index_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/obavestenja');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_raspored_index_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/raspored');
+        
+        $response->assertStatus(200);
+    }
 }

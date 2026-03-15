@@ -5,7 +5,7 @@
 
     <div class="col-md-9">
 
-        <form role="form" method="post" action="{{$putanja}}/predmet/{{$predmet->id}}">
+        <form role="form" method="post" action="{{"/"}}predmet/{{$predmet->id}}">
             {{csrf_field()}}
             {{method_field('PATCH')}}
 

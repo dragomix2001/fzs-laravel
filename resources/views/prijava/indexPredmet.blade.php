@@ -3,8 +3,8 @@
 @section('section')
     <h3>Предмет: {{ $predmet->naziv }}</h3>
     <br>
-    {{--<a href="{{$putanja}}/prijava/predmet/{{$predmet->id}}" class="btn btn-primary"><span class="fa fa-plus"></span> Нова пријава - један студент</a>--}}
-    <a href="{{$putanja}}/prijava/predmetVise/{{$predmet->id}}" class="btn btn-primary"><span class="fa fa-plus"></span> Нова пријава - више студената</a>
+    {{--<a href="{{"/"}}prijava/predmet/{{$predmet->id}}" class="btn btn-primary"><span class="fa fa-plus"></span> Нова пријава - један студент</a>--}}
+    <a href="{{"/"}}prijava/predmetVise/{{$predmet->id}}" class="btn btn-primary"><span class="fa fa-plus"></span> Нова пријава - више студената</a>
     <div id="messages">
         @if (Session::get('flash-error'))
             <div class="alert alert-dismissible alert-danger">
@@ -55,8 +55,8 @@
                 <td>{{ $prijava->profesor->ime . " " . $prijava->profesor->prezime }}</td>
                 <td data-order="{{$prijava->datum->timestamp}}">{{ $prijava->datum->format('d.m.Y.') }}</td>
                 <td>
-                    {{--<a class="btn btn-primary" href="{{$putanja}}/master/{{ $kandidat->id }}/edit">Измени</a>--}}
-                    <a class="btn btn-danger" href="{{$putanja}}/prijava/delete/{{ $prijava->id }}?prijava=predmet"
+                    {{--<a class="btn btn-primary" href="{{"/"}}master/{{ $kandidat->id }}/edit">Измени</a>--}}
+                    <a class="btn btn-danger" href="{{"/"}}prijava/delete/{{ $prijava->id }}?prijava=predmet"
                        onclick="return confirm('Да ли сте сигурни да желите да обришете ову пријаву?');">Бриши</a>
                 </td>
             </tr>

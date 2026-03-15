@@ -27,7 +27,7 @@
                 <h3 class="panel-title">Нова уплата</h3>
             </div>
             <div class="panel-body">
-                <form role="form" method="post" action="{{$putanja}}/uplata/store">
+                <form role="form" method="post" action="{{"/"}}uplata/store">
                     {{ csrf_field() }}
 
                     <input type="hidden" name="skolarina_id" id="skolarina_id" value="{{ $skolarina->id }}">
@@ -72,5 +72,5 @@
             });
         });
     </script>
-    <script type="text/javascript" src="{{ $putanja }}/js/dateMask.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

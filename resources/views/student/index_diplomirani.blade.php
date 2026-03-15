@@ -29,27 +29,40 @@
             </div>
         @endif
     </div>
-    <ul class="nav nav-pills">
-        @foreach($tipStudija as $tip)
-            <li role="presentation"
-                    {{ Request::input('tipStudijaId') == $tip->id  ? 'class=active' : '' }}>
-                <a href="?tipStudijaId={{ $tip->id }}">{{ $tip->naziv }}</a>
-            </li>
-        @endforeach
-    </ul>
-    <br>
+    
+    <div class="card mb-3">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills" role="tablist">
+                @foreach($tipStudija as $tip)
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::input('tipStudijaId') == $tip->id ? 'active' : '' }}" 
+                           href="?tipStudijaId={{ $tip->id }}">
+                            {{ $tip->naziv }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    
     @if(!empty(Request::input('tipStudijaId')))
-        <ul class="nav nav-pills">
-            @foreach($studijskiProgrami as $program)
-                <li role="presentation"
-                        {{ Request::input('studijskiProgramId') == $program->id  ? 'class=active' : '' }}>
-                    <a href="?tipStudijaId={{ Request::input('tipStudijaId') }}&studijskiProgramId={{ $program->id }}">{{ $program->naziv }}</a>
-                </li>
-            @endforeach
-        </ul>
-        <br>
-        <hr>
+        <div class="card mb-4">
+            <div class="card-header">
+                <ul class="nav nav-pills card-header-pills" role="tablist">
+                    @foreach($studijskiProgrami as $program)
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::input('studijskiProgramId') == $program->id ? 'active' : '' }}" 
+                               href="?tipStudijaId={{ Request::input('tipStudijaId') }}&studijskiProgramId={{ $program->id }}">
+                                {{ $program->naziv }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
     @endif
+    
+    <hr>
         <table id="tabela" class="table">
             <thead>
             <tr>
@@ -68,30 +81,30 @@
                     <td>{{$kandidat->prezimeKandidata}}</td>
                     <td>{{$kandidat->jmbg}}</td>
                     <td>
-                        <a class="btn btn-warning" href="{{$putanja}}/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                        <a class="btn btn-warning" href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                             <div title="Измена">
                                 <span class="fa fa-edit"></span>
                             </div>
                         </a>
-                        <a class="btn btn-danger" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/delete"
+                        <a class="btn btn-danger" href="{{"/"}}kandidat/{{ $kandidat->id }}/delete"
                            onclick="return confirm('Да ли сте сигурни да желите да обришете податке овог студента?');">
                             <div title="Брисање">
                                 <span class="fa fa-trash"></span>
                             </div>
                         </a>
-                        <a class="btn btn-primary btn-sm" href="{{$putanja}}/student/{{ $kandidat->id }}/upis">
+                        <a class="btn btn-primary btn-sm" href="{{"/"}}student/{{ $kandidat->id }}/upis">
                             Статус
                         </a>
                         <a class="btn btn-primary btn-sm"
-                           href="{{$putanja}}/prijava/zaStudenta/{{ $kandidat->id }}">
+                           href="{{"/"}}prijava/zaStudenta/{{ $kandidat->id }}">
                             Испити
                         </a>
                         <a class="btn btn-primary btn-sm"
-                           href="{{$putanja}}/izvestaji/potvrdeStudent/{{$kandidat->id}}">
+                           href="{{"/"}}izvestaji/potvrdeStudent/{{$kandidat->id}}">
                             Потврде
                         </a>
                         <a class="btn btn-primary btn-sm"
-                           href="{{$putanja}}/skolarina/{{$kandidat->id}}">
+                           href="{{"/"}}skolarina/{{$kandidat->id}}">
                             Школарина
                         </a>
                     </td>
