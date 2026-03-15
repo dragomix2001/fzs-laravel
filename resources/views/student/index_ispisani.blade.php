@@ -29,27 +29,40 @@
             </div>
         @endif
     </div>
-    <ul class="nav nav-pills">
-        @foreach($tipStudija as $tip)
-            <li role="presentation"
-                    {{ Request::input('tipStudijaId') == $tip->id  ? 'class=active' : '' }}>
-                <a href="?tipStudijaId={{ $tip->id }}">{{ $tip->naziv }}</a>
-            </li>
-        @endforeach
-    </ul>
-    <br>
+    
+    <div class="card mb-3">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills" role="tablist">
+                @foreach($tipStudija as $tip)
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::input('tipStudijaId') == $tip->id ? 'active' : '' }}" 
+                           href="?tipStudijaId={{ $tip->id }}">
+                            {{ $tip->naziv }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    
     @if(!empty(Request::input('tipStudijaId')))
-        <ul class="nav nav-pills">
-            @foreach($studijskiProgrami as $program)
-                <li role="presentation"
-                        {{ Request::input('studijskiProgramId') == $program->id  ? 'class=active' : '' }}>
-                    <a href="?tipStudijaId={{ Request::input('tipStudijaId') }}&studijskiProgramId={{ $program->id }}">{{ $program->naziv }}</a>
-                </li>
-            @endforeach
-        </ul>
-        <br>
-        <hr>
+        <div class="card mb-4">
+            <div class="card-header">
+                <ul class="nav nav-pills card-header-pills" role="tablist">
+                    @foreach($studijskiProgrami as $program)
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::input('studijskiProgramId') == $program->id ? 'active' : '' }}" 
+                               href="?tipStudijaId={{ Request::input('tipStudijaId') }}&studijskiProgramId={{ $program->id }}">
+                                {{ $program->naziv }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
     @endif
+    
+    <hr>
         <table id="tabela" class="table">
             <thead>
             <tr>
