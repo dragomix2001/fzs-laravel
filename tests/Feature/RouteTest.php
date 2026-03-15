@@ -608,4 +608,18 @@ class RouteTest extends TestCase
         
         $response->assertStatus(200);
     }
+
+    public function test_zapisnik_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/zapisnik');
+        
+        $response->assertStatus(200);
+    }
 }
