@@ -7,6 +7,7 @@ use App\Models\Predmet;
 use App\Models\Kandidat;
 use App\Models\NastavnaNedelja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PrisustvoController extends Controller
 {
@@ -51,7 +52,7 @@ class PrisustvoController extends Controller
                 [
                     'status' => $request->status[$studentId] ?? 'odsutan',
                     'napomena' => $request->napomena[$studentId] ?? null,
-                    'profesor_id' => auth()->user()->profesor_id ?? null,
+                    'profesor_id' => Auth::user()?->profesor_id,
                 ]
             );
         }

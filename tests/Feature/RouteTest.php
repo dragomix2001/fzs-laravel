@@ -185,4 +185,256 @@ class RouteTest extends TestCase
         $count = DB::table('skolska_god_upisa')->count();
         $this->assertGreaterThan(0, $count, 'skolska_god_upisa table should have records');
     }
+
+    public function test_kandidat_index_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/kandidat');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_kandidat_create_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/kandidat/create');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_master_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/master');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_predmet_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/predmet');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_profesor_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/profesor');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_sport_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/sport');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_semestar_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/semestar');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_tip_studija_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/tipStudija');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_studijski_program_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/studijskiProgram');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_kalendar_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/kalendar');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_aktivnost_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/aktivnost');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_raspored_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/raspored');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_obavestenja_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/obavestenja');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_prisustvo_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/prisustvo');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_status_studiranja_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/statusStudiranja');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_status_ispita_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/statusIspita');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_dashboard_ispiti_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/dashboard/ispiti');
+        
+        $response->assertStatus(200);
+    }
+
+    public function test_dashboard_studenti_route_loads(): void
+    {
+        $user = $this->getAuthUser();
+        
+        if (!$user) {
+            $this->markTestSkipped('No users found');
+            return;
+        }
+        
+        $response = $this->actingAs($user)->get('/dashboard/studenti');
+        
+        $response->assertStatus(200);
+    }
 }

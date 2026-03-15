@@ -27,6 +27,9 @@ class PredmetController extends Controller
         try {
             $predmet = Predmet::all();
             $tipPredmeta = TipPredmeta::all();
+            $tipStudija = TipStudija::all();
+            $studijskiProgram = StudijskiProgram::all();
+            $godinaStudija = GodinaStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
             dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
         }
