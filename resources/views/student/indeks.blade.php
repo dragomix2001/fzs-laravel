@@ -30,28 +30,45 @@
                 </div>
             @endif
         </div>
-        <ul class="nav nav-pills">
-            <li role="presentation" {{ (Request::input('godina') == '1' || Request::input('godina') == null) ? 'class=active' : '' }}>
-                <a href="?godina=1&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Прва година</a></li>
-            <li role="presentation" {{ Request::input('godina') == '2' ? 'class=active' : '' }}><a
-                        href="?godina=2&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Друга година</a>
-            </li>
-            <li role="presentation" {{ Request::input('godina') == '3' ? 'class=active' : '' }}><a
-                        href="?godina=3&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Трећа година</a>
-            </li>
-            <li role="presentation" {{ Request::input('godina') == '4' ? 'class=active' : '' }}><a
-                        href="?godina=4&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Четврта
-                    година</a></li>
-        </ul>
-        <br>
-        <ul class="nav nav-pills">
-            @foreach($studijskiProgrami as $program)
-                <li role="presentation"
-                        {{ Request::input('studijskiProgramId') == $program->id  ? 'class=active' : '' }}>
-                    <a href="?godina={{ Request::input('godina') }}&studijskiProgramId={{ $program->id }}">{{ $program->naziv }}</a>
-                </li>
-            @endforeach
-        </ul>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link {{ (Request::input('godina') == '1' || Request::input('godina') == null) ? 'active' : '' }}" 
+                           href="?godina=1&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Прва година</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::input('godina') == '2' ? 'active' : '' }}" 
+                           href="?godina=2&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Друга година</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::input('godina') == '3' ? 'active' : '' }}" 
+                           href="?godina=3&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Трећа година</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::input('godina') == '4' ? 'active' : '' }}" 
+                           href="?godina=4&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Четврта година</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <ul class="nav nav-pills card-header-pills" role="tablist">
+                    @foreach($studijskiProgrami as $program)
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::input('studijskiProgramId') == $program->id ? 'active' : '' }}" 
+                               href="?godina={{ Request::input('godina') }}&studijskiProgramId={{ $program->id }}">
+                                {{ $program->naziv }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        
         <hr>
         <form id="formaKandidatiOdabir" action="" method="post">
             {{ csrf_field() }}
@@ -76,31 +93,25 @@
                         <td>{{$kandidat->jmbg}}</td>
                         <td>{{$kandidat->brojIndeksa}}</td>
                         <td>
-                            <a class="btn btn-warning" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/edit">
-                                <div title="Измена">
-                                    <span class="fa fa-edit"></span>
-                                </div>
+                            <a class="btn btn-warning btn-sm" href="{{ url('/kandidat/' . $kandidat->id . '/edit') }}">
+                                <i class="fas fa-edit"></i>
                             </a>
-                            <a class="btn btn-danger" href="{{$putanja}}/kandidat/{{ $kandidat->id }}/delete"
-                               onclick="return confirm('Да ли сте сигурни да желите да обришете податке овог студента?');">
-                                <div title="Брисање">
-                                    <span class="fa fa-trash"></span>
-                                </div>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger btn-sm" href="{{ url('/kandidat/' . $kandidat->id . '/delete') }}" onclick="return confirm('Да ли сте сигурни?');">
+                                <i class="fas fa-trash"></i>
                             </a>
-                            <a class="btn btn-primary btn-sm" href="{{$putanja}}/student/{{ $kandidat->id }}/upis">
-                                Статус
+                            <a class="btn btn-primary btn-sm" href="{{ url('/student/' . $kandidat->id . '/upis') }}">
+                                <i class="fas fa-user-plus"></i> Упис
                             </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{$putanja}}/prijava/zaStudenta/{{ $kandidat->id }}">
-                                Испити
+                            <a class="btn btn-info btn-sm" href="{{ url('/prijava/zaStudenta/' . $kandidat->id) }}">
+                                <i class="fas fa-file-alt"></i> Пријаве
                             </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{$putanja}}/izvestaji/potvrdeStudent/{{$kandidat->id}}">
-                                Потврде
+                            <a class="btn btn-secondary btn-sm" href="{{ url('/izvestaji/potvrdeStudent/' . $kandidat->id) }}">
+                                <i class="fas fa-file-pdf"></i> Потврда
                             </a>
-                            <a class="btn btn-primary btn-sm"
-                               href="{{$putanja}}/skolarina/{{$kandidat->id}}">
-                                Школарина
+                            <a class="btn btn-success btn-sm" href="{{ url('/skolarina/' . $kandidat->id) }}">
+                                <i class="fas fa-money-bill"></i> Школарина
                             </a>
                         </td>
                     </tr>
@@ -126,12 +137,12 @@
         var forma = $('#formaKandidatiOdabir');
 
         $('#masovnaUplata').click(function () {
-            forma.attr("action", "{{ $putanja }}/student/masovnaUplata");
+            forma.attr("action", "{{ url('/student/masovnaUplata') }}");
             forma.submit();
         });
 
         $('#masovniUpis').click(function () {
-            forma.attr("action", "{{ $putanja }}/student/masovniUpis");
+            forma.attr("action", "{{ url('/student/masovniUpis') }}");
             forma.submit();
         });
     </script>

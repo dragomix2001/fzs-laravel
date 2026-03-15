@@ -71,14 +71,15 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-lg-2">
-                            <label for="ajaxSubmitPrijava">&nbsp;</label><br>
-                            <input type="button" id="ajaxSubmitPrijava" class="btn btn-success"
-                                   value="Прикажи студенте">
-                        </div>
-                        <div class="form-group col-lg-2">
-                            <label for="ajaxSubmitPrijava">&nbsp;</label><br>
-                            <div id="addStudentLink" class="btn btn-primary">Додај студента</div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <button type="button" id="ajaxSubmitPrijava" class="btn btn-success me-2">
+                                <i class="fas fa-search me-1"></i> Прикажи студенте
+                            </button>
+                            <button type="button" id="addStudentLink" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-1"></i> Додај студента
+                            </button>
                         </div>
                     </div>
                     <div class="clearfix"></div>

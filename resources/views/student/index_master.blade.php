@@ -29,14 +29,22 @@
             </div>
         @endif
     </div>
-    <ul class="nav nav-pills">
-        @foreach($studijskiProgrami as $program)
-            <li role="presentation"
-                    {{ Request::input('studijskiProgramId') == $program->id  ? 'class=active' : '' }}>
-                <a href="?studijskiProgramId={{ $program->id }}">{{ $program->naziv }}</a>
-            </li>
-        @endforeach
-    </ul>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills" role="tablist">
+                @foreach($studijskiProgrami as $program)
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::input('studijskiProgramId') == $program->id ? 'active' : '' }}" 
+                           href="?studijskiProgramId={{ $program->id }}">
+                            {{ $program->naziv }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    
     <hr>
         <table id="tabela" class="table">
             <thead>
