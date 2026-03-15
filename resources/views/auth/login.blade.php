@@ -30,16 +30,23 @@
         .login-header {
             background: #0d6efd;
             color: #fff;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
+        }
+        .login-header .logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
         }
         .login-header img {
             height: 50px;
-            margin-bottom: 15px;
         }
         .login-header h3 {
             margin: 0;
             font-weight: 600;
+            font-size: 22px;
         }
         .login-body {
             padding: 30px;
@@ -63,8 +70,10 @@
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <img src="{{ asset('images/logo_fzs.png') }}" alt="FZS">
-                <h3>Факултет за спорт</h3>
+                <div class="logo-wrapper">
+                    <img src="{{ asset('images/logo_fzs.png') }}" alt="FZS">
+                    <h3>Факултет за спорт</h3>
+                </div>
             </div>
             <div class="login-body">
                 <form method="POST" action="{{ url('/login') }}">

@@ -436,9 +436,10 @@
                     
                     @if(!Auth::guest())
                         <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-outline-secondary btn-sm" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>
                                 {{ Auth::user()->name }}
-                            </a>
+                            </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Одјава</a></li>
                             </ul>

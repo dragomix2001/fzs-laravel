@@ -11,6 +11,11 @@ class TestDataSeeder extends Seeder
 {
     public function run(): void
     {
+        if (DB::table('users')->count() > 4) {
+            $this->command->info('Test data already exists, skipping...');
+            return;
+        }
+        
         $this->command->info('Креирање тест података...');
 
         // Users
@@ -33,7 +38,6 @@ class TestDataSeeder extends Seeder
         // Školska godina
         $godinaId = DB::table('skolska_god_upisa')->insertGetId([
             'naziv' => '2024/2025',
-            'godina_upisa' => 2024,
             'aktivan' => true,
             'created_at' => now(),
         ]);

@@ -2,21 +2,39 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $user = \App\Models\User::where('email', 'fzs@fzs.rs')->first();
+        
+        if (!$user) {
+            \App\Models\User::create([
+                'name' => 'FZS Admin',
+                'email' => 'fzs@fzs.rs',
+                'password' => Hash::make('fzs123'),
+            ]);
+            $this->command->info('Test user created: fzs@fzs.rs / fzs123');
+        } else {
+            $user->update(['password' => Hash::make('fzs123')]);
+            $this->command->info('Test user password updated: fzs@fzs.rs / fzs123');
+        }
+        
+        if (class_exists(\Database\Seeders\UserSeeder::class)) {
+            $this->call([
+                UserSeeder::class,
+            ]);
+        }
+        
+        if (class_exists(\Database\Seeders\TestDataSeeder::class)) {
+            $this->call([
+                TestDataSeeder::class,
+            ]);
+        }
+        
+        $this->command->info('Database seeded successfully!');
     }
 }
