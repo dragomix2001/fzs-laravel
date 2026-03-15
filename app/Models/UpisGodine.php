@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 
 class UpisGodine extends AndroModel
@@ -143,7 +144,7 @@ class UpisGodine extends AndroModel
                 $kandidat->tipStudija_id = 2;
                 $kandidat->studijskiProgram_id = $studijskiProgramId;
                 $kandidat->skolskaGodinaUpisa_id = $skolskaGodinaUpisaId;
-                $kandidat->statusUpisa_id = \Config::get('constants.statusi.upisan');
+                $kandidat->statusUpisa_id = Config::get('constants.statusi.upisan');
                 $kandidat->brojIndeksa = null;
                 $kandidat->save();
                 UpisGodine::generisiBrojIndeksa($kandidat->id);

@@ -60,6 +60,8 @@
         .sidebar-menu > li > a:hover {
             background: #e9ecef;
             color: #000;
+            padding-left: 25px;
+            transition: all 0.2s ease;
         }
         
         .sidebar-menu > li > a i:first-child {
@@ -110,9 +112,68 @@
             color: #fff;
         }
         
+        .sidebar-menu > li.active > a:hover {
+            padding-left: 20px;
+        }
+        
         .sidebar-menu > li.active .submenu li a.active {
             background: #0d6efd;
             color: #fff;
+        }
+        
+        /* Card styles */
+        .content-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Table improvements */
+        .table {
+            font-size: 14px;
+        }
+        
+        .table thead th {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Badge improvements */
+        .badge-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-success-custom {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .badge-warning-custom {
+            background: #fff3cd;
+            color: #664d03;
+        }
+        
+        .badge-danger-custom {
+            background: #f8d7da;
+            color: #842029;
+        }
+        
+        .badge-info-custom {
+            background: #cff4fc;
+            color: #055160;
         }
         
         /* Main content */
@@ -173,6 +234,32 @@
             cursor: pointer;
             padding: 5px 10px;
             color: #333;
+            transition: color 0.2s;
+        }
+        
+        .mobile-toggle:hover {
+            color: #0d6efd;
+        }
+        
+        /* User dropdown */
+        .user-dropdown .dropdown-toggle::after {
+            display: none;
+        }
+        
+        .user-dropdown .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .user-dropdown .dropdown-item {
+            border-radius: 5px;
+            padding: 8px 15px;
+        }
+        
+        .user-dropdown .dropdown-item:hover {
+            background: #f8f9fa;
         }
         
         /* Responsive */

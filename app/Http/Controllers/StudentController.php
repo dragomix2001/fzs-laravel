@@ -20,6 +20,7 @@ use App\TipStudija;
 use App\UpisGodine;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use App\Kandidat;
 
 use App\Http\Requests;
@@ -35,7 +36,7 @@ class StudentController extends Controller
     {
         $this->middleware('auth');
 
-        $this->status = \Config::get('constants.statusi');
+        $this->status = Config::get('constants.statusi');
     }
 
     public function index(Request $request, $tipStudijaId)
@@ -283,7 +284,7 @@ class StudentController extends Controller
 
     public function zamrznutiStudenti()
     {
-        $statusZamrzao = \Config::get('constants.statusi.zamrzao');
+        $statusZamrzao = Config::get('constants.statusi.zamrzao');
         $studenti = Kandidat::where(['statusUpisa_id' => $statusZamrzao])->get();
 
         return view('student.index_zamrznuti', compact('studenti'));
@@ -291,7 +292,7 @@ class StudentController extends Controller
 
     public function diplomiraniStudenti(Request $request)
     {
-        $statusDiplomirao = \Config::get('constants.statusi.diplomirao');
+        $statusDiplomirao = Config::get('constants.statusi.diplomirao');
         $tipStudija = TipStudija::all();
         $studijskiProgrami = StudijskiProgram::where([
             'tipStudija_id' => $request->tipStudijaId,
@@ -308,7 +309,7 @@ class StudentController extends Controller
 
     public function ispisaniStudenti(Request $request)
     {
-        $statusIspisan = \Config::get('constants.statusi.odustao');
+        $statusIspisan = Config::get('constants.statusi.odustao');
         $tipStudija = TipStudija::all();
         $studijskiProgrami = StudijskiProgram::where([
             'tipStudija_id' => $request->tipStudijaId,
