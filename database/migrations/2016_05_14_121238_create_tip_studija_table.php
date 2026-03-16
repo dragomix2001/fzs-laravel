@@ -15,6 +15,7 @@ class CreateTipStudijaTable extends Migration
         Schema::create('tip_studija', function (Blueprint $table) {
             $table->increments('id');
             $table->string('naziv');
+            $table->string('opis')->nullable();
             $table->string('skrNaziv');
             $table->integer('indikatorAktivan')->unsigned();
             $table->timestamps();
