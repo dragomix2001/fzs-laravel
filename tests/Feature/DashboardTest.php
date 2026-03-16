@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
-    use RefreshDatabase;
+    // Not using RefreshDatabase - relies on existing database from baza.sql
 
     public function test_dashboard_requires_authentication()
     {
