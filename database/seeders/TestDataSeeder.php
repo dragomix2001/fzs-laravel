@@ -54,7 +54,10 @@ class TestDataSeeder extends Seeder
         // Studijski program
         $programId = DB::table('studijski_program')->insertGetId([
             'naziv' => 'Спорт и физичко васпитање',
+            'skrNazivStudijskogPrograma' => 'SIV',
+            'zvanje' => 'Професор физичког васпитања',
             'tipStudija_id' => $tipStudijaId,
+            'indikatorAktivan' => 1,
             'created_at' => now(),
         ]);
 
