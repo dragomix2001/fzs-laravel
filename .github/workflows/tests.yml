@@ -68,7 +68,8 @@ jobs:
         run: |
           mysql -h $DB_HOST -P $DB_PORT -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < database/baza.sql
           php artisan migrate --force
-          php artisan db:seed --class=UserSeeder --force
+          # Update test user password to match tests
+          php artisan tinker --execute="DB::table('users')->where('email', 'fzs@fzs.rs')->update(['password' => Hash::make('fzs123')]);"
 
       - name: Run tests
         env:
