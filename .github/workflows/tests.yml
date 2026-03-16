@@ -36,6 +36,7 @@ jobs:
         run: |
           composer install --no-interaction
           npm ci
+          npm run build
 
       - name: Create environment file
         run: |
