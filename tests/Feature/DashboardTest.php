@@ -1,0 +1,88 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use App\Models\Kandidat;
+use App\Models\SkolskaGodUpisa;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class DashboardTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_dashboard_requires_authentication()
+    {
+        $response = $this->get('/dashboard');
+        $response->assertRedirect('/login');
+    }
+
+    public function test_dashboard_loads_for_authenticated_user()
+    {
+        $user = User::where('email', 'fzs@fzs.rs')->first();
+        
+        if (!$user) {
+            $user = User::create([
+                'name' => 'Test User',
+                'email' => 'test@test.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
+
+        $response = $this->actingAs($user)->get('/dashboard');
+        $response->assertStatus(200);
+    }
+
+    public function test_dashboard_studenti_endpoint()
+    {
+        $user = User::where('email', 'fzs@fzs.rs')->first();
+        
+        if (!$user) {
+            $user = User::create([
+                'name' => 'Test User',
+                'email' => 'test@test.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
+
+        $response = $this->actingAs($user)->get('/dashboard/studenti');
+        $response->assertStatus(200);
+    }
+
+    public function test_dashboard_ispiti_endpoint()
+    {
+        $user = User::where('email', 'fzs@fzs.rs')->first();
+        
+        if (!$user) {
+            $user = User::create([
+                'name' => 'Test User',
+                'email' => 'test@test.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
+
+        $response = $this->actingAs($user)->get('/dashboard/ispiti');
+        $response->assertStatus(200);
+    }
+
+    public function test_dashboard_widgets_can_be_saved()
+    {
+        $user = User::where('email', 'fzs@fzs.rs')->first();
+        
+        if (!$user) {
+            $user = User::create([
+                'name' => 'Test User',
+                'email' => 'test@test.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
+
+        $response = $this->actingAs($user)->post('/dashboard/widgets', [
+            'studenti_ukupno' => 'on',
+            'polozeni_ispiti' => 'on',
+        ]);
+
+        $response->assertRedirect('/dashboard');
+    }
+}
