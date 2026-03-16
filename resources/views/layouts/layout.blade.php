@@ -161,6 +161,24 @@
             font-weight: 500;
         }
         
+        /* Mobile responsive tables */
+        @media screen and (max-width: 767px) {
+            .table-responsive {
+                border: none;
+            }
+            .table {
+                font-size: 12px;
+            }
+            .table th, .table td {
+                padding: 6px 8px;
+                white-space: nowrap;
+            }
+            .btn-sm {
+                padding: 2px 6px;
+                font-size: 11px;
+            }
+        }
+        
         .badge-success-custom {
             background: #d1e7dd;
             color: #0f5132;
