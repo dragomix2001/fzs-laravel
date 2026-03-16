@@ -429,7 +429,7 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <a href="{{ url('') }}" class="logo-link">
-                        <img src="{{ asset('images/logo_fzs.png') }}" height="38">
+                        <img src="{{ asset('images/logo_fzs.png') }}" height="38" loading="lazy">
                         <span>Факултет за спорт</span>
                     </a>
                 </div>

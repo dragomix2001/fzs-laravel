@@ -33,7 +33,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <img class="float-start" src="{{ asset('images/logo_fzs.png') }}" height="30px" style="margin: 10px 0px 10px 10px">
+                        <img class="float-start" src="{{ asset('images/logo_fzs.png') }}" height="30px" style="margin: 10px 0px 10px 10px" loading="lazy">
                 <a class="navbar-brand" href="{{ url('') }}"> Факултет за спорт</a>
             </div>
 
