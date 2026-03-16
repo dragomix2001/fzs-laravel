@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class NastavnaNedelja extends Model
 {
     protected $table = 'nastavne_nedelje';
-    
+
     protected $fillable = [
         'skolska_godina_id',
         'redni_broj',

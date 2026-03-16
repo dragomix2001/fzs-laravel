@@ -14,5 +14,4 @@ class TipStudija extends Model
     {
         return $this->hasMany(StudijskiProgram::class, 'tipStudija_id');
     }
-
 }

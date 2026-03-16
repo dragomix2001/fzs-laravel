@@ -11,17 +11,17 @@ class AktivnostController extends Controller
     public function index(Request $request)
     {
         $query = Aktivnost::with(['profesor', 'ucionica']);
-        
+
         if ($request->tip) {
             $query->where('tip', $request->tip);
         }
-        
+
         if ($request->datum) {
             $query->whereDate('datum_vreme_pocetka', $request->datum);
         }
-        
+
         $aktivnosti = $query->orderBy('datum_vreme_pocetka', 'desc')->get();
-        
+
         return response()->json([
             'data' => $aktivnosti,
             'message' => 'Активности успешно учитате',
@@ -35,7 +35,7 @@ class AktivnostController extends Controller
             ->where('aktivan', true)
             ->orderBy('datum_vreme_pocetka')
             ->get();
-        
+
         return response()->json([
             'data' => $aktivnosti,
             'message' => 'Данашње активности',
@@ -54,20 +54,20 @@ class AktivnostController extends Controller
     {
         $user = $request->user();
         $kandidat = \App\Models\Kandidat::where('email', $user->email)->first();
-        
-        if (!$kandidat) {
+
+        if (! $kandidat) {
             return response()->json([
                 'message' => 'Студент није пронађен',
             ], 404);
         }
-        
+
         $aktivnosti = Aktivnost::with(['profesor', 'ucionica'])
             ->whereHas('studenti', function ($query) use ($kandidat) {
                 $query->where('kandidat_id', $kandidat->id);
             })
             ->orderBy('datum_vreme_pocetka', 'desc')
             ->get();
-        
+
         return response()->json([
             'data' => $aktivnosti,
             'message' => 'Моје активности',

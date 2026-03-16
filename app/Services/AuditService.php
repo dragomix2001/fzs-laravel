@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class AuditService
 {
-    public function log(Request $request = null, string $action, string $tableName, $recordId, array $oldValues = [], array $newValues = [])
+    public function log(?Request $request, string $action, string $tableName, $recordId, array $oldValues = [], array $newValues = [])
     {
         $userId = null;
         $ipAddress = null;
@@ -34,7 +34,7 @@ class AuditService
         ]);
     }
 
-    public function getLogs(string $tableName = null, int $userId = null, int $limit = 100)
+    public function getLogs(?string $tableName = null, ?int $userId = null, int $limit = 100)
     {
         $query = AuditLog::with('user');
 

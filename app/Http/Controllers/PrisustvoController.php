@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Prisanstvo;
-use App\Models\Predmet;
 use App\Models\Kandidat;
 use App\Models\NastavnaNedelja;
+use App\Models\Predmet;
+use App\Models\Prisanstvo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +15,7 @@ class PrisustvoController extends Controller
     {
         $predmeti = Predmet::all();
         $nedelje = NastavnaNedelja::orderBy('redni_broj', 'desc')->get();
-        
+
         $prisanstva = null;
         if ($request->predmet && $request->nedelja) {
             $prisanstva = Prisanstvo::where('predmet_id', $request->predmet)
@@ -31,7 +31,7 @@ class PrisustvoController extends Controller
     {
         $predmeti = Predmet::all();
         $nedelje = NastavnaNedelja::orderBy('redni_broj', 'desc')->get();
-        
+
         $studenti = [];
         if ($request->predmet) {
             $studenti = Kandidat::where('statusUpisa_id', 3)->get();
@@ -63,7 +63,7 @@ class PrisustvoController extends Controller
     public function report(Request $request)
     {
         $studenti = Kandidat::where('statusUpisa_id', 3)->get();
-        
+
         $prisanstva = Prisanstvo::where('predmet_id', $request->predmet_id)
             ->with('student', 'nastavnaNedelja')
             ->get()

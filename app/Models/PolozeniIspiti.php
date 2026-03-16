@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class PolozeniIspiti extends AndroModel
 {
     protected $table = 'polozeni_ispiti';
@@ -27,5 +25,4 @@ class PolozeniIspiti extends AndroModel
     {
         return $this->belongsTo(ZapisnikOPolaganjuIspita::class, 'zapisnik_id');
     }
-
 }

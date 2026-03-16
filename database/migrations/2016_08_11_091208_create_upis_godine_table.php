@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateUpisGodineTable extends Migration
 {
@@ -21,8 +21,8 @@ class CreateUpisGodineTable extends Migration
             $table->integer('statusGodine_id');
             $table->integer('studijskiProgram_id');
             $table->integer('skolskaGodina_id')->nullable();
-            $table->date('datumUpisa')->nullable();;
-            $table->date('datumPromene')->nullable();;
+            $table->date('datumUpisa')->nullable();
+            $table->date('datumPromene')->nullable();
             $table->timestamps();
         });
     }

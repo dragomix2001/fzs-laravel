@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateDiplomaTable extends Migration
 {
@@ -28,8 +28,5 @@ class CreateDiplomaTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-
-    }
+    public function down() {}
 }

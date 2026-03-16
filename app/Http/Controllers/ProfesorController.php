@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests;
 use App\OblikNastave;
-use App\Predmet;
 use App\PredmetProgram;
 use App\Profesor;
 use App\ProfesorPredmet;
-use App\Semestar;
 use App\StatusProfesora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-
-use App\Http\Requests;
 
 class ProfesorController extends Controller
 {
@@ -27,7 +24,7 @@ class ProfesorController extends Controller
             $profesor = Profesor::all();
             $status = StatusProfesora::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.profesor', compact('profesor', 'status'));
@@ -35,7 +32,7 @@ class ProfesorController extends Controller
 
     public function unos(Request $request)
     {
-        $profesor = new Profesor();
+        $profesor = new Profesor;
 
         $profesor->jmbg = $request->jmbg;
         $profesor->ime = $request->ime;
@@ -50,7 +47,7 @@ class ProfesorController extends Controller
         try {
             $profesor->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/profesor');
@@ -62,7 +59,7 @@ class ProfesorController extends Controller
             $status = StatusProfesora::all();
             $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.editProfesor', compact('profesor', 'status', 'predmeti'));
@@ -71,11 +68,11 @@ class ProfesorController extends Controller
     public function editPredmet(Profesor $profesor)
     {
         try {
-            //$status = StatusProfesora::all();
+            // $status = StatusProfesora::all();
             $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
-            //return($predmeti->first());
+            // return($predmeti->first());
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.editProfesorPredmet', compact('profesor', 'status', 'predmeti'));
@@ -86,7 +83,7 @@ class ProfesorController extends Controller
         try {
             $status = StatusProfesora::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.addProfesor', compact('status'));
@@ -111,7 +108,7 @@ class ProfesorController extends Controller
         try {
             $profesor->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/profesor');
@@ -122,7 +119,7 @@ class ProfesorController extends Controller
         try {
             $profesor->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();
@@ -133,7 +130,7 @@ class ProfesorController extends Controller
         try {
             $predmet->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();
@@ -145,7 +142,7 @@ class ProfesorController extends Controller
             $predmet = PredmetProgram::all();
             $oblik = OblikNastave::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.addProfesorPredmet', compact('predmet', 'oblik', 'profesor'));
@@ -153,9 +150,9 @@ class ProfesorController extends Controller
 
     public function addPredmetUnos(Requests\ProfesorRequest $request)
     {
-        $predmet = new ProfesorPredmet();
+        $predmet = new ProfesorPredmet;
 
-        $predmet->profesor_id= $request->profesor_id;
+        $predmet->profesor_id = $request->profesor_id;
         $predmet->predmet_id = $request->predmet_id;
         $predmet->oblik_nastave_id = $request->oblikNastave_id;
         $predmet->indikatorAktivan = 1;
@@ -163,9 +160,9 @@ class ProfesorController extends Controller
         try {
             $predmet->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
-        return Redirect::to('/profesor/' . $predmet->profesor_id . '/editPredmet');
+        return Redirect::to('/profesor/'.$predmet->profesor_id.'/editPredmet');
     }
 }

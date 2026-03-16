@@ -2,16 +2,14 @@
 
 namespace App\Services;
 
+use App\Kandidat;
 use App\Models\DiplomskiPolaganje;
-use App\Models\DiplomskiPrijavaOdbrane;
 use App\Models\DiplomskiPrijavaTeme;
 use App\Models\DiplomskiRad;
-use App\Kandidat;
 use App\Profesor;
 use App\ProfesorPredmet;
 use Illuminate\Http\Request;
 use View;
-use PDF;
 
 class DiplomskiRadService extends BasePdfService
 {
@@ -26,14 +24,14 @@ class DiplomskiRadService extends BasePdfService
 
     public function diplomskiAdd(Request $request)
     {
-        $diplomski = new DiplomskiRad();
+        $diplomski = new DiplomskiRad;
         $diplomski->kandidat_id = $request->kandidat_id;
         $diplomski->tema = $request->tema;
         $diplomski->mentor = $request->mentor;
         $diplomski->datumPrijave = $request->datumPrijave;
         $diplomski->save();
 
-        $prijava = new DiplomskiPrijavaTeme();
+        $prijava = new DiplomskiPrijavaTeme;
         $prijava->kandidat_id = $request->kandidat_id;
         $prijava->tema = $request->tema;
         $prijava->mentor = $request->mentor;
@@ -46,8 +44,8 @@ class DiplomskiRadService extends BasePdfService
     public function komisijaStampa(Kandidat $student)
     {
         $diplomski = DiplomskiRad::where('kandidat_id', $student->id)->first();
-        
-        if (!$diplomski) {
+
+        if (! $diplomski) {
             return redirect()->back()->with('error', 'Дипломски рад није пронађен');
         }
 
@@ -71,13 +69,13 @@ class DiplomskiRadService extends BasePdfService
     {
         try {
             $diplomskiPolaganje = DiplomskiPolaganje::where('kandidat_id', $student->id)->first();
-            
-            if (!$diplomskiPolaganje) {
+
+            if (! $diplomskiPolaganje) {
                 return redirect()->back()->with('error', 'Дипломско полагање није пронађено');
             }
 
             $diplomski = DiplomskiRad::where('kandidat_id', $student->id)->first();
-            
+
             $pdf_settings = \Config::get('tcpdf');
             $pdf = new \Elibyy\TCPDF\TCPDF([
                 $pdf_settings['page_orientation'],
@@ -85,7 +83,7 @@ class DiplomskiRadService extends BasePdfService
                 $pdf_settings['page_format'],
                 true,
                 'UTF-8',
-                false
+                false,
             ], 'tcpdf');
 
             $view = View::make('izvestaji.zapisnikDiplomski')
@@ -94,14 +92,14 @@ class DiplomskiRadService extends BasePdfService
                 ->with('diplomskiPolaganje', $diplomskiPolaganje);
 
             $contents = $view->render();
-            $pdf->SetAutoPageBreak(TRUE, 5);
+            $pdf->SetAutoPageBreak(true, 5);
             $pdf->SetTitle('Записник са одбране дипломског');
             $pdf->AddPage();
             $pdf->SetFont('freeserif', '', 10);
             $pdf->WriteHtml($contents);
             $pdf->Output('ZapisnikDiplomski.pdf');
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
     }
 }

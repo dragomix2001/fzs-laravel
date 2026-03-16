@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
-
 class ProgramRequest extends Request
 {
     /**
@@ -47,7 +45,7 @@ class ProgramRequest extends Request
             'tipPredmeta_id.required' => 'Унесите тип предмета.',
             'predavanja.required' => 'Унесите број часова предавања.',
             'vezbe.required' => 'Унесите број часова вежби.',
-            'skolskaGodina_id.required' => 'Унесите школску годину.',            
+            'skolskaGodina_id.required' => 'Унесите школску годину.',
         ];
     }
 }

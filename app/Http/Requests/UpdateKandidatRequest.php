@@ -16,7 +16,7 @@ class UpdateKandidatRequest extends FormRequest
         return [
             'ime' => 'sometimes|string|max:50',
             'prezimeKandidata' => 'sometimes|string|max:50',
-            'brojIndeksa' => 'sometimes|string|max:20|unique:kandidat,brojIndeksa,' . $this->kandidat->id,
+            'brojIndeksa' => 'sometimes|string|max:20|unique:kandidat,brojIndeksa,'.$this->kandidat->id,
             'studijskiProgram_id' => 'sometimes|exists:studijski_program,id',
             'godinaStudija_id' => 'sometimes|exists:godina_studija,id',
             'statusUpisa_id' => 'sometimes|exists:status_studiranja,id',

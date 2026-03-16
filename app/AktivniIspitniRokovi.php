@@ -10,19 +10,20 @@ class AktivniIspitniRokovi extends AndroModel
         'pocetak,kraj' => 'datetime',
     ];
 
-    protected $fillable = ['rok_id','naziv','pocetak', 'kraj', 'komentar', 'tipRoka_id', 'indikatorAktivan'];
+    protected $fillable = ['rok_id', 'naziv', 'pocetak', 'kraj', 'komentar', 'tipRoka_id', 'indikatorAktivan'];
 
     public function nadredjeniRok()
     {
-        return $this->belongsTo(IspitniRok::class,'rok_id');
+        return $this->belongsTo(IspitniRok::class, 'rok_id');
     }
 
     public static function tipRoka($id)
     {
-        switch($id){
+        switch ($id) {
             case 1: return 'Редовни';
             case 2: return 'Ванредни';
         }
+
         return '';
     }
 }

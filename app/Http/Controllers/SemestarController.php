@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Semestar;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
-
 
 class SemestarController extends Controller
 {
@@ -20,7 +18,7 @@ class SemestarController extends Controller
         try {
             $semestar = Semestar::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.semestar', compact('semestar'));
@@ -28,18 +26,17 @@ class SemestarController extends Controller
 
     public function unos(Request $request)
     {
-        $semestar = new Semestar();
+        $semestar = new Semestar;
 
         $semestar->naziv = $request->naziv;
         $semestar->nazivRimski = $request->nazivRimski;
         $semestar->nazivBrojcano = $request->nazivBrojcano;
         $semestar->indikatorAktivan = 1;
 
-
         try {
             $semestar->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/semestar');
@@ -69,7 +66,7 @@ class SemestarController extends Controller
         try {
             $semestar->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/semestar');
@@ -80,7 +77,7 @@ class SemestarController extends Controller
         try {
             $semestar->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

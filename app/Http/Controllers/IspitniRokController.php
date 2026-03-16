@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\IspitniRok;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 
 class IspitniRokController extends Controller
@@ -19,7 +18,7 @@ class IspitniRokController extends Controller
         try {
             $ispitniRok = IspitniRok::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.ispitniRok', compact('ispitniRok'));
@@ -27,16 +26,15 @@ class IspitniRokController extends Controller
 
     public function unos(Request $request)
     {
-        $ispitniRok = new IspitniRok();
+        $ispitniRok = new IspitniRok;
 
         $ispitniRok->naziv = $request->naziv;
         $ispitniRok->indikatorAktivan = 1;
 
-
         try {
             $ispitniRok->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/ispitniRok');
@@ -64,7 +62,7 @@ class IspitniRokController extends Controller
         try {
             $ispitniRok->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/ispitniRok');
@@ -75,7 +73,7 @@ class IspitniRokController extends Controller
         try {
             $ispitniRok->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

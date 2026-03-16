@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Kandidat;
-use App\Models\UpisGodine;
 use App\Models\GodinaStudija;
+use App\Models\Kandidat;
 use App\Models\StudijskiProgram;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Tests\TestCase;
 
 class ComprehensiveFeatureTest extends TestCase
 {
@@ -26,183 +25,196 @@ class ComprehensiveFeatureTest extends TestCase
     public function test_user_can_access_dashboard(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/dashboard');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_student_list(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         // Route is /student/index or similar
         $response = $this->actingAs($user)->get('/kandidat');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_kandidat_list(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/kandidat');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_master_students(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/master');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_ispitni_rok(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/ispitniRok');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_bodovanje(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/bodovanje');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_kalendar(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/kalendar');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_obavestenja(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/obavestenja');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_raspored(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/raspored');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_prisustvo(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/prisustvo');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_studijski_program(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/studijskiProgram');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_predmet(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/predmet');
-        
+
         $response->assertStatus(200);
     }
 
     public function test_user_can_access_profesor(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/profesor');
-        
+
         $response->assertStatus(200);
     }
 
@@ -215,14 +227,15 @@ class ComprehensiveFeatureTest extends TestCase
     public function test_login_redirects_authenticated_users(): void
     {
         $user = $this->getAuthUser();
-        
-        if (!$user) {
+
+        if (! $user) {
             $this->markTestSkipped('No users found');
+
             return;
         }
-        
+
         $response = $this->actingAs($user)->get('/login');
-        
+
         $response->assertRedirect('/');
     }
 

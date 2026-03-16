@@ -10,16 +10,17 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (!$request->user()) {
+        if (! $request->user()) {
             return redirect('/login');
         }
 
         $user = $request->user();
-        
-        if (!in_array($user->role, $roles)) {
+
+        if (! in_array($user->role, $roles)) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json(['error' => 'Unauthorized'], 403);
             }
+
             return redirect('/')->with('error', 'Немате приступ овој страници.');
         }
 

@@ -2,31 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\AktivniIspitniRokovi;
-use App\GodinaStudija;
-use App\IspitniRok;
-use App\PolozeniIspiti;
-use App\Predmet;
-use App\PredmetProgram;
-use App\PrijavaIspita;
-use App\Profesor;
-use App\ProfesorPredmet;
+use App\Kandidat;
 use App\SkolskaGodUpisa;
 use App\StatusGodine;
 use App\StudijskiProgram;
-use App\TipPredmeta;
-use App\TipPrijave;
 use App\TipStudija;
 use App\UpisGodine;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use App\Kandidat;
-
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Validator;
 
 class StudentController extends Controller
 {
@@ -42,45 +28,45 @@ class StudentController extends Controller
     public function index(Request $request, $tipStudijaId)
     {
         $godinaStudija = $request->godina;
-        if($godinaStudija == null || $godinaStudija > 4 || $godinaStudija < 1){
+        if ($godinaStudija == null || $godinaStudija > 4 || $godinaStudija < 1) {
             $godinaStudija = 1;
         }
 
         $studijskiProgramId = 1;
-        if( !empty($request->studijskiProgramId )){
+        if (! empty($request->studijskiProgramId)) {
             $studijskiProgramId = $request->studijskiProgramId;
         }
 
-        if($tipStudijaId == 1){
+        if ($tipStudijaId == 1) {
 
-            $studenti = Kandidat::where(['tipStudija_id' => 1, 'statusUpisa_id' => 1, 'godinaStudija_id' =>  $godinaStudija, 'studijskiProgram_id' => $studijskiProgramId])->get();
+            $studenti = Kandidat::where(['tipStudija_id' => 1, 'statusUpisa_id' => 1, 'godinaStudija_id' => $godinaStudija, 'studijskiProgram_id' => $studijskiProgramId])->get();
             $studijskiProgrami = StudijskiProgram::where(['tipStudija_id' => 1])->get();
 
-            return view("student.indeks")
+            return view('student.indeks')
                 ->with('studenti', $studenti)->with('tipStudija', 1)
-                ->with('studijskiProgrami',$studijskiProgrami);
+                ->with('studijskiProgrami', $studijskiProgrami);
 
-        }else if($tipStudijaId == 2){
+        } elseif ($tipStudijaId == 2) {
 
             $studenti = Kandidat::where(['tipStudija_id' => 2, 'statusUpisa_id' => 1, 'studijskiProgram_id' => $studijskiProgramId])->get();
             $studijskiProgrami = StudijskiProgram::where(['tipStudija_id' => 2])->get();
 
-            return view("student.index_master")->with('studenti', $studenti)
+            return view('student.index_master')->with('studenti', $studenti)
                 ->with('tipStudija', 2)
-                ->with('studijskiProgrami',$studijskiProgrami);
+                ->with('studijskiProgrami', $studijskiProgrami);
         }
 
-        return "Дошло је до неочекиване грешке.";
+        return 'Дошло је до неочекиване грешке.';
     }
 
-    //Status studenta
+    // Status studenta
     public function upisStudenta($id)
     {
         $kandidat = Kandidat::find($id);
         $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 2])->get();
         $skolskaGodinaUpisa = SkolskaGodUpisa::all();
         $osnovneStudije = UpisGodine::where(['kandidat_id' => $id, 'tipStudija_id' => 1])
-            ->orderBy('godina','ASC')
+            ->orderBy('godina', 'ASC')
             ->orderBy('pokusaj', 'ASC')
             ->get();
         $masterStudije = UpisGodine::where(['kandidat_id' => $id, 'tipStudija_id' => 2])->get();
@@ -92,18 +78,19 @@ class StudentController extends Controller
 
     public function upisiStudenta($id, Request $request)
     {
-        if(empty($id) || empty($request->godina)){
+        if (empty($id) || empty($request->godina)) {
             Session::flash('flash-error', 'upis');
+
             return redirect("student/{$id}/upis");
         }
         $kandidat = Kandidat::find($id);
 
         $godina = $request->godina;
-        if($godina > 1){
-            $max = UpisGodine::where(['kandidat_id' => $id, 'godina' => $godina-1])->max('pokusaj');
+        if ($godina > 1) {
+            $max = UpisGodine::where(['kandidat_id' => $id, 'godina' => $godina - 1])->max('pokusaj');
             $prethodnaGodina = UpisGodine::where([
                 'kandidat_id' => $id,
-                'godina' => $godina-1,
+                'godina' => $godina - 1,
                 'pokusaj' => $max,
                 'tipStudija_id' => $kandidat->tipStudija_id])->first();
             $prethodnaGodina->statusGodine_id = 5;
@@ -128,8 +115,9 @@ class StudentController extends Controller
 
     public function obnoviGodinu($id, Request $request)
     {
-        if(empty($id) || empty($request->godina)){
+        if (empty($id) || empty($request->godina)) {
             Session::flash('flash-error', 'upis');
+
             return redirect("student/{$id}/upis");
         }
 
@@ -149,7 +137,7 @@ class StudentController extends Controller
         $prethodnaGodina->datumPromene = Carbon::now();
         $prethodnaGodina->save();
 
-        $obnovaGodine = new UpisGodine();
+        $obnovaGodine = new UpisGodine;
         $obnovaGodine->kandidat_id = $id;
         $obnovaGodine->godina = $request->godina;
         $obnovaGodine->tipStudija_id = $request->tipStudijaId;
@@ -167,8 +155,9 @@ class StudentController extends Controller
 
     public function obrisiObnovuGodine($id, Request $request)
     {
-        if(empty($id) || empty($request->upisId)){
+        if (empty($id) || empty($request->upisId)) {
             Session::flash('flash-error', 'upis');
+
             return redirect("student/{$id}/upis");
         }
 
@@ -179,8 +168,9 @@ class StudentController extends Controller
 
     public function ponistiUpis($id, Request $request)
     {
-        if(empty($id) || empty($request->upisId)){
+        if (empty($id) || empty($request->upisId)) {
             Session::flash('flash-error', 'upis');
+
             return redirect("student/{$id}/upis");
         }
 
@@ -194,10 +184,10 @@ class StudentController extends Controller
     public function promeniStatus($id, $statusId, $godinaId)
     {
         $kandidat = Kandidat::find($id);
-        if($statusId == $this->status['zavrsio'] || $statusId == $this->status['odustao'] || $statusId == $this->status['obnovio']) {
+        if ($statusId == $this->status['zavrsio'] || $statusId == $this->status['odustao'] || $statusId == $this->status['obnovio']) {
 
-        }else if($kandidat->statusUpisa_id == $this->status['odustao'] && $statusId == 1){
-            //deo gde se upisuje ispisani kandidat
+        } elseif ($kandidat->statusUpisa_id == $this->status['odustao'] && $statusId == 1) {
+            // deo gde se upisuje ispisani kandidat
             $kandidat->statusUpisa_id = $statusId;
             $kandidat->datumStatusa = Carbon::now();
             $kandidat->skolskaGodinaUpisa_id = $godinaId;
@@ -206,16 +196,16 @@ class StudentController extends Controller
             UpisGodine::generisiBrojIndeksa($kandidat->id);
 
             return Redirect::back();
-        }else{
+        } else {
             $kandidat->statusUpisa_id = $statusId;
         }
 
         $kandidat->datumStatusa = Carbon::now();
 
-        if($godinaId != 0){
+        if ($godinaId != 0) {
             $aktivnaGodina = UpisGodine::find($godinaId);
             $aktivnaGodina->statusGodine_id = $statusId;
-            if($statusId == $this->status['upisan']){
+            if ($statusId == $this->status['upisan']) {
                 $aktivnaGodina->datumUpisa = Carbon::now();
             }
             $aktivnaGodina->datumPromene = Carbon::now();
@@ -226,7 +216,7 @@ class StudentController extends Controller
         $kandidat->save();
 
         return Redirect::back();
-        //return redirect("student/index/{$kandidat->tipStudija_id}?godina={$kandidat->godinaStudija_id}&studijskiProgramId={$kandidat->studijskiProgram_id}");
+        // return redirect("student/index/{$kandidat->tipStudija_id}?godina={$kandidat->godinaStudija_id}&studijskiProgramId={$kandidat->studijskiProgram_id}");
     }
 
     public function masovniUpis(Request $request)
@@ -238,17 +228,20 @@ class StudentController extends Controller
 
             UpisGodine::upisiGodinu($kandidatId, $godina, $kandidat->skolskaGodinaUpisa_id);
         }
+
         return redirect('/student/index/1');
     }
 
     public function upisMasterStudija(Request $request)
     {
-        $result = UpisGodine::upisMasterPostojeciKandidat($request->kandidat_id,$request->StudijskiProgram,$request->SkolskaGodinaUpisa);
-        if($result){
+        $result = UpisGodine::upisMasterPostojeciKandidat($request->kandidat_id, $request->StudijskiProgram, $request->SkolskaGodinaUpisa);
+        if ($result) {
             Session::flash('flash-success', 'upis');
+
             return redirect("/student/{$result}/upis");
-        }else{
+        } else {
             Session::flash('flash-error', 'upis');
+
             return Redirect::back();
         }
 
@@ -276,9 +269,10 @@ class StudentController extends Controller
             null : $request->datumPromene;
 
         $saved = $upisGodine->save();
-        if(!$saved){
+        if (! $saved) {
             Session::flash('error', 'Дошло је до грешке при чувању!');
         }
+
         return redirect("/student/{$upisGodine->kandidat_id}/upis");
     }
 
@@ -301,10 +295,10 @@ class StudentController extends Controller
         $studenti = Kandidat::where([
             'tipStudija_id' => $request->tipStudijaId,
             'studijskiProgram_id' => $request->studijskiProgramId,
-            'statusUpisa_id' => $statusDiplomirao
+            'statusUpisa_id' => $statusDiplomirao,
         ])->get();
 
-        return view('student.index_diplomirani', compact('studenti','tipStudija','studijskiProgrami'));
+        return view('student.index_diplomirani', compact('studenti', 'tipStudija', 'studijskiProgrami'));
     }
 
     public function ispisaniStudenti(Request $request)
@@ -318,10 +312,9 @@ class StudentController extends Controller
         $studenti = Kandidat::where([
             'tipStudija_id' => $request->tipStudijaId,
             'studijskiProgram_id' => $request->studijskiProgramId,
-            'statusUpisa_id' => $statusIspisan
+            'statusUpisa_id' => $statusIspisan,
         ])->get();
 
-        return view('student.index_ispisani', compact('studenti','tipStudija','studijskiProgrami'));
+        return view('student.index_ispisani', compact('studenti', 'tipStudija', 'studijskiProgrami'));
     }
-
 }

@@ -15,7 +15,7 @@ class PolozeniIspitiExport implements FromCollection, WithHeadings
             ->get()
             ->map(function ($ispit) {
                 return [
-                    'student' => $ispit->kandidat->imeKandidata . ' ' . $ispit->kandidat->prezimeKandidata,
+                    'student' => $ispit->kandidat->imeKandidata.' '.$ispit->kandidat->prezimeKandidata,
                     'indeks' => $ispit->kandidat->BrojIndeksa,
                     'predmet' => $ispit->predmet->naziv ?? 'N/A',
                     'ocena' => $ispit->konacnaOcena,

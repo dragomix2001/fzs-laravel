@@ -7,14 +7,13 @@ use App\PolozeniIspiti;
 use App\Predmet;
 use App\PredmetProgram;
 use App\PrijavaIspita;
-use App\Profesor;
 use App\StudijskiProgram;
-use App\ZapisnikOPolaganjuIspita;
 use App\ZapisnikOPolaganju_Student;
+use App\ZapisnikOPolaganjuIspita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use View;
 use PDF;
+use View;
 
 class IspitService extends BasePdfService
 {
@@ -23,31 +22,31 @@ class IspitService extends BasePdfService
         try {
             $zapisnik = ZapisnikOPolaganjuIspita::find($request->id);
             $zapisnikStudent = ZapisnikOPolaganju_Student::where(['zapisnik_id' => $request->id])->get();
-            
+
             $ids = array_map(function (ZapisnikOPolaganju_Student $o) {
                 return $o->kandidat_id;
             }, $zapisnikStudent->all());
-            
+
             $studenti = Kandidat::whereIn('id', $ids)->orderByRaw('SUBSTR(brojIndeksa, 5)')->orderBy('brojIndeksa')->get();
 
-            $prijavaIds = array();
+            $prijavaIds = [];
             foreach ($ids as $id) {
                 $pom = PrijavaIspita::where([
                     'predmet_id' => $zapisnik->predmet_id,
                     'rok_id' => $zapisnik->rok_id,
-                    'kandidat_id' => $id
+                    'kandidat_id' => $id,
                 ])->first();
                 if ($pom != null) {
                     $prijavaIds[$id] = $pom->id;
                 }
             }
 
-            $polozeniIspitIds = array();
+            $polozeniIspitIds = [];
             foreach ($ids as $id) {
                 $pom = PolozeniIspiti::where([
                     'zapisnik_id' => $zapisnik->id,
                     'predmet_id' => $zapisnik->predmet_id,
-                    'kandidat_id' => $id
+                    'kandidat_id' => $id,
                 ])->first();
                 if ($pom != null) {
                     $polozeniIspitIds[$id] = $pom->id;
@@ -73,15 +72,15 @@ class IspitService extends BasePdfService
             $ispit = Predmet::where(['id' => $zapisnik->predmet_id])->first();
 
             $predmetiProgramiSpisak = PredmetProgram::where(['predmet_id' => $zapisnik->predmet_id])->get();
-            
-            $ids = array();
+
+            $ids = [];
             foreach ($predmetiProgramiSpisak as $item) {
                 $ids[] = $item->studijskiProgram_id;
             }
 
             $programi = StudijskiProgram::whereIn('id', $ids)->get();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         $view = View::make('izvestaji.zapisnik')
@@ -99,7 +98,7 @@ class IspitService extends BasePdfService
             ->with('datum2', $zapisnik->datum2);
 
         $contents = $view->render();
-        PDF::SetAutoPageBreak(TRUE, 5);
+        PDF::SetAutoPageBreak(true, 5);
         PDF::SetTitle('Записник о полагању испита');
         PDF::AddPage();
         PDF::SetFont('dejavusans', '', 10);
@@ -111,7 +110,7 @@ class IspitService extends BasePdfService
     {
         try {
             $student = Kandidat::find($id);
-            
+
             $ispiti = DB::table('polozeni_ispiti')
                 ->where(['polozeni_ispiti.kandidat_id' => $id])
                 ->join('prijava_ispita', 'polozeni_ispiti.prijava_id', '=', 'prijava_ispita.id')
@@ -126,7 +125,7 @@ class IspitService extends BasePdfService
                 )
                 ->get();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         $pdf = $this->createPdf();
@@ -135,7 +134,7 @@ class IspitService extends BasePdfService
             ->with('ispiti', $ispiti);
 
         $contents = $view->render();
-        $pdf->SetAutoPageBreak(TRUE, 5);
+        $pdf->SetAutoPageBreak(true, 5);
         $pdf->SetTitle('Уверење о положеним испитима');
         $pdf->AddPage();
         $pdf->SetFont('freeserif', '', 10);
@@ -150,7 +149,7 @@ class IspitService extends BasePdfService
             $program = StudijskiProgram::where('id', $request->program)->first();
             $godina = \App\GodinaStudija::where('id', $request->godina)->first();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         $pdf = $this->createPdf();
@@ -160,7 +159,7 @@ class IspitService extends BasePdfService
             ->with('godina', $godina);
 
         $contents = $view->render();
-        $pdf->SetAutoPageBreak(TRUE, 5);
+        $pdf->SetAutoPageBreak(true, 5);
         $pdf->SetTitle('Наставни план');
         $pdf->AddPage();
         $pdf->SetFont('freeserif', '', 10);

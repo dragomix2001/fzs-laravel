@@ -11,13 +11,13 @@ class BasePdfService
     {
         $view = View::make($view)->with($data);
         $contents = $view->render();
-        
+
         PDF::SetAutoPageBreak(true, 5);
         PDF::SetTitle($title);
         PDF::AddPage();
         PDF::SetFont('dejavusans', '', 10);
         PDF::WriteHtml($contents, true);
-        PDF::Output($title . '.pdf');
+        PDF::Output($title.'.pdf');
     }
 
     protected function getPdfSettings(): array
@@ -28,13 +28,14 @@ class BasePdfService
     protected function createPdf()
     {
         $settings = $this->getPdfSettings();
+
         return new \Elibyy\TCPDF\TCPDF([
             $settings['page_orientation'],
             $settings['page_units'],
             $settings['page_format'],
             true,
             'UTF-8',
-            false
+            false,
         ], 'tcpdf');
     }
 }

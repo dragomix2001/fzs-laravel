@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Api\ApiKandidatController;
+use App\Http\Controllers\Api\AktivnostController;
 use App\Http\Controllers\Api\ApiIspitController;
+use App\Http\Controllers\Api\ApiKandidatController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ObavestenjeController;
-use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\RasporedController;
-use App\Http\Controllers\Api\AktivnostController;
+use App\Http\Controllers\Api\StudentController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ Route::prefix('v1')->group(function () {
         'kandidati' => ApiKandidatController::class,
         'ispiti' => ApiIspitController::class,
     ]);
-    
+
     Route::prefix('auth')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

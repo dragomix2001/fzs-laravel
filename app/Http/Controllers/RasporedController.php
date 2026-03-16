@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Raspored;
+use App\Models\GodinaStudija;
+use App\Models\OblikNastave;
 use App\Models\Predmet;
 use App\Models\Profesor;
-use App\Models\StudijskiProgram;
-use App\Models\GodinaStudija;
+use App\Models\Raspored;
 use App\Models\Semestar;
 use App\Models\SkolskaGodUpisa;
-use App\Models\OblikNastave;
+use App\Models\StudijskiProgram;
 use Illuminate\Http\Request;
 
 class RasporedController extends Controller
@@ -22,7 +22,7 @@ class RasporedController extends Controller
             'studijskiProgram',
             'godinaStudija',
             'semestar',
-            'oblikNastave'
+            'oblikNastave',
         ]);
 
         if ($request->skolska_godina_id) {
@@ -59,7 +59,7 @@ class RasporedController extends Controller
         $obliciNastave = OblikNastave::all();
 
         return view('raspored.create', compact(
-            'predmeti', 'profesori', 'studijskiProgrami', 
+            'predmeti', 'profesori', 'studijskiProgrami',
             'godineStudija', 'semestri', 'skolskeGodine', 'obliciNastave'
         ));
     }
@@ -97,7 +97,7 @@ class RasporedController extends Controller
         $obliciNastave = OblikNastave::all();
 
         return view('raspored.edit', compact(
-            'raspored', 'predmeti', 'profesori', 'studijskiProgrami', 
+            'raspored', 'predmeti', 'profesori', 'studijskiProgrami',
             'godineStudija', 'semestri', 'skolskeGodine', 'obliciNastave'
         ));
     }
@@ -127,6 +127,7 @@ class RasporedController extends Controller
     public function destroy(Raspored $raspored)
     {
         $raspored->delete();
+
         return redirect()->route('raspored.index')->with('success', 'Распоред обрисан');
     }
 
@@ -138,7 +139,7 @@ class RasporedController extends Controller
             'studijskiProgram',
             'godinaStudija',
             'semestar',
-            'oblikNastave'
+            'oblikNastave',
         ]);
 
         if ($request->skolska_godina_id) {
@@ -165,7 +166,7 @@ class RasporedController extends Controller
                 'naziv' => $naziv,
                 'casovi' => $raspored->filter(function ($r) use ($dan) {
                     return $r->dan == $dan;
-                })->values()
+                })->values(),
             ];
         }
 
@@ -173,14 +174,14 @@ class RasporedController extends Controller
 
         return view('raspored.pregled', compact('rasporedPoDanima', 'skolskeGodine'));
     }
-    
+
     public function kalendar(Request $request)
     {
         $query = Raspored::with([
             'predmet',
             'profesor',
             'studijskiProgram',
-            'oblikNastave'
+            'oblikNastave',
         ]);
 
         if ($request->skolska_godina_id) {
@@ -194,13 +195,13 @@ class RasporedController extends Controller
         }
 
         $raspored = $query->get();
-        
+
         $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
         $studijskiProgrami = StudijskiProgram::all();
 
         return view('raspored.kalendar', compact('raspored', 'skolskeGodine', 'studijskiProgrami'));
     }
-    
+
     public function kalendarEvents(Request $request)
     {
         $query = Raspored::with(['predmet', 'profesor', 'oblikNastave']);
@@ -216,10 +217,10 @@ class RasporedController extends Controller
         }
 
         $raspored = $query->get();
-        
+
         $events = [];
         $dani = [1 => 'monday', 2 => 'tuesday', 3 => 'wednesday', 4 => 'thursday', 5 => 'friday', 6 => 'saturday', 7 => 'sunday'];
-        
+
         foreach ($raspored as $r) {
             $boje = [
                 1 => '#3498db',
@@ -228,20 +229,20 @@ class RasporedController extends Controller
             ];
             $events[] = [
                 'id' => $r->id,
-                'title' => ($r->predmet->naziv ?? 'N/A') . ' - ' . ($r->oblikNastave->naziv ?? ''),
+                'title' => ($r->predmet->naziv ?? 'N/A').' - '.($r->oblikNastave->naziv ?? ''),
                 'daysOfWeek' => [$r->dan],
                 'startTime' => $r->vreme_od,
                 'endTime' => $r->vreme_do,
                 'backgroundColor' => $boje[$r->oblik_nastave_id] ?? '#3498db',
                 'borderColor' => $boje[$r->oblik_nastave_id] ?? '#3498db',
                 'extendedProps' => [
-                    'profesor' => $r->profesor->imeProf . ' ' . $r->profesor->prezimeProf ?? '',
+                    'profesor' => $r->profesor->imeProf.' '.$r->profesor->prezimeProf ?? '',
                     'prostorija' => $r->prostorija,
                     'grupa' => $r->grupa,
-                ]
+                ],
             ];
         }
-        
+
         return response()->json($events);
     }
 }

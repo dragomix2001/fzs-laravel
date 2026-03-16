@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\TipPredmeta;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 
 class TipPredmetaController extends Controller
@@ -19,7 +18,7 @@ class TipPredmetaController extends Controller
         try {
             $tipPredmeta = TipPredmeta::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.tipPredmeta', compact('tipPredmeta'));
@@ -27,17 +26,16 @@ class TipPredmetaController extends Controller
 
     public function unos(Request $request)
     {
-        $tipPredmeta = new TipPredmeta();
+        $tipPredmeta = new TipPredmeta;
 
         $tipPredmeta->naziv = $request->naziv;
         $tipPredmeta->skrNaziv = $request->skrNaziv;
         $tipPredmeta->indikatorAktivan = 1;
 
-
         try {
             $tipPredmeta->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/tipPredmeta');
@@ -66,7 +64,7 @@ class TipPredmetaController extends Controller
         try {
             $tipPredmeta->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/tipPredmeta');
@@ -77,7 +75,7 @@ class TipPredmetaController extends Controller
         try {
             $tipPredmeta->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

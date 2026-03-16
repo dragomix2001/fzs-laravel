@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Kandidat;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Services\StudentListService;
 use App\Services\DiplomaService;
 use App\Services\DiplomskiRadService;
 use App\Services\IspitService;
+use App\Services\StudentListService;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel;
 
 class IzvestajiController extends Controller
 {
     protected $studentListService;
+
     protected $diplomaService;
+
     protected $diplomskiRadService;
+
     protected $ispitService;
 
     public function __construct()
     {
-        $this->studentListService = new StudentListService();
-        $this->diplomaService = new DiplomaService();
-        $this->diplomskiRadService = new DiplomskiRadService();
-        $this->ispitService = new IspitService();
+        $this->studentListService = new StudentListService;
+        $this->diplomaService = new DiplomaService;
+        $this->diplomskiRadService = new DiplomskiRadService;
+        $this->ispitService = new IspitService;
     }
 
     public function spisakPoSmerovima()
@@ -145,13 +146,13 @@ class IzvestajiController extends Controller
     public function excelStampa(Request $request)
     {
         $godina = $request->godina;
-        $statusi = array("1", "2", "4", "5", "7");
+        $statusi = ['1', '2', '4', '5', '7'];
 
         $kandidat = \DB::table('kandidat')
             ->join('studijski_program', 'kandidat.studijskiProgram_id', '=', 'studijski_program.id')
             ->whereIn('kandidat.statusUpisa_id', $statusi)->where(['kandidat.skolskaGodinaUpisa_id' => $godina])->
             select('kandidat.ime', 'kandidat.prezimeKandidata', 'kandidat.brojIndeksa', 'studijski_program.naziv as program')
-            ->orderByRaw('SUBSTR(kandidat.brojIndeksa, 5)')->orderBy('kandidat.brojIndeksa')->get();
+                ->orderByRaw('SUBSTR(kandidat.brojIndeksa, 5)')->orderBy('kandidat.brojIndeksa')->get();
 
         Excel::create('Spisak', function ($excel) use ($kandidat) {
             $excel->sheet('sheet1', function ($sheet) use ($kandidat) {

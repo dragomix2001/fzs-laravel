@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\GodinaStudija;
+use App\Http\Requests;
 use App\Predmet;
+use App\PredmetProgram;
 use App\SkolskaGodUpisa;
 use App\StudijskiProgram;
 use App\TipPredmeta;
-use App\PredmetProgram;
-use App\TipSemestra;
 use App\TipStudija;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-
-use App\Http\Requests;
 
 class PredmetController extends Controller
 {
@@ -31,7 +29,7 @@ class PredmetController extends Controller
             $studijskiProgram = StudijskiProgram::all();
             $godinaStudija = GodinaStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.predmet', compact('predmet', 'tipStudija', 'studijskiProgram', 'godinaStudija', 'tipPredmeta'));
@@ -39,14 +37,14 @@ class PredmetController extends Controller
 
     public function unos(Request $request)
     {
-        $predmet = new Predmet();
+        $predmet = new Predmet;
 
         $predmet->naziv = $request->naziv;
 
         try {
             $predmet->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/predmet');
@@ -55,10 +53,10 @@ class PredmetController extends Controller
     public function edit(Predmet $predmet)
     {
         try {
-            //$programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
-            //return $programi;
+            // $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
+            // return $programi;
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.editPredmet', compact('predmet'));
@@ -71,10 +69,10 @@ class PredmetController extends Controller
                 $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
 
             } catch (\Illuminate\Database\QueryException $e) {
-                dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+                dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
             }
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.editPredmetProgram', compact('programi', 'predmet'));
@@ -85,7 +83,7 @@ class PredmetController extends Controller
         try {
             $godinaStudija = GodinaStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.addPredmet', compact('tipStudija', 'tipPredmeta'));
@@ -98,7 +96,7 @@ class PredmetController extends Controller
         try {
             $predmet->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/predmet');
@@ -109,7 +107,7 @@ class PredmetController extends Controller
         try {
             $predmet->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();
@@ -120,7 +118,7 @@ class PredmetController extends Controller
         try {
             $program->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();
@@ -134,10 +132,10 @@ class PredmetController extends Controller
             $tipPredmeta = TipPredmeta::all();
             $tipStudija = TipStudija::all();
             $skolskaGodina = SkolskaGodUpisa::all();
-            //$semestar = Semestar::all();
-            //$oblik = OblikNastave::all();
+            // $semestar = Semestar::all();
+            // $oblik = OblikNastave::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.addPredmetProgram', compact('programi', 'predmet', 'godinaStudija', 'tipPredmeta', 'tipStudija', 'skolskaGodina'));
@@ -146,7 +144,7 @@ class PredmetController extends Controller
     public function addProgramUnos(Requests\ProgramRequest $request)
     {
 
-        $program = new PredmetProgram();
+        $program = new PredmetProgram;
         $program->studijskiProgram_id = $request->program_id;
         $program->predmet_id = $request->predmet_id;
         $program->godinaStudija_id = $request->godinaStudija_id;
@@ -163,10 +161,9 @@ class PredmetController extends Controller
         try {
             $program->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
-        return Redirect::to('/predmet/' . $request->predmet_id . '/editProgram');
+        return Redirect::to('/predmet/'.$request->predmet_id.'/editProgram');
     }
-
 }

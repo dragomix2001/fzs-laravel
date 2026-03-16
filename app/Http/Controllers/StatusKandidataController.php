@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\StatusGodine;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
-
 
 class StatusKandidataController extends Controller
 {
@@ -20,7 +18,7 @@ class StatusKandidataController extends Controller
         try {
             $status = StatusGodine::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.statusKandidata', compact('status'));
@@ -28,16 +26,15 @@ class StatusKandidataController extends Controller
 
     public function unos(Request $request)
     {
-        $status = new StatusGodine();
+        $status = new StatusGodine;
 
         $status->naziv = $request->naziv;
         $status->indikatorAktivan = 1;
 
-
         try {
             $status->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusKandidata');
@@ -65,7 +62,7 @@ class StatusKandidataController extends Controller
         try {
             $status->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusKandidata');
@@ -76,7 +73,7 @@ class StatusKandidataController extends Controller
         try {
             $status->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

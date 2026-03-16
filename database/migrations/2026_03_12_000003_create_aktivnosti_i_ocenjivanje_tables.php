@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('napomena')->nullable();
             $table->boolean('aktivan')->default(true);
             $table->timestamps();
-            
+
             $table->index('predmet_id');
         });
 
@@ -35,12 +35,12 @@ return new class extends Migration
             $table->text('napomena')->nullable();
             $table->unsignedBigInteger('profesor_id')->nullable();
             $table->timestamps();
-            
+
             $table->index('student_id');
             $table->index('aktivnost_id');
             $table->unique(['student_id', 'aktivnost_id']);
         });
-        
+
         // Seed data
         if (DB::table('predmet')->count() > 0) {
             $predmet = DB::table('predmet')->first();

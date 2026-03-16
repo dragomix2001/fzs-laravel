@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kandidat;
-use App\Models\StudijskiProgram;
-use App\Models\SkolskaGodUpisa;
+use App\Models\Obavestenje;
 use App\Models\PolozeniIspiti;
 use App\Models\PrijavaIspita;
+use App\Models\SkolskaGodUpisa;
+use App\Models\StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
-use App\Models\Obavestenje;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,13 +16,13 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $skolskaGodinaId = $request->skolska_godina_id ?? 
-            Cache::remember('active_skolska_godina', 3600, function() {
+        $skolskaGodinaId = $request->skolska_godina_id ??
+            Cache::remember('active_skolska_godina', 3600, function () {
                 return SkolskaGodUpisa::where('aktivan', true)->value('id');
             });
 
         $ukupnoStudenata = Kandidat::where('statusUpisa_id', 3)->count();
-        
+
         $studentiPoGodini = Kandidat::selectRaw('skolskaGodinaUpisa_id, COUNT(*) as broj')
             ->where('statusUpisa_id', 3)
             ->groupBy('skolskaGodinaUpisa_id')
@@ -37,9 +37,9 @@ class DashboardController extends Controller
 
         $polozeniIspiti = PolozeniIspiti::whereYear('created_at', date('Y'))->count();
         $prijavljeniIspiti = PrijavaIspita::whereYear('created_at', date('Y'))->count();
-        
+
         $aktivnaObavestenja = Obavestenje::aktivna()->count();
-        
+
         $prolaznost = 0;
         if ($prijavljeniIspiti > 0) {
             $prolaznost = round(($polozeniIspiti / $prijavljeniIspiti) * 100, 1);
@@ -88,7 +88,7 @@ class DashboardController extends Controller
             'widgets'
         ));
     }
-    
+
     public function saveWidgets(Request $request)
     {
         $widgets = [
@@ -101,9 +101,9 @@ class DashboardController extends Controller
             'prolaznost' => $request->has('prolaznost'),
             'neuspesni_predmeti' => $request->has('neuspesni_predmeti'),
         ];
-        
+
         session(['dashboard_widgets' => $widgets]);
-        
+
         return redirect()->route('dashboard.index');
     }
 
@@ -111,40 +111,40 @@ class DashboardController extends Controller
     {
         $programId = $request->program_id;
         $godinaId = $request->godina_id;
-        
+
         $query = Kandidat::where('statusUpisa_id', 3);
-        
+
         if ($programId) {
             $query->where('studijskiProgram_id', $programId);
         }
-        
+
         if ($godinaId) {
             $query->where('skolskaGodinaUpisa_id', $godinaId);
         }
-        
+
         $studenti = $query->with(['program', 'godinaUpisa'])->get();
         $programi = StudijskiProgram::all();
         $godine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
-        
+
         return view('dashboard.studenti', compact('studenti', 'programi', 'godine', 'programId', 'godinaId'));
     }
 
     public function ispiti(Request $request)
     {
         $godina = $request->godina ?? date('Y');
-        
+
         $polozeniPoMesecima = PolozeniIspiti::selectRaw('MONTH(created_at) as mesec, COUNT(*) as broj')
             ->whereYear('created_at', $godina)
             ->groupBy('mesec')
             ->orderBy('mesec')
             ->get();
-            
+
         $prijavePoMesecima = PrijavaIspita::selectRaw('MONTH(created_at) as mesec, COUNT(*) as broj')
             ->whereYear('created_at', $godina)
             ->groupBy('mesec')
             ->orderBy('mesec')
             ->get();
-            
+
         $uspehPoPredmetu = PolozeniIspiti::selectRaw('predmet_id, 
             COUNT(*) as ukupno,
             SUM(CASE WHEN konacnaOcena >= 6 THEN 1 ELSE 0 END) as polozeni,
@@ -155,7 +155,7 @@ class DashboardController extends Controller
             ->orderByDesc('ukupno')
             ->limit(10)
             ->get();
-            
+
         return view('dashboard.ispiti', compact('polozeniPoMesecima', 'prijavePoMesecima', 'uspehPoPredmetu', 'godina'));
     }
 }

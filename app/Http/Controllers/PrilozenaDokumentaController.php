@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\PrilozenaDokumenta;
 use App\GodinaStudija;
+use App\PrilozenaDokumenta;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
-use PDF;
 
 class PrilozenaDokumentaController extends Controller
 {
@@ -23,7 +20,7 @@ class PrilozenaDokumentaController extends Controller
             $dokument = PrilozenaDokumenta::all();
             $godinaStudija = GodinaStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.prilozenaDokumenta', compact('dokument', 'godinaStudija'));
@@ -31,7 +28,7 @@ class PrilozenaDokumentaController extends Controller
 
     public function unos(Request $request)
     {
-        $dokument = new PrilozenaDokumenta();
+        $dokument = new PrilozenaDokumenta;
 
         $dokument->redniBrojDokumenta = $request->redniBrojDokumenta;
         $dokument->naziv = $request->naziv;
@@ -40,7 +37,7 @@ class PrilozenaDokumentaController extends Controller
         try {
             $dokument->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/prilozenaDokumenta');
@@ -69,7 +66,7 @@ class PrilozenaDokumentaController extends Controller
         try {
             $dokument->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/prilozenaDokumenta');
@@ -80,7 +77,7 @@ class PrilozenaDokumentaController extends Controller
         try {
             $dokument->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

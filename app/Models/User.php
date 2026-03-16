@@ -24,7 +24,9 @@ class User extends Authenticatable
     ];
 
     const ROLE_ADMIN = 'admin';
+
     const ROLE_PROFESSOR = 'professor';
+
     const ROLE_STUDENT = 'student';
 
     public function isAdmin()

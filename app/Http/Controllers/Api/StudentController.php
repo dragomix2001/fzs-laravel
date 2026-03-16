@@ -20,7 +20,7 @@ class StudentController extends Controller
         $user = $request->user();
         $kandidat = Kandidat::where('user_id', $user->id)->first();
 
-        if (!$kandidat) {
+        if (! $kandidat) {
             return response()->json([
                 'message' => 'Студент није пронађен',
             ], 404);
@@ -41,7 +41,7 @@ class StudentController extends Controller
         $user = $request->user();
         $kandidat = Kandidat::where('user_id', $user->id)->first();
 
-        if (!$kandidat) {
+        if (! $kandidat) {
             return response()->json([
                 'message' => 'Студент није пронађен',
             ], 404);
@@ -68,7 +68,7 @@ class StudentController extends Controller
         $user = $request->user();
         $kandidat = Kandidat::where('user_id', $user->id)->first();
 
-        if (!$kandidat) {
+        if (! $kandidat) {
             return response()->json([
                 'message' => 'Студент није пронађен',
             ], 404);
@@ -94,7 +94,7 @@ class StudentController extends Controller
         $user = $request->user();
         $kandidat = Kandidat::where('user_id', $user->id)->first();
 
-        if (!$kandidat) {
+        if (! $kandidat) {
             return response()->json([
                 'message' => 'Студент није пронађен',
             ], 404);
@@ -120,7 +120,7 @@ class StudentController extends Controller
         $user = $request->user();
         $kandidat = Kandidat::where('user_id', $user->id)->first();
 
-        if (!$kandidat) {
+        if (! $kandidat) {
             return response()->json([
                 'message' => 'Студент није пронађен',
             ], 404);

@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\StudijskiProgram;
 use App\TipStudija;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class StudijskiProgramController extends Controller
@@ -22,7 +20,7 @@ class StudijskiProgramController extends Controller
             $studijskiProgram = StudijskiProgram::all();
             $tipStudija = TipStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.studijskiProgram', compact('studijskiProgram', 'tipStudija'));
@@ -30,7 +28,7 @@ class StudijskiProgramController extends Controller
 
     public function unos(Request $request)
     {
-        $studijskiProgram = new StudijskiProgram();
+        $studijskiProgram = new StudijskiProgram;
 
         $studijskiProgram->naziv = $request->naziv;
         $studijskiProgram->tipStudija_id = $request->tipStudija_id;
@@ -38,11 +36,10 @@ class StudijskiProgramController extends Controller
         $studijskiProgram->zvanje = $request->zvanje;
         $studijskiProgram->indikatorAktivan = 1;
 
-
         try {
             $studijskiProgram->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/studijskiProgram');
@@ -53,7 +50,7 @@ class StudijskiProgramController extends Controller
         try {
             $tipStudija = TipStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.editStudijskiProgram', compact('studijskiProgram', 'tipStudija'));
@@ -64,7 +61,7 @@ class StudijskiProgramController extends Controller
         try {
             $tipStudija = TipStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.addStudijskiProgram', compact('tipStudija'));
@@ -85,9 +82,8 @@ class StudijskiProgramController extends Controller
         try {
             $studijskiProgram->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
-
 
         return Redirect::to('/studijskiProgram');
     }
@@ -97,10 +93,9 @@ class StudijskiProgramController extends Controller
         try {
             $studijskiProgram->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();
     }
-
 }

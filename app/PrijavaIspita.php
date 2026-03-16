@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 class PrijavaIspita extends AndroModel
 {
     protected $table = 'prijava_ispita';
@@ -12,7 +10,7 @@ class PrijavaIspita extends AndroModel
         'datum' => 'datetime',
     ];
 
-    protected $fillable = ['kandidat_id','predmet_id', 'rok_id',
+    protected $fillable = ['kandidat_id', 'predmet_id', 'rok_id',
         'profesor_id', 'brojPolaganja', 'datum'];
 
     public function kandidat()
@@ -38,9 +36,10 @@ class PrijavaIspita extends AndroModel
     public static function nazivRokaPoId($idRoka)
     {
         $rok = AktivniIspitniRokovi::find($idRoka);
-        if($rok == null){
+        if ($rok == null) {
             return null;
         }
+
         return $rok->naziv;
     }
 }

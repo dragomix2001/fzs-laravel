@@ -6,8 +6,6 @@ use App\StatusStudiranja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
-use App\Http\Requests;
-
 class StatusStudiranjaController extends Controller
 {
     public function __construct()
@@ -20,7 +18,7 @@ class StatusStudiranjaController extends Controller
         try {
             $statusStudiranja = StatusStudiranja::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.statusStudiranja', compact('statusStudiranja'));
@@ -28,16 +26,15 @@ class StatusStudiranjaController extends Controller
 
     public function unos(Request $request)
     {
-        $statusStudiranja = new StatusStudiranja();
+        $statusStudiranja = new StatusStudiranja;
 
         $statusStudiranja->naziv = $request->naziv;
         $statusStudiranja->indikatorAktivan = 1;
 
-
         try {
             $statusStudiranja->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusStudiranja');
@@ -62,11 +59,10 @@ class StatusStudiranjaController extends Controller
             $statusStudiranja->indikatorAktivan = 0;
         }
 
-
         try {
             $statusStudiranja->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusStudiranja');
@@ -77,7 +73,7 @@ class StatusStudiranjaController extends Controller
         try {
             $statusStudiranja->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

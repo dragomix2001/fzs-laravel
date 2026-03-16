@@ -6,7 +6,6 @@ use App\Mesto;
 use App\Opstina;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests;
 
 class MestoController extends Controller
 {
@@ -20,7 +19,7 @@ class MestoController extends Controller
 
     public function unos(Request $request)
     {
-        $mesto = new Mesto();
+        $mesto = new Mesto;
 
         $mesto->naziv = $request->naziv;
         $mesto->opstina_id = $request->opstina_id;

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Sport;
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class SportController extends Controller
@@ -19,7 +18,7 @@ class SportController extends Controller
         try {
             $sport = Sport::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.sport', compact('sport'));
@@ -27,16 +26,15 @@ class SportController extends Controller
 
     public function unos(Request $request)
     {
-        $sport = new Sport();
+        $sport = new Sport;
 
         $sport->naziv = $request->naziv;
         $sport->indikatorAktivan = 1;
 
-
         try {
             $sport->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/sport');
@@ -64,7 +62,7 @@ class SportController extends Controller
         try {
             $sport->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/sport');
@@ -75,7 +73,7 @@ class SportController extends Controller
         try {
             $sport->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

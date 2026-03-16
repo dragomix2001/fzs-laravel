@@ -3,15 +3,13 @@
 namespace App\Services;
 
 use App\Diploma;
-use App\Kandidat;
-use App\StudijskiProgram;
-use App\Profesor;
 use App\GodinaStudija;
+use App\Kandidat;
+use App\Profesor;
 use App\SkolskaGodUpisa;
+use App\StudijskiProgram;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use View;
-use PDF;
 
 class DiplomaService extends BasePdfService
 {
@@ -46,14 +44,14 @@ class DiplomaService extends BasePdfService
 
     public function diplomaAdd(Request $request)
     {
-        $diploma = new Diploma();
+        $diploma = new Diploma;
         $diploma->kandidat_id = $request->kandidat_id;
         $diploma->brojDipломе = $request->brojDiplome;
         $diploma->datumOdbrane = $request->datumOdbrane;
         $diploma->nazivStudijskogPrograma = $request->nazivStudijskogPrograma;
         $diploma->brojPočetnogLista = $request->brojPocetnogLista;
         $diploma->brojЗаписника = $request->brojZapisnika;
-        $diploma-> datum = $request->datum;
+        $diploma->datum = $request->datum;
         $diploma->pristupniRad = $request->pristupniRad;
         $diploma->tema = $request->tema;
         $diploma->mentor = $request->mentor;
@@ -66,8 +64,8 @@ class DiplomaService extends BasePdfService
     public function diplomaStampa(Kandidat $student)
     {
         $diploma = Diploma::where('kandidat_id', $student->id)->first();
-        
-        if (!$diploma) {
+
+        if (! $diploma) {
             return redirect()->back()->with('error', 'Диплома није пронађена');
         }
 

@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -28,15 +26,16 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        Log::info('Login attempt for: ' . $credentials['email']);
+        Log::info('Login attempt for: '.$credentials['email']);
 
         if (Auth::attempt($credentials)) {
-            Log::info('Auth successful for: ' . $credentials['email']);
+            Log::info('Auth successful for: '.$credentials['email']);
             $request->session()->regenerate();
+
             return redirect()->intended('/');
         }
 
-        Log::info('Auth failed for: ' . $credentials['email']);
+        Log::info('Auth failed for: '.$credentials['email']);
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
@@ -48,6 +47,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

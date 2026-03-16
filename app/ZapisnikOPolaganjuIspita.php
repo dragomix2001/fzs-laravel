@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 class ZapisnikOPolaganjuIspita extends AndroModel
 {
     protected $table = 'zapisnik_o_polaganju_ispita';
@@ -12,7 +10,7 @@ class ZapisnikOPolaganjuIspita extends AndroModel
         'datum,datum2' => 'datetime',
     ];
 
-    protected $fillable = ['kandidat_id','predmet_id', 'rok_id', 'brojPolaganja', 'datum', 'datum2',
+    protected $fillable = ['kandidat_id', 'predmet_id', 'rok_id', 'brojPolaganja', 'datum', 'datum2',
         'vreme', 'ucionica', 'prijavaIspita_id', 'profesor_id'];
 
     public function predmet()

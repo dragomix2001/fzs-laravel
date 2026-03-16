@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Bodovanje;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 
 class BodovanjeController extends Controller
@@ -19,7 +18,7 @@ class BodovanjeController extends Controller
         try {
             $bodovanje = Bodovanje::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.bodovanje', compact('bodovanje'));
@@ -27,7 +26,7 @@ class BodovanjeController extends Controller
 
     public function unos(Request $request)
     {
-        $bodovanje = new Bodovanje();
+        $bodovanje = new Bodovanje;
 
         $bodovanje->opisnaOcena = $request->opisnaOcena;
         $bodovanje->poeniMin = $request->poeniMin;
@@ -35,11 +34,10 @@ class BodovanjeController extends Controller
         $bodovanje->ocena = $request->ocena;
         $bodovanje->indikatorAktivan = 1;
 
-
         try {
             $bodovanje->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/bodovanje');
@@ -70,7 +68,7 @@ class BodovanjeController extends Controller
         try {
             $bodovanje->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/bodovanje');
@@ -81,7 +79,7 @@ class BodovanjeController extends Controller
         try {
             $bodovanje->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

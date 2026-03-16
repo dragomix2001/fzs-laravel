@@ -10,8 +10,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = \App\Models\User::where('email', 'fzs@fzs.rs')->first();
-        
-        if (!$user) {
+
+        if (! $user) {
             \App\Models\User::create([
                 'name' => 'FZS Admin',
                 'email' => 'fzs@fzs.rs',
@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder
             $user->update(['password' => Hash::make('fzs123')]);
             $this->command->info('Test user password updated: fzs@fzs.rs / fzs123');
         }
-        
-        // Note: TestDataSeeder is not called here because it requires 
+
+        // Note: TestDataSeeder is not called here because it requires
         // additional database columns that may not exist in all environments
         // Run it manually if needed: php artisan db:seed --class=TestDataSeeder
-        
+
         $this->command->info('Database seeded successfully!');
     }
 }

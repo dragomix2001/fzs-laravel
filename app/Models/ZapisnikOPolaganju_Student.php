@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class ZapisnikOPolaganju_Student extends AndroModel
 {
     protected $table = 'zapisnik_o_polaganju__student';

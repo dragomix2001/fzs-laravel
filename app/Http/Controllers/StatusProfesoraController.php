@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\StatusProfesora;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
-
 
 class StatusProfesoraController extends Controller
 {
@@ -20,7 +18,7 @@ class StatusProfesoraController extends Controller
         try {
             $status = statusProfesora::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.statusProfesora', compact('status'));
@@ -28,16 +26,15 @@ class StatusProfesoraController extends Controller
 
     public function unos(Request $request)
     {
-        $status = new statusProfesora();
+        $status = new statusProfesora;
 
         $status->naziv = $request->naziv;
         $status->indikatorAktivan = 1;
 
-
         try {
             $status->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusProfesora');
@@ -62,11 +59,10 @@ class StatusProfesoraController extends Controller
             $status->indikatorAktivan = 0;
         }
 
-
         try {
             $status->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusProfesora');
@@ -77,7 +73,7 @@ class StatusProfesoraController extends Controller
         try {
             $status->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

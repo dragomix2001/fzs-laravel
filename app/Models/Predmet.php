@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Predmet extends AndroModel
 {
     protected $table = 'predmet';
@@ -27,6 +25,4 @@ class Predmet extends AndroModel
     {
         return $this->belongsTo(StudijskiProgram::class, 'studijskiProgram_id');
     }
-
-
 }

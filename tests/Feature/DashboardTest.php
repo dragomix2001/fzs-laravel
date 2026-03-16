@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Models\Kandidat;
-use App\Models\SkolskaGodUpisa;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,8 +18,8 @@ class DashboardTest extends TestCase
     public function test_dashboard_loads_for_authenticated_user()
     {
         $user = User::where('email', 'fzs@fzs.rs')->first();
-        
-        if (!$user) {
+
+        if (! $user) {
             $user = User::create([
                 'name' => 'Test User',
                 'email' => 'test@test.com',
@@ -36,8 +34,8 @@ class DashboardTest extends TestCase
     public function test_dashboard_studenti_endpoint()
     {
         $user = User::where('email', 'fzs@fzs.rs')->first();
-        
-        if (!$user) {
+
+        if (! $user) {
             $user = User::create([
                 'name' => 'Test User',
                 'email' => 'test@test.com',
@@ -52,8 +50,8 @@ class DashboardTest extends TestCase
     public function test_dashboard_ispiti_endpoint()
     {
         $user = User::where('email', 'fzs@fzs.rs')->first();
-        
-        if (!$user) {
+
+        if (! $user) {
             $user = User::create([
                 'name' => 'Test User',
                 'email' => 'test@test.com',
@@ -68,8 +66,8 @@ class DashboardTest extends TestCase
     public function test_dashboard_widgets_can_be_saved()
     {
         $user = User::where('email', 'fzs@fzs.rs')->first();
-        
-        if (!$user) {
+
+        if (! $user) {
             $user = User::create([
                 'name' => 'Test User',
                 'email' => 'test@test.com',

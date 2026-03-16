@@ -19,7 +19,7 @@ return new class extends Migration
             $table->datetime('datum_isteka')->nullable();
             $table->unsignedBigInteger('profesor_id')->nullable();
             $table->timestamps();
-            
+
             $table->index('profesor_id');
         });
 
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->index('user_id');
             $table->unique(['obavestenje_id', 'user_id']);
         });
-        
+
         // Seed data
         DB::table('obavestenja')->insert([
             ['naslov' => 'Početak nove školske godine', 'sadrzaj' => 'Nastava počinje 1. oktobra 2025. godine.', 'tip' => 'opste', 'aktivan' => 1, 'profesor_id' => 1, 'created_at' => now(), 'updated_at' => now()],

@@ -9,7 +9,6 @@ use App\StudijskiProgram;
 use App\TipStudija;
 use Illuminate\Support\Facades\DB;
 use View;
-use PDF;
 
 class StudentListService extends BasePdfService
 {
@@ -38,8 +37,8 @@ class StudentListService extends BasePdfService
             ->groupBy('studijskiProgram_id', 'godinaStudija_id')
             ->get();
 
-        $uslov = array();
-        $uslov2 = array();
+        $uslov = [];
+        $uslov2 = [];
         foreach ($picks as $item) {
             $uslov[] = $item->studijskiProgram_id;
         }
@@ -67,8 +66,8 @@ class StudentListService extends BasePdfService
 
     public function integralno($godina)
     {
-        $statusi = array("1", "2", "4", "5", "7");
-        
+        $statusi = ['1', '2', '4', '5', '7'];
+
         $kandidat = DB::table('kandidat')
             ->join('studijski_program', 'kandidat.studijskiProgram_id', '=', 'studijski_program.id')
             ->whereIn('kandidat.statusUpisa_id', $statusi)
@@ -84,7 +83,7 @@ class StudentListService extends BasePdfService
             ->groupBy('tipStudija_id')
             ->get();
 
-        $uslov2 = array();
+        $uslov2 = [];
         foreach ($picks2 as $item) {
             $uslov2[] = $item->tipStudija_id;
         }
@@ -107,8 +106,8 @@ class StudentListService extends BasePdfService
 
     public function spisakPoSmerovimaOstali($godina)
     {
-        $statusi = array("1", "2", "4", "5", "7");
-        
+        $statusi = ['1', '2', '4', '5', '7'];
+
         $kandidat = DB::table('kandidat')
             ->join('studijski_program', 'kandidat.studijskiProgram_id', '=', 'studijski_program.id')
             ->whereIn('kandidat.statusUpisa_id', $statusi)
@@ -125,7 +124,7 @@ class StudentListService extends BasePdfService
             ->groupBy('studijskiProgram_id')
             ->get();
 
-        $uslov = array();
+        $uslov = [];
         foreach ($picks as $item) {
             $uslov[] = $item->studijskiProgram_id;
         }
@@ -159,7 +158,7 @@ class StudentListService extends BasePdfService
             ->groupBy('studijskiProgram_id')
             ->get();
 
-        $uslov = array();
+        $uslov = [];
         foreach ($picks as $item) {
             $uslov[] = $item->studijskiProgram_id;
         }
@@ -185,7 +184,7 @@ class StudentListService extends BasePdfService
         $kandidat = Kandidat::where([
             'statusUpisa_id' => 3,
             'studijskiProgram_id' => $programId,
-            'godinaStudija_id' => $godinaId
+            'godinaStudija_id' => $godinaId,
         ])
             ->orderByRaw('SUBSTR(brojIndeksa, 5)')
             ->orderBy('brojIndeksa')
@@ -212,7 +211,7 @@ class StudentListService extends BasePdfService
     {
         $kandidat = Kandidat::where([
             'statusUpisa_id' => 3,
-            'studijskiProgram_id' => $programId
+            'studijskiProgram_id' => $programId,
         ])
             ->orderByRaw('SUBSTR(brojIndeksa, 5)')
             ->orderBy('brojIndeksa')
@@ -237,7 +236,7 @@ class StudentListService extends BasePdfService
     {
         $kandidat = Kandidat::where([
             'statusUpisa_id' => 3,
-            'godinaStudija_id' => $godinaId
+            'godinaStudija_id' => $godinaId,
         ])
             ->orderByRaw('SUBSTR(brojIndeksa, 5)')
             ->orderBy('brojIndeksa')
@@ -346,8 +345,8 @@ class StudentListService extends BasePdfService
 
     public function spisakDiplomiranih($godina)
     {
-        $statusi = array(6);
-        
+        $statusi = [6];
+
         $kandidat = DB::table('kandidat')
             ->join('studijski_program', 'kandidat.studijskiProgram_id', '=', 'studijski_program.id')
             ->whereIn('kandidat.statusUpisa_id', $statusi)

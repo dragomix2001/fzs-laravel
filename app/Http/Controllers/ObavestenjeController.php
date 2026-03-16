@@ -15,6 +15,7 @@ class ObavestenjeController extends Controller
     {
         $this->notificationService = $notificationService;
     }
+
     public function index(Request $request)
     {
         $query = Obavestenje::with('profesor');
@@ -115,12 +116,14 @@ class ObavestenjeController extends Controller
     public function destroy(Obavestenje $obavestenje)
     {
         $obavestenje->delete();
+
         return redirect()->route('obavestenja.index')->with('success', 'Обавештење обрисано');
     }
 
     public function toggleStatus(Obavestenje $obavestenje)
     {
-        $obavestenje->update(['aktivan' => !$obavestenje->aktivan]);
+        $obavestenje->update(['aktivan' => ! $obavestenje->aktivan]);
+
         return redirect()->route('obavestenja.index')->with('success', 'Статус промењен');
     }
 
@@ -136,7 +139,7 @@ class ObavestenjeController extends Controller
     public function moja(Request $request)
     {
         $user = auth()->user();
-        
+
         $obavestenja = Obavestenje::whereHas('korisnici', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->orWhere(function ($query) {

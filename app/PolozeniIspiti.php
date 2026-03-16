@@ -25,5 +25,4 @@ class PolozeniIspiti extends AndroModel
     {
         return $this->belongsTo(ZapisnikOPolaganjuIspita::class, 'zapisnik_id');
     }
-
 }

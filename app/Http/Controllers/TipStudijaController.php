@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\TipStudija;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class TipStudijaController extends Controller
@@ -20,7 +18,7 @@ class TipStudijaController extends Controller
         try {
             $tipStudija = TipStudija::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.tipStudija', compact('tipStudija'));
@@ -28,17 +26,16 @@ class TipStudijaController extends Controller
 
     public function unos(Request $request)
     {
-        $tipStudija = new TipStudija();
+        $tipStudija = new TipStudija;
 
         $tipStudija->naziv = $request->naziv;
         $tipStudija->skrNaziv = $request->skrNaziv;
         $tipStudija->indikatorAktivan = 1;
 
-
         try {
             $tipStudija->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/tipStudija');
@@ -67,7 +64,7 @@ class TipStudijaController extends Controller
         try {
             $tipStudija->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/tipStudija');
@@ -78,7 +75,7 @@ class TipStudijaController extends Controller
         try {
             $tipStudija->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

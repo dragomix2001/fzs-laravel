@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class DiplomskiPrijavaOdbrane extends AndroModel
 {
     public $table = 'diplomski_prijava_odbrane';

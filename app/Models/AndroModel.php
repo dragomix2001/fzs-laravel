@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Andrija
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class AndroModel extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    
+
     /**
      * Handle lazy loaded relationships. Call chain:
      * Model::__get() => Model::getAttribute() => Model::getRelationshipFromMethod();

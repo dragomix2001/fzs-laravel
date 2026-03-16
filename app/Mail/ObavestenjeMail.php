@@ -5,14 +5,15 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ObavestenjeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $naslov;
+
     public $sadrzaj;
+
     public $tip;
 
     public function __construct($naslov, $sadrzaj, $tip = 'opste')
@@ -24,7 +25,7 @@ class ObavestenjeMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Ново обавештење - ' . $this->naslov)
+        return $this->subject('Ново обавештење - '.$this->naslov)
             ->view('emails.obavestenje');
     }
 }

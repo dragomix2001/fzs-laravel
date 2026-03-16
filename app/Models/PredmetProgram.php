@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class PredmetProgram extends AndroModel
 {
     protected $table = 'predmet_program';

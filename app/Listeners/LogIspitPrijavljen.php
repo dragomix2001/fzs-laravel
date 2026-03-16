@@ -3,14 +3,10 @@
 namespace App\Listeners;
 
 use App\Events\IspitPrijavljen;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class LogIspitPrijavljen
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function handle(IspitPrijavljen $event)
     {

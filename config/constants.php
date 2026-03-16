@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Andrija
@@ -14,6 +15,6 @@ return [
         'obnovio' => 4,
         'zavrsio' => 5,
         'diplomirao' => 6,
-        'zamrzao' => 7
-    ]
+        'zamrzao' => 7,
+    ],
 ];

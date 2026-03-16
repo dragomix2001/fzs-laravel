@@ -11,13 +11,12 @@
 |
 */
 
-
-//Rute koje se aktivno koriste u projektu
-//Home route
+// Rute koje se aktivno koriste u projektu
+// Home route
 Route::get('/', 'HomeController@index');
 
-//Added by Andrija
-//Routes in the web middleware group
+// Added by Andrija
+// Routes in the web middleware group
 
 Route::group(['middleware' => ['web']], function () {
 
@@ -25,7 +24,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('login', 'Auth\LoginController@login');
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-    
+
     Route::resource('kandidat', 'KandidatController');
     Route::get('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sport');
     Route::post('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sportStore');
@@ -34,7 +33,6 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('/kandidat/masovnaUplata', 'KandidatController@masovnaUplata');
     Route::post('/kandidat/masovniUpis', 'KandidatController@masovniUpis');
-
 
     Route::get('/master/create', 'KandidatController@createMaster');
     Route::get('/master/', 'KandidatController@indexMaster');
@@ -57,11 +55,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/student/masovniUpis', 'StudentController@masovniUpis');
 
     Route::get('/student/index/{tipStudijaId}/', 'StudentController@index');
-    //zamrznuti studenti
+    // zamrznuti studenti
     Route::get('/student/zamrznuti', 'StudentController@zamrznutiStudenti');
-    //diplomirani studenti
+    // diplomirani studenti
     Route::get('/student/diplomirani', 'StudentController@diplomiraniStudenti');
-    //ispisani studenti
+    // ispisani studenti
     Route::get('/student/ispisani', 'StudentController@ispisaniStudenti');
 
     Route::get('/kalendar/', 'KalendarController@index');
@@ -73,14 +71,14 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/kalendar/storeRok/', 'KalendarController@storeRok');
     Route::get('/kalendar/eventSource/', 'KalendarController@eventSource');
 
-    //Prijava za ispit preko studenta (INDEX i CREATE Student-Prijava)
+    // Prijava za ispit preko studenta (INDEX i CREATE Student-Prijava)
     Route::get('/prijava/zaStudenta/{kandidatId}', 'PrijavaController@svePrijaveIspitaZaStudenta');
     Route::get('/prijava/student/{kandidatId}', 'PrijavaController@createPrijavaIspitaStudent');
 
-    //Spisak predmeta za prijavu ispita
+    // Spisak predmeta za prijavu ispita
     Route::get('/predmeti/', 'PrijavaController@spisakPredmeta');
 
-    //(INDEX i CREATE Predmet-Prijava)
+    // (INDEX i CREATE Predmet-Prijava)
     Route::get('/prijava/zaPredmet/{predmetId}', 'PrijavaController@indexPrijavaIspitaPredmet');
     Route::get('/prijava/predmet/{predmetId}', 'PrijavaController@createPrijavaIspitaPredmet');
     Route::get('/prijava/predmetVise/{predmetId}', 'PrijavaController@createPrijavaIspitaPredmetMany');
@@ -92,16 +90,14 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('/prijava/dodajPolozeneIspite', 'PrijavaController@dodajPolozeneIspite');
 
-
-    //AJAX pozivi sa prijave
+    // AJAX pozivi sa prijave
     Route::post('/prijava/vratiKandidataPrijava', 'PrijavaController@vratiKandidataPrijava');
     Route::post('/prijava/vratiPredmetPrijava', 'PrijavaController@vratiPredmetPrijava');
     Route::post('/prijava/vratiKandidataPoBroju', 'PrijavaController@vratiKandidataPoBroju');
     Route::post('/prijava/vratiIspitPoId', 'PrijavaController@vratiIspitPoId');
 
-
-    //Diplomski rad
-    //TEMA
+    // Diplomski rad
+    // TEMA
     Route::get('/prijava/diplomskiTema/{kandidat}', 'PrijavaController@diplomskiTema');
     Route::get('/prijava/vratiIspitPoId', 'PrijavaController@vratiIspitPoId');
     Route::get('/prijava/vratiIspitPoId', 'PrijavaController@vratiIspitPoId');
@@ -110,21 +106,21 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/prijava/updateDiplomskiTema', 'PrijavaController@updateDiplomskiTema');
     Route::get('/deleteDiplomskiTema/{kandidat}/delete', 'PrijavaController@deleteDiplomskiTema');
 
-    //ODBRANA
+    // ODBRANA
     Route::get('/prijava/diplomskiOdbrana/{kandidat}', 'PrijavaController@diplomskiOdbrana');
     Route::post('/prijava/storeDiplomskiOdbrana', 'PrijavaController@storeDiplomskiOdbrana');
     Route::get('/prijava/diplomskiOdbrana/{kandidat}/edit', 'PrijavaController@editDiplomskiOdbrana');
     Route::post('/prijava/updateDiplomskiOdbrana', 'PrijavaController@updateDiplomskiOdbrana');
     Route::get('/deleteDiplomskiOdbrana/{kandidat}/delete', 'PrijavaController@deleteDiplomskiOdbrana');
 
-    //POLAGANJE
+    // POLAGANJE
     Route::get('/prijava/diplomskiPolaganje/{kandidat}', 'PrijavaController@diplomskiPolaganje');
     Route::post('/prijava/storeDiplomskiPolaganje', 'PrijavaController@storeDiplomskipolaganje');
     Route::get('/prijava/diplomskiPolaganje/{kandidat}/edit', 'PrijavaController@editDiplomskiPolaganje');
     Route::post('/prijava/updateDiplomskiPolaganje', 'PrijavaController@updateDiplomskiPolaganje');
     Route::get('/deleteDiplomskiPolaganje/{kandidat}/delete', 'PrijavaController@deleteDiplomskiPolaganje');
 
-    //Zapisnik o polaganju ispita
+    // Zapisnik o polaganju ispita
     Route::get('/zapisnik', 'IspitController@indexZapisnik');
     Route::get('/zapisnik/create', 'IspitController@createZapisnik');
     Route::get('/zapisnik/vratiZapisnikPredmet', 'IspitController@vratiZapisnikPredmet');
@@ -141,18 +137,15 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/zapisnik/arhiviraj/{id}', 'IspitController@arhivirajZapisnik');
     Route::post('/zapisnik/arhivirajRok', 'IspitController@arhivirajZapisnikeZaIspitniRok');
 
-
     Route::get('/ispit/delete/{id}', 'IspitController@deletePolozeniIspit');
-
 
     Route::post('/zapisnik/polozeniIspit', 'IspitController@polozeniIspit');
 
-    //Priznavanje ispita za kandidate koji se upisusju na II, III, i IV godinu studija
+    // Priznavanje ispita za kandidate koji se upisusju na II, III, i IV godinu studija
     Route::get('/priznavanjeIspita/{kandidatId}', 'IspitController@priznavanjeIspita');
     Route::post('/storePriznatiIspiti/', 'IspitController@storePriznatiIspiti');
     Route::get('/deletePriznatIspit/{id}', 'IspitController@deletePriznatIspit');
     Route::get('/deletePrivremeniIspit/{id}', 'IspitController@deletePrivremeniIspit');
-
 
     Route::get('/student/{id}/obnova', 'StudentController@obnoviGodinu');
     Route::get('/student/{id}/obrisiObnovu', 'StudentController@obrisiObnovuGodine');
@@ -163,11 +156,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/student/{id}/status/{statusId}/{godinaId}', 'StudentController@promeniStatus');
     Route::get('/student/{id}/upisMasterStudija', 'StudentController@upisMasterStudija');
 
-    //PRETRAGA
+    // PRETRAGA
     Route::get('/pretraga', 'SearchController@search');
     Route::post('/pretraga', 'SearchController@searchResult');
 
-    //SKOLARINA
+    // SKOLARINA
     Route::get('/skolarina/{id}', 'SkolarinaController@index');
     Route::get('/skolarina/dodavanje/{id}', 'SkolarinaController@create');
     Route::get('/skolarina/izmena/{id}', 'SkolarinaController@edit');
@@ -183,9 +176,8 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::group(['middleware' => ['web', 'admin']], function () {
-    Route::get('/admintest','HomeController@adminTest');
+    Route::get('/admintest', 'HomeController@adminTest');
 });
-
 
 // rute za sifarnike
 Route::get('/tipStudija', 'TipStudijaController@index');
@@ -360,7 +352,7 @@ Route::get('/profesor/{profesor}/addPredmet', 'ProfesorController@addPredmet');
 Route::post('profesor/addPredmetUnos', 'ProfesorController@addPredmetUnos');
 Route::get('/profesor/{profesor}/editPredmet', 'ProfesorController@editPredmet');
 
-///izvestaji
+// /izvestaji
 
 Route::get('izvestaji/spisakPoSmerovima', 'IzvestajiController@spisakPoSmerovima');
 Route::get('/izvestaji/spiskoviStudenti', 'IzvestajiController@spiskoviStudenti');
@@ -388,10 +380,9 @@ Route::post('izvestaji/excelStampa', 'IzvestajiController@excelStampa');
 Route::post('izvestaji/integralno', 'IzvestajiController@integralno');
 Route::get('izvestaji/zapisnikDiplomski/{student}', 'IzvestajiController@zapisnikDiplomski');
 
-//Route::any('/kandidat/{kandidat}/{indikator}', 'KandidatController@update');
+// Route::any('/kandidat/{kandidat}/{indikator}', 'KandidatController@update');
 
-
-//Dodao Andrija rute za testiranje
+// Dodao Andrija rute za testiranje
 Route::get('/test1', 'KandidatController@test1');
 Route::get('/test2', 'KandidatController@test2');
 Route::get('/test3', 'KandidatController@test3');

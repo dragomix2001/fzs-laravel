@@ -2,10 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Nqxcode\LuceneSearch\Model\SearchableInterface;
-use Nqxcode\LuceneSearch\Model\SearchTrait;
-
 class Kandidat extends AndroModel
 {
     protected $table = 'kandidat';

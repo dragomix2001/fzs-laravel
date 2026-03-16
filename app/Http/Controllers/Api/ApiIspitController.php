@@ -11,12 +11,14 @@ class ApiIspitController extends Controller
     public function index()
     {
         $predmeti = Predmet::all();
+
         return response()->json($predmeti);
     }
 
     public function store(Request $request)
     {
         $predmet = Predmet::create($request->all());
+
         return response()->json($predmet, 201);
     }
 
@@ -28,12 +30,14 @@ class ApiIspitController extends Controller
     public function update(Request $request, Predmet $predmet)
     {
         $predmet->update($request->all());
+
         return response()->json($predmet);
     }
 
     public function destroy(Predmet $predmet)
     {
         $predmet->delete();
+
         return response()->json(null, 204);
     }
 }

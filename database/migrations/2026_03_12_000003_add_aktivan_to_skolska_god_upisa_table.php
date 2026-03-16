@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::table('skolska_god_upisa', function (Blueprint $table) {
             $table->tinyInteger('aktivan')->default(0)->after('naziv');
         });
-        
+
         // Seed data - set first record as active
         DB::table('skolska_god_upisa')->where('id', 1)->update(['aktivan' => 1]);
     }

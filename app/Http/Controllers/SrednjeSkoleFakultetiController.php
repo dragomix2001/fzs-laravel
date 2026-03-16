@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\SrednjeSkoleFakulteti;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests;
 
 class SrednjeSkoleFakultetiController extends Controller
 {
@@ -18,7 +17,7 @@ class SrednjeSkoleFakultetiController extends Controller
 
     public function unos(Request $request)
     {
-        $srednjeSkoleFakulteti = new SrednjeSkoleFakulteti();
+        $srednjeSkoleFakulteti = new SrednjeSkoleFakulteti;
 
         $srednjeSkoleFakulteti->naziv = $request->naziv;
         $srednjeSkoleFakulteti->indSkoleFakulteta = $request->indSkoleFakulteta;
@@ -49,5 +48,4 @@ class SrednjeSkoleFakultetiController extends Controller
 
         return back();
     }
-
 }

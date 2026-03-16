@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Skolarina extends AndroModel
 {
-    protected $table = "skolarina";
+    protected $table = 'skolarina';
 
     protected $casts = ['datum'];
 

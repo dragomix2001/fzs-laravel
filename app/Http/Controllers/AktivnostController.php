@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aktivnost;
+use App\Models\Kandidat;
 use App\Models\Ocenjivanje;
 use App\Models\Predmet;
-use App\Models\Kandidat;
 use Illuminate\Http\Request;
 
 class AktivnostController extends Controller
@@ -13,18 +13,21 @@ class AktivnostController extends Controller
     public function index()
     {
         $aktivnosti = Aktivnost::with('predmet')->orderBy('datum', 'desc')->get();
+
         return view('aktivnost.index', compact('aktivnosti'));
     }
 
     public function create()
     {
         $predmeti = Predmet::all();
+
         return view('aktivnost.create', compact('predmeti'));
     }
 
     public function store(Request $request)
     {
         $aktivnost = Aktivnost::create($request->all());
+
         return redirect()->route('aktivnost.index')->with('success', 'Аktivnost креирана');
     }
 
@@ -33,7 +36,7 @@ class AktivnostController extends Controller
         $ocene = Ocenjivanje::where('aktivnost_id', $aktivnost->id)
             ->with('student')
             ->get();
-        
+
         return view('aktivnost.show', compact('aktivnost', 'ocene'));
     }
 
@@ -43,7 +46,7 @@ class AktivnostController extends Controller
         $ocene = Ocenjivanje::where('aktivnost_id', $aktivnost->id)
             ->pluck('bodovi', 'student_id')
             ->toArray();
-        
+
         return view('aktivnost.ocenjivanje', compact('aktivnost', 'studenti', 'ocene'));
     }
 
@@ -71,13 +74,26 @@ class AktivnostController extends Controller
     private function izracunajOcenu($bodovi, $maxBodova)
     {
         $procenat = ($bodovi / $maxBodova) * 100;
-        
-        if ($procenat >= 90) return 10;
-        if ($procenat >= 80) return 9;
-        if ($procenat >= 70) return 8;
-        if ($procenat >= 60) return 7;
-        if ($procenat >= 50) return 6;
-        if ($procenat >= 40) return 5;
+
+        if ($procenat >= 90) {
+            return 10;
+        }
+        if ($procenat >= 80) {
+            return 9;
+        }
+        if ($procenat >= 70) {
+            return 8;
+        }
+        if ($procenat >= 60) {
+            return 7;
+        }
+        if ($procenat >= 50) {
+            return 6;
+        }
+        if ($procenat >= 40) {
+            return 5;
+        }
+
         return 5;
     }
 
@@ -85,25 +101,25 @@ class AktivnostController extends Controller
     {
         $predmet = Predmet::find($request->predmet_id);
         $aktivnosti = Aktivnost::where('predmet_id', $request->predmet_id)->get();
-        
+
         $studenti = Kandidat::where('statusUpisa_id', 3)->get();
-        
+
         $rezultati = [];
         foreach ($studenti as $student) {
             $ukupnoBodova = 0;
             $ukupnoMax = 0;
-            
+
             foreach ($aktivnosti as $aktivnost) {
                 $ocena = Ocenjivanje::where('student_id', $student->id)
                     ->where('aktivnost_id', $aktivnost->id)
                     ->first();
-                
+
                 if ($ocena && $ocena->bodovi) {
                     $ukupnoBodova += $ocena->bodovi;
                 }
                 $ukupnoMax += $aktivnost->max_bodova;
             }
-            
+
             $rezultati[] = [
                 'student' => $student,
                 'bodovi' => $ukupnoBodova,

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\OblikNastave;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 
 class OblikNastaveController extends Controller
@@ -19,7 +18,7 @@ class OblikNastaveController extends Controller
         try {
             $oblikNastave = OblikNastave::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.oblikNastave', compact('oblikNastave'));
@@ -27,17 +26,16 @@ class OblikNastaveController extends Controller
 
     public function unos(Request $request)
     {
-        $oblikNastave = new OblikNastave();
+        $oblikNastave = new OblikNastave;
 
         $oblikNastave->naziv = $request->naziv;
         $oblikNastave->skrNaziv = $request->skrNaziv;
         $oblikNastave->indikatorAktivan = 1;
 
-
         try {
             $oblikNastave->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/oblikNastave');
@@ -66,7 +64,7 @@ class OblikNastaveController extends Controller
         try {
             $oblikNastave->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/oblikNastave');
@@ -77,7 +75,7 @@ class OblikNastaveController extends Controller
         try {
             $oblikNastave->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

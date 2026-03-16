@@ -20,7 +20,7 @@ class AuditLogController extends Controller
         }
 
         $logs = $query->orderBy('created_at', 'desc')->paginate(50);
-        
+
         $tables = AuditLog::distinct()->pluck('table_name');
 
         return view('audit.index', compact('logs', 'tables'));

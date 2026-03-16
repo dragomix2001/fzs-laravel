@@ -17,30 +17,31 @@ class BackupController extends Controller
     public function index()
     {
         $backups = $this->backupService->listBackups();
+
         return view('backup.index', compact('backups'));
     }
 
     public function create(Request $request)
     {
         $type = $request->get('type', 'full');
-        
+
         $result = $this->backupService->createBackup($type);
-        
+
         if ($result['success']) {
-            return back()->with('success', 'Резервна копија креирана: ' . $result['filename']);
+            return back()->with('success', 'Резервна копија креирана: '.$result['filename']);
         }
-        
-        return back()->with('error', 'Грешка: ' . $result['error']);
+
+        return back()->with('error', 'Грешка: '.$result['error']);
     }
 
     public function download($filename)
     {
-        $path = storage_path('app/backups/' . $filename);
-        
-        if (!file_exists($path)) {
+        $path = storage_path('app/backups/'.$filename);
+
+        if (! file_exists($path)) {
             return back()->with('error', 'Фајл не постоји');
         }
-        
+
         return response()->download($path);
     }
 
@@ -49,7 +50,7 @@ class BackupController extends Controller
         if ($this->backupService->deleteBackup($filename)) {
             return back()->with('success', 'Резервна копија обрисана');
         }
-        
+
         return back()->with('error', 'Грешка при брисању');
     }
 }

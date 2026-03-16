@@ -95,7 +95,7 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::group(['middleware' => ['web', 'admin']], function () {
-    Route::get('/admintest','App\Http\Controllers\HomeController@adminTest');
+    Route::get('/admintest', 'App\Http\Controllers\HomeController@adminTest');
 });
 
 Route::get('/tipStudija', 'App\Http\Controllers\TipStudijaController@index');
@@ -209,13 +209,13 @@ Route::get('/raspored/pregled', 'App\Http\Controllers\RasporedController@pregled
 
 // Require authentication for all new modules
 Route::group(['middleware' => ['web', 'auth']], function () {
-    
+
     Route::group(['middleware' => ['role:admin']], function () {
         Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
         Route::get('/dashboard/studenti', 'App\Http\Controllers\DashboardController@studenti')->name('dashboard.studenti');
         Route::get('/dashboard/ispiti', 'App\Http\Controllers\DashboardController@ispiti')->name('dashboard.ispiti');
         Route::get('/dashboard/saveWidgets', 'App\Http\Controllers\DashboardController@saveWidgets')->name('dashboard.saveWidgets');
-        
+
         // Admin only - obavestenja management (SPECIFIC routes before parameterized)
         Route::get('/obavestenja/create', 'App\Http\Controllers\ObavestenjeController@create')->name('obavestenja.create');
         Route::post('/obavestenja', 'App\Http\Controllers\ObavestenjeController@store')->name('obavestenja.store');
@@ -223,20 +223,20 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::put('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@update')->name('obavestenja.update');
         Route::delete('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@destroy')->name('obavestenja.destroy');
         Route::get('/obavestenja/{obavestenje}/toggle', 'App\Http\Controllers\ObavestenjeController@toggleStatus')->name('obavestenja.toggle');
-        
+
         // Admin only - raspored management (SPECIFIC routes before parameterized)
         Route::get('/raspored/create', 'App\Http\Controllers\RasporedController@create')->name('raspored.create');
         Route::post('/raspored', 'App\Http\Controllers\RasporedController@store')->name('raspored.store');
         Route::get('/raspored/{raspored}/edit', 'App\Http\Controllers\RasporedController@edit')->name('raspored.edit');
         Route::put('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@update')->name('raspored.update');
         Route::delete('/raspored/{raspored}', 'App\Http\Controllers\RasporedController@destroy')->name('raspored.destroy');
-        
+
         // Admin only - aktivnost management (SPECIFIC routes before parameterized)
         Route::get('/aktivnost/create', 'App\Http\Controllers\AktivnostController@create')->name('aktivnost.create');
         Route::post('/aktivnost', 'App\Http\Controllers\AktivnostController@store')->name('aktivnost.store');
         Route::get('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@ocenjivanje')->name('aktivnost.ocenjivanje');
         Route::post('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@saveOcenjivanje')->name('aktivnost.saveOcenjivanje');
-        
+
         // Admin only - prisustvo management (SPECIFIC routes before parameterized)
         Route::get('/prisustvo/create', 'App\Http\Controllers\PrisustvoController@create')->name('prisustvo.create');
         Route::post('/prisustvo', 'App\Http\Controllers\PrisustvoController@store')->name('prisustvo.store');
@@ -245,16 +245,16 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     // Admin and Professor - SPECIFIC routes before parameterized
     Route::get('/obavestenja', 'App\Http\Controllers\ObavestenjeController@index')->name('obavestenja.index');
     Route::get('/obavestenja/{obavestenje}', 'App\Http\Controllers\ObavestenjeController@show')->name('obavestenja.show');
-    
+
     // Raspored - view for all
     Route::get('/raspored', 'App\Http\Controllers\RasporedController@index')->name('raspored.index');
     Route::get('/raspored/pregled', 'App\Http\Controllers\RasporedController@pregled')->name('raspored.pregled');
-    
+
     // Aktivnost - view for all
     Route::get('/aktivnost', 'App\Http\Controllers\AktivnostController@index')->name('aktivnost.index');
     Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->name('aktivnost.show');
     Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
-    
+
     // Prisustvo - view for all
     Route::get('/prisustvo', 'App\Http\Controllers\PrisustvoController@index')->name('prisustvo.index');
     Route::get('/prisustvo/report', 'App\Http\Controllers\PrisustvoController@report')->name('prisustvo.report');
@@ -277,13 +277,13 @@ Route::group(['middleware' => ['web', 'auth', 'role:admin']], function () {
     Route::get('/import-export/export', 'App\Http\Controllers\ImportExportController@export')->name('import-export.export');
     Route::get('/import-export/export-studenti', 'App\Http\Controllers\ImportExportController@exportStudenti')->name('import-export.export-studenti');
     Route::get('/import-export/export-ispiti', 'App\Http\Controllers\ImportExportController@exportPolozeniIspiti')->name('import-export.export-ispiti');
-    
+
     // Backup routes
     Route::get('/backup', 'App\Http\Controllers\BackupController@index')->name('backup.index');
     Route::post('/backup/create', 'App\Http\Controllers\BackupController@create')->name('backup.create');
     Route::get('/backup/download/{filename}', 'App\Http\Controllers\BackupController@download')->name('backup.download');
     Route::delete('/backup/delete/{filename}', 'App\Http\Controllers\BackupController@delete')->name('backup.delete');
-    
+
     // User management routes
     Route::get('/users', 'App\Http\Controllers\UserController@index')->name('user.index');
     Route::get('/users/create', 'App\Http\Controllers\UserController@create')->name('user.create');
@@ -293,7 +293,7 @@ Route::group(['middleware' => ['web', 'auth', 'role:admin']], function () {
     Route::put('/users/{user}', 'App\Http\Controllers\UserController@update')->name('user.update');
     Route::delete('/users/{user}', 'App\Http\Controllers\UserController@destroy')->name('user.destroy');
     Route::get('/users/{user}/toggle', 'App\Http\Controllers\UserController@toggleStatus')->name('user.toggle');
-    
+
     // Audit log routes
     Route::get('/audit-logs', 'App\Http\Controllers\AuditLogController@index')->name('audit.index');
 });

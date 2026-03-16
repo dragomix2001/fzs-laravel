@@ -2,11 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
-use App\Models\Kandidat;
-use App\Models\Predmet;
-use App\Models\StudijskiProgram;
+use Tests\TestCase;
 
 class KandidatTest extends TestCase
 {

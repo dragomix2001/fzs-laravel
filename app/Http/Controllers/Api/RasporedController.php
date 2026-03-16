@@ -11,21 +11,21 @@ class RasporedController extends Controller
     public function index(Request $request)
     {
         $query = Raspored::with(['profesor', 'ucionica']);
-        
+
         if ($request->dan) {
             $query->where('dan', $request->dan);
         }
-        
+
         if ($request->predmet_id) {
             $query->where('predmet_id', $request->predmet_id);
         }
-        
+
         if ($request->profesor_id) {
             $query->where('profesor_id', $request->profesor_id);
         }
-        
+
         $raspored = $query->orderBy('vreme_pocetka')->get();
-        
+
         return response()->json([
             'data' => $raspored,
             'message' => 'Распоред успешно учитат',
@@ -44,13 +44,13 @@ class RasporedController extends Controller
             'saturday' => 'Субота',
             'sunday' => 'Недеља',
         ];
-        
+
         $raspored = Raspored::with(['profesor', 'ucionica'])
             ->where('dan', $danMap[$dan] ?? $dan)
             ->where('aktivan', true)
             ->orderBy('vreme_pocetka')
             ->get();
-        
+
         return response()->json([
             'data' => $raspored,
             'message' => 'Данашњи распоред',

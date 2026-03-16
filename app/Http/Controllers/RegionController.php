@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Region;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests;
-use View;
-use PDF;
 
 class RegionController extends Controller
 {
@@ -21,7 +18,7 @@ class RegionController extends Controller
         try {
             $region = Region::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.region', compact('region'));
@@ -29,13 +26,13 @@ class RegionController extends Controller
 
     public function unos(Request $request)
     {
-        $region = new Region();
+        $region = new Region;
         $region->naziv = $request->naziv;
 
         try {
             $region->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/region');
@@ -58,7 +55,7 @@ class RegionController extends Controller
         try {
             $region->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/region');
@@ -69,10 +66,9 @@ class RegionController extends Controller
         try {
             $region->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();
     }
-
 }

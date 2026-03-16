@@ -15,7 +15,7 @@ return new class extends Migration
             $table->date('datum_pocetka');
             $table->date('datum_kraja');
             $table->timestamps();
-            
+
             $table->index('skolska_godina_id');
         });
     }

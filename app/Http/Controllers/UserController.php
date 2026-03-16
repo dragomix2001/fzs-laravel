@@ -11,6 +11,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with(['profesor', 'kandidat'])->paginate(20);
+
         return view('user.index', compact('users'));
     }
 
@@ -52,7 +53,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'role' => 'required|in:admin,professor,student',
         ]);
 
@@ -79,13 +80,15 @@ class UserController extends Controller
         }
 
         $user->delete();
+
         return redirect()->route('user.index')->with('success', 'Корисник обрисан');
     }
 
     public function toggleStatus(User $user)
     {
-        $user->update(['active' => !$user->active]);
+        $user->update(['active' => ! $user->active]);
         $status = $user->active ? 'активиран' : 'деактивиран';
+
         return back()->with('success', "Корисник {$status}");
     }
 }

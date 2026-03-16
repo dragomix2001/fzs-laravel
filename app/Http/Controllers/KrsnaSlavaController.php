@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\KrsnaSlava;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-
-use App\Http\Requests;
 
 class KrsnaSlavaController extends Controller
 {
@@ -20,7 +18,7 @@ class KrsnaSlavaController extends Controller
         try {
             $krsnaSlava = KrsnaSlava::all();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return view('sifarnici.krsnaSlava', compact('krsnaSlava'));
@@ -28,7 +26,7 @@ class KrsnaSlavaController extends Controller
 
     public function unos(Request $request)
     {
-        $krsnaSlava = new KrsnaSlava();
+        $krsnaSlava = new KrsnaSlava;
         $krsnaSlava->naziv = $request->naziv;
         $krsnaSlava->datumSlave = $request->datumSlave;
         $krsnaSlava->indikatorAktivan = 1;
@@ -36,7 +34,7 @@ class KrsnaSlavaController extends Controller
         try {
             $krsnaSlava->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/krsnaSlava');
@@ -65,7 +63,7 @@ class KrsnaSlavaController extends Controller
         try {
             $krsnaSlava->update();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/krsnaSlava');
@@ -76,7 +74,7 @@ class KrsnaSlavaController extends Controller
         try {
             $krsnaSlava->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.' . $e->getMessage());
+            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return back();

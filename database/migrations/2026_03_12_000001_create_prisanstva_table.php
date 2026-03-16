@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('napomena')->nullable();
             $table->unsignedBigInteger('profesor_id')->nullable();
             $table->timestamps();
-            
+
             $table->index('student_id');
             $table->index('predmet_id');
             $table->index('nastavna_nedelja_id');
