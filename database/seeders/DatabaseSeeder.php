@@ -24,17 +24,9 @@ class DatabaseSeeder extends Seeder
             $this->command->info('Test user password updated: fzs@fzs.rs / fzs123');
         }
         
-        if (class_exists(\Database\Seeders\UserSeeder::class)) {
-            $this->call([
-                UserSeeder::class,
-            ]);
-        }
-        
-        if (class_exists(\Database\Seeders\TestDataSeeder::class)) {
-            $this->call([
-                TestDataSeeder::class,
-            ]);
-        }
+        // Note: TestDataSeeder is not called here because it requires 
+        // additional database columns that may not exist in all environments
+        // Run it manually if needed: php artisan db:seed --class=TestDataSeeder
         
         $this->command->info('Database seeded successfully!');
     }

@@ -66,10 +66,14 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: root
         run: |
+          # Import the database dump
           mysql -h $DB_HOST -P $DB_PORT -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < database/baza.sql
+          
+          # Run migrations to add new tables/columns
           php artisan migrate --force
-          # Create test user if not exists
-          php artisan tinker --execute="use Illuminate\Support\Facades\DB; use App\Models\User; if (!DB::table('users')->where('email', 'fzs@fzs.rs')->exists()) { User::create(['name' => 'FZS Admin', 'email' => 'fzs@fzs.rs', 'password' => Hash::make('fzs123'), 'role' => 'admin']); echo 'User created'; } else { DB::table('users')->where('email', 'fzs@fzs.rs')->update(['password' => Hash::make('fzs123')]); echo 'Password updated'; }"
+          
+          # Run seeders to ensure test data exists
+          php artisan db:seed --class=DatabaseSeeder --force
 
       - name: Run tests
         env:
