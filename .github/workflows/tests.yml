@@ -52,4 +52,5 @@ jobs:
           DB_PASSWORD: root
         run: |
           php artisan migrate --force
-          ./vendor/bin/phpunit --testdox
+          php artisan db:seed --force
+          ./vendor/bin/phpunit --no-progress
