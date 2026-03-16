@@ -45,7 +45,9 @@ class TestDataSeeder extends Seeder
         // Tip studija
         $tipStudijaId = DB::table('tip_studija')->insertGetId([
             'naziv' => 'Основне академске студије',
-            'opis' => '4 године',
+            'opis' => '4 godine',
+            'skrNaziv' => 'OS',
+            'indikatorAktivan' => 1,
             'created_at' => now(),
         ]);
 
