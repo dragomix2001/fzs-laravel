@@ -36,6 +36,26 @@ php artisan db:seed
 | Email | fzs@fzs.rs |
 | Лозинка | fzs123 |
 
+## Код форматирање
+
+```bash
+# Инсталирај Pint (већ је инсталиран)
+composer require laravel/pint --dev
+
+# Форматирај код
+./vendor/bin/pint
+```
+
+## Telescope (опционо)
+
+За debug и monitoring:
+
+```bash
+composer require laravel/telescope --dev
+php artisan telescope:install
+php artisan migrate
+```
+
 ## Развој
 
 ```bash
