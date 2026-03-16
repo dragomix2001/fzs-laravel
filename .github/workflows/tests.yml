@@ -68,6 +68,7 @@ jobs:
         run: |
           mysql -h $DB_HOST -P $DB_PORT -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < database/baza.sql
           php artisan migrate --force
+          php artisan db:seed --class=DatabaseSeeder --force
 
       - name: Run tests
         env:
