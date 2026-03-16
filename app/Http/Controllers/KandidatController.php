@@ -25,6 +25,7 @@ use App\UspehSrednjaSkola;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -50,12 +51,16 @@ class KandidatController extends Controller
      */
     public function index(Request $request)
     {
-        $studijskiProgramId = StudijskiProgram::where(['tipStudija_id' => 1, 'indikatorAktivan' => 1])->first()->id;
+        $studijskiProgramId = Cache::remember('active_studijski_program_osnovne', 3600, function() {
+            return StudijskiProgram::where(['tipStudija_id' => 1, 'indikatorAktivan' => 1])->value('id');
+        });
         if (!empty($request->studijskiProgramId)) {
             $studijskiProgramId = $request->studijskiProgramId;
         }
 
-        $studijskiProgrami = StudijskiProgram::where(['tipStudija_id' => 1])->get();
+        $studijskiProgrami = Cache::remember('studijski_programi_tip_1', 3600, function() {
+            return StudijskiProgram::where(['tipStudija_id' => 1])->get();
+        });
 
         $kandidati = Kandidat::where(['tipStudija_id' => 1, 'statusUpisa_id' => 3, 'studijskiProgram_id' => $studijskiProgramId])->get();
 
