@@ -43,6 +43,13 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot --silent && break
+            sleep 2
+          done
+
       - name: Run tests
         env:
           DB_HOST: 127.0.0.1
@@ -53,4 +60,4 @@ jobs:
         run: |
           php artisan migrate --force
           php artisan db:seed --force
-          ./vendor/bin/phpunit 2>&1 | head -100
+          ./vendor/bin/phpunit --testdox
