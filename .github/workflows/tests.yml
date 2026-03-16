@@ -19,10 +19,10 @@ jobs:
         ports:
           - 3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10
 
     steps:
       - uses: actions/checkout@v4
@@ -43,12 +43,19 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Wait for MySQL
+      - name: Wait for MySQL to be ready
         run: |
-          for i in {1..30}; do
-            mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot --silent && break
+          echo "Waiting for MySQL..."
+          for i in {1..60}; do
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot --silent 2>/dev/null; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Attempt $i/60 - MySQL not ready, waiting..."
             sleep 2
           done
+          # Verify connection
+          mysql -h 127.0.0.1 -P 3306 -u root -proot -e "SELECT 1" || echo "MySQL connection failed"
 
       - name: Run tests
         env:
