@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class RouteTest extends TestCase
 {
-    protected function getAuthUser(): User
+    protected function getAuthUser(): ?User
     {
         return User::first();
     }
