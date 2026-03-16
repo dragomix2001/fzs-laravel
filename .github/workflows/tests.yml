@@ -69,7 +69,7 @@ jobs:
           mysql -h $DB_HOST -P $DB_PORT -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < database/baza.sql
           php artisan migrate --force
           # Create test user if not exists
-          php artisan tinker --execute="if (!DB::table('users')->where('email', 'fzs@fzs.rs')->exists()) { User::create(['name' => 'FZS Admin', 'email' => 'fzs@fzs.rs', 'password' => Hash::make('fzs123'), 'role' => 'admin']); } else { DB::table('users')->where('email', 'fzs@fzs.rs')->update(['password' => Hash::make('fzs123')]); }"
+          php artisan tinker --execute="use Illuminate\Support\Facades\DB; use App\Models\User; if (!DB::table('users')->where('email', 'fzs@fzs.rs')->exists()) { User::create(['name' => 'FZS Admin', 'email' => 'fzs@fzs.rs', 'password' => Hash::make('fzs123'), 'role' => 'admin']); echo 'User created'; } else { DB::table('users')->where('email', 'fzs@fzs.rs')->update(['password' => Hash::make('fzs123')]); echo 'Password updated'; }"
 
       - name: Run tests
         env:
