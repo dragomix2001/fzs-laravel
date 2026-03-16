@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'FZS Admin',
                 'email' => 'fzs@fzs.rs',
                 'password' => Hash::make('fzs123'),
+                'role' => 'admin',
             ]);
             $this->command->info('Test user created: fzs@fzs.rs / fzs123');
         } else {
