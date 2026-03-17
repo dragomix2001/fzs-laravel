@@ -2,6 +2,30 @@
 
 /*
 |--------------------------------------------------------------------------
+| Class Aliases for Backward Compatibility
+|--------------------------------------------------------------------------
+|
+| These aliases allow old code using App\ModelName to work with
+| App\Models\ModelName without requiring code changes.
+|
+*/
+
+$modelsPath = dirname(__DIR__) . '/app/Models';
+if (is_dir($modelsPath)) {
+    foreach (glob($modelsPath . '/*.php') as $file) {
+        $filename = basename($file, '.php');
+        if (!in_array($filename, ['AndroModel'])) {
+            $oldClass = 'App\\' . $filename;
+            $newClass = 'App\\Models\\' . $filename;
+            if (class_exists($newClass) && !class_exists($oldClass)) {
+                class_alias($newClass, $oldClass);
+            }
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
 | Create The Application
 |--------------------------------------------------------------------------
 |

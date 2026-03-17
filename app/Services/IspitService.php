@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Kandidat;
-use App\PolozeniIspiti;
-use App\Predmet;
-use App\PredmetProgram;
-use App\PrijavaIspita;
-use App\StudijskiProgram;
-use App\ZapisnikOPolaganju_Student;
-use App\ZapisnikOPolaganjuIspita;
+use App\Models\Kandidat;
+use App\Models\PolozeniIspiti;
+use App\Models\Predmet;
+use App\Models\PredmetProgram;
+use App\Models\PrijavaIspita;
+use App\Models\StudijskiProgram;
+use App\Models\ZapisnikOPolaganju_Student;
+use App\Models\ZapisnikOPolaganjuIspita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;

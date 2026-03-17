@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use App\GodinaStudija;
-use App\Kandidat;
-use App\SkolskaGodUpisa;
-use App\StudijskiProgram;
-use App\TipStudija;
+use App\Models\GodinaStudija;
+use App\Models\Kandidat;
+use App\Models\SkolskaGodUpisa;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
 use Illuminate\Support\Facades\DB;
 use View;
 

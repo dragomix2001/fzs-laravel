@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
+
 class Kandidat extends AndroModel
 {
+    use Auditable;
+    
     protected $table = 'kandidat';
 
     protected $casts = [

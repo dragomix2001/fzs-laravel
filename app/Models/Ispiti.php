@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 class Ispiti extends Model
 {
+    use Auditable;
+    
     protected $table = 'ispiti';
 
     public function predmet()

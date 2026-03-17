@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Kandidat;
+use App\Models\Kandidat;
 use App\Models\DiplomskiPolaganje;
 use App\Models\DiplomskiPrijavaTeme;
 use App\Models\DiplomskiRad;
-use App\Profesor;
-use App\ProfesorPredmet;
+use App\Models\Profesor;
+use App\Models\ProfesorPredmet;
 use Illuminate\Http\Request;
 use View;
 

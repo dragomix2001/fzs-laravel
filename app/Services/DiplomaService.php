@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Diploma;
-use App\GodinaStudija;
-use App\Kandidat;
-use App\Profesor;
-use App\SkolskaGodUpisa;
-use App\StudijskiProgram;
+use App\Models\Diploma;
+use App\Models\GodinaStudija;
+use App\Models\Kandidat;
+use App\Models\Profesor;
+use App\Models\SkolskaGodUpisa;
+use App\Models\StudijskiProgram;
 use Illuminate\Http\Request;
 use View;
 
