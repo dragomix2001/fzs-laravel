@@ -15,6 +15,16 @@
 // Home route
 Route::get('/', 'HomeController@index');
 
+// Health check endpoint
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String(),
+        'app' => 'FZS Laravel',
+        'version' => '1.0.0',
+    ]);
+});
+
 // Added by Andrija
 // Routes in the web middleware group
 
@@ -22,7 +32,7 @@ Route::group(['middleware' => ['web']], function () {
 
     // Auth routes - manual definitions
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-    Route::post('login', 'Auth\LoginController@login');
+    Route::post('login', 'Auth\LoginController@login')->middleware('throttle:5,1');
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
     Route::resource('kandidat', 'KandidatController');
