@@ -28,41 +28,54 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::apiResources([
-        'kandidati' => ApiKandidatController::class,
-        'ispiti' => ApiIspitController::class,
-    ]);
+    // Public endpoints with rate limiting
+    Route::middleware('throttle:60,1')->group(function () {
+        Route::apiResources([
+            'kandidati' => ApiKandidatController::class,
+            'ispiti' => ApiIspitController::class,
+        ]);
 
-    Route::prefix('auth')->group(function () {
-        Route::post('/login', [AuthController::class, 'login']);
-        Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-        Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
-        Route::put('/profile', [AuthController::class, 'updateProfile'])->middleware('auth:sanctum');
-        Route::post('/change-password', [AuthController::class, 'changePassword'])->middleware('auth:sanctum');
+        Route::prefix('auth')->group(function () {
+            Route::post('/login', [AuthController::class, 'login']);
+        });
+
+        Route::get('/obavestenja/javna', [ObavestenjeController::class, 'javna']);
+
+        Route::prefix('raspored')->group(function () {
+            Route::get('/', [RasporedController::class, 'index']);
+            Route::get('/today', [RasporedController::class, 'today']);
+            Route::get('/{raspored}', [RasporedController::class, 'show']);
+        });
+
+        Route::prefix('aktivnost')->group(function () {
+            Route::get('/', [AktivnostController::class, 'index']);
+            Route::get('/today', [AktivnostController::class, 'today']);
+            Route::get('/{aktivnost}', [AktivnostController::class, 'show']);
+        });
     });
 
-    Route::get('/obavestenja/javna', [ObavestenjeController::class, 'javna']);
-    Route::get('/obavestenja', [ObavestenjeController::class, 'index'])->middleware('auth:sanctum');
-    Route::get('/obavestenja/{obavestenje}', [ObavestenjeController::class, 'show'])->middleware('auth:sanctum');
+    // Protected endpoints
+    Route::middleware('auth:sanctum', 'throttle:120,1')->group(function () {
+        Route::prefix('auth')->group(function () {
+            Route::post('/logout', [AuthController::class, 'logout']);
+            Route::get('/user', [AuthController::class, 'user']);
+            Route::put('/profile', [AuthController::class, 'updateProfile']);
+            Route::post('/change-password', [AuthController::class, 'changePassword']);
+        });
 
-    Route::prefix('student')->middleware('auth:sanctum')->group(function () {
-        Route::get('/profile', [StudentController::class, 'profile']);
-        Route::get('/ispiti', [StudentController::class, 'polozeniIspiti']);
-        Route::get('/prijave', [StudentController::class, 'prijave']);
-        Route::get('/upis', [StudentController::class, 'upis']);
-        Route::get('/stats', [StudentController::class, 'stats']);
-    });
+        Route::get('/obavestenja', [ObavestenjeController::class, 'index']);
+        Route::get('/obavestenja/{obavestenje}', [ObavestenjeController::class, 'show']);
 
-    Route::prefix('raspored')->group(function () {
-        Route::get('/', [RasporedController::class, 'index']);
-        Route::get('/today', [RasporedController::class, 'today']);
-        Route::get('/{raspored}', [RasporedController::class, 'show']);
-    });
+        Route::prefix('student')->group(function () {
+            Route::get('/profile', [StudentController::class, 'profile']);
+            Route::get('/ispiti', [StudentController::class, 'polozeniIspiti']);
+            Route::get('/prijave', [StudentController::class, 'prijave']);
+            Route::get('/upis', [StudentController::class, 'upis']);
+            Route::get('/stats', [StudentController::class, 'stats']);
+        });
 
-    Route::prefix('aktivnost')->group(function () {
-        Route::get('/', [AktivnostController::class, 'index']);
-        Route::get('/today', [AktivnostController::class, 'today']);
-        Route::get('/{aktivnost}', [AktivnostController::class, 'show']);
-        Route::get('/moje', [AktivnostController::class, 'myActivities'])->middleware('auth:sanctum');
+        Route::prefix('aktivnost')->group(function () {
+            Route::get('/moje', [AktivnostController::class, 'myActivities']);
+        });
     });
 });

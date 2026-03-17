@@ -10,7 +10,7 @@ class ApiKandidatController extends Controller
 {
     public function index()
     {
-        $kandidati = Kandidat::all();
+        $kandidati = Kandidat::with(['tipStudija', 'program', 'upisaneGodine'])->get();
 
         return response()->json($kandidati);
     }
@@ -24,6 +24,8 @@ class ApiKandidatController extends Controller
 
     public function show(Kandidat $kandidat)
     {
+        $kandidat->load(['tipStudija', 'program', 'upisaneGodine', 'angazovanja']);
+
         return response()->json($kandidat);
     }
 
