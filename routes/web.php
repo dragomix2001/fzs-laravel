@@ -2,10 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->middleware('cache.headers:public;max_age=3600');
-
 Route::get('/home', function () {
     return view('home');
 })->middleware('auth');

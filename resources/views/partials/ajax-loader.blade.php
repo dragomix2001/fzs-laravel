@@ -1,3 +1,4 @@
+<script>
 // Global AJAX setup with loading spinner
 $(document).ajaxStart(function() {
     // Show loading spinner
@@ -29,3 +30,4 @@ $(document).ajaxError(function(event, xhr, settings, thrownError) {
         $('#toast-container').append(errorHtml);
     }
 });
+</script>
