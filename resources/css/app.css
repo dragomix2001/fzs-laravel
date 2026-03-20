@@ -31,10 +31,17 @@ body {
 .ui-widget-content {
     background-color: #ffffff !important;
     border: 1px solid #ced4da !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
 }
 
 .ui-menu-item {
     background-color: #ffffff !important;
+    list-style: none !important;
+    padding: 5px 10px !important;
+    margin: 0 !important;
 }
 
 .ui-menu-item:hover,
@@ -42,4 +49,13 @@ body {
 .ui-state-active {
     background-color: #0d6efd !important;
     color: #ffffff !important;
+}
+
+.ui-menu .ui-menu-item {
+    list-style-type: none !important;
+}
+
+.ui-autocomplete {
+    width: auto !important;
+    max-width: 400px !important;
 }
