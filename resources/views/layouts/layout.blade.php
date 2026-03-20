@@ -433,6 +433,20 @@
                         <li><a href="{{ url('/dashboard') }}">&nbsp;&nbsp;&nbsp;Аналитика</a></li>
                     </ul>
                 </li>
+                
+                <li class="{{ Request::is('*chatbot*') ? 'active' : '' }}">
+                    <a href="{{ url('/chatbot') }}">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Chatbot</span>
+                    </a>
+                </li>
+                
+                <li class="{{ Request::is('*prediction*') ? 'active' : '' }}">
+                    <a href="{{ url('/prediction') }}">
+                        <i class="fas fa-chart-line"></i>
+                        <span>AI Предикција</span>
+                    </a>
+                </li>
             </ul>
         </aside>
         

@@ -296,4 +296,17 @@ Route::group(['middleware' => ['web', 'auth', 'role:admin']], function () {
 
     // Audit log routes
     Route::get('/audit-logs', 'App\Http\Controllers\AuditLogController@index')->name('audit.index');
+    
+    // Chatbot routes
+    Route::get('/chatbot', 'App\Http\Controllers\ChatbotController@index')->name('chatbot.index');
+    Route::post('/chatbot/chat', 'App\Http\Controllers\ChatbotController@chat')->name('chatbot.chat');
+    Route::post('/chatbot/clear', 'App\Http\Controllers\ChatbotController@clearHistory')->name('chatbot.clear');
+    Route::post('/chatbot/quick', 'App\Http\Controllers\ChatbotController@quickQuestion')->name('chatbot.quick');
 });
+
+    // Prediction routes
+    Route::get('/prediction', 'App\Http\Controllers\PredictionController@index')->name('prediction.index');
+    Route::get('/prediction/student/{id}', 'App\Http\Controllers\PredictionController@studentPrediction')->name('prediction.student');
+    Route::get('/prediction/statistics', 'App\Http\Controllers\PredictionController@classStatistics')->name('prediction.statistics');
+    Route::get('/api/prediction/student/{id}', 'App\Http\Controllers\PredictionController@apiStudentPrediction')->name('api.prediction.student');
+    Route::get('/api/prediction/statistics', 'App\Http\Controllers\PredictionController@apiClassStatistics')->name('api.prediction.statistics');
