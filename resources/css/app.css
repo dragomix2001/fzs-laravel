@@ -10,3 +10,17 @@ body {
     padding-bottom: 10px;
     border-bottom: 2px solid #dee2e6;
 }
+
+.form-group {
+    background-color: #ffffff !important;
+}
+
+.custom-combobox {
+    background-color: #ffffff !important;
+    display: inline-block !important;
+    width: 100% !important;
+}
+
+.ui-autocomplete-input {
+    background-color: #ffffff !important;
+}
