@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery as BaseVerifier;
 
-class VerifyCsrfToken extends BaseVerifier
+class PreventRequestForgery extends BaseVerifier
 {
     protected $except = [
         'izvestaji/spisakZaSmer',
