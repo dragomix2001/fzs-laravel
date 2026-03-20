@@ -24,3 +24,22 @@ body {
 .ui-autocomplete-input {
     background-color: #ffffff !important;
 }
+
+.ui-autocomplete,
+.ui-menu,
+.ui-widget,
+.ui-widget-content {
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+}
+
+.ui-menu-item {
+    background-color: #ffffff !important;
+}
+
+.ui-menu-item:hover,
+.ui-state-focus,
+.ui-state-active {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+}
