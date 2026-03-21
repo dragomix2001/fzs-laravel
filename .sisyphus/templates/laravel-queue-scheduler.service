@@ -1,0 +1,51 @@
+[Unit]
+# Human-friendly name shown in `systemctl status`
+Description=Laravel Queue Scheduler Worker
+# Ensure network is available before starting scheduler worker
+After=network.target
+
+[Service]
+# Run as the web server account
+User=www-data
+Group=www-data
+
+# Laravel project root
+WorkingDirectory=/home/dragomix/fzs-laravel
+
+# Optional systemd-style environment file (KEY=VALUE lines)
+# Leading '-' means: do not fail if the file is missing.
+EnvironmentFile=-/etc/default/fzs-laravel
+
+# Dedicated scheduler queue worker command:
+# --queue=scheduler : process only scheduler-specific queue
+# --sleep=3         : wait 3s when no job is available
+# --tries=3         : retry failed jobs up to 3 times
+# --timeout=90      : kill jobs running longer than 90s
+ExecStart=/usr/bin/php /home/dragomix/fzs-laravel/artisan queue:work --queue=scheduler --sleep=3 --tries=3 --timeout=90
+
+# Restart behavior for resilient background processing
+Restart=always
+RestartSec=5
+
+# Graceful stop handling
+KillSignal=SIGTERM
+TimeoutStopSec=60
+
+# Log stdout/stderr to journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=laravel-queue-scheduler
+
+[Install]
+# Start this service at boot in normal multi-user mode
+WantedBy=multi-user.target
+
+# Installation notes:
+# 1) Copy to systemd units:
+#    sudo cp /home/dragomix/fzs-laravel/.sisyphus/templates/laravel-queue-scheduler.service /etc/systemd/system/
+# 2) Reload unit files:
+#    sudo systemctl daemon-reload
+# 3) Enable/start service:
+#    sudo systemctl enable --now laravel-queue-scheduler.service
+# 4) Check logs:
+#    sudo journalctl -u laravel-queue-scheduler.service -f
