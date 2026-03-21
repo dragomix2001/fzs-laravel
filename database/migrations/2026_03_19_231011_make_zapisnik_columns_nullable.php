@@ -12,13 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
-            $table->integer('predmet_id')->nullable()->change();
-            $table->integer('rok_id')->nullable()->change();
-            $table->date('datum')->nullable()->change();
-            $table->time('vreme')->nullable()->change();
-            $table->string('ucionica')->nullable()->change();
-            $table->integer('profesor_id')->nullable()->change();
-            $table->integer('kandidat_id')->nullable()->change();
+            if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'predmet_id')) {
+                $table->integer('predmet_id')->nullable()->change();
+            }
+            if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'rok_id')) {
+                $table->integer('rok_id')->nullable()->change();
+            }
+            if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'datum')) {
+                $table->date('datum')->nullable()->change();
+            }
+            if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'vreme')) {
+                $table->time('vreme')->nullable()->change();
+            }
+            if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'ucionica')) {
+                $table->string('ucionica')->nullable()->change();
+            }
+            if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'profesor_id')) {
+                $table->integer('profesor_id')->nullable()->change();
+            }
+            if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'kandidat_id')) {
+                $table->integer('kandidat_id')->nullable()->change();
+            }
         });
     }
 

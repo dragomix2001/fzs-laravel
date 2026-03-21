@@ -13,7 +13,8 @@ class QueueTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function queue_can_dispatch_job(): void
+    /** @test */
+    public function test_queue_can_dispatch_job()
     {
         Queue::fake();
 
@@ -24,7 +25,8 @@ class QueueTest extends TestCase
         Queue::assertPushed(TestFailingJob::class);
     }
 
-    public function failing_job_goes_to_failed_queue_after_max_attempts(): void
+    /** @test */
+    public function test_failing_job_goes_to_failed_queue_after_max_attempts()
     {
         Queue::fake();
 
@@ -43,7 +45,8 @@ class QueueTest extends TestCase
         ]);
     }
 
-    public function failed_job_can_be_retried(): void
+    /** @test */
+    public function test_failed_job_can_be_retried()
     {
         Queue::fake();
 

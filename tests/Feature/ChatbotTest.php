@@ -13,7 +13,8 @@ class ChatbotTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_chatbot_returns_mock_response_when_no_openai_key(): void
+    /** @test */
+    public function chatbot_returns_mock_response_when_no_openai_key()
     {
         // Ensure no valid OpenAI key
         $_ENV['OPENAI_API_KEY'] = 'sk-your-openai-api-key-here';
@@ -31,7 +32,8 @@ class ChatbotTest extends TestCase
         $this->assertNotEmpty($response['message']);
     }
 
-    public function test_chatbot_handles_openai_exceptions_gracefully(): void
+    /** @test */
+    public function chatbot_handles_openai_exceptions_gracefully()
     {
         $_ENV['OPENAI_API_KEY'] = 'sk-test-key-for-testing';
         putenv('OPENAI_API_KEY=sk-test-key-for-testing');
@@ -43,7 +45,7 @@ class ChatbotTest extends TestCase
         $chatbot = new ChatbotService($ragMock);
 
         // Mock OpenAI facade to throw an exception
-        $this->mock(\OpenAI\Laravel\Facades\OpenAI::class, function ($mock) {
+        $this->mock(\Illuminate\Support\Facades\Facade::getFacadeApplication()->make('openai'), function ($mock) {
             $mock->shouldReceive('chat()->create')
                  ->andThrow(new \Exception('API Error'));
         });
@@ -56,7 +58,8 @@ class ChatbotTest extends TestCase
         $this->assertStringContainsString('грешке', $response['message']);
     }
 
-    public function test_chatbot_returns_quick_questions(): void
+    /** @test */
+    public function chatbot_returns_quick_questions()
     {
         $ragMock = $this->createMock(RagService::class);
         $chatbot = new ChatbotService($ragMock);
@@ -70,7 +73,8 @@ class ChatbotTest extends TestCase
         $this->assertArrayHasKey('category', $questions[0]);
     }
 
-    public function test_chatbot_session_handling_works(): void
+    /** @test */
+    public function chatbot_session_handling_works()
     {
         $this->withoutExceptionHandling();
 
@@ -84,7 +88,7 @@ class ChatbotTest extends TestCase
         $chatbot = new ChatbotService($ragMock);
 
         // Mock OpenAI response
-        $this->mock(\OpenAI\Laravel\Facades\OpenAI::class, function ($mock) {
+        $this->mock(\Illuminate\Support\Facades\Facade::getFacadeApplication()->make('openai'), function ($mock) {
             $mock->shouldReceive('chat()->create')
                  ->andReturn((object) [
                      'choices' => [[
