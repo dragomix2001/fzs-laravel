@@ -21,10 +21,38 @@
         :root {
             --sidebar-width: 250px;
             --header-height: 56px;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --card-bg: #ffffff;
+            --sidebar-bg: #f8f9fa;
+            --sidebar-text: #333333;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-tertiary: #0f3460;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --border-color: #3f3f46;
+            --card-bg: #1e1e2f;
+            --sidebar-bg: #16162a;
+            --sidebar-text: #e4e4e7;
         }
         
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        body, .main-content, .card, .table {
+            background-color: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
         }
         
         .wrapper {
@@ -32,17 +60,16 @@
             min-height: 100vh;
         }
         
-        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
-            background: #f8f9fa;
+            background: var(--sidebar-bg);
             position: fixed;
             top: 0;
             left: 0;
             bottom: 0;
             z-index: 100;
             overflow-y: auto;
-            border-right: 1px solid #dee2e6;
+            border-right: 1px solid var(--border-color);
         }
         
         .sidebar-menu {
@@ -55,9 +82,9 @@
             display: flex;
             align-items: center;
             padding: 12px 20px;
-            color: #333;
+            color: var(--sidebar-text);
             text-decoration: none;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid var(--border-color);
             cursor: pointer;
         }
         
@@ -479,6 +506,10 @@
                         <i class="fas fa-search"></i>
                     </a>
                     
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="themeToggle" title="Тема">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                    
                     @if(!Auth::guest())
                         <div class="dropdown">
                             <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -528,6 +559,33 @@
         document.getElementById('sidebarOverlay').addEventListener('click', function() {
             document.getElementById('sidebar').classList.remove('show');
             document.getElementById('sidebarOverlay').classList.remove('show');
+        });
+
+        // Dark mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const savedTheme = localStorage.getItem('theme');
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
         });
     </script>
 </body>

@@ -1,8 +1,11 @@
+vendor
+node_modules
+.env
 .git
 .gitignore
-node_modules
-vendor
-.env
-.env.*
-!.env.example
+docker-compose.yml
+Dockerfile
+README.md
 storage/*.key
+storage/logs/*
+bootstrap/cache/*

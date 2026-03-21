@@ -2,66 +2,55 @@
 
 namespace App\Services;
 
-use App\Mail\IspitPrijavaMail;
-use App\Mail\ObavestenjeMail;
-use App\Models\Kandidat;
-use Illuminate\Support\Facades\Mail;
+use App\Events\NewNotification;
+use App\Models\Obavestenje;
+use App\Models\User;
 
 class NotificationService
 {
-    public function sendObavestenjeToStudent(Kandidat $student, $naslov, $sadrzaj, $tip = 'opste')
+    public function notifyUser(int $userId, string $title, string $message, string $type = 'info', ?array $data = null): void
     {
-        if (! $student->email) {
-            return false;
-        }
+        NewNotification::dispatch($userId, $title, $message, $type, $data);
+    }
 
-        try {
-            Mail::to($student->email)->send(new ObavestenjeMail($naslov, $sadrzaj, $tip));
-
-            return true;
-        } catch (\Exception $e) {
-            \Log::error('Failed to send obavestenje email: '.$e->getMessage());
-
-            return false;
+    public function notifyAdmins(string $title, string $message, string $type = 'info', ?array $data = null): void
+    {
+        $admins = User::where('role', User::ROLE_ADMIN)->get();
+        
+        foreach ($admins as $admin) {
+            $this->notifyUser($admin->id, $title, $message, $type, $data);
         }
     }
 
-    public function sendObavestenjeToAllStudents($naslov, $sadrzaj, $tip = 'opste')
+    public function broadcastObavestenje(Obavestenje $obavestenje): void
     {
-        $students = Kandidat::whereNotNull('email')
-            ->where('email', '!=', '')
-            ->where('statusUpisa_id', 3)
-            ->get();
+        $targetUsers = match ($obavestenje->tip) {
+            'javno' => User::all(),
+            'profesori' => User::where('role', User::ROLE_PROFESSOR)->get(),
+            default => User::where('role', User::ROLE_ADMIN)->get(),
+        };
 
-        $sent = 0;
-        foreach ($students as $student) {
-            if ($this->sendObavestenjeToStudent($student, $naslov, $sadrzaj, $tip)) {
-                $sent++;
-            }
+        foreach ($targetUsers as $user) {
+            $this->notifyUser(
+                $user->id,
+                'Ново обавештење',
+                $obavestenje->naslov,
+                'info',
+                [
+                    'id' => $obavestenje->id,
+                    'link' => route('obavestenja.show', $obavestenje->id),
+                ]
+            );
         }
-
-        return $sent;
     }
 
-    public function sendIspitPrijava(Kandidat $student, $predmet, $rok, $datum)
+    public function notifyExamDeadline(int $userId, string $examName, string $deadline): void
     {
-        if (! $student->email) {
-            return false;
-        }
-
-        try {
-            Mail::to($student->email)->send(new IspitPrijavaMail(
-                $student->imeKandidata.' '.$student->prezimeKandidata,
-                $predmet,
-                $rok,
-                $datum
-            ));
-
-            return true;
-        } catch (\Exception $e) {
-            \Log::error('Failed to send ispit prijava email: '.$e->getMessage());
-
-            return false;
-        }
+        $this->notifyUser(
+            $userId,
+            'Рок за пријаву испита',
+            "Пријава за {$examName} истиче {$deadline}",
+            'warning'
+        );
     }
 }

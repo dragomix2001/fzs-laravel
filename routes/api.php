@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ApiIspitController;
 use App\Http\Controllers\Api\ApiKandidatController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ObavestenjeController;
+use App\Http\Controllers\Api\PredictionController;
 use App\Http\Controllers\Api\RasporedController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
@@ -76,6 +77,11 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('aktivnost')->group(function () {
             Route::get('/moje', [AktivnostController::class, 'myActivities']);
+        });
+
+        Route::prefix('prediction')->group(function () {
+            Route::get('/student/{id}', [PredictionController::class, 'studentPrediction']);
+            Route::get('/statistics', [PredictionController::class, 'statistics']);
         });
     });
 });
