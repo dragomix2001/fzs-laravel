@@ -6,8 +6,6 @@ use OpenAI\Laravel\Facades\OpenAI;
 use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
 use App\Models\PrijavaIspita;
-use App\Models\Predmet;
-use App\Models\Profesor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -16,59 +14,34 @@ class ChatbotService
     protected $model = 'gpt-4';
     protected $maxTokens = 500;
     protected $temperature = 0.7;
+    protected RagService $ragService;
 
-    public function __construct()
+    public function __construct(RagService $ragService)
     {
-        // Constructor - can be used for initialization
+        $this->ragService = $ragService;
     }
 
     public function chat(string $message, array $conversationHistory = []): array
     {
-        // If OpenAI API key is not configured, return mock response
         $apiKey = env('OPENAI_API_KEY');
         if (empty($apiKey) || $apiKey === 'sk-your-openai-api-key-here') {
-            // Mock response based on message content
-            $mockResponses = [
-                'default' => 'Извините, AI сервис тренутно није доступан. Молимо покушајте касније.',
-                'привет' => 'Здраво! Како могу да вам помогнем?',
-                'здраво' => 'Здраво! Како могу да вам помогнем?',
-                'хвала' => 'Нема на чему! Ако имате још питања, слободно питajте.',
-            ];
-            
-            $lowerMessage = mb_strtolower($message);
-            $response = $mockResponses['default'];
-            foreach ($mockResponses as $key => $value) {
-                if ($key !== 'default' && mb_strpos($lowerMessage, $key) !== false) {
-                    $response = $value;
-                    break;
-                }
-            }
-            
-            return [
-                'success' => true,
-                'message' => $response,
-                'usage' => null,
-            ];
+            return $this->getMockResponse($message);
         }
         
         try {
-            // Build system prompt with context about the system
-            $systemPrompt = $this->buildSystemPrompt();
+            $context = $this->ragService->findRelevantContext($message);
+            $systemPrompt = $this->buildSystemPrompt($context);
             
-            // Build messages array
             $messages = [
                 ['role' => 'system', 'content' => $systemPrompt],
             ];
             
-            // Add conversation history
             foreach ($conversationHistory as $history) {
                 $messages[] = $history;
             }
             
-            // Add current user message
             $messages[] = ['role' => 'user', 'content' => $message];
             
-            // Call OpenAI API
             $response = OpenAI::chat()->create([
                 'model' => $this->model,
                 'messages' => $messages,
@@ -95,13 +68,49 @@ class ChatbotService
         }
     }
 
-    protected function buildSystemPrompt(): string
+    protected function getMockResponse(string $message): array
+    {
+        $lowerMessage = mb_strtolower($message);
+        
+        $keywordResponses = [
+            'примет' => 'За пријаву испита идите на /predmeti/. Изаберите предмет и испитни рок.',
+            'школарин' => 'Рокови за уплату школарине су на почетку сваког семестра. Погледајте /skolarina/{id}.',
+            'рок' => 'Испитни рокови су објављени на /kalendar/.',
+            'оцен' => 'Ваше оцене можете видети на страници запосленог студента.',
+            'контакт' => 'Контактирајте студентску службу или користите страницу /profesor.',
+            'привет' => 'Здраво! Како могу да вам помогнем? Могу одговорити на питања о испитима, предметима, школарини.',
+            'здраво' => 'Здраво! Како могу да вам помогнем?',
+            'хвала' => 'Нема на чему! Ако имате jos питања, слободно питајте.',
+            'како' => 'За детаљна упутства, контактирајте студентску службу или погледајте /obavestenja.',
+        ];
+        
+        foreach ($keywordResponses as $keyword => $response) {
+            if (mb_strpos($lowerMessage, $keyword) !== false) {
+                return [
+                    'success' => true,
+                    'message' => $response,
+                    'usage' => null,
+                ];
+            }
+        }
+        
+        $context = $this->ragService->findRelevantContext($message);
+        
+        return [
+            'success' => true,
+            'message' => "Користим базу знања да вам помогнем. {$context}За детаљне информације контактирајте студентску службу.",
+            'usage' => null,
+        ];
+    }
+
+    protected function buildSystemPrompt(string $context = ''): string
     {
         $user = Auth::user();
         $userName = $user->name ?? 'Корисник';
         
-        $prompt = "Ти си AI асistent за факултетски систем. Твоја улога је да помогнеш студентима и администрацији.\n\n";
-        $prompt .= "Информације о систему:\n";
+        $prompt = "Ти си AI асistent за Факултет за спорт. Твоја улога је да помогнеш студентима и администрацији.\n\n";
+        $prompt .= "База знања:\n{$context}\n";
+        $prompt .= "Опште информације:\n";
         $prompt .= "- Факултет за спорт\n";
         $prompt .= "- Систем за управљање студентима, испитима, предметима\n\n";
         
@@ -114,15 +123,13 @@ class ChatbotService
         $prompt .= "Правила:\n";
         $prompt .= "- Увек одговарај на српском језику\n";
         $prompt .= "- Буди љубазан и користан\n";
-        $prompt .= "- Ако не знаш одговор, реци то\n";
+        $prompt .= "- Ако не знаш одговор, реци да контактира студентску службу\n";
         $prompt .= "- Не измишљај информације\n";
-        $prompt .= "- Не приступај осетљивим подацима (лозинке, лични подаци)\n\n";
+        $prompt .= "- Користи информације из базе знања када су релевантне\n\n";
         
-        // Add context about current user
         if ($user) {
             $prompt .= "Тренутни корисник: {$userName}\n";
             
-            // Add student-specific context if user is a student
             $kandidat = Kandidat::where('email', $user->email)->first();
             if ($kandidat) {
                 $prompt .= "Корисник је студент.\n";
@@ -135,30 +142,12 @@ class ChatbotService
     public function getQuickQuestions(): array
     {
         return [
-            [
-                'question' => 'Када је следећи испитни рок?',
-                'category' => 'Испити',
-            ],
-            [
-                'question' => 'Како да пријавим испит?',
-                'category' => 'Испити',
-            ],
-            [
-                'question' => 'Које предмете имам ове године?',
-                'category' => 'Предмети',
-            ],
-            [
-                'question' => 'Које су ми оцене?',
-                'category' => 'Оцене',
-            ],
-            [
-                'question' => 'Који је рок за уплату школарине?',
-                'category' => 'Школарина',
-            ],
-            [
-                'question' => 'Како да контактирам студентску службу?',
-                'category' => 'Контакт',
-            ],
+            ['question' => 'Када је следећи испитни рок?', 'category' => 'Испити'],
+            ['question' => 'Како да пријавим испит?', 'category' => 'Испити'],
+            ['question' => 'Које предмете имам ове godine?', 'category' => 'Предмети'],
+            ['question' => 'Које су ми оцене?', 'category' => 'Оцене'],
+            ['question' => 'Који је рок за уплату школарине?', 'category' => 'Школарина'],
+            ['question' => 'Како да контактирам студентску службу?', 'category' => 'Контакт'],
         ];
     }
 
