@@ -19,5 +19,10 @@ Route::get('/health', function () {
     ]);
 })->middleware('cache.headers:public;max_age=60');
 
+Route::get('/test-failed-job', function () {
+    dispatch(new \App\Jobs\TestFailingJob());
+    return response()->json(['message' => 'Test failing job dispatched']);
+});
+
 require __DIR__.'/fzs-routes.php';
 require __DIR__.'/ai-routes.php';

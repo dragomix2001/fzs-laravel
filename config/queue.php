@@ -36,18 +36,18 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'default',
-            'retry_after' => 90,
+            'table' => env('QUEUE_TABLE', 'jobs'),
+            'queue' => env('QUEUE_NAME', 'default'),
+            'retry_after' => env('QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,
         ],
 
         'beanstalkd' => [
             'driver' => 'beanstalkd',
-            'host' => 'localhost',
-            'queue' => 'default',
-            'retry_after' => 90,
-            'block_for' => 0,
+            'host' => env('BEANSTALKD_HOST', 'localhost'),
+            'queue' => env('QUEUE_NAME', 'default'),
+            'retry_after' => env('QUEUE_RETRY_AFTER', 90),
+            'block_for' => env('BEANSTALKD_BLOCK_FOR', 0),
             'after_commit' => false,
         ],
 
@@ -59,16 +59,21 @@ return [
             'queue' => env('SQS_QUEUE', 'default'),
             'suffix' => env('SQS_SUFFIX'),
             'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'retry_after' => env('QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,
         ],
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'default',
+            'connection' => 'queue',
             'queue' => env('REDIS_QUEUE', 'default'),
-            'retry_after' => 90,
-            'block_for' => null,
+            'retry_after' => env('QUEUE_RETRY_AFTER', 90),
+            'block_for' => env('REDIS_BLOCK_FOR'),
             'after_commit' => false,
+        ],
+
+        'null' => [
+            'driver' => 'null',
         ],
 
     ],
@@ -86,7 +91,7 @@ return [
 
     'batching' => [
         'database' => env('DB_CONNECTION', 'mysql'),
-        'table' => 'job_batches',
+        'table' => env('QUEUE_BATCHES_TABLE', 'job_batches'),
     ],
 
     /*
@@ -103,7 +108,7 @@ return [
     'failed' => [
         'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
         'database' => env('DB_CONNECTION', 'mysql'),
-        'table' => 'failed_jobs',
+        'table' => env('QUEUE_FAILED_TABLE', 'failed_jobs'),
     ],
 
 ];
