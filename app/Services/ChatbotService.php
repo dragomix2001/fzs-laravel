@@ -24,6 +24,33 @@ class ChatbotService
 
     public function chat(string $message, array $conversationHistory = []): array
     {
+        // If OpenAI API key is not configured, return mock response
+        $apiKey = env('OPENAI_API_KEY');
+        if (empty($apiKey) || $apiKey === 'sk-your-openai-api-key-here') {
+            // Mock response based on message content
+            $mockResponses = [
+                'default' => 'Извините, AI сервис тренутно није доступан. Молимо покушајте касније.',
+                'привет' => 'Здраво! Како могу да вам помогнем?',
+                'здраво' => 'Здраво! Како могу да вам помогнем?',
+                'хвала' => 'Нема на чему! Ако имате још питања, слободно питajте.',
+            ];
+            
+            $lowerMessage = mb_strtolower($message);
+            $response = $mockResponses['default'];
+            foreach ($mockResponses as $key => $value) {
+                if ($key !== 'default' && mb_strpos($lowerMessage, $key) !== false) {
+                    $response = $value;
+                    break;
+                }
+            }
+            
+            return [
+                'success' => true,
+                'message' => $response,
+                'usage' => null,
+            ];
+        }
+        
         try {
             // Build system prompt with context about the system
             $systemPrompt = $this->buildSystemPrompt();

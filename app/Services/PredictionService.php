@@ -27,8 +27,8 @@ class PredictionService
             return [
                 'student' => [
                     'id' => $kandidat->id,
-                    'ime' => $kandidat->ime,
-                    'prezime' => $kandidat->prezime,
+                    'ime' => $kandidat->imeKandidata,
+                    'prezime' => $kandidat->prezimeKandidata,
                     'email' => $kandidat->email,
                 ],
                 'statistics' => $stats,

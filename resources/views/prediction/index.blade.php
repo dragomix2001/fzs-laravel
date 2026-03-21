@@ -41,7 +41,7 @@
                         @foreach($students as $student)
                         <tr>
                             <td>
-                                <strong>{{ $student->prezime }} {{ $student->ime }}</strong>
+                                <strong>{{ $student->prezimeKandidata }} {{ $student->imeKandidata }}</strong>
                             </td>
                             <td>{{ $student->email }}</td>
                             <td class="text-center">

@@ -442,3 +442,15 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
 Route::post('/dashboard/widgets', 'DashboardController@saveWidgets')->name('dashboard.widgets');
 Route::get('/dashboard/studenti', 'DashboardController@studenti')->name('dashboard.studenti');
 Route::get('/dashboard/ispiti', 'DashboardController@ispiti')->name('dashboard.ispiti');
+
+// AI rute
+Route::get('/chatbot', 'ChatbotController@index')->name('chatbot.index');
+Route::post('/chatbot/chat', 'ChatbotController@chat')->name('chatbot.chat');
+Route::post('/chatbot/clear', 'ChatbotController@clearHistory')->name('chatbot.clear');
+Route::post('/chatbot/quick', 'ChatbotController@quickQuestion')->name('chatbot.quick');
+
+Route::get('/prediction', 'PredictionController@index')->name('prediction.index');
+Route::get('/prediction/student/{id}', 'PredictionController@studentPrediction')->name('prediction.student');
+Route::get('/prediction/statistics', 'PredictionController@classStatistics')->name('prediction.statistics');
+Route::get('/api/prediction/student/{id}', 'PredictionController@apiStudentPrediction')->name('api.prediction.student');
+Route::get('/api/prediction/statistics', 'PredictionController@apiClassStatistics')->name('api.prediction.statistics');

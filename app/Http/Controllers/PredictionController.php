@@ -18,7 +18,7 @@ class PredictionController extends Controller
 
     public function index()
     {
-        $students = Kandidat::orderBy('prezime')->orderBy('ime')->get();
+        $students = Kandidat::orderBy('prezimeKandidata')->orderBy('imeKandidata')->get();
         
         return view('prediction.index', compact('students'));
     }

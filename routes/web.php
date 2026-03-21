@@ -20,3 +20,4 @@ Route::get('/health', function () {
 })->middleware('cache.headers:public;max_age=60');
 
 require __DIR__.'/fzs-routes.php';
+require __DIR__.'/ai-routes.php';
