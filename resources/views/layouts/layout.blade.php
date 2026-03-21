@@ -420,33 +420,42 @@
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*prisustvo*') || Request::is('*aktivnost*') || Request::is('*raspored*') || Request::is('*obavestenja*') || Request::is('*dashboard*') ? 'active' : '' }}">
-                    <a href="#" onclick="toggleSubmenu(event, 'noviModuliSubmenu')">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Нови модули</span>
+                <li class="{{ Request::is('*prisustvo*') || Request::is('*aktivnost*') || Request::is('*raspored*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'nastavaSubmenu')">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Настава</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
-                    <ul class="submenu" id="noviModuliSubmenu">
+                    <ul class="submenu" id="nastavaSubmenu">
+                        <li><a href="{{ url('/raspored') }}">&nbsp;&nbsp;&nbsp;Распоред</a></li>
                         <li><a href="{{ url('/prisustvo') }}">&nbsp;&nbsp;&nbsp;Присуство</a></li>
                         <li><a href="{{ url('/aktivnost') }}">&nbsp;&nbsp;&nbsp;Активности</a></li>
-                        <li><a href="{{ url('/raspored') }}">&nbsp;&nbsp;&nbsp;Распоред</a></li>
-                        <li><a href="{{ url('/obavestenja') }}">&nbsp;&nbsp;&nbsp;Обавештења</a></li>
-                        <li><a href="{{ url('/dashboard') }}">&nbsp;&nbsp;&nbsp;Аналитика</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*chatbot*') ? 'active' : '' }}">
-                    <a href="{{ url('/chatbot') }}">
-                        <i class="fas fa-robot"></i>
-                        <span>AI Chatbot</span>
+                <li class="{{ Request::is('*obavestenja*') || Request::is('*moja-obavestenja*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'komunikacijaSubmenu')">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>Комуникација</span>
+                        <i class="fas fa-chevron-down arrow"></i>
                     </a>
+                    <ul class="submenu" id="komunikacijaSubmenu">
+                        <li><a href="{{ url('/obavestenja') }}">&nbsp;&nbsp;&nbsp;Обавештења</a></li>
+                        <li><a href="{{ url('/moja-obavestenja') }}">&nbsp;&nbsp;&nbsp;Моја обавештења</a></li>
+                    </ul>
                 </li>
                 
-                <li class="{{ Request::is('*prediction*') ? 'active' : '' }}">
-                    <a href="{{ url('/prediction') }}">
-                        <i class="fas fa-chart-line"></i>
-                        <span>AI Предикција</span>
+                <li class="{{ Request::is('*chatbot*') || Request::is('*prediction*') || Request::is('*dashboard*') ? 'active' : '' }}">
+                    <a href="#" onclick="toggleSubmenu(event, 'analitikaSubmenu')">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Аналитика и AI</span>
+                        <i class="fas fa-chevron-down arrow"></i>
                     </a>
+                    <ul class="submenu" id="analitikaSubmenu">
+                        <li><a href="{{ url('/dashboard') }}">&nbsp;&nbsp;&nbsp;Аналитика</a></li>
+                        <li><a href="{{ url('/chatbot') }}">&nbsp;&nbsp;&nbsp;AI Чатбот</a></li>
+                        <li><a href="{{ url('/prediction') }}">&nbsp;&nbsp;&nbsp;AI Предикција</a></li>
+                    </ul>
                 </li>
             </ul>
         </aside>
