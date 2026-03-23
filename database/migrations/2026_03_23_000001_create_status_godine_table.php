@@ -8,6 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Skip if table already exists (imported from baza.sql)
+        if (Schema::hasTable('status_godine')) {
+            return;
+        }
+
         Schema::create('status_godine', function (Blueprint $table) {
             $table->id();
             $table->string('naziv')->nullable();
