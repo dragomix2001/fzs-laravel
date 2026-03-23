@@ -984,7 +984,15 @@ class KandidatController extends Controller
 
     public function indexMaster(Request $request)
     {
-        $studijskiProgramId = StudijskiProgram::where(['tipStudija_id' => 2, 'indikatorAktivan' => 1])->first()->id;
+        $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 2, 'indikatorAktivan' => 1])->first();
+        
+        if (!$studijskiProgram) {
+            return view('kandidat.index_master')
+                ->with('kandidati', collect())
+                ->with('studijskiProgrami', collect());
+        }
+
+        $studijskiProgramId = $studijskiProgram->id;
         if (! empty($request->studijskiProgramId)) {
             $studijskiProgramId = $request->studijskiProgramId;
         }
