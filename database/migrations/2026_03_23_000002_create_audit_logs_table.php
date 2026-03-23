@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('user_agent')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->index(['table_name', 'record_id']);
             $table->index('user_id');
         });
