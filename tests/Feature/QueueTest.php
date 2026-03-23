@@ -25,25 +25,25 @@ class QueueTest extends TestCase
         Queue::assertPushed(TestFailingJob::class);
     }
 
-    /** @test */
-    public function test_failing_job_goes_to_failed_queue_after_max_attempts()
-    {
-        Queue::fake();
+     /** @test */
+     public function test_failing_job_goes_to_failed_queue_after_max_attempts()
+     {
+         Queue::fake();
 
-        // Configure queue to fail quickly for testing
-        config(['queue.default' => 'database']);
-        
-        // Dispatch the failing job
-        TestFailingJob::dispatch();
+         // Configure queue to fail quickly for testing
+         config(['queue.default' => 'database']);
+         
+         // Dispatch the failing job
+         TestFailingJob::dispatch();
 
-        // Process the queue
-        $this->artisan('queue:work', ['--once' => true, '--sleep' => 0]);
+         // Process the queue
+         $this->artisan('queue:work', ['--once' => true, '--sleep' => 0]);
 
-        // Check that job exists in failed jobs table
-        $this->assertDatabaseHas('failed_jobs', [
-            'payload' => $this->stringContains('App\\Jobs\\TestFailingJob'),
-        ]);
-    }
+         // Check that job exists in failed jobs table
+         $this->assertDatabaseHas('failed_jobs', function ($query) {
+             $query->where('payload', 'like', '%App\\Jobs\\TestFailingJob%');
+         });
+     }
 
     /** @test */
     public function test_failed_job_can_be_retried()

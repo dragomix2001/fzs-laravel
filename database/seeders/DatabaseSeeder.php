@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
             $this->command->info('Test user password updated: fzs@fzs.rs / fzs123');
         }
 
+        $this->call([
+            StatusGodineTableSeeder::class,
+        ]);
+
         // Note: TestDataSeeder is not called here because it requires
         // additional database columns that may not exist in all environments
         // Run it manually if needed: php artisan db:seed --class=TestDataSeeder

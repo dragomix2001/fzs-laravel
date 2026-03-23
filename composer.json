@@ -13,20 +13,20 @@
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
-        "maatwebsite/excel": "^3.1",
+        "maatwebsite/excel": "^4.0",
         "openai-php/laravel": "^0.19.1",
         "symfony/http-client": "^7.0"
     },
     "require-dev": {
+        "darkaonline/l5-swagger": "^11.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^2.0",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "laravel/telescope": "^5.0",
         "mockery/mockery": "^1.6",
-        "phpunit/phpunit": "^12.0",
-        "spatie/laravel-ignition": "^2.4",
-        "darkphp/l5-swagger": "^12.0"
+        "phpunit/phpunit": "^13.0",
+        "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
         "psr-4": {
