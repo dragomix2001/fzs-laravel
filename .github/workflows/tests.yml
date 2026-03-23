@@ -42,6 +42,11 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
+          # Override database credentials for tests
+          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=127.0.0.1/' .env
+          sed -i 's/DB_PASSWORD=/DB_PASSWORD=root/' .env
+          sed -i 's/DB_PORT=3306/DB_PORT=${{ job.services.mysql.ports['3306'] }}/' .env
+          cat .env | grep DB_
 
       - name: Wait for MySQL to be ready
         run: |
