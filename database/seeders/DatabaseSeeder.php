@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             StatusGodineTableSeeder::class,
-            TestDataSeeder::class,
         ]);
 
         // Note: TestDataSeeder is not called here because it requires

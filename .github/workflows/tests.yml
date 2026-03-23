@@ -74,6 +74,7 @@ jobs:
           
           # Run seeders to ensure test data exists
           php artisan db:seed --class=DatabaseSeeder --force
+          php artisan db:seed --class=TestDataSeeder --force || true
 
       - name: Run tests
         env:
