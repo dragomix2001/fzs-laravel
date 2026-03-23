@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class BusinessFlowTest extends TestCase
 {
-    protected function getAuthUser(): User
+    protected function getAuthUser(): ?User
     {
         return User::first();
     }
