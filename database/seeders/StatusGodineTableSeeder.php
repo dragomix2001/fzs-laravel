@@ -10,6 +10,10 @@ class StatusGodineTableSeeder extends Seeder
 {
     public function run(): void
     {
+        if (DB::table('status_godine')->count() > 0) {
+            return;
+        }
+
         DB::table('status_godine')->insert([
             ['id' => 1, 'naziv' => 'уписан', 'datum' => null, 'indikatorAktivan' => 1, 'created_at' => '2016-08-29 20:03:53', 'updated_at' => '2016-08-29 20:03:53'],
             ['id' => 2, 'naziv' => 'одустао', 'datum' => null, 'indikatorAktivan' => 1, 'created_at' => '2016-08-29 20:03:53', 'updated_at' => '2016-08-29 20:03:53'],
