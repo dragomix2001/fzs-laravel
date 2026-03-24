@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Config;
 class UpisGodine extends AndroModel
 {
     use Auditable;
-    
+
     protected $table = 'upis_godine';
 
     protected $casts = [

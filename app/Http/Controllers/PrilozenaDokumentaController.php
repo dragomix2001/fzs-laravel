@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\GodinaStudija;
 use App\PrilozenaDokumenta;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -19,7 +20,7 @@ class PrilozenaDokumentaController extends Controller
         try {
             $dokument = PrilozenaDokumenta::all();
             $godinaStudija = GodinaStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -36,7 +37,7 @@ class PrilozenaDokumentaController extends Controller
 
         try {
             $dokument->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -65,7 +66,7 @@ class PrilozenaDokumentaController extends Controller
 
         try {
             $dokument->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -76,7 +77,7 @@ class PrilozenaDokumentaController extends Controller
     {
         try {
             $dokument->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bodovanje;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class BodovanjeController extends Controller
     {
         try {
             $bodovanje = Bodovanje::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -36,7 +37,7 @@ class BodovanjeController extends Controller
 
         try {
             $bodovanje->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -67,7 +68,7 @@ class BodovanjeController extends Controller
 
         try {
             $bodovanje->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -78,7 +79,7 @@ class BodovanjeController extends Controller
     {
         try {
             $bodovanje->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

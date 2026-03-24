@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use App\Models\Kandidat;
-use App\Models\StudijskiProgram;
-use App\Models\SkolskaGodUpisa;
-use App\Models\Opstina;
-use App\Models\KrsnaSlava;
-use App\Models\OpstiUspeh;
-use App\Models\UspehSrednjaSkola;
-use App\Models\SportskoAngazovanje;
-use App\Models\PrilozenaDokumenta;
-use App\Models\StatusStudiranja;
-use App\Models\TipStudija;
 use App\Models\GodinaStudija;
+use App\Models\Kandidat;
+use App\Models\KrsnaSlava;
+use App\Models\Opstina;
+use App\Models\OpstiUspeh;
+use App\Models\PrilozenaDokumenta;
+use App\Models\SkolskaGodUpisa;
+use App\Models\SportskoAngazovanje;
+use App\Models\StatusStudiranja;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
+use App\Models\UspehSrednjaSkola;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 

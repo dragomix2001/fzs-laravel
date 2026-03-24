@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
-            if (!Schema::hasColumn('zapisnik_o_polaganju_ispita', 'datum2')) {
+            if (! Schema::hasColumn('zapisnik_o_polaganju_ispita', 'datum2')) {
                 $table->date('datum2')->nullable()->after('datum');
             }
-            
-            if (!Schema::hasColumn('zapisnik_o_polaganju_ispita', 'prijavaIspita_id')) {
+
+            if (! Schema::hasColumn('zapisnik_o_polaganju_ispita', 'prijavaIspita_id')) {
                 $table->integer('prijavaIspita_id')->nullable()->after('kandidat_id');
             }
         });
@@ -31,7 +31,7 @@ return new class extends Migration
             if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'datum2')) {
                 $table->dropColumn('datum2');
             }
-            
+
             if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'prijavaIspita_id')) {
                 $table->dropColumn('prijavaIspita_id');
             }

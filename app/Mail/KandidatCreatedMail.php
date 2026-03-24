@@ -11,9 +11,7 @@ class KandidatCreatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Kandidat $kandidat)
-    {
-    }
+    public function __construct(public Kandidat $kandidat) {}
 
     public function build()
     {

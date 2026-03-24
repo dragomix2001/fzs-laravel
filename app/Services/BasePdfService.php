@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Elibyy\TCPDF\TCPDF;
 use PDF;
 use View;
 
@@ -29,7 +30,7 @@ class BasePdfService
     {
         $settings = $this->getPdfSettings();
 
-        return new \Elibyy\TCPDF\TCPDF([
+        return new TCPDF([
             $settings['page_orientation'],
             $settings['page_units'],
             $settings['page_format'],

@@ -2,13 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\Kandidat;
-use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
@@ -17,7 +15,7 @@ class AuthenticationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        if (app()->environment('testing') && !DB::table('users')->exists()) {
+        if (app()->environment('testing') && ! DB::table('users')->exists()) {
             $this->markTestSkipped('Users table not available in CI');
         }
     }
@@ -78,7 +76,7 @@ class AuthenticationTest extends TestCase
             'diplomski' => 0,
             'datumStatusa' => null,
             'email' => 'test@example.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
         $response = $this->actingAs($user)->get('/login');
@@ -133,12 +131,12 @@ class AuthenticationTest extends TestCase
             'diplomski' => 0,
             'datumStatusa' => null,
             'email' => 'test@example.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
         $response = $this->post('/login', [
             'email' => 'test@example.com',
-            'password' => 'password'
+            'password' => 'password',
         ]);
 
         $response->assertRedirect('/home');
@@ -192,12 +190,12 @@ class AuthenticationTest extends TestCase
             'diplomski' => 0,
             'datumStatusa' => null,
             'email' => 'test@example.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
         $response = $this->post('/login', [
             'email' => 'test@example.com',
-            'password' => 'wrong-password'
+            'password' => 'wrong-password',
         ]);
 
         $response->assertSessionHasErrors('email');
@@ -251,7 +249,7 @@ class AuthenticationTest extends TestCase
             'diplomski' => 0,
             'datumStatusa' => null,
             'email' => 'test@example.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
         $response = $this->actingAs($user)->get('/home');
@@ -314,12 +312,12 @@ class AuthenticationTest extends TestCase
             'diplomski' => 0,
             'datumStatusa' => null,
             'email' => 'test@example.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
         $this->actingAs($user)
-             ->post('/logout')
-             ->assertRedirect('/');
+            ->post('/logout')
+            ->assertRedirect('/');
 
         $this->assertGuest();
     }

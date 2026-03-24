@@ -3,13 +3,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 class AdminMiddleware
 {
     /**
      * Handle an incoming request. User must be logged in to do admin check
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)

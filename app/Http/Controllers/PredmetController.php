@@ -10,6 +10,7 @@ use App\SkolskaGodUpisa;
 use App\StudijskiProgram;
 use App\TipPredmeta;
 use App\TipStudija;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -28,7 +29,7 @@ class PredmetController extends Controller
             $tipStudija = TipStudija::all();
             $studijskiProgram = StudijskiProgram::all();
             $godinaStudija = GodinaStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -43,7 +44,7 @@ class PredmetController extends Controller
 
         try {
             $predmet->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -55,7 +56,7 @@ class PredmetController extends Controller
         try {
             // $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
             // return $programi;
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -68,10 +69,10 @@ class PredmetController extends Controller
             try {
                 $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
 
-            } catch (\Illuminate\Database\QueryException $e) {
+            } catch (QueryException $e) {
                 dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
             }
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -82,7 +83,7 @@ class PredmetController extends Controller
     {
         try {
             $godinaStudija = GodinaStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -95,7 +96,7 @@ class PredmetController extends Controller
 
         try {
             $predmet->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -106,7 +107,7 @@ class PredmetController extends Controller
     {
         try {
             $predmet->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -117,7 +118,7 @@ class PredmetController extends Controller
     {
         try {
             $program->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -134,7 +135,7 @@ class PredmetController extends Controller
             $skolskaGodina = SkolskaGodUpisa::all();
             // $semestar = Semestar::all();
             // $oblik = OblikNastave::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -160,7 +161,7 @@ class PredmetController extends Controller
 
         try {
             $program->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

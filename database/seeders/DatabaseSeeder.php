@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -9,10 +10,10 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = \App\Models\User::where('email', 'fzs@fzs.rs')->first();
+        $user = User::where('email', 'fzs@fzs.rs')->first();
 
         if (! $user) {
-            \App\Models\User::create([
+            User::create([
                 'name' => 'FZS Admin',
                 'email' => 'fzs@fzs.rs',
                 'password' => Hash::make('fzs123'),

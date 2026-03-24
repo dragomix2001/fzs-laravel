@@ -25,7 +25,7 @@ trait Auditable
     protected function logAudit(string $action, ?array $oldValues, ?array $newValues)
     {
         $userId = null;
-        
+
         if (Auth::check()) {
             $userId = Auth::id();
         }

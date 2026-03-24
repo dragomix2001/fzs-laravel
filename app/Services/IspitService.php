@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\GodinaStudija;
 use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
 use App\Models\Predmet;
@@ -10,6 +11,7 @@ use App\Models\PrijavaIspita;
 use App\Models\StudijskiProgram;
 use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganjuIspita;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
@@ -79,7 +81,7 @@ class IspitService extends BasePdfService
             }
 
             $programi = StudijskiProgram::whereIn('id', $ids)->get();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -124,7 +126,7 @@ class IspitService extends BasePdfService
                     'polozeni_ispiti.konacnaOcena as ocena'
                 )
                 ->get();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -147,8 +149,8 @@ class IspitService extends BasePdfService
         try {
             $predmet = Predmet::where('id', $request->predmet)->first();
             $program = StudijskiProgram::where('id', $request->program)->first();
-            $godina = \App\GodinaStudija::where('id', $request->godina)->first();
-        } catch (\Illuminate\Database\QueryException $e) {
+            $godina = GodinaStudija::where('id', $request->godina)->first();
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

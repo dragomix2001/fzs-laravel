@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Services\ChatbotService;
 use App\Services\RagService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Session;
+use Tests\TestCase;
 
 class ChatbotTest extends TestCase
 {
@@ -40,14 +40,14 @@ class ChatbotTest extends TestCase
 
         $ragMock = $this->createMock(RagService::class);
         $ragMock->method('findRelevantContext')
-                ->willReturn('');
+            ->willReturn('');
 
         $chatbot = new ChatbotService($ragMock);
 
         // Mock OpenAI facade to throw an exception
-        $this->mock(\Illuminate\Support\Facades\Facade::getFacadeApplication()->make('openai'), function ($mock) {
+        $this->mock(Facade::getFacadeApplication()->make('openai'), function ($mock) {
             $mock->shouldReceive('chat()->create')
-                 ->andThrow(new \Exception('API Error'));
+                ->andThrow(new \Exception('API Error'));
         });
 
         $response = $chatbot->chat('test message');
@@ -83,29 +83,29 @@ class ChatbotTest extends TestCase
 
         $ragMock = $this->createMock(RagService::class);
         $ragMock->method('findRelevantContext')
-                ->willReturn('Test context');
+            ->willReturn('Test context');
 
         $chatbot = new ChatbotService($ragMock);
 
         // Mock OpenAI response
-        $this->mock(\Illuminate\Support\Facades\Facade::getFacadeApplication()->make('openai'), function ($mock) {
+        $this->mock(Facade::getFacadeApplication()->make('openai'), function ($mock) {
             $mock->shouldReceive('chat()->create')
-                 ->andReturn((object) [
-                     'choices' => [[
-                         'message' => (object) [
-                             'content' => 'Test response'
-                         ]
-                     ]],
-                     'usage' => (object) [
-                         'prompt_tokens' => 10,
-                         'completion_tokens' => 5,
-                         'total_tokens' => 15
-                     ]
-                 ]);
+                ->andReturn((object) [
+                    'choices' => [[
+                        'message' => (object) [
+                            'content' => 'Test response',
+                        ],
+                    ]],
+                    'usage' => (object) [
+                        'prompt_tokens' => 10,
+                        'completion_tokens' => 5,
+                        'total_tokens' => 15,
+                    ],
+                ]);
         });
 
         $response = $this->post('/chatbot/chat', [
-            'message' => 'Test message'
+            'message' => 'Test message',
         ]);
 
         $response->assertStatus(200);

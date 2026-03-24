@@ -38,7 +38,7 @@ class EnhancedFeatureTest extends TestCase
     {
         $user = User::first();
 
-        if (!$user) {
+        if (! $user) {
             $this->markTestSkipped('No users found');
         }
 

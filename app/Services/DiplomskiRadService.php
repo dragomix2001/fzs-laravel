@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\Kandidat;
 use App\Models\DiplomskiPolaganje;
 use App\Models\DiplomskiPrijavaTeme;
 use App\Models\DiplomskiRad;
+use App\Models\Kandidat;
 use App\Models\Profesor;
 use App\Models\ProfesorPredmet;
+use Elibyy\TCPDF\TCPDF;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use View;
 
@@ -77,7 +79,7 @@ class DiplomskiRadService extends BasePdfService
             $diplomski = DiplomskiRad::where('kandidat_id', $student->id)->first();
 
             $pdf_settings = \Config::get('tcpdf');
-            $pdf = new \Elibyy\TCPDF\TCPDF([
+            $pdf = new TCPDF([
                 $pdf_settings['page_orientation'],
                 $pdf_settings['page_units'],
                 $pdf_settings['page_format'],
@@ -98,7 +100,7 @@ class DiplomskiRadService extends BasePdfService
             $pdf->SetFont('freeserif', '', 10);
             $pdf->WriteHtml($contents);
             $pdf->Output('ZapisnikDiplomski.pdf');
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
     }

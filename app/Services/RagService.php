@@ -3,17 +3,17 @@
 namespace App\Services;
 
 use App\Models\KnowledgeBase;
-use Illuminate\Support\Facades\Log;
 
 class RagService
 {
     protected array $faqData = [];
+
     protected bool $openAiConfigured = false;
 
     public function __construct()
     {
         $this->faqData = $this->loadFaqData();
-        $this->openAiConfigured = !empty(env('OPENAI_API_KEY')) && env('OPENAI_API_KEY') !== 'sk-your-openai-api-key-here';
+        $this->openAiConfigured = ! empty(env('OPENAI_API_KEY')) && env('OPENAI_API_KEY') !== 'sk-your-openai-api-key-here';
     }
 
     protected function loadFaqData(): array
@@ -68,7 +68,7 @@ class RagService
         $queryWords = preg_split('/\s+/', $queryLower);
 
         $scoredFaqs = [];
-        
+
         foreach ($this->faqData as $faq) {
             $score = 0;
             $questionLower = mb_strtolower($faq['question']);
@@ -97,11 +97,11 @@ class RagService
             }
         }
 
-        usort($scoredFaqs, fn($a, $b) => $b['score'] <=> $a['score']);
+        usort($scoredFaqs, fn ($a, $b) => $b['score'] <=> $a['score']);
         $topResults = array_slice($scoredFaqs, 0, $maxResults);
 
         $context = "Релевантне информације из базе знања:\n\n";
-        
+
         foreach ($topResults as $result) {
             $context .= "📌 Питање: {$result['faq']['question']}\n";
             $context .= "Одговор: {$result['faq']['answer']}\n\n";
@@ -112,9 +112,9 @@ class RagService
 
     public function generateEnhancedPrompt(string $userMessage, string $context): string
     {
-        return "Ти си AI асистент за Факултет за спорт. Користи само информације из датог контекста или своје опште знање о академском образовању.\n\n" .
-               "Ако не знаш одговор, реци кориснику да контактира студентску службу.\n\n" .
-               "{$context}\n\n" .
+        return "Ти си AI асистент за Факултет за спорт. Користи само информације из датог контекста или своје опште знање о академском образовању.\n\n".
+               "Ако не знаш одговор, реци кориснику да контактира студентску службу.\n\n".
+               "{$context}\n\n".
                "Корисник пита: {$userMessage}";
     }
 

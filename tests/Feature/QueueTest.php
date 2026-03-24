@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Jobs\TestFailingJob;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Bus;
+use Tests\TestCase;
 
 class QueueTest extends TestCase
 {
@@ -25,27 +23,27 @@ class QueueTest extends TestCase
         Queue::assertPushed(TestFailingJob::class);
     }
 
-     /** @test */
-      public function test_failing_job_goes_to_failed_queue_after_max_attempts()
-      {
-          $this->markTestSkipped('Queue tests require special setup in CI');
+    /** @test */
+    public function test_failing_job_goes_to_failed_queue_after_max_attempts()
+    {
+        $this->markTestSkipped('Queue tests require special setup in CI');
 
-          Queue::fake();
+        Queue::fake();
 
-          // Configure queue to fail quickly for testing
-          config(['queue.default' => 'database']);
-          
-          // Dispatch the failing job
-          TestFailingJob::dispatch();
+        // Configure queue to fail quickly for testing
+        config(['queue.default' => 'database']);
 
-          // Process the queue
-          $this->artisan('queue:work', ['--once' => true, '--sleep' => 0]);
+        // Dispatch the failing job
+        TestFailingJob::dispatch();
 
-          // Check that job exists in failed jobs table
-          $this->assertDatabaseHas('failed_jobs', [
-              'payload' => '%TestFailingJob%',
-          ]);
-      }
+        // Process the queue
+        $this->artisan('queue:work', ['--once' => true, '--sleep' => 0]);
+
+        // Check that job exists in failed jobs table
+        $this->assertDatabaseHas('failed_jobs', [
+            'payload' => '%TestFailingJob%',
+        ]);
+    }
 
     /** @test */
     public function test_failed_job_can_be_retried()

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->json('embedding')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index('category');
         });
     }

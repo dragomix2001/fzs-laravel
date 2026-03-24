@@ -18,7 +18,7 @@ class AuthTest extends TestCase
     public function test_user_can_login_with_valid_credentials(): void
     {
         $this->markTestSkipped('Pre-existing auth test issue - needs investigation');
-        
+
         $user = User::where('email', 'fzs@fzs.rs')->first();
 
         if (! $user) {

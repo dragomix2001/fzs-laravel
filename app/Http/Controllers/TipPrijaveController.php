@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TipPrijave;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class TipPrijaveController extends Controller
     {
         try {
             $tip = TipPrijave::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -33,7 +34,7 @@ class TipPrijaveController extends Controller
 
         try {
             $tip->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -61,7 +62,7 @@ class TipPrijaveController extends Controller
 
         try {
             $tip->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -72,7 +73,7 @@ class TipPrijaveController extends Controller
     {
         try {
             $tip->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

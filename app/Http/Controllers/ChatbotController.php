@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\ChatbotService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class ChatbotController extends Controller
@@ -20,7 +19,7 @@ class ChatbotController extends Controller
     public function index()
     {
         $quickQuestions = $this->chatbotService->getQuickQuestions();
-        
+
         return view('chatbot.index', compact('quickQuestions'));
     }
 
@@ -31,28 +30,28 @@ class ChatbotController extends Controller
         ]);
 
         $message = $request->input('message');
-        
+
         // Get conversation history from session
         $conversationHistory = Session::get('chatbot_history', []);
-        
+
         // Add user message to history
         $conversationHistory[] = ['role' => 'user', 'content' => $message];
-        
+
         // Get response from chatbot
         $response = $this->chatbotService->chat($message, $conversationHistory);
-        
+
         if ($response['success']) {
             // Add assistant response to history
             $conversationHistory[] = ['role' => 'assistant', 'content' => $response['message']];
-            
+
             // Keep only last 10 messages to avoid token limit
             if (count($conversationHistory) > 10) {
                 $conversationHistory = array_slice($conversationHistory, -10);
             }
-            
+
             // Save to session
             Session::put('chatbot_history', $conversationHistory);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => $response['message'],
@@ -69,7 +68,7 @@ class ChatbotController extends Controller
     public function clearHistory()
     {
         Session::forget('chatbot_history');
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Историја разговора је обрисана',
@@ -83,26 +82,26 @@ class ChatbotController extends Controller
         ]);
 
         $question = $request->input('question');
-        
+
         // Get conversation history from session
         $conversationHistory = Session::get('chatbot_history', []);
-        
+
         // Get response from chatbot
         $response = $this->chatbotService->chat($question, $conversationHistory);
-        
+
         if ($response['success']) {
             // Add both question and response to history
             $conversationHistory[] = ['role' => 'user', 'content' => $question];
             $conversationHistory[] = ['role' => 'assistant', 'content' => $response['message']];
-            
+
             // Keep only last 10 messages
             if (count($conversationHistory) > 10) {
                 $conversationHistory = array_slice($conversationHistory, -10);
             }
-            
+
             // Save to session
             Session::put('chatbot_history', $conversationHistory);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => $response['message'],

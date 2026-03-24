@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\PredictionController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot.index');
 Route::post('/chatbot/chat', [ChatbotController::class, 'chat'])->name('chatbot.chat');

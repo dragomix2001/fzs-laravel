@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Aktivnost;
+use App\Models\Kandidat;
 use Illuminate\Http\Request;
 
 class AktivnostController extends Controller
@@ -53,7 +54,7 @@ class AktivnostController extends Controller
     public function myActivities(Request $request)
     {
         $user = $request->user();
-        $kandidat = \App\Models\Kandidat::where('email', $user->email)->first();
+        $kandidat = Kandidat::where('email', $user->email)->first();
 
         if (! $kandidat) {
             return response()->json([

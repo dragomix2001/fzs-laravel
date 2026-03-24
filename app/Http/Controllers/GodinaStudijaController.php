@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\GodinaStudija;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class GodinaStudijaController extends Controller
     {
         try {
             $godinaStudija = GodinaStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -36,7 +37,7 @@ class GodinaStudijaController extends Controller
 
         try {
             $godinaStudija->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -67,7 +68,7 @@ class GodinaStudijaController extends Controller
 
         try {
             $godinaStudija->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -79,7 +80,7 @@ class GodinaStudijaController extends Controller
 
         try {
             $godinaStudija->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

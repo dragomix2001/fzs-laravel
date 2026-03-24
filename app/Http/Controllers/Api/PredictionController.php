@@ -27,11 +27,11 @@ class PredictionController extends Controller
     public function studentPrediction(Request $request, int $id): JsonResponse
     {
         $prediction = $this->predictionService->predictStudentSuccess($id);
-        
+
         if (isset($prediction['error'])) {
             return response()->json(['error' => $prediction['error']], 404);
         }
-        
+
         return response()->json($prediction);
     }
 
@@ -47,6 +47,7 @@ class PredictionController extends Controller
     public function statistics(): JsonResponse
     {
         $statistics = $this->predictionService->getClassStatistics();
+
         return response()->json($statistics);
     }
 }

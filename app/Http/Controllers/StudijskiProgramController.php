@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\StudijskiProgram;
 use App\TipStudija;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -19,7 +20,7 @@ class StudijskiProgramController extends Controller
         try {
             $studijskiProgram = StudijskiProgram::all();
             $tipStudija = TipStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -38,7 +39,7 @@ class StudijskiProgramController extends Controller
 
         try {
             $studijskiProgram->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -49,7 +50,7 @@ class StudijskiProgramController extends Controller
     {
         try {
             $tipStudija = TipStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -60,7 +61,7 @@ class StudijskiProgramController extends Controller
     {
         try {
             $tipStudija = TipStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -81,7 +82,7 @@ class StudijskiProgramController extends Controller
 
         try {
             $studijskiProgram->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -92,7 +93,7 @@ class StudijskiProgramController extends Controller
     {
         try {
             $studijskiProgram->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

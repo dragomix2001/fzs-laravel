@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\OblikNastave;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class OblikNastaveController extends Controller
     {
         try {
             $oblikNastave = OblikNastave::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -34,7 +35,7 @@ class OblikNastaveController extends Controller
 
         try {
             $oblikNastave->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -63,7 +64,7 @@ class OblikNastaveController extends Controller
 
         try {
             $oblikNastave->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -74,7 +75,7 @@ class OblikNastaveController extends Controller
     {
         try {
             $oblikNastave->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

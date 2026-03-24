@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TipStudija;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class TipStudijaController extends Controller
     {
         try {
             $tipStudija = TipStudija::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -34,7 +35,7 @@ class TipStudijaController extends Controller
 
         try {
             $tipStudija->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -63,7 +64,7 @@ class TipStudijaController extends Controller
 
         try {
             $tipStudija->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -74,7 +75,7 @@ class TipStudijaController extends Controller
     {
         try {
             $tipStudija->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

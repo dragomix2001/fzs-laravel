@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TipPredmeta;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class TipPredmetaController extends Controller
     {
         try {
             $tipPredmeta = TipPredmeta::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -34,7 +35,7 @@ class TipPredmetaController extends Controller
 
         try {
             $tipPredmeta->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -63,7 +64,7 @@ class TipPredmetaController extends Controller
 
         try {
             $tipPredmeta->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -74,7 +75,7 @@ class TipPredmetaController extends Controller
     {
         try {
             $tipPredmeta->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

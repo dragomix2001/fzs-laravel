@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PredictionService;
 use App\Models\Kandidat;
-use Illuminate\Http\Request;
+use App\Services\PredictionService;
 
 class PredictionController extends Controller
 {
@@ -19,29 +18,29 @@ class PredictionController extends Controller
     public function index()
     {
         $students = Kandidat::orderBy('prezimeKandidata')->orderBy('imeKandidata')->get();
-        
+
         return view('prediction.index', compact('students'));
     }
 
     public function studentPrediction($id)
     {
         $prediction = $this->predictionService->predictStudentSuccess($id);
-        
+
         if (isset($prediction['error'])) {
             return back()->with('error', $prediction['error']);
         }
-        
+
         return view('prediction.student', compact('prediction'));
     }
 
     public function classStatistics()
     {
         $statistics = $this->predictionService->getClassStatistics();
-        
+
         if (isset($statistics['error'])) {
             return back()->with('error', $statistics['error']);
         }
-        
+
         return view('prediction.statistics', compact('statistics'));
     }
 

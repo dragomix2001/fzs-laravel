@@ -4,6 +4,4 @@ namespace App;
 
 use App\Models\AndroModel as Model;
 
-class AndroModel extends Model
-{
-}
+class AndroModel extends Model {}

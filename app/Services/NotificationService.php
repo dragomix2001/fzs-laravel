@@ -16,7 +16,7 @@ class NotificationService
     public function notifyAdmins(string $title, string $message, string $type = 'info', ?array $data = null): void
     {
         $admins = User::where('role', User::ROLE_ADMIN)->get();
-        
+
         foreach ($admins as $admin) {
             $this->notifyUser($admin->id, $title, $message, $type, $data);
         }

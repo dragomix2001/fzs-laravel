@@ -8,6 +8,7 @@ use App\PredmetProgram;
 use App\Profesor;
 use App\ProfesorPredmet;
 use App\StatusProfesora;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -23,7 +24,7 @@ class ProfesorController extends Controller
         try {
             $profesor = Profesor::all();
             $status = StatusProfesora::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -46,7 +47,7 @@ class ProfesorController extends Controller
 
         try {
             $profesor->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -58,7 +59,7 @@ class ProfesorController extends Controller
         try {
             $status = StatusProfesora::all();
             $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -71,7 +72,7 @@ class ProfesorController extends Controller
             // $status = StatusProfesora::all();
             $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
             // return($predmeti->first());
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -82,7 +83,7 @@ class ProfesorController extends Controller
     {
         try {
             $status = StatusProfesora::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -107,7 +108,7 @@ class ProfesorController extends Controller
 
         try {
             $profesor->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -118,7 +119,7 @@ class ProfesorController extends Controller
     {
         try {
             $profesor->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -129,7 +130,7 @@ class ProfesorController extends Controller
     {
         try {
             $predmet->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -141,7 +142,7 @@ class ProfesorController extends Controller
         try {
             $predmet = PredmetProgram::all();
             $oblik = OblikNastave::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -159,7 +160,7 @@ class ProfesorController extends Controller
 
         try {
             $predmet->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

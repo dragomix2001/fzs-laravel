@@ -7,6 +7,9 @@ use App\Models\Kandidat;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
+use App\Predmet;
+use App\PrijavaIspita;
+use App\Profesor;
 use Illuminate\Support\Facades\DB;
 use View;
 
@@ -280,7 +283,7 @@ class StudentListService extends BasePdfService
 
     public function spisakPoProfesorima()
     {
-        $profesori = \App\Profesor::all();
+        $profesori = Profesor::all();
 
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.predmetiPoProfesorima')
@@ -327,8 +330,8 @@ class StudentListService extends BasePdfService
 
     public function spisakPoPredmetima($predmetId)
     {
-        $prijave = \App\PrijavaIspita::where('predmet_id', $predmetId)->get();
-        $predmet = \App\Predmet::find($predmetId);
+        $prijave = PrijavaIspita::where('predmet_id', $predmetId)->get();
+        $predmet = Predmet::find($predmetId);
 
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.spisakPoPredmetima')

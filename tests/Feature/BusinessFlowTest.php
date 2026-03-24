@@ -19,7 +19,7 @@ class BusinessFlowTest extends TestCase
     public function test_authentication_flow(): void
     {
         $this->markTestSkipped('Pre-existing auth test issue - needs investigation');
-        
+
         $response = $this->get('/login');
         $response->assertStatus(200);
 

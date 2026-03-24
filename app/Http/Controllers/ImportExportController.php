@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\KandidatiExport;
+use App\Exports\PolozeniIspitiExport;
+use App\Exports\StudentiExport;
 use App\Imports\KandidatiImport;
 use App\Models\Kandidat;
 use Illuminate\Http\Request;
@@ -45,13 +47,13 @@ class ImportExportController extends Controller
 
         $filename = 'studenti_'.date('Y-m-d_His');
 
-        return Excel::download(new \App\Exports\StudentiExport($studenti), $filename.'.xlsx');
+        return Excel::download(new StudentiExport($studenti), $filename.'.xlsx');
     }
 
     public function exportPolozeniIspiti(Request $request)
     {
         $filename = 'polozeni_ispiti_'.date('Y-m-d_His');
 
-        return Excel::download(new \App\Exports\PolozeniIspitiExport, $filename.'.xlsx');
+        return Excel::download(new PolozeniIspitiExport, $filename.'.xlsx');
     }
 }

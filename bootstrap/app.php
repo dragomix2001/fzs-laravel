@@ -1,5 +1,10 @@
 <?php
 
+use App\Exceptions\Handler;
+use App\Http\Kernel;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\Application;
+
 /*
 |--------------------------------------------------------------------------
 | Class Aliases for Backward Compatibility
@@ -10,14 +15,14 @@
 |
 */
 
-$modelsPath = dirname(__DIR__) . '/app/Models';
+$modelsPath = dirname(__DIR__).'/app/Models';
 if (is_dir($modelsPath)) {
-    foreach (glob($modelsPath . '/*.php') as $file) {
+    foreach (glob($modelsPath.'/*.php') as $file) {
         $filename = basename($file, '.php');
-        if (!in_array($filename, ['AndroModel'])) {
-            $oldClass = 'App\\' . $filename;
-            $newClass = 'App\\Models\\' . $filename;
-            if (class_exists($newClass) && !class_exists($oldClass)) {
+        if (! in_array($filename, ['AndroModel'])) {
+            $oldClass = 'App\\'.$filename;
+            $newClass = 'App\\Models\\'.$filename;
+            if (class_exists($newClass) && ! class_exists($oldClass)) {
                 class_alias($newClass, $oldClass);
             }
         }
@@ -35,7 +40,7 @@ if (is_dir($modelsPath)) {
 |
 */
 
-$app = new Illuminate\Foundation\Application(
+$app = new Application(
     dirname(__DIR__)
 );
 
@@ -52,7 +57,7 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    App\Http\Kernel::class
+    Kernel::class
 );
 
 $app->singleton(
@@ -61,8 +66,8 @@ $app->singleton(
 );
 
 $app->singleton(
-    Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class
+    ExceptionHandler::class,
+    Handler::class
 );
 
 /*

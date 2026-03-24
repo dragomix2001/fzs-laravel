@@ -10,6 +10,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AndroModel extends Model
 {
@@ -23,7 +24,7 @@ class AndroModel extends Model
     {
         $relations = $this->$method();
 
-        if (! $relations instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
+        if (! $relations instanceof Relation) {
             throw new \LogicException('Relationship method must return an object of type '
                 .'Illuminate\Database\Eloquent\Relations\Relation');
         }

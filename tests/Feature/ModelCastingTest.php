@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\UpisGodine;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -21,7 +22,7 @@ class ModelCastingTest extends TestCase
         $this->assertNotNull($upis->datumUpisa, 'datumUpisa is null');
 
         $this->assertTrue(
-            is_a($upis->datumUpisa, \Carbon\Carbon::class),
+            is_a($upis->datumUpisa, Carbon::class),
             'datumUpisa should be Carbon instance, got: '.gettype($upis->datumUpisa)
         );
     }
@@ -39,7 +40,7 @@ class ModelCastingTest extends TestCase
         $this->assertNotNull($upis->datumPromene, 'datumPromene is null');
 
         $this->assertTrue(
-            is_a($upis->datumPromene, \Carbon\Carbon::class),
+            is_a($upis->datumPromene, Carbon::class),
             'datumPromene should be Carbon instance, got: '.gettype($upis->datumPromene)
         );
     }

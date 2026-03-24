@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Semestar;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class SemestarController extends Controller
     {
         try {
             $semestar = Semestar::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -35,7 +36,7 @@ class SemestarController extends Controller
 
         try {
             $semestar->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -65,7 +66,7 @@ class SemestarController extends Controller
 
         try {
             $semestar->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -76,7 +77,7 @@ class SemestarController extends Controller
     {
         try {
             $semestar->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

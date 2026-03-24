@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\TestFailingJob;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/home', function () {
@@ -20,7 +21,8 @@ Route::get('/health', function () {
 })->middleware('cache.headers:public;max_age=60');
 
 Route::get('/test-failed-job', function () {
-    dispatch(new \App\Jobs\TestFailingJob());
+    dispatch(new TestFailingJob);
+
     return response()->json(['message' => 'Test failing job dispatched']);
 });
 

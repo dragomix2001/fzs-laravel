@@ -22,6 +22,7 @@ use App\UspehSrednjaSkola;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -37,7 +38,7 @@ class KandidatController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index(Request $request)
     {
@@ -62,7 +63,7 @@ class KandidatController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -98,7 +99,7 @@ class KandidatController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -315,7 +316,7 @@ class KandidatController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -328,7 +329,7 @@ class KandidatController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -422,7 +423,7 @@ class KandidatController extends Controller
      * Update the specified resource in storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -635,7 +636,7 @@ class KandidatController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
@@ -985,8 +986,8 @@ class KandidatController extends Controller
     public function indexMaster(Request $request)
     {
         $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 2, 'indikatorAktivan' => 1])->first();
-        
-        if (!$studijskiProgram) {
+
+        if (! $studijskiProgram) {
             return view('kandidat.index_master')
                 ->with('kandidati', collect())
                 ->with('studijskiProgrami', collect());

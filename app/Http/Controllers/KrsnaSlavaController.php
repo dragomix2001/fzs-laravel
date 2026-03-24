@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\KrsnaSlava;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -17,7 +18,7 @@ class KrsnaSlavaController extends Controller
     {
         try {
             $krsnaSlava = KrsnaSlava::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -33,7 +34,7 @@ class KrsnaSlavaController extends Controller
 
         try {
             $krsnaSlava->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -62,7 +63,7 @@ class KrsnaSlavaController extends Controller
 
         try {
             $krsnaSlava->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -73,7 +74,7 @@ class KrsnaSlavaController extends Controller
     {
         try {
             $krsnaSlava->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 

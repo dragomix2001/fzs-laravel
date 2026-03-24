@@ -5,10 +5,12 @@ namespace App\Exceptions;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -51,9 +53,6 @@ class Handler extends ExceptionHandler
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Throwable  $e
-     * @return void
      */
     public function report(Throwable $e): void
     {
@@ -81,8 +80,7 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $e
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function render($request, Throwable $e)
     {
@@ -107,8 +105,7 @@ class Handler extends ExceptionHandler
      * Render an exception into a JSON response for API requests.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $e
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function renderApiException($request, Throwable $e)
     {
@@ -121,7 +118,7 @@ class Handler extends ExceptionHandler
         $response = [
             'error' => [
                 'message' => $this->isHttpException($e) ? $e->getMessage() : 'Server Error',
-                'code'    => $statusCode,
+                'code' => $statusCode,
             ],
         ];
 

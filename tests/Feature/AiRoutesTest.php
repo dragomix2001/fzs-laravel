@@ -2,10 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Kandidat;
-use App\Services\ChatbotService;
-use App\Services\RagService;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -16,7 +14,7 @@ class AiRoutesTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->user = User::where('email', 'fzs@fzs.rs')->first();
         if (! $this->user) {
             $this->user = User::create([
@@ -67,14 +65,14 @@ class AiRoutesTest extends TestCase
     public function test_chatbot_requires_authentication(): void
     {
         $response = $this->get('/chatbot');
-        
+
         $response->assertRedirect('/login');
     }
 
     public function test_prediction_requires_authentication(): void
     {
         $response = $this->get('/prediction');
-        
+
         $response->assertRedirect('/login');
     }
 

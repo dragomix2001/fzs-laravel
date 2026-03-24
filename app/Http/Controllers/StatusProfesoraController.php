@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\StatusProfesora;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -16,8 +17,8 @@ class StatusProfesoraController extends Controller
     public function index()
     {
         try {
-            $status = statusProfesora::all();
-        } catch (\Illuminate\Database\QueryException $e) {
+            $status = StatusProfesora::all();
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
@@ -26,21 +27,21 @@ class StatusProfesoraController extends Controller
 
     public function unos(Request $request)
     {
-        $status = new statusProfesora;
+        $status = new StatusProfesora;
 
         $status->naziv = $request->naziv;
         $status->indikatorAktivan = 1;
 
         try {
             $status->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusProfesora');
     }
 
-    public function edit(statusProfesora $status)
+    public function edit(StatusProfesora $status)
     {
         return view('sifarnici.editstatusProfesora', compact('status'));
     }
@@ -50,7 +51,7 @@ class StatusProfesoraController extends Controller
         return view('sifarnici.addstatusProfesora');
     }
 
-    public function update(Request $request, statusProfesora $status)
+    public function update(Request $request, StatusProfesora $status)
     {
         $status->naziv = $request->naziv;
         if ($request->indikatorAktivan == 'on' || $request->indikatorAktivan == 1) {
@@ -61,18 +62,18 @@ class StatusProfesoraController extends Controller
 
         try {
             $status->update();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
         return Redirect::to('/statusProfesora');
     }
 
-    public function delete(statusProfesora $status)
+    public function delete(StatusProfesora $status)
     {
         try {
             $status->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
