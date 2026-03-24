@@ -2,9 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Kandidat;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -24,104 +23,22 @@ class AuthenticationTest extends TestCase
     /** @test */
     public function test_authenticated_user_cannot_see_login_page()
     {
-        $user = Kandidat::create([
-            'imeKandidata' => 'Test',
-            'prezimeKandidata' => 'User',
-            'jmbg' => '1234567890123',
-            'datumRodjenja' => '2000-01-01',
-            'mestoRodjenja' => 'Test',
-            'krsnaSlava_id' => 1,
-            'kontaktTelefon' => '123456',
-            'adresaStanovanja' => 'Test adresa',
-            'email' => 'test@example.com',
-            'imePrezimeJednogRoditelja' => 'Test Roditelj',
-            'kontaktTelefonRoditelja' => '123456',
-            'srednjeSkoleFakulteti' => 'Test',
-            'mestoZavrseneSkoleFakulteta' => 'Test',
-            'smerZavrseneSkoleFakulteta' => 'Test',
-            'uspehSrednjaSkola_id' => 1,
-            'opstiUspehSrednjaSkola_id' => 1,
-            'srednjaOcenaSrednjaSkola' => 4.0,
-            'sportskoAngazovanje_id' => 1,
-            'telesnaTezina' => 70.0,
-            'visina' => 180,
-            'prilozenaDokumentaPrvaGodina_id' => 1,
-            'statusUpisa_id' => 1,
-            'brojBodovaTest' => 80,
-            'brojBodovaSkola' => 80,
-            'ukupniBrojBodova' => 160,
-            'prosecnaOcena' => 4.0,
-            'upisniRok' => '2024/2025',
-            'brojIndeksa' => 'TEST123',
-            'skolskaGodinaUpisa_id' => 1,
-            'indikatorAktivan' => 1,
-            'studijskiProgram_id' => 1,
-            'tipStudija_id' => 1,
-            'godinaStudija_id' => 1,
-            'mesto_id' => 1,
-            'uplata' => 0,
-            'upisan' => 1,
-            'drzavaZavrseneSkole' => 'Srbija',
-            'drzavaRodjenja' => 'Srbija',
-            'godinaZavrsetkaSkole' => 2018,
-            'slika' => null,
-            'diplomski' => 0,
-            'datumStatusa' => null,
+        $user = User::create([
+            'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
 
         $response = $this->actingAs($user)->get('/login');
 
-        $response->assertRedirect('/home');
+        $response->assertRedirect('/');
     }
 
     /** @test */
     public function test_user_can_login_with_valid_credentials()
     {
-        $user = Kandidat::create([
-            'imeKandidata' => 'Test',
-            'prezimeKandidata' => 'User',
-            'jmbg' => '1234567890123',
-            'datumRodjenja' => '2000-01-01',
-            'mestoRodjenja' => 'Test',
-            'krsnaSlava_id' => 1,
-            'kontaktTelefon' => '123456',
-            'adresaStanovanja' => 'Test adresa',
-            'email' => 'test@example.com',
-            'imePrezimeJednogRoditelja' => 'Test Roditelj',
-            'kontaktTelefonRoditelja' => '123456',
-            'srednjeSkoleFakulteti' => 'Test',
-            'mestoZavrseneSkoleFakulteta' => 'Test',
-            'smerZavrseneSkoleFakulteta' => 'Test',
-            'uspehSrednjaSkola_id' => 1,
-            'opstiUspehSrednjaSkola_id' => 1,
-            'srednjaOcenaSrednjaSkola' => 4.0,
-            'sportskoAngazovanje_id' => 1,
-            'telesnaTezina' => 70.0,
-            'visina' => 180,
-            'prilozenaDokumentaPrvaGodina_id' => 1,
-            'statusUpisa_id' => 1,
-            'brojBodovaTest' => 80,
-            'brojBodovaSkola' => 80,
-            'ukupniBrojBodova' => 160,
-            'prosecnaOcena' => 4.0,
-            'upisniRok' => '2024/2025',
-            'brojIndeksa' => 'TEST123',
-            'skolskaGodinaUpisa_id' => 1,
-            'indikatorAktivan' => 1,
-            'studijskiProgram_id' => 1,
-            'tipStudija_id' => 1,
-            'godinaStudija_id' => 1,
-            'mesto_id' => 1,
-            'uplata' => 0,
-            'upisan' => 1,
-            'drzavaZavrseneSkole' => 'Srbija',
-            'drzavaRodjenja' => 'Srbija',
-            'godinaZavrsetkaSkole' => 2018,
-            'slika' => null,
-            'diplomski' => 0,
-            'datumStatusa' => null,
+        $user = User::create([
+            'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
@@ -131,56 +48,15 @@ class AuthenticationTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertRedirect('/home');
+        $response->assertRedirect('/');
         $this->assertAuthenticated();
     }
 
     /** @test */
     public function test_user_cannot_login_with_invalid_credentials()
     {
-        $user = Kandidat::create([
-            'imeKandidata' => 'Test',
-            'prezimeKandidata' => 'User',
-            'jmbg' => '1234567890123',
-            'datumRodjenja' => '2000-01-01',
-            'mestoRodjenja' => 'Test',
-            'krsnaSlava_id' => 1,
-            'kontaktTelefon' => '123456',
-            'adresaStanovanja' => 'Test adresa',
-            'email' => 'test@example.com',
-            'imePrezimeJednogRoditelja' => 'Test Roditelj',
-            'kontaktTelefonRoditelja' => '123456',
-            'srednjeSkoleFakulteti' => 'Test',
-            'mestoZavrseneSkoleFakulteta' => 'Test',
-            'smerZavrseneSkoleFakulteta' => 'Test',
-            'uspehSrednjaSkola_id' => 1,
-            'opstiUspehSrednjaSkola_id' => 1,
-            'srednjaOcenaSrednjaSkola' => 4.0,
-            'sportskoAngazovanje_id' => 1,
-            'telesnaTezina' => 70.0,
-            'visina' => 180,
-            'prilozenaDokumentaPrvaGodina_id' => 1,
-            'statusUpisa_id' => 1,
-            'brojBodovaTest' => 80,
-            'brojBodovaSkola' => 80,
-            'ukupniBrojBodova' => 160,
-            'prosecnaOcena' => 4.0,
-            'upisniRok' => '2024/2025',
-            'brojIndeksa' => 'TEST123',
-            'skolskaGodinaUpisa_id' => 1,
-            'indikatorAktivan' => 1,
-            'studijskiProgram_id' => 1,
-            'tipStudija_id' => 1,
-            'godinaStudija_id' => 1,
-            'mesto_id' => 1,
-            'uplata' => 0,
-            'upisan' => 1,
-            'drzavaZavrseneSkole' => 'Srbija',
-            'drzavaRodjenja' => 'Srbija',
-            'godinaZavrsetkaSkole' => 2018,
-            'slika' => null,
-            'diplomski' => 0,
-            'datumStatusa' => null,
+        $user = User::create([
+            'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
@@ -197,49 +73,8 @@ class AuthenticationTest extends TestCase
     /** @test */
     public function test_authenticated_user_can_access_dashboard()
     {
-        $user = Kandidat::create([
-            'imeKandidata' => 'Test',
-            'prezimeKandidata' => 'User',
-            'jmbg' => '1234567890123',
-            'datumRodjenja' => '2000-01-01',
-            'mestoRodjenja' => 'Test',
-            'krsnaSlava_id' => 1,
-            'kontaktTelefon' => '123456',
-            'adresaStanovanja' => 'Test adresa',
-            'email' => 'test@example.com',
-            'imePrezimeJednogRoditelja' => 'Test Roditelj',
-            'kontaktTelefonRoditelja' => '123456',
-            'srednjeSkoleFakulteti' => 'Test',
-            'mestoZavrseneSkoleFakulteta' => 'Test',
-            'smerZavrseneSkoleFakulteta' => 'Test',
-            'uspehSrednjaSkola_id' => 1,
-            'opstiUspehSrednjaSkola_id' => 1,
-            'srednjaOcenaSrednjaSkola' => 4.0,
-            'sportskoAngazovanje_id' => 1,
-            'telesnaTezina' => 70.0,
-            'visina' => 180,
-            'prilozenaDokumentaPrvaGodina_id' => 1,
-            'statusUpisa_id' => 1,
-            'brojBodovaTest' => 80,
-            'brojBodovaSkola' => 80,
-            'ukupniBrojBodova' => 160,
-            'prosecnaOcena' => 4.0,
-            'upisniRok' => '2024/2025',
-            'brojIndeksa' => 'TEST123',
-            'skolskaGodinaUpisa_id' => 1,
-            'indikatorAktivan' => 1,
-            'studijskiProgram_id' => 1,
-            'tipStudija_id' => 1,
-            'godinaStudija_id' => 1,
-            'mesto_id' => 1,
-            'uplata' => 0,
-            'upisan' => 1,
-            'drzavaZavrseneSkole' => 'Srbija',
-            'drzavaRodjenja' => 'Srbija',
-            'godinaZavrsetkaSkole' => 2018,
-            'slika' => null,
-            'diplomski' => 0,
-            'datumStatusa' => null,
+        $user = User::create([
+            'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
@@ -260,49 +95,8 @@ class AuthenticationTest extends TestCase
     /** @test */
     public function test_user_can_logout()
     {
-        $user = Kandidat::create([
-            'imeKandidata' => 'Test',
-            'prezimeKandidata' => 'User',
-            'jmbg' => '1234567890123',
-            'datumRodjenja' => '2000-01-01',
-            'mestoRodjenja' => 'Test',
-            'krsnaSlava_id' => 1,
-            'kontaktTelefon' => '123456',
-            'adresaStanovanja' => 'Test adresa',
-            'email' => 'test@example.com',
-            'imePrezimeJednogRoditelja' => 'Test Roditelj',
-            'kontaktTelefonRoditelja' => '123456',
-            'srednjeSkoleFakulteti' => 'Test',
-            'mestoZavrseneSkoleFakulteta' => 'Test',
-            'smerZavrseneSkoleFakulteta' => 'Test',
-            'uspehSrednjaSkola_id' => 1,
-            'opstiUspehSrednjaSkola_id' => 1,
-            'srednjaOcenaSrednjaSkola' => 4.0,
-            'sportskoAngazovanje_id' => 1,
-            'telesnaTezina' => 70.0,
-            'visina' => 180,
-            'prilozenaDokumentaPrvaGodina_id' => 1,
-            'statusUpisa_id' => 1,
-            'brojBodovaTest' => 80,
-            'brojBodovaSkola' => 80,
-            'ukupniBrojBodova' => 160,
-            'prosecnaOcena' => 4.0,
-            'upisniRok' => '2024/2025',
-            'brojIndeksa' => 'TEST123',
-            'skolskaGodinaUpisa_id' => 1,
-            'indikatorAktivan' => 1,
-            'studijskiProgram_id' => 1,
-            'tipStudija_id' => 1,
-            'godinaStudija_id' => 1,
-            'mesto_id' => 1,
-            'uplata' => 0,
-            'upisan' => 1,
-            'drzavaZavrseneSkole' => 'Srbija',
-            'drzavaRodjenja' => 'Srbija',
-            'godinaZavrsetkaSkole' => 2018,
-            'slika' => null,
-            'diplomski' => 0,
-            'datumStatusa' => null,
+        $user = User::create([
+            'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);

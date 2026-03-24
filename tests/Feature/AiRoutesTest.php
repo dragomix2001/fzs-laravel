@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class AiRoutesTest extends TestCase
 {
-    protected User $user;
+    protected ?User $user;
 
     protected function setUp(): void
     {

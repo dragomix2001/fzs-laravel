@@ -8,7 +8,18 @@ use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
-    // Not using RefreshDatabase - relies on existing database from baza.sql
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        User::create([
+            'name' => 'Test User',
+            'email' => 'fzs@fzs.rs',
+            'password' => bcrypt('password'),
+        ]);
+    }
 
     public function test_dashboard_requires_authentication()
     {
@@ -17,15 +28,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_loads_for_authenticated_user()
     {
-        $user = User::where('email', 'fzs@fzs.rs')->first();
-
-        if (! $user) {
-            $user = User::create([
-                'name' => 'Test User',
-                'email' => 'test@test.com',
-                'password' => bcrypt('password'),
-            ]);
-        }
+        $user = User::where('email', 'fzs@fzs.rs')->firstOrFail();
 
         $response = $this->actingAs($user)->get('/dashboard');
         $response->assertStatus(200);
@@ -33,15 +36,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_studenti_endpoint()
     {
-        $user = User::where('email', 'fzs@fzs.rs')->first();
-
-        if (! $user) {
-            $user = User::create([
-                'name' => 'Test User',
-                'email' => 'test@test.com',
-                'password' => bcrypt('password'),
-            ]);
-        }
+        $user = User::where('email', 'fzs@fzs.rs')->firstOrFail();
 
         $response = $this->actingAs($user)->get('/dashboard/studenti');
         $response->assertStatus(200);
@@ -49,15 +44,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_ispiti_endpoint()
     {
-        $user = User::where('email', 'fzs@fzs.rs')->first();
-
-        if (! $user) {
-            $user = User::create([
-                'name' => 'Test User',
-                'email' => 'test@test.com',
-                'password' => bcrypt('password'),
-            ]);
-        }
+        $user = User::where('email', 'fzs@fzs.rs')->firstOrFail();
 
         $response = $this->actingAs($user)->get('/dashboard/ispiti');
         $response->assertStatus(200);
@@ -65,15 +52,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_widgets_can_be_saved()
     {
-        $user = User::where('email', 'fzs@fzs.rs')->first();
-
-        if (! $user) {
-            $user = User::create([
-                'name' => 'Test User',
-                'email' => 'test@test.com',
-                'password' => bcrypt('password'),
-            ]);
-        }
+        $user = User::where('email', 'fzs@fzs.rs')->firstOrFail();
 
         $response = $this->actingAs($user)->post('/dashboard/widgets', [
             'studenti_ukupno' => 'on',

@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Kandidat extends Authenticatable
+class Kandidat extends Model
 {
     use Auditable, Notifiable;
 
@@ -23,11 +23,11 @@ class Kandidat extends Authenticatable
         'upisniRok', 'brojIndeksa', 'skolskaGodinaUpisa_id', 'indikatorAktivan',
         'studijskiProgram_id', 'tipStudija_id', 'godinaStudija_id', 'mesto_id',
         'uplata', 'upisan', 'drzavaZavrseneSkole', 'drzavaRodjenja', 'godinaZavrsetkaSkole',
-        'slika', 'diplomski', 'datumStatusa', 'password',
+        'slika', 'diplomski', 'datumStatusa',
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token',
     ];
 
     protected $casts = [
