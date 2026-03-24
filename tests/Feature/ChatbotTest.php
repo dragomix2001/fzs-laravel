@@ -13,10 +13,8 @@ class ChatbotTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function chatbot_returns_mock_response_when_no_openai_key()
+    public function test_chatbot_returns_mock_response_when_no_openai_key(): void
     {
-        // Ensure no valid OpenAI key
         $_ENV['OPENAI_API_KEY'] = 'sk-your-openai-api-key-here';
         putenv('OPENAI_API_KEY=sk-your-openai-api-key-here');
 
@@ -32,8 +30,7 @@ class ChatbotTest extends TestCase
         $this->assertNotEmpty($response['message']);
     }
 
-    /** @test */
-    public function chatbot_handles_openai_exceptions_gracefully()
+    public function test_chatbot_handles_openai_exceptions_gracefully(): void
     {
         $_ENV['OPENAI_API_KEY'] = 'sk-test-key-for-testing';
         putenv('OPENAI_API_KEY=sk-test-key-for-testing');
@@ -44,7 +41,6 @@ class ChatbotTest extends TestCase
 
         $chatbot = new ChatbotService($ragMock);
 
-        // Mock OpenAI facade to throw an exception
         $this->mock(Facade::getFacadeApplication()->make('openai'), function ($mock) {
             $mock->shouldReceive('chat()->create')
                 ->andThrow(new \Exception('API Error'));
@@ -58,8 +54,7 @@ class ChatbotTest extends TestCase
         $this->assertStringContainsString('грешке', $response['message']);
     }
 
-    /** @test */
-    public function chatbot_returns_quick_questions()
+    public function test_chatbot_returns_quick_questions(): void
     {
         $ragMock = $this->createMock(RagService::class);
         $chatbot = new ChatbotService($ragMock);
@@ -73,8 +68,7 @@ class ChatbotTest extends TestCase
         $this->assertArrayHasKey('category', $questions[0]);
     }
 
-    /** @test */
-    public function chatbot_session_handling_works()
+    public function test_chatbot_session_handling_works(): void
     {
         $this->withoutExceptionHandling();
 
@@ -87,7 +81,6 @@ class ChatbotTest extends TestCase
 
         $chatbot = new ChatbotService($ragMock);
 
-        // Mock OpenAI response
         $this->mock(Facade::getFacadeApplication()->make('openai'), function ($mock) {
             $mock->shouldReceive('chat()->create')
                 ->andReturn((object) [
@@ -113,7 +106,6 @@ class ChatbotTest extends TestCase
             'success' => true,
         ]);
 
-        // Check that session has chat history
         $this->assertNotNull(Session::get('chatbot_history'));
     }
 }
