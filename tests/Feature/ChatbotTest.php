@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Services\ChatbotService;
 use App\Services\RagService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
 class ChatbotTest extends TestCase
