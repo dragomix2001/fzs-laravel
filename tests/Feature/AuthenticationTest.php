@@ -12,14 +12,6 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        if (app()->environment('testing') && ! DB::table('users')->exists()) {
-            $this->markTestSkipped('Users table not available in CI');
-        }
-    }
-
     /** @test */
     public function test_guest_can_see_login_page()
     {

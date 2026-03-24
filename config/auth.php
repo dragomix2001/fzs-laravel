@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Kandidat;
 
 return [
 
@@ -42,6 +43,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'kandidat' => [
+            'driver' => 'session',
+            'provider' => 'kandidati',
+        ],
     ],
 
     /*
@@ -65,6 +70,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => User::class,
+        ],
+
+        'kandidati' => [
+            'driver' => 'eloquent',
+            'model' => Kandidat::class,
         ],
 
         // 'users' => [

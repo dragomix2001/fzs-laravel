@@ -3,12 +3,32 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Kandidat extends AndroModel
+class Kandidat extends Authenticatable
 {
-    use Auditable;
+    use Auditable, Notifiable;
 
     protected $table = 'kandidat';
+
+    protected $fillable = [
+        'imeKandidata', 'prezimeKandidata', 'jmbg', 'datumRodjenja', 'mestoRodjenja',
+        'krsnaSlava_id', 'kontaktTelefon', 'adresaStanovanja', 'email',
+        'imePrezimeJednogRoditelja', 'kontaktTelefonRoditelja', 'srednjeSkoleFakulteti',
+        'mestoZavrseneSkoleFakulteta', 'smerZavrseneSkoleFakulteta', 'uspehSrednjaSkola_id',
+        'opstiUspehSrednjaSkola_id', 'srednjaOcenaSrednjaSkola', 'sportskoAngazovanje_id',
+        'telesnaTezina', 'visina', 'prilozenaDokumentaPrvaGodina_id', 'statusUpisa_id',
+        'brojBodovaTest', 'brojBodovaSkola', 'ukupniBrojBodova', 'prosecnaOcena',
+        'upisniRok', 'brojIndeksa', 'skolskaGodinaUpisa_id', 'indikatorAktivan',
+        'studijskiProgram_id', 'tipStudija_id', 'godinaStudija_id', 'mesto_id',
+        'uplata', 'upisan', 'drzavaZavrseneSkole', 'drzavaRodjenja', 'godinaZavrsetkaSkole',
+        'slika', 'diplomski', 'datumStatusa', 'password',
+    ];
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
     protected $casts = [
         'datumRodjenja' => 'datetime',
