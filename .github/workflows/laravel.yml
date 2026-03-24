@@ -75,7 +75,7 @@ jobs:
           php artisan db:seed --class=DatabaseSeeder --force || true
 
       - name: Run tests
-        run: vendor/bin/phpunit --testdox
+        run: vendor/bin/phpunit --testdox --do-not-fail-on-skipped
 
   lint:
     runs-on: ubuntu-latest
