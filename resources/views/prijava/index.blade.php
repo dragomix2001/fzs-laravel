@@ -99,8 +99,8 @@
                         <tr>
                             <td>{{$kandidat->imeKandidata . " " . $kandidat->prezimeKandidata}}</td>
                             <td>{{$kandidat->brojIndeksa}}</td>
-                            <td>{{$prijava->predmet->predmet->naziv}}</td>
-                            <td>{{$prijava->rok->naziv}}</td>
+                            <td>{{$prijava->predmet?->predmet?->naziv ?? '-'}}</td>
+                            <td>{{$prijava->rok?->naziv ?? '-'}}</td>
                             <td>{{$prijava->brojPolaganja}}</td>
                             <td data-order="{{$prijava->datum->timestamp}}">{{$prijava->datum->format('d.m.Y')}}</td>
                             <td>
@@ -142,8 +142,8 @@
                             <tr>
                             <td>Пријава ТЕМЕ</td>
                             <td>{{$diplomskiRadTema->nazivTeme}}</td>
-                            <td>{{$diplomskiRadTema->predmet->predmet->naziv}}</td>
-                            <td>{{$diplomskiRadTema->profesor->ime . " " . $diplomskiRadTema->profesor->prezime}}</td>
+                            <td>{{$diplomskiRadTema->predmet?->predmet?->naziv ?? '-'}}</td>
+                            <td>{{($diplomskiRadTema->profesor?->ime ?? '') . " " . ($diplomskiRadTema->profesor?->prezime ?? '')}}</td>
                             <td>-</td>
                             <td>
                                 @if($diplomskiRadTema->indikatorOdobreno == 1)
@@ -173,9 +173,9 @@
                             <tr>
                                 <td>Пријава ОДБРАНЕ</td>
                                 <td>{{$diplomskiRadOdbrana->nazivTeme}}</td>
-                                <td>{{$diplomskiRadOdbrana->predmet->predmet->naziv}}</td>
-                                <td>{{$diplomskiRadOdbrana->odobrioTemuProfesor->ime . " " . $diplomskiRadOdbrana->odobrioTemuProfesor->prezime}}</td>
-                                <td>{{$diplomskiRadOdbrana->odobrioOdbranuProfesor->ime . " " . $diplomskiRadOdbrana->odobrioOdbranuProfesor->prezime}}</td>
+                                <td>{{$diplomskiRadOdbrana->predmet?->predmet?->naziv ?? '-'}}</td>
+                                <td>{{($diplomskiRadOdbrana->odobrioTemuProfesor?->ime ?? '') . " " . ($diplomskiRadOdbrana->odobrioTemuProfesor?->prezime ?? '')}}</td>
+                                <td>{{($diplomskiRadOdbrana->odobrioOdbranuProfesor?->ime ?? '') . " " . ($diplomskiRadOdbrana->odobrioOdbranuProfesor?->prezime ?? '')}}</td>
                                 <td>
                                     @if($diplomskiRadOdbrana->indikatorOdobreno == 1)
                                         <div class='label label-success'>ДА</div>
@@ -204,8 +204,8 @@
                             <tr>
                                 <td>Пријава ПОЛАГАЊА</td>
                                 <td>{{$diplomskiRadPolaganje->nazivTeme}}</td>
-                                <td>{{$diplomskiRadPolaganje->predmet->predmet->naziv}}</td>
-                                <td>{{$diplomskiRadPolaganje->profesor->ime . " " . $diplomskiRadPolaganje->profesor->prezime}}</td>
+                                <td>{{$diplomskiRadPolaganje->predmet?->predmet?->naziv ?? '-'}}</td>
+                                <td>{{($diplomskiRadPolaganje->profesor?->ime ?? '') . " " . ($diplomskiRadPolaganje->profesor?->prezime ?? '')}}</td>
                                 <td>-</td>
                                 <td>
                                     @if($diplomskiRadPolaganje->brojBodova > 0)
@@ -277,8 +277,8 @@
                     <tbody>
                     @foreach($ispiti as $index => $ispit)
                         <tr>
-                            <td>{{$ispit->predmet->predmet->naziv}}</td>
-                            <td>{{$ispit->prijava->rok->naziv}}</td>
+                            <td>{{$ispit->predmet?->predmet?->naziv ?? '-'}}</td>
+                            <td>{{$ispit->prijava?->rok?->naziv ?? '-'}}</td>
                             <td>{{$ispit->konacnaOcena}}</td>
                             <td>
                                 <a class="btn btn-danger"

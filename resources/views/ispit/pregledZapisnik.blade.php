@@ -128,9 +128,9 @@
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <h3>Предмет: {{ $zapisnik->predmet->naziv }}</h3>
-                <h4>Испитни рок: {{ $zapisnik->ispitniRok->naziv }}</h4>
-                <h4>Професор: {{ $zapisnik->profesor->ime . " " . $zapisnik->profesor->prezime }}</h4>
+                <h3>Предмет: {{ $zapisnik->predmet?->naziv ?? '-' }}</h3>
+                <h4>Испитни рок: {{ $zapisnik->ispitniRok?->naziv ?? '-' }}</h4>
+                <h4>Професор: {{ ($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '') }}</h4>
             </div>
             <div class="col-lg-4" style="margin-top: 20px">
                 <h4>Време полагања: {{ substr($zapisnik->vreme, 0, -3) }}</h4>
@@ -141,10 +141,10 @@
                 <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post">
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <input type="hidden" name="predmet" value="{{$zapisnik->predmet->naziv}}">
-                        <input type="hidden" name="rok" value="{{$zapisnik->ispitniRok->naziv}}">
+                        <input type="hidden" name="predmet" value="{{$zapisnik->predmet?->naziv ?? ''}}">
+                        <input type="hidden" name="rok" value="{{$zapisnik->ispitniRok?->naziv ?? ''}}">
                         <input type="hidden" name="profesor"
-                               value="{{$zapisnik->profesor->ime . " " . $zapisnik->profesor->prezime}}">
+                               value="{{($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '')}}">
                         <input type="hidden" name="id" value="{{$zapisnik->id}}">
                         <input type="submit" class="btn btn-primary" value="Штампа записника">
                     </div>
@@ -183,15 +183,15 @@
                                        value="{{ $ispit->id }}">
                                 <input type="hidden" id="zapisnik_id" name="zapisnik_id[{{ $index }}]"
                                        value="{{ $zapisnik->id }}">
-                                <input type="hidden" id="prijava_id" name="prijava_id[{{ $index }}]"
-                                       value="{{ $prijavaIds[$ispit->kandidat->id] }}">
-                                <input type="hidden" id="kandidat_id" name="kandidat_id[{{ $index }}]"
-                                       value="{{ $ispit->kandidat->id }}">
+                                 <input type="hidden" id="prijava_id" name="prijava_id[{{ $index }}]"
+                                        value="{{ $prijavaIds[$ispit->kandidat?->id] ?? '' }}">
+                                 <input type="hidden" id="kandidat_id" name="kandidat_id[{{ $index }}]"
+                                        value="{{ $ispit->kandidat?->id }}">
                                 <input type="hidden" id="predmet_id" name="predmet_id"
                                        value="{{ $zapisnik->predmet_id }}">
                             </td>
-                            <td>{{$ispit->kandidat->brojIndeksa}}</td>
-                            <td>{{$ispit->kandidat->imeKandidata . " " . $ispit->kandidat->prezimeKandidata}}</td>
+                            <td>{{$ispit->kandidat?->brojIndeksa ?? '-'}}</td>
+                            <td>{{($ispit->kandidat?->imeKandidata ?? '') . " " . ($ispit->kandidat?->prezimeKandidata ?? '')}}</td>
                             <td>
                                 <input type="text" class="form-control brojBodova"
                                        id="brojBodova"
@@ -240,7 +240,7 @@
                             </td>
                             <td>
                                 <a class="btn btn-danger" style="padding: 9px 12px"
-                                   href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}/{{ $ispit->kandidat->id }}/delete"
+                                   href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}/{{ $ispit->kandidat?->id }}/delete"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете овог студента?');">
                                     <div title="Брисање">
                                         <span class="fa fa-trash"></span>

@@ -77,7 +77,7 @@
                             <label for="predmet_id">Дипломски рад из предмета</label>
                             <select class="form-control auto-combobox" id="predmet_id" name="predmet_id">
                                 @foreach($predmeti as $item)
-                                    <option value="{{ $item->id }}" {{ ($diplomskiRadTema->predmet_id == $item->id ? "selected":"") }}>{{ $item->predmet->naziv }}</option>
+                                    <option value="{{ $item->id }}" {{ ($diplomskiRadTema->predmet_id == $item->id ? "selected":"") }}>{{ $item->predmet?->naziv ?? '-' }}</option>
                                 @endforeach
                             </select>
                         </div>

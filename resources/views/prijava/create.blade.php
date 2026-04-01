@@ -99,7 +99,7 @@
                                     <label for="predmet_id">Пријављујем се за полагање испита из предмета</label>
                                     <select class="form-control auto-combobox" id="predmet_id" name="predmet_id">
                                         @foreach($predmeti as $item)
-                                            <option value="{{ $item->id }}">{{ $item->predmet->naziv }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->predmet?->naziv ?? '-' }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -207,7 +207,7 @@
                             <div class="form-group" style="width: 50%;">
                                 <label for="predmet_id">Пријављујем се за полагање испита из предмета</label>
                                 <select class="form-control" id="predmet_id" name="predmet_id">
-                                    <option value="{{ $predmet->id }}">{{ "Семестар " . $predmet->semestar . ': ' . $predmet->predmet->naziv }}</option>
+                                    <option value="{{ $predmet->id }}">{{ "Семестар " . $predmet->semestar . ': ' . ($predmet->predmet?->naziv ?? '-') }}</option>
                                 </select>
                             </div>
 
@@ -232,7 +232,7 @@
                             <div class="form-group pull-left" style="width: 40%;">
                                 <label for="tipStudija_id">Тип студија:</label>
                                 <select class="form-control" id="tipStudija_id" name="tipStudija_id" disabled>
-                                    <option value="{{$predmet->tipStudija_id}}">{{$predmet->tipStudija->naziv}}</option>
+                                     <option value="{{$predmet->tipStudija_id}}">{{$predmet->tipStudija?->naziv ?? '-'}}</option>
                                 </select>
                             </div>
 

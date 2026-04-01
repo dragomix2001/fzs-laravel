@@ -45,7 +45,7 @@
                         @endif</td>
                     <td>
                         @if($program->program)
-                            {{$program->program->tipStudija->naziv}}
+                            {{$program->program->tipStudija?->naziv ?? '-'}}
                         @else
 
                         @endif</td>

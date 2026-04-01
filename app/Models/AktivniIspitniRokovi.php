@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
-class AktivniIspitniRokovi extends AndroModel
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class AktivniIspitniRokovi extends Model
 {
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $table = 'aktivni_ispitni_rokovi';
 
     protected $casts = [
@@ -13,7 +18,7 @@ class AktivniIspitniRokovi extends AndroModel
 
     protected $fillable = ['rok_id', 'naziv', 'pocetak', 'kraj', 'komentar', 'tipRoka_id', 'indikatorAktivan'];
 
-    public function nadredjeniRok()
+    public function nadredjeniRok(): BelongsTo
     {
         return $this->belongsTo(IspitniRok::class, 'rok_id');
     }

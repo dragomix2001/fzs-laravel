@@ -27,9 +27,9 @@
             </thead>
             @foreach($predmeti as $predmet)
                 <tr>
-                    <td>{{$predmet->predmet->predmet->naziv}}
-                        - {{$predmet->predmet->program->skrNazivStudijskogPrograma}}</td>
-                    <td>{{$predmet->predmet->tipPredmeta->naziv}}</td>
+                    <td>{{$predmet->predmet?->predmet?->naziv ?? '-'}}
+                        - {{$predmet->predmet?->program?->skrNazivStudijskogPrograma ?? '-'}}</td>
+                    <td>{{$predmet->predmet?->tipPredmeta?->naziv ?? '-'}}</td>
                     <td>{{$predmet->predmet->semestar}}</td>
                     <td>{{$predmet->oblik_nastave->naziv}}</td>
                     <td>

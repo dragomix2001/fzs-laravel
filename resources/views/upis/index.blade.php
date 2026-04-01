@@ -138,19 +138,19 @@
                                     <td>{{ $godina->pokusaj }}</td>
                                     <td>
                                         @if($godina->statusGodine_id == 1)
-                                            <span class='label label-success'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-success'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 2)
-                                            <span class='label label-default'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-default'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 3)
-                                            <span class='label label-danger'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-danger'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 4)
-                                            <span class='label label-warning'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-warning'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 5)
-                                            <span class='label label-info'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-info'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 6)
-                                            <span class='label label-info'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-info'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 7)
-                                            <span class='label label-info'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-info'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @endif
                                     </td>
                                     <td>
@@ -230,19 +230,19 @@
                                     <td>{{ $godina->pokusaj }}</td>
                                     <td>
                                         @if($godina->statusGodine_id == 1)
-                                            <span class='label label-success'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-success'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 2)
-                                            <span class='label label-default'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-default'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 3)
-                                            <span class='label label-danger'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-danger'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 4)
-                                            <span class='label label-warning'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-warning'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 5)
-                                            <span class='label label-info'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-info'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 6)
-                                            <span class='label label-info'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-info'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @elseif($godina->statusGodine_id == 7)
-                                            <span class='label label-info'>{{$godina->status->naziv}}</span>
+                                            <span class='label label-info'>{{$godina->status?->naziv ?? '-'}}</span>
                                         @endif
                                     </td>
                                     <td>

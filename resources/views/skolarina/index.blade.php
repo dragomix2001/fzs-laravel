@@ -27,13 +27,13 @@
                 </li>
                 <li class="list-group-item">Година студија:
                     <strong>
-                        {{ $kandidat->godinaStudija->naziv }}
+                        {{ $kandidat->godinaStudija?->naziv ?? '-' }}
                     </strong>
                 </li>
                 @if(!empty($trenutnaSkolarina))
                     <li class="list-group-item">Година на коју се односи школарина:
                         <strong>
-                            {{ $trenutnaSkolarina->godinaStudija->naziv . " - " . $trenutnaSkolarina->komentar}}
+                            {{ ($trenutnaSkolarina->godinaStudija?->naziv ?? '-') . " - " . $trenutnaSkolarina->komentar}}
                         </strong>
                     </li>
                 @endif

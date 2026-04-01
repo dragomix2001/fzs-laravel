@@ -88,9 +88,9 @@
             <tbody>
             @foreach($zapisnici as $index => $zapisnik)
                 <tr>
-                    <td>{{$zapisnik->predmet->naziv}}</td>
-                    <td>{{$zapisnik->ispitniRok->naziv}}</td>
-                    <td>{{$zapisnik->profesor->ime . " " . $zapisnik->profesor->prezime}}</td>
+                    <td>{{$zapisnik->predmet?->naziv ?? '-'}}</td>
+                    <td>{{$zapisnik->ispitniRok?->naziv ?? '-'}}</td>
+                    <td>{{($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '')}}</td>
                     <td data-order="{{ \Carbon\Carbon::parse($zapisnik->datum)->timestamp }}">{{\Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')}}</td>
                     <td>{{$zapisnik->studenti->count()}}</td>
                     <td>
@@ -98,10 +98,10 @@
                             <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post" style="margin-bottom: 0px">
                                 {{ csrf_field() }}
                                 <div style="display:none;">
-                                    <input type="hidden" name="predmet" value="{{$zapisnik->predmet->naziv}}">
-                                    <input type="hidden" name="rok" value="{{$zapisnik->ispitniRok->naziv}}">
+                                    <input type="hidden" name="predmet" value="{{$zapisnik->predmet?->naziv ?? ''}}">
+                                    <input type="hidden" name="rok" value="{{$zapisnik->ispitniRok?->naziv ?? ''}}">
                                     <input type="hidden" name="profesor"
-                                           value="{{$zapisnik->profesor->ime . " " . $zapisnik->profesor->prezime}}">
+                                           value="{{($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '')}}">
                                     <input type="hidden" name="id" value="{{$zapisnik->id}}">
                                 </div>
                                 <a class="btn btn-primary" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед</a>

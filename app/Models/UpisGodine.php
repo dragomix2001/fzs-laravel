@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UpisGodine extends AndroModel
+class UpisGodine extends Model
 {
     use Auditable;
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $table = 'upis_godine';
 
@@ -15,7 +19,7 @@ class UpisGodine extends AndroModel
         'datumPromene' => 'datetime',
     ];
 
-    public function status()
+    public function status(): BelongsTo
     {
         return $this->belongsTo(StatusGodine::class, 'statusGodine_id');
     }

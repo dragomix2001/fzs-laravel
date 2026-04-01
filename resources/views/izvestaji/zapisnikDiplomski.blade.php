@@ -26,7 +26,7 @@
             <td>ПРЕДМЕТ</td>
         </tr>
         <tr>
-            <td style="border: 1px solid black; width: 300px;">{{mb_strtoupper($diplomski->predmet->predmet->naziv, "utf-8")}}</td>
+            <td style="border: 1px solid black; width: 300px;">{{mb_strtoupper($diplomski->predmet?->predmet?->naziv ?? '-', "utf-8")}}</td>
         </tr>
     </table>
 

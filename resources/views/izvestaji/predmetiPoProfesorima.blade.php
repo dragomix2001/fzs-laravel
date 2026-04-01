@@ -27,7 +27,7 @@
                     <?php $a++; ?>
                     <tr>
                         <td style="border: 1px solid black;">{{$a}}</td>
-                        <td style="border: 1px solid black;">{{$predmet->predmet->predmet->naziv}}</td>
+                        <td style="border: 1px solid black;">{{$predmet->predmet?->predmet?->naziv ?? '-'}}</td>
                     </tr>
                 @endif
 

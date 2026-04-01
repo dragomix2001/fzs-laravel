@@ -85,8 +85,8 @@
                     @if(!empty($sveSkolarine))
                         @foreach($sveSkolarine as $index => $item)
                             <tr>
-                                <td>{{$item->tipStudija->naziv}}</td>
-                                <td>{{$item->godinaStudija->naziv}}</td>
+                                <td>{{$item->tipStudija?->naziv ?? '-'}}</td>
+                                <td>{{$item->godinaStudija?->naziv ?? '-'}}</td>
                                 <td>{{number_format($item->iznos, 2, ',', '.') . " RSD"}}</td>
                                 <td>{{$item->uplate->count()}}</td>
                                 <td>{{number_format(($item->iznos - $item->uplate->sum('iznos')), 2, ',', '.') . " RSD"}}</td>

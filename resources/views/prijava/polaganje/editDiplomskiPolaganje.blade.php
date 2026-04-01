@@ -75,7 +75,7 @@
                             <label for="predmet_id">Дипломски рад из предмета</label>
                             <select class="form-control" id="predmet_id" name="predmet_id">
                                 @foreach($predmeti as $item)
-                                    <option value="{{ $item->id }}">{{ $item->predmet->naziv }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->predmet?->naziv ?? '-' }}</option>
                                 @endforeach
                             </select>
                         </div>

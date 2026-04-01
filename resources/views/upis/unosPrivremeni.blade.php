@@ -46,7 +46,7 @@
                 <select class="form-control auto-combobox" id="addIspitList" name="addIspitList">
                     <option value=""></option>
                     @foreach($ispiti as $index => $ispit)
-                        <option value="{{$ispit->id}}">{{$ispit->predmet->naziv}}</option>
+                        <option value="{{$ispit->id}}">{{$ispit->predmet?->naziv ?? '-'}}</option>
                     @endforeach
                 </select>
             </div>
@@ -88,7 +88,7 @@
                     <tbody>
                     @foreach($polozeniIspiti as $ispit)
                         <tr>
-                            <td>{{$ispit->predmet->predmet->naziv}}</td>
+                            <td>{{$ispit->predmet?->predmet?->naziv ?? '-'}}</td>
                             <td>{{$ispit->konacnaOcena}}</td>
                             <td>
                                 <a class="btn btn-danger" href="{{"/"}}deletePrivremeniIspit/{{$ispit->id}}"

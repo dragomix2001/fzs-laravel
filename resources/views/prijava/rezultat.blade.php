@@ -25,15 +25,15 @@
                                 <td>{{$kandidat->imeKandidata}}</td>
                                 <td>{{$kandidat->prezimeKandidata}}</td>
                                 <td>{{$kandidat->jmbg}}</td>
-                                <td>{{$kandidat->godinaStudija->nazivRimski}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        @endif
-        @if (count($duplicateArray) > 0)
+                                 <td>{{$kandidat->godinaStudija?->nazivRimski ?? '-'}}</td>
+                             </tr>
+                         @endforeach
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         @endif
+         @if (count($duplicateArray) > 0)
             <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h3 class="panel-title">Студенти који су већ пријављени у датом року</h3>
@@ -56,15 +56,15 @@
                                 <td>{{$kandidat->imeKandidata}}</td>
                                 <td>{{$kandidat->prezimeKandidata}}</td>
                                 <td>{{$kandidat->jmbg}}</td>
-                                <td>{{$kandidat->godinaStudija->nazivRimski}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        @endif
-            <div class="alert alert-success">
+                                 <td>{{$kandidat->godinaStudija?->nazivRimski ?? '-'}}</td>
+                             </tr>
+                         @endforeach
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         @endif
+             <div class="alert alert-success">
                 <strong>Студенти су успешно пријављени.</strong>
             </div>
         <a href="{{"/"}}prijava/zaPredmet/{{ $predmetId }}">&lt;&lt; Назад на предмет</a>

@@ -38,9 +38,9 @@
                             <?php $a++; ?>
                             <tr>
                                 <td style="border: 1px solid black; width: 40px;"> {{$a}}</td>
-                                <td style="border: 1px solid black; width: 250px;"> {{$item->predmet->naziv}}</td>
+                                <td style="border: 1px solid black; width: 250px;"> {{$item->predmet?->naziv ?? '-'}}</td>
                                 <td style="border: 1px solid black; width: 65px; text-align: center;"> {{$item->semestar}}</td>
-                                <td style="border: 1px solid black;"> {{$item->tipPredmeta->naziv}}</td>
+                                <td style="border: 1px solid black;"> {{$item->tipPredmeta?->naziv ?? '-'}}</td>
                                 <td style="border: 1px solid black; width: 50px; text-align: center;"> {{$item->vezbe}}</td>
                                 <td style="border: 1px solid black; width: 75px; text-align: center;"> {{$item->predavanja}}</td>
                                 <td style="border: 1px solid black; width: 50px; text-align: center;"> {{$item->espb}}</td>

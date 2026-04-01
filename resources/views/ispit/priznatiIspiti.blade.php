@@ -69,10 +69,10 @@
                                     <input type="checkbox" id="predmetId" name="predmetId[{{ $index }}]"
                                            value="{{ $predmet->id }}">
                                 </td>
-                                <td>{{$predmet->predmet->naziv}}</td>
+                                <td>{{$predmet->predmet?->naziv ?? '-'}}</td>
                                 <td>{{$predmet->semestar}}</td>
                                 <td>{{$predmet->espb}}</td>
-                                <td>{{$predmet->tipPredmeta->naziv}}</td>
+                                <td>{{$predmet->tipPredmeta?->naziv ?? '-'}}</td>
                                 <td>
                                     <select class="konacnaOcena" data-index="{{ $index }}"
                                             name="konacnaOcena[{{ $index }}]">

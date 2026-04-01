@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
-class PrijavaIspita extends AndroModel
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class PrijavaIspita extends Model
 {
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $table = 'prijava_ispita';
 
     protected $casts = [
@@ -12,22 +17,22 @@ class PrijavaIspita extends AndroModel
 
     protected $fillable = ['kandidat_id', 'predmet_id', 'rok_id', 'profesor_id', 'brojPolaganja', 'datum'];
 
-    public function kandidat()
+    public function kandidat(): BelongsTo
     {
         return $this->belongsTo(Kandidat::class, 'kandidat_id');
     }
 
-    public function predmet()
+    public function predmet(): BelongsTo
     {
         return $this->belongsTo(PredmetProgram::class, 'predmet_id');
     }
 
-    public function rok()
+    public function rok(): BelongsTo
     {
         return $this->belongsTo(AktivniIspitniRokovi::class, 'rok_id');
     }
 
-    public function profesor()
+    public function profesor(): BelongsTo
     {
         return $this->belongsTo(Profesor::class, 'profesor_id');
     }

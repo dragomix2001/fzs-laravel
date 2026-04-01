@@ -76,7 +76,7 @@
                             <select class="form-control auto-combobox" id="predmet_id" name="predmet_id">
                                 <option value=""></option>
                                 @foreach($predmeti as $item)
-                                    <option value="{{ $item->id }}">{{ $item->predmet->naziv }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->predmet?->naziv ?? '-' }}</option>
                                 @endforeach
                             </select>
                         </div>
