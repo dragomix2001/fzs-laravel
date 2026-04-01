@@ -43,3 +43,45 @@
 - QUEUE_CONNECTION=redis already in .env
 - Supervisor config at `.sisyphus/notepads/fzs-modernization/supervisor-config.ini`
 - Run worker: `php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600`
+
+
+## FAZA 3.6: Scheduled Tasks (completed - commit 6c584a9)
+
+### Command Creation Pattern
+- Use `php artisan make:command CommandName` with promoted constructor properties
+- Set `$signature` with optional flags: `'backup:run {--compress}'`
+- Set `$description` for artisan list help text
+- Return `Command::SUCCESS` or `Command::FAILURE` from handle() method
+
+### Scheduled Task Implementation Notes
+- **BackupDatabase**: Uses mysqldump via shell_exec(), stores in storage/app/backups/
+  - Optional --compress flag for gzip compression
+  - Environment vars extracted from config/database.php
+  - Output captures both stdout and stderr for error reporting
+- **CleanupOldNotifications**: Deletes notifications older than 90 days (configurable via --days option)
+  - Uses DatabaseNotification model, not custom notification tables
+- **ArchiveCompletedZapisnici**: Archives exam records older than 6 months (configurable via --months)
+  - Sets arhivirano=1 on ZapisnikOPolaganjuIspita records
+
+### Kernel Schedule Configuration
+- `dailyAt('02:00')` for daily backups (off-peak hours)
+- `weekly()->sundays()->at('03:00')` for weekly cleanup
+- `monthlyOn(1, '04:00')` for first-of-month archiving
+- All scheduled tasks added to `app/Console/Kernel.php` protected schedule() method
+
+### Production Setup
+- Cron entry required: `* * * * * cd /path-to-project && php artisan schedule:run >> /dev/null 2>&1`
+- Verify with: `php artisan schedule:list` (Laravel 13+)
+- Manual run: `php artisan backup:run`, `php artisan notifications:cleanup`, `php artisan zapisnici:archive`
+## FAZA 3.4 Frontend Modernization Learnings
+- **jQuery Dependency**: Cannot be entirely removed because `DataTables` and `jQuery UI Autocomplete` are heavily used across multiple views (e.g. `kandidat/indeks.blade.php`, `sifarnici/editProfesor.blade.php`). Kept the CDN imports for jQuery and jQuery UI.
+- **Bootstrap 5 Package**: Removed `bootstrap`, `@popperjs/core`, and `datatables.net-bs5` from `package.json`. Replaced with `alpinejs` and `datatables.net-dt`.
+- **Layouts**: The app uses multiple layouts (`app.blade.php` and `layout.blade.php`). Migrated `app.blade.php` fully to Tailwind CSS and AlpineJS.
+- **Components**: Created reusable Alpine.js + Tailwind components (`modal.blade.php` and `alert.blade.php`).
+
+## FIX: Main Layout Corrected
+- **layout.blade.php**: Discovered that the true main layout used by most views (`kandidat`, `ispit`, `prijava`) is `layout.blade.php`, not `app.blade.php`.
+- **CDN Removal**: Successfully removed the Bootstrap 5 CSS/JS CDN imports from `layout.blade.php`.
+- **Alpine.js Sidebar**: Replaced the Vanilla JS event listeners for the sidebar toggle with Alpine.js `x-data` state to manage the mobile overlay and sidebar visibility gracefully.
+- **Top Header**: Converted the top user dropdown menu to use Alpine.js `x-data="{ open: false }"`, removing reliance on Bootstrap's native dropdown JS.
+- **jQuery Maintenance**: Retained `jquery.min.js` and `jquery-ui.min.js` in `layout.blade.php` to ensure DataTables and autocomplete remain operational.

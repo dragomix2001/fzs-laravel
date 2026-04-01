@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Факултет за спорт')</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.13.2/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
@@ -348,12 +347,12 @@
     </style>
 </head>
 <body>
-    <div class="wrapper">
+    <div class="wrapper" x-data="{ sidebarOpen: false }">
         <!-- Sidebar Overlay (mobile) -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="sidebar-overlay" id="sidebarOverlay" :class="{ 'show': sidebarOpen }" @click="sidebarOpen = false"></div>
         
         <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar" id="sidebar" :class="{ 'show': sidebarOpen }">
             <ul class="sidebar-menu" id="side-menu">
                 <li class="{{ Request::is('*kandidat*') ? 'active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'kandidatSubmenu')">
@@ -491,8 +490,8 @@
         <div class="main-content">
             <!-- Top Header -->
             <header class="top-header">
-                <div class="d-flex align-items-center">
-                    <button class="mobile-toggle me-3" id="sidebarToggle">
+                <div class="flex items-center">
+                    <button class="mobile-toggle mr-3" id="sidebarToggle" @click="sidebarOpen = !sidebarOpen">
                         <i class="fas fa-bars"></i>
                     </button>
                     <a href="{{ url('') }}" class="logo-link">
@@ -501,24 +500,25 @@
                     </a>
                 </div>
                 
-                <div class="d-flex align-items-center gap-3">
-                    <a href="{{ url('/pretraga') }}" class="btn btn-outline-secondary btn-sm">
+                <div class="flex items-center gap-3">
+                    <a href="{{ url('/pretraga') }}" class="px-3 py-1.5 border border-gray-400 text-gray-700 hover:bg-gray-100 rounded text-sm transition-colors">
                         <i class="fas fa-search"></i>
                     </a>
                     
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="themeToggle" title="Тема">
+                    <button type="button" class="px-3 py-1.5 border border-gray-400 text-gray-700 hover:bg-gray-100 rounded text-sm transition-colors" id="themeToggle" title="Тема">
                         <i class="fas fa-moon" id="themeIcon"></i>
                     </button>
                     
                     @if(!Auth::guest())
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle me-2"></i>
+                        <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                            <button @click="open = !open" class="px-3 py-1.5 border border-gray-400 text-gray-700 hover:bg-gray-100 rounded text-sm flex items-center transition-colors" type="button" aria-expanded="false">
+                                <i class="fas fa-user-circle mr-2"></i>
                                 {{ Auth::user()->name }}
+                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Одјава</a></li>
-                            </ul>
+                            <div x-show="open" style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt mr-2"></i>Одјава</a>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -533,8 +533,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    @include('partials.toast')
+        @include('partials.toast')
     @include('partials.ajax-loader')
     @stack('scripts')
     
@@ -550,16 +549,7 @@
             parentLi.classList.toggle('open');
         }
         
-        // Mobile sidebar toggle
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('show');
-            document.getElementById('sidebarOverlay').classList.toggle('show');
-        });
-        
-        document.getElementById('sidebarOverlay').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.remove('show');
-            document.getElementById('sidebarOverlay').classList.remove('show');
-        });
+
 
         // Dark mode toggle
         const themeToggle = document.getElementById('themeToggle');
