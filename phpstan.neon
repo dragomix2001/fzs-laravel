@@ -1,0 +1,15 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+
+    level: 5
+
+    excludePaths:
+        - app/bridge.php
+
+    ignoreErrors:
+        # Allow dynamic properties on AndroModel subclasses (Phase 3.1 will remove AndroModel)
+        - '#Access to an undefined property App\\[a-zA-Z]+::\$#'

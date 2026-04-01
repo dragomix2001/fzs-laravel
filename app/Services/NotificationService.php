@@ -15,24 +15,24 @@ class NotificationService
 
     public function notifyAdmins(string $title, string $message, string $type = 'info', ?array $data = null): void
     {
-        $admins = User::where('role', User::ROLE_ADMIN)->get();
+        $adminIds = User::where('role', User::ROLE_ADMIN)->pluck('id');
 
-        foreach ($admins as $admin) {
-            $this->notifyUser($admin->id, $title, $message, $type, $data);
+        foreach ($adminIds as $adminId) {
+            $this->notifyUser($adminId, $title, $message, $type, $data);
         }
     }
 
     public function broadcastObavestenje(Obavestenje $obavestenje): void
     {
-        $targetUsers = match ($obavestenje->tip) {
-            'javno' => User::all(),
-            'profesori' => User::where('role', User::ROLE_PROFESSOR)->get(),
-            default => User::where('role', User::ROLE_ADMIN)->get(),
+        $targetUserIds = match ($obavestenje->tip) {
+            'javno' => User::pluck('id'),
+            'profesori' => User::where('role', User::ROLE_PROFESSOR)->pluck('id'),
+            default => User::where('role', User::ROLE_ADMIN)->pluck('id'),
         };
 
-        foreach ($targetUsers as $user) {
+        foreach ($targetUserIds as $userId) {
             $this->notifyUser(
-                $user->id,
+                $userId,
                 'Ново обавештење',
                 $obavestenje->naslov,
                 'info',

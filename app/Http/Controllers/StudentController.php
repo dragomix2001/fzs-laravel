@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Kandidat;
+use App\Services\UpisService;
 use App\SkolskaGodUpisa;
 use App\StatusGodine;
 use App\StudijskiProgram;
@@ -18,7 +19,7 @@ class StudentController extends Controller
 {
     private $status;
 
-    public function __construct()
+    public function __construct(protected UpisService $upisService)
     {
         $this->middleware('auth');
 
@@ -193,7 +194,7 @@ class StudentController extends Controller
             $kandidat->skolskaGodinaUpisa_id = $godinaId;
             $kandidat->save();
 
-            UpisGodine::generisiBrojIndeksa($kandidat->id);
+            $this->upisService->generisiBrojIndeksa($kandidat->id);
 
             return Redirect::back();
         } else {
@@ -226,7 +227,7 @@ class StudentController extends Controller
             $kandidat = Kandidat::find($kandidatId);
             $godina = $kandidat->godinaStudija_id + 1;
 
-            UpisGodine::upisiGodinu($kandidatId, $godina, $kandidat->skolskaGodinaUpisa_id);
+            $this->upisService->upisiGodinu($kandidatId, $godina, $kandidat->skolskaGodinaUpisa_id);
         }
 
         return redirect('/student/index/1');
@@ -234,7 +235,7 @@ class StudentController extends Controller
 
     public function upisMasterStudija(Request $request)
     {
-        $result = UpisGodine::upisMasterPostojeciKandidat($request->kandidat_id, $request->StudijskiProgram, $request->SkolskaGodinaUpisa);
+        $result = $this->upisService->upisMasterPostojeciKandidat($request->kandidat_id, $request->StudijskiProgram, $request->SkolskaGodinaUpisa);
         if ($result) {
             Session::flash('flash-success', 'upis');
 

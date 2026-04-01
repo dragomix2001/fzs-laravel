@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Kandidat;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreKandidatRequest extends FormRequest
+class UpdateMasterKandidatRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -13,9 +14,11 @@ class StoreKandidatRequest extends FormRequest
 
     public function rules(): array
     {
-        if ($this->input('page') == 1) {
+        $kandidat = Kandidat::find($this->route('id'));
+
+        if ($kandidat && $kandidat->brojIndeksa != $this->input('brojIndeksa')) {
             return [
-                'JMBG' => 'unique:kandidat|required',
+                'brojIndeksa' => 'unique:kandidat',
             ];
         }
 
@@ -26,8 +29,7 @@ class StoreKandidatRequest extends FormRequest
     {
         return [
             'required' => ':attribute је обавезно поље.',
-            'JMBG.unique' => 'ЈМБГ мора бити уникатан. Већ постоји такав запис у бази.',
-            'JMBG.max' => 'ЈМБГ не може имати више од 13 цифара.',
+            'brojIndeksa.unique' => 'Број индекса мора бити уникатан. Већ постоји такав запис у бази.',
         ];
     }
 }

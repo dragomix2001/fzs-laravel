@@ -6,20 +6,22 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StorePrijavaIspitaRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
-            'kandidat_id' => 'required|exists:kandidat,id',
-            'predmet_id' => 'required|exists:predmet,id',
-            'profesor_id' => 'required|exists:profesor,id',
-            'rok_id' => 'required|exists:ispitni_rok,id',
-            'brojPolaganja' => 'required|integer|min:1',
-            'datum' => 'nullable|date',
+            'kandidat_id' => 'unique_with:prijava_ispita,predmet_id,rok_id',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'kandidat_id.unique_with' => 'Дошло је до грешке. Проверите да ли је студент већ пријавио тражени испит у траженом року.',
         ];
     }
 }

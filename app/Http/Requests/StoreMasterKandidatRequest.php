@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreKandidatRequest extends FormRequest
+class StoreMasterKandidatRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -13,19 +13,15 @@ class StoreKandidatRequest extends FormRequest
 
     public function rules(): array
     {
-        if ($this->input('page') == 1) {
-            return [
-                'JMBG' => 'unique:kandidat|required',
-            ];
-        }
-
-        return [];
+        return [
+            'JMBG' => 'unique:kandidat|required',
+        ];
     }
 
     public function messages(): array
     {
         return [
-            'required' => ':attribute је обавезно поље.',
+            'JMBG.required' => 'ЈМБГ је обавезно поље.',
             'JMBG.unique' => 'ЈМБГ мора бити уникатан. Већ постоји такав запис у бази.',
             'JMBG.max' => 'ЈМБГ не може имати више од 13 цифара.',
         ];
