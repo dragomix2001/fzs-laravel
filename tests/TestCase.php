@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Database\Seeders\StatusGodineTableSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -11,7 +12,6 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Use existing database - no migrations needed
-        // Database is imported from baza.sql
+        $this->seed(StatusGodineTableSeeder::class);
     }
 }

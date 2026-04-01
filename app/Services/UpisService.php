@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\ArhivIndeksa;
 use App\Kandidat;
+use App\Models\TipStudija;
 use App\SkolskaGodUpisa;
 use App\UpisGodine;
 use Carbon\Carbon;
@@ -15,7 +16,6 @@ class UpisService
     {
         $kandidat = Kandidat::find($id);
 
-        // provera da li je kandidat vec upisan, da bi se izbeglo dupliranje zapisa
         $vecUpisan = UpisGodine::where([
             'kandidat_id' => $id,
             'tipStudija_id' => $kandidat->tipStudija_id])
@@ -25,7 +25,10 @@ class UpisService
             return;
         }
 
-        if ($kandidat->tipStudija_id == 1) {
+        $tipStudija = TipStudija::find($kandidat->tipStudija_id);
+        $skrNaziv = $tipStudija ? $tipStudija->skrNaziv : null;
+
+        if ($skrNaziv === 'OAS') {
             $upis = new UpisGodine;
             $upis->kandidat_id = $id;
             $upis->godina = 1;
@@ -93,7 +96,7 @@ class UpisService
                 $upis->datumUpisa = null;
             }
             $upis->save();
-        } elseif ($kandidat->tipStudija_id == 2) {
+        } elseif ($skrNaziv === 'MAS') {
             $upis = new UpisGodine;
             $upis->kandidat_id = $id;
             $upis->godina = 1;
@@ -105,7 +108,7 @@ class UpisService
             $upis->datumUpisa = Carbon::now();
             $upis->datumPromene = Carbon::now();
             $upis->save();
-        } elseif ($kandidat->tipStudija_id == 3) {
+        } elseif ($skrNaziv === 'DAS') {
             $upis = new UpisGodine;
             $upis->kandidat_id = $id;
             $upis->godina = 1;
@@ -125,8 +128,10 @@ class UpisService
     {
         $kandidat = Kandidat::find($kandidatId)->replicate();
         if (! empty($kandidat)) {
-            if ($kandidat->tipStudija_id == 1) {
-                $kandidat->tipStudija_id = 2;
+            $tipStudija = TipStudija::find($kandidat->tipStudija_id);
+            $tipMaster = TipStudija::where('skrNaziv', 'MAS')->first();
+            if ($tipStudija && $tipStudija->skrNaziv === 'OAS' && $tipMaster) {
+                $kandidat->tipStudija_id = $tipMaster->id;
                 $kandidat->studijskiProgram_id = $studijskiProgramId;
                 $kandidat->skolskaGodinaUpisa_id = $skolskaGodinaUpisaId;
                 $kandidat->statusUpisa_id = Config::get('constants.statusi.upisan');

@@ -22,6 +22,8 @@ class PrijavaIspitaFactory extends Factory
             'rok_id' => AktivniIspitniRokovi::factory(),
             'brojPolaganja' => 1,
             'datum' => now()->toDateString(),
+            'datum2' => now()->addDays(7)->toDateString(),
+            'vreme' => '10:00:00',
             'tipPrijave_id' => 1,
         ];
     }
