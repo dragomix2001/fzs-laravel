@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Kandidat;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
@@ -27,7 +28,7 @@ class EnrollmentTest extends TestCase
         $program = StudijskiProgram::factory()->create(['tipStudija_id' => $tipStudija->id, 'indikatorAktivan' => 1]);
         $skolskaGodina = SkolskaGodUpisa::factory()->create(['naziv' => '2024/2025']);
 
-        $kandidat = \App\Models\Kandidat::factory()->create([
+        $kandidat = Kandidat::factory()->create([
             'tipStudija_id' => $tipStudija->id,
             'studijskiProgram_id' => $program->id,
             'skolskaGodinaUpisa_id' => $skolskaGodina->id,
@@ -69,7 +70,7 @@ class EnrollmentTest extends TestCase
         $program = StudijskiProgram::factory()->create(['tipStudija_id' => $tipStudija->id]);
         $skolskaGodina = SkolskaGodUpisa::factory()->create(['naziv' => '2024/2025']);
 
-        $kandidat = \App\Models\Kandidat::factory()->create([
+        $kandidat = Kandidat::factory()->create([
             'tipStudija_id' => $tipStudija->id,
             'studijskiProgram_id' => $program->id,
             'skolskaGodinaUpisa_id' => $skolskaGodina->id,
@@ -94,7 +95,7 @@ class EnrollmentTest extends TestCase
         $program = StudijskiProgram::factory()->create(['tipStudija_id' => $tipStudija->id]);
         $skolskaGodina = SkolskaGodUpisa::factory()->create(['naziv' => '2024/2025']);
 
-        $kandidat = \App\Models\Kandidat::factory()->create([
+        $kandidat = Kandidat::factory()->create([
             'tipStudija_id' => $tipStudija->id,
             'studijskiProgram_id' => $program->id,
             'skolskaGodinaUpisa_id' => $skolskaGodina->id,
@@ -114,7 +115,7 @@ class EnrollmentTest extends TestCase
         $program = StudijskiProgram::factory()->create(['tipStudija_id' => $tipStudija->id]);
         $skolskaGodina = SkolskaGodUpisa::factory()->create(['naziv' => '2024/2025']);
 
-        $kandidat = \App\Models\Kandidat::factory()->create([
+        $kandidat = Kandidat::factory()->create([
             'tipStudija_id' => $tipStudija->id,
             'studijskiProgram_id' => $program->id,
             'skolskaGodinaUpisa_id' => $skolskaGodina->id,
@@ -136,7 +137,7 @@ class EnrollmentTest extends TestCase
         $program = StudijskiProgram::factory()->create(['tipStudija_id' => $tipStudija->id]);
         $skolskaGodina = SkolskaGodUpisa::factory()->create(['naziv' => '2024/2025']);
 
-        $kandidat1 = \App\Models\Kandidat::factory()->create([
+        $kandidat1 = Kandidat::factory()->create([
             'tipStudija_id' => $tipStudija->id,
             'studijskiProgram_id' => $program->id,
             'skolskaGodinaUpisa_id' => $skolskaGodina->id,
@@ -144,7 +145,7 @@ class EnrollmentTest extends TestCase
             'brojIndeksa' => null,
         ]);
 
-        $kandidat2 = \App\Models\Kandidat::factory()->create([
+        $kandidat2 = Kandidat::factory()->create([
             'tipStudija_id' => $tipStudija->id,
             'studijskiProgram_id' => $program->id,
             'skolskaGodinaUpisa_id' => $skolskaGodina->id,
