@@ -16,6 +16,9 @@ class Kernel extends ConsoleKernel
         // Commands\Inspire::class,
         Commands\FailedJobsMonitor::class,
         Commands\CleanupOrphanedRecords::class,
+        Commands\BackupDatabase::class,
+        Commands\CleanupOldNotifications::class,
+        Commands\ArchiveCompletedZapisnici::class,
     ];
 
     /**
@@ -25,7 +28,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // Daily database backup at 2 AM
+        $schedule->command('backup:run --compress')
+                 ->dailyAt('02:00');
+
+        // Weekly notification cleanup (Sundays at 3 AM)
+        $schedule->command('notifications:cleanup')
+                 ->weekly()
+                 ->sundays()
+                 ->at('03:00');
+
+        // Monthly zapisnik archive (1st of month at 4 AM)
+        $schedule->command('zapisnici:archive')
+                 ->monthlyOn(1, '04:00');
     }
 }
