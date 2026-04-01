@@ -229,18 +229,6 @@ parameters:
 			path: app/Http/Controllers/PredmetController.php
 
 		-
-			message: '#^Call to function compact\(\) contains undefined variable \$tipPredmeta\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: app/Http/Controllers/PredmetController.php
-
-		-
-			message: '#^Call to function compact\(\) contains undefined variable \$tipStudija\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: app/Http/Controllers/PredmetController.php
-
-		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
 			identifier: catch.neverThrown
 			count: 3
@@ -809,12 +797,6 @@ parameters:
 			identifier: assign.propertyType
 			count: 3
 			path: app/Services/IspitService.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\KandidatPrilozenaDokumenta\>\:\:lists\(\)\.$#'
-			identifier: method.notFound
-			count: 2
-			path: app/Services/KandidatService.php
 
 		-
 			message: '#^Call to an undefined static method App\\Models\\UpisGodine\:\:uplatiGodinu\(\)\.$#'
