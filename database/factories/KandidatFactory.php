@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Kandidat;
 use App\Models\SkolskaGodUpisa;
+use App\Models\StatusStudiranja;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -24,7 +25,7 @@ class KandidatFactory extends Factory
             'tipStudija_id' => TipStudija::factory(),
             'skolskaGodinaUpisa_id' => SkolskaGodUpisa::factory(),
             'godinaStudija_id' => $godinaStudija,
-            'statusUpisa_id' => 1,
+            'statusUpisa_id' => StatusStudiranja::factory(),
             'indikatorAktivan' => 1,
             'krsnaSlava_id' => 1,
             'uspehSrednjaSkola_id' => 1,
@@ -39,7 +40,7 @@ class KandidatFactory extends Factory
     public function osnovneStudije(): static
     {
         return $this->state(fn (array $attributes) => [
-            'tipStudija_id' => 1,
+            'tipStudija_id' => TipStudija::factory()->osnovne(),
             'godinaStudija_id' => 1,
         ]);
     }
@@ -47,7 +48,7 @@ class KandidatFactory extends Factory
     public function masterStudije(): static
     {
         return $this->state(fn (array $attributes) => [
-            'tipStudija_id' => 2,
+            'tipStudija_id' => TipStudija::factory()->master(),
             'godinaStudija_id' => 1,
         ]);
     }
@@ -55,7 +56,7 @@ class KandidatFactory extends Factory
     public function upisan(): static
     {
         return $this->state(fn (array $attributes) => [
-            'statusUpisa_id' => 1,
+            'statusUpisa_id' => StatusStudiranja::factory(),
             'upisan' => 1,
         ]);
     }
