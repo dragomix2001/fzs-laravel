@@ -74,11 +74,7 @@ class KandidatService
      */
     public function getStudijskiProgrami(int $tipStudijaId): mixed
     {
-        $cacheKey = "studijski_programi_tip_{$tipStudijaId}";
-
-        return Cache::remember($cacheKey, 3600, function () use ($tipStudijaId) {
-            return StudijskiProgram::where('tipStudija_id', $tipStudijaId)->get();
-        });
+        return StudijskiProgram::where('tipStudija_id', $tipStudijaId)->get();
     }
 
     /**
@@ -787,7 +783,7 @@ class KandidatService
         $statusKandidata = StatusGodine::whereNotIn('id', [4, 5])->get();
         $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 1, 'indikatorAktivan' => 1])->get();
 
-        $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->lists('prilozenaDokumenta_id')->toArray();
+        $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->pluck('prilozenaDokumenta_id')->toArray();
 
         try {
             $prviRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 1])->firstOrFail();
@@ -852,7 +848,7 @@ class KandidatService
     public function getEditDropdownDataMaster(int $id): array
     {
         $statusKandidata = StatusGodine::whereNotIn('id', [4, 5])->get();
-        $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->lists('prilozenaDokumenta_id')->toArray();
+        $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->pluck('prilozenaDokumenta_id')->toArray();
 
         return array_merge($this->getDropdownDataMaster(), [
             'statusKandidata' => $statusKandidata,

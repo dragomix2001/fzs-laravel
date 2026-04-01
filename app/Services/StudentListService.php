@@ -318,7 +318,12 @@ class StudentListService extends BasePdfService
             ->with('skolskaGodina3', $skolskaGodina6)
             ->with('skolskaGodina', $skolskaGodina6)
             ->with('skolskaGodina4', $skolskaGodina6)
-            ->with('tipStudija', TipStudija::all());
+            ->with('tipStudija', TipStudija::all())
+            ->with('predmeti', Predmet::all())
+            ->with('skolskaGodinaE', $skolskaGodina6)
+            ->with('skolskaGodina7', $skolskaGodina6)
+            ->with('skolskaGodina8', $skolskaGodina6)
+            ->with('skolskaGodina9', $skolskaGodina6);
 
         $contents = $view->render();
         $pdf->SetTitle('Списци студената');

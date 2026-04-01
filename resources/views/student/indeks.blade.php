@@ -96,8 +96,6 @@
                             <a class="btn btn-warning btn-sm" href="{{ url('/kandidat/' . $kandidat->id . '/edit') }}">
                                 <i class="fas fa-edit"></i>
                             </a>
-                        </td>
-                        <td>
                             <a class="btn btn-danger btn-sm" href="{{ url('/kandidat/' . $kandidat->id . '/delete') }}" onclick="return confirm('Да ли сте сигурни?');">
                                 <i class="fas fa-trash"></i>
                             </a>

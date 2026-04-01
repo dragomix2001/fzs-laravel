@@ -197,8 +197,14 @@ class IspitService extends BasePdfService
         $prijavaIds = [];
         foreach ($zapisnikStudent as $id) {
             $kandidat = $studentiMap->get($id);
+            if ($kandidat === null) {
+                continue;
+            }
 
             $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
+            if ($predmetProgram === null) {
+                continue;
+            }
 
             $pom = PrijavaIspita::where(['predmet_id' => $predmetProgram->id, 'rok_id' => $zapisnik->rok_id, 'kandidat_id' => $id])->first();
             if ($pom != null) {
@@ -209,28 +215,41 @@ class IspitService extends BasePdfService
         $polozeniIspitIds = [];
         foreach ($zapisnikStudent as $id) {
             $kandidat = $studentiMap->get($id);
+            if ($kandidat === null) {
+                continue;
+            }
             $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
+            if ($predmetProgram === null) {
+                continue;
+            }
             $pom = PolozeniIspiti::where(['zapisnik_id' => $zapisnik->id, 'predmet_id' => $predmetProgram->id, 'kandidat_id' => $id])->first();
             if ($pom != null) {
                 $polozeniIspitIds[$id] = $pom->id;
             }
         }
 
-        // Use last kandidat from the loop to determine predmetProgram for the final query below
+        // Determine predmetProgram from the last valid kandidat for the final query below
         $lastKandidat = $studentiMap->last();
-        $predmetProgram = $predmetProgramLookup->get($lastKandidat->tipStudija_id.'_'.$lastKandidat->studijskiProgram_id);
         $studijskiProgrami = ZapisnikOPolaganju_StudijskiProgram::where(['zapisnik_id' => $zapisnikId])->get();
         $statusIspita = StatusIspita::all();
         $polozeniIspiti = PolozeniIspiti::where(['zapisnik_id' => $zapisnikId])->get();
 
         $polozeniIspiti = $polozeniIspiti->sortBy(function ($name, $key) use ($studentiMap) {
-            return $studentiMap->get($name['kandidat_id'])->brojIndeksa;
+            $kandidat = $studentiMap->get($name['kandidat_id']);
+
+            return $kandidat ? $kandidat->brojIndeksa : '';
         });
 
-        $kandidati = Kandidat::where([
-            'tipStudija_id' => $predmetProgram->tipStudija_id,
-            'studijskiProgram_id' => $predmetProgram->studijskiProgram_id,
-        ])->get();
+        $kandidati = collect();
+        if ($lastKandidat !== null) {
+            $predmetProgram = $predmetProgramLookup->get($lastKandidat->tipStudija_id.'_'.$lastKandidat->studijskiProgram_id);
+            if ($predmetProgram !== null) {
+                $kandidati = Kandidat::where([
+                    'tipStudija_id' => $predmetProgram->tipStudija_id,
+                    'studijskiProgram_id' => $predmetProgram->studijskiProgram_id,
+                ])->get();
+            }
+        }
 
         return compact('zapisnik', 'studenti', 'studijskiProgrami', 'statusIspita', 'polozeniIspiti', 'polozeniIspitIds', 'prijavaIds', 'kandidati');
     }

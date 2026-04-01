@@ -87,7 +87,7 @@ class PredmetController extends Controller
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }
 
-        return view('sifarnici.addPredmet', compact('tipStudija', 'tipPredmeta'));
+        return view('sifarnici.addPredmet');
     }
 
     public function update(Request $request, Predmet $predmet)

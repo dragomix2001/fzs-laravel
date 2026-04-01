@@ -12,6 +12,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     @stack('styles')
@@ -42,6 +44,20 @@
             --sidebar-bg: #16162a;
             --sidebar-text: #e4e4e7;
         }
+        
+        [data-theme="dark"] .panel { background: var(--card-bg); border-color: var(--border-color); }
+        [data-theme="dark"] .panel-heading { border-color: var(--border-color); }
+        [data-theme="dark"] .panel-default > .panel-heading { background: var(--bg-secondary); color: var(--text-primary); }
+        [data-theme="dark"] .list-group-item { background: var(--card-bg); color: var(--text-primary); border-color: var(--border-color); }
+        [data-theme="dark"] .well { background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary); }
+        [data-theme="dark"] .table > thead > tr > th { background: var(--bg-secondary) !important; color: var(--text-primary) !important; }
+        [data-theme="dark"] .table > tbody > tr > td { border-color: var(--border-color); }
+        [data-theme="dark"] .btn-default { background: var(--bg-secondary); color: var(--text-primary); border-color: var(--border-color); }
+        [data-theme="dark"] .nav-pills > li > a { color: var(--text-primary); }
+        [data-theme="dark"] .nav-pills > li > a:hover { background: var(--bg-secondary); }
+        [data-theme="dark"] .modal-content { background: var(--card-bg); color: var(--text-primary); }
+        [data-theme="dark"] .form-control { background: var(--bg-secondary); color: var(--text-primary); border-color: var(--border-color); }
+        [data-theme="dark"] .form-select { background-color: var(--bg-secondary); color: var(--text-primary); border-color: var(--border-color); }
         
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -344,6 +360,103 @@
                 display: block;
             }
         }
+
+/* ======= Bootstrap 3 → 5 Compatibility Shim ======= */
+
+/* Panels → Cards */
+.panel { background: var(--card-bg, #fff); border: 1px solid var(--border-color, #dee2e6); border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.panel-heading { padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--border-color, #dee2e6); border-radius: 0.5rem 0.5rem 0 0; font-weight: 600; }
+.panel-body { padding: 1.25rem; }
+.panel-title { margin: 0; font-size: 1rem; font-weight: 600; }
+.panel-footer { padding: 0.75rem 1.25rem; border-top: 1px solid var(--border-color, #dee2e6); background: #f8f9fa; border-radius: 0 0 0.5rem 0.5rem; }
+.panel-primary { border-color: #0d6efd; }
+.panel-primary > .panel-heading { background: #0d6efd; color: #fff; border-color: #0d6efd; }
+.panel-success { border-color: #198754; }
+.panel-success > .panel-heading { background: #198754; color: #fff; }
+.panel-danger { border-color: #dc3545; }
+.panel-danger > .panel-heading { background: #dc3545; color: #fff; }
+.panel-warning { border-color: #ffc107; }
+.panel-warning > .panel-heading { background: #ffc107; color: #212529; }
+.panel-info { border-color: #0dcaf0; }
+.panel-info > .panel-heading { background: #0dcaf0; color: #212529; }
+.panel-default { border-color: #dee2e6; }
+.panel-default > .panel-heading { background: #f8f9fa; color: #212529; }
+
+/* Labels → Badges */
+.label { display: inline-block; padding: 0.35em 0.65em; font-size: 0.75em; font-weight: 700; line-height: 1; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: 0.375rem; }
+.label-default { background-color: #6c757d; color: #fff; }
+.label-primary { background-color: #0d6efd; color: #fff; }
+.label-success { background-color: #198754; color: #fff; }
+.label-info { background-color: #0dcaf0; color: #212529; }
+.label-warning { background-color: #ffc107; color: #212529; }
+.label-danger { background-color: #dc3545; color: #fff; }
+
+/* Bootstrap 3 data attributes → work with BS5 JS */
+/* (handled via JS shim below) */
+
+/* Pull classes */
+.pull-left { float: left !important; }
+.pull-right { float: right !important; }
+
+/* Alerts - ensure close button works */
+.alert .close { float: right; font-size: 1.5rem; font-weight: 700; line-height: 1; color: #000; opacity: .5; background: none; border: 0; padding: 0; cursor: pointer; }
+.alert .close:hover { opacity: .75; }
+
+/* Nav pills BS3 compat */
+.nav-pills > li { display: inline-block; }
+.nav-pills > li > a { display: block; padding: 0.5rem 1rem; border-radius: 0.375rem; color: #0d6efd; text-decoration: none; margin-right: 2px; }
+.nav-pills > li > a:hover { background-color: #e9ecef; }
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus { background-color: #0d6efd; color: #fff; }
+
+/* Modal BS3 compat */
+.modal-header .close { float: right; font-size: 1.5rem; font-weight: 700; line-height: 1; color: #000; opacity: .5; background: none; border: 0; padding: 0; cursor: pointer; }
+
+/* Table row contextual classes (BS3) */
+.table > tbody > tr.warning, .table > tbody > tr.warning > td { background-color: #fff3cd !important; }
+.table > tbody > tr.info, .table > tbody > tr.info > td { background-color: #cff4fc !important; }
+.table > tbody > tr.success, .table > tbody > tr.success > td { background-color: #d1e7dd !important; }
+.table > tbody > tr.danger, .table > tbody > tr.danger > td { background-color: #f8d7da !important; }
+.table > tbody > tr.active, .table > tbody > tr.active > td { background-color: #e2e3e5 !important; }
+
+/* Glyphicons → Font Awesome (common ones) - most already use FA */
+.glyphicon { font-family: inherit; }
+
+/* Form group spacing */
+.form-group { margin-bottom: 1rem; }
+
+/* Well → card equivalent */
+.well { background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 0.5rem; padding: 1.25rem; margin-bottom: 1rem; }
+
+/* Button group spacing fix */
+.btn-group .btn { border-radius: 0; }
+.btn-group .btn:first-child { border-radius: 0.375rem 0 0 0.375rem; }
+.btn-group .btn:last-child { border-radius: 0 0.375rem 0.375rem 0; }
+
+/* List group */
+.list-group-item { background-color: var(--card-bg, #fff); color: var(--text-primary, #212529); border-color: var(--border-color, #dee2e6); }
+
+/* Ensure tables get proper Bootstrap styling */
+.table { width: 100%; margin-bottom: 1rem; vertical-align: top; border-color: var(--border-color, #dee2e6); }
+.table > thead > tr > th { vertical-align: bottom; border-bottom: 2px solid var(--border-color, #dee2e6); padding: 0.75rem; text-align: left; }
+.table > tbody > tr > td { padding: 0.75rem; vertical-align: middle; border-top: 1px solid var(--border-color, #dee2e6); }
+.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Btn variants that BS5 may style differently */
+.btn-default { color: #212529; background-color: #f8f9fa; border-color: #dee2e6; }
+.btn-default:hover { background-color: #e9ecef; border-color: #dee2e6; }
+
+/* DataTables Bootstrap 5 integration fixes */
+.dataTables_wrapper .dataTables_length select { display: inline-block; width: auto; }
+.dataTables_wrapper .dataTables_filter input { display: inline-block; width: auto; margin-left: 0.5rem; }
+.dataTables_wrapper .dataTables_info { padding-top: 0.75rem; }
+.dataTables_wrapper .dataTables_paginate { padding-top: 0.75rem; }
+.dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.375rem 0.75rem; margin-left: 2px; border-radius: 0.375rem; border: 1px solid #dee2e6; }
+.dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #0d6efd; color: #fff !important; border-color: #0d6efd; }
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: #e9ecef; border-color: #dee2e6; }
+
+/* ======= END Compatibility Shim ======= */
     </style>
 </head>
 <body>
@@ -535,6 +648,9 @@
 
         @include('partials.toast')
     @include('partials.ajax-loader')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     @stack('scripts')
     
     <script>
@@ -578,5 +694,34 @@
             }
         });
     </script>
+<script>
+// Bootstrap 3→5 data attribute compatibility
+document.addEventListener('DOMContentLoaded', function() {
+    // Map data-dismiss → data-bs-dismiss
+    document.querySelectorAll('[data-dismiss]').forEach(function(el) {
+        el.setAttribute('data-bs-dismiss', el.getAttribute('data-dismiss'));
+    });
+    // Map data-toggle → data-bs-toggle
+    document.querySelectorAll('[data-toggle]').forEach(function(el) {
+        el.setAttribute('data-bs-toggle', el.getAttribute('data-toggle'));
+    });
+    // Map data-target → data-bs-target
+    document.querySelectorAll('[data-target]').forEach(function(el) {
+        el.setAttribute('data-bs-target', el.getAttribute('data-target'));
+    });
+    // Map data-placement → data-bs-placement
+    document.querySelectorAll('[data-placement]').forEach(function(el) {
+        el.setAttribute('data-bs-placement', el.getAttribute('data-placement'));
+    });
+    // Map data-content → data-bs-content
+    document.querySelectorAll('[data-content]').forEach(function(el) {
+        el.setAttribute('data-bs-content', el.getAttribute('data-content'));
+    });
+    // Map data-container → data-bs-container
+    document.querySelectorAll('[data-container]').forEach(function(el) {
+        el.setAttribute('data-bs-container', el.getAttribute('data-container'));
+    });
+});
+</script>
 </body>
 </html>
