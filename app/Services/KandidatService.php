@@ -62,7 +62,7 @@ class KandidatService
     /**
      * Get active studijski program for osnovne studije
      */
-    public function getActiveStudijskiProgramOsnovne(): int
+    public function getActiveStudijskiProgramOsnovne(): ?int
     {
         return Cache::remember('active_studijski_program_osnovne', 3600, function () {
             return StudijskiProgram::where(['tipStudija_id' => 1, 'indikatorAktivan' => 1])->value('id');

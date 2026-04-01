@@ -39,7 +39,11 @@ class KandidatController extends Controller
 
         $studijskiProgrami = $this->kandidatService->getStudijskiProgrami(1);
 
-        $kandidati = Kandidat::where(['tipStudija_id' => 1, 'statusUpisa_id' => 3, 'studijskiProgram_id' => $studijskiProgramId])->get();
+        $query = Kandidat::where(['tipStudija_id' => 1, 'statusUpisa_id' => 3]);
+        if ($studijskiProgramId !== null) {
+            $query->where('studijskiProgram_id', $studijskiProgramId);
+        }
+        $kandidati = $query->get();
 
         return view('kandidat.indeks')
             ->with('kandidati', $kandidati)
