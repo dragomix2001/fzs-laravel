@@ -31,7 +31,7 @@ class BackupDatabase extends Command
         try {
             // Create backups directory if it doesn't exist
             $backupDir = storage_path('app/backups');
-            if (!is_dir($backupDir)) {
+            if (! is_dir($backupDir)) {
                 mkdir($backupDir, 0755, true);
             }
 
@@ -58,6 +58,7 @@ class BackupDatabase extends Command
             if ($returnVar !== 0) {
                 Log::error("Database backup failed. Return code: {$returnVar}");
                 $this->error('Failed to create database backup.');
+
                 return 1;
             }
 
@@ -72,6 +73,7 @@ class BackupDatabase extends Command
                 if ($returnVar !== 0) {
                     Log::error("Database backup compression failed. Return code: {$returnVar}");
                     $this->error('Failed to compress database backup.');
+
                     return 1;
                 }
 
@@ -88,8 +90,9 @@ class BackupDatabase extends Command
 
             return 0;
         } catch (\Exception $e) {
-            Log::error("Database backup error: " . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage());
+            Log::error('Database backup error: '.$e->getMessage());
+            $this->error('Error: '.$e->getMessage());
+
             return 1;
         }
     }
@@ -97,7 +100,7 @@ class BackupDatabase extends Command
     /**
      * Format bytes to human-readable format.
      *
-     * @param int $bytes
+     * @param  int  $bytes
      * @return string
      */
     private function formatBytes($bytes)
@@ -108,6 +111,6 @@ class BackupDatabase extends Command
         $pow = min($pow, count($units) - 1);
         $bytes /= (1 << (10 * $pow));
 
-        return round($bytes, 2) . ' ' . $units[$pow];
+        return round($bytes, 2).' '.$units[$pow];
     }
 }

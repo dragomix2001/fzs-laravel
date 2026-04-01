@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\DTOs\KandidatData;
 use App\GodinaStudija;
+use App\Http\Requests\StoreKandidatRequest;
+use App\Http\Requests\StoreMasterKandidatRequest;
+use App\Http\Requests\UpdateKandidatRequest;
+use App\Http\Requests\UpdateMasterKandidatRequest;
 use App\Kandidat;
-use App\KrsnaSlava;
 use App\Opstina;
 use App\OpstiUspeh;
 use App\PrilozenaDokumenta;
-use App\Http\Requests\StoreMasterKandidatRequest;
-use App\Http\Requests\StoreKandidatRequest;
-use App\Http\Requests\UpdateKandidatRequest;
-use App\Http\Requests\UpdateMasterKandidatRequest;
 use App\Services\KandidatService;
 use App\SkolskaGodUpisa;
 use App\Sport;
@@ -22,7 +21,6 @@ use App\StudijskiProgram;
 use App\TipStudija;
 use App\UspehSrednjaSkola;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
 
 class KandidatController extends Controller
@@ -123,14 +121,14 @@ class KandidatController extends Controller
                 return redirect("/student/index/1?godina={$kandidat->godinaStudija_id}&studijskiProgramId={$kandidat->studijskiProgram_id}");
             }
 
-            return redirect('/kandidat?studijskiProgramId=' . $kandidat->studijskiProgram_id);
+            return redirect('/kandidat?studijskiProgramId='.$kandidat->studijskiProgram_id);
         } else {
             Session::flash('flash-error', 'update');
             if ($kandidat->statusUpisa_id == 1) {
                 return redirect("/student/index/1?godina={$kandidat->godinaStudija_id}&studijskiProgramId={$kandidat->studijskiProgram_id}");
             }
 
-            return redirect('/kandidat?studijskiProgramId=1' . $kandidat->studijskiProgram_id);
+            return redirect('/kandidat?studijskiProgramId=1'.$kandidat->studijskiProgram_id);
         }
     }
 
@@ -191,7 +189,7 @@ class KandidatController extends Controller
     {
         $kandidat = $this->kandidatService->storeMasterKandidat($request);
 
-        return redirect('/master?studijskiProgramId=' . $kandidat->studijskiProgram_id);
+        return redirect('/master?studijskiProgramId='.$kandidat->studijskiProgram_id);
     }
 
     public function editMaster($id)

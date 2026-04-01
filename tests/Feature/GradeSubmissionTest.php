@@ -91,7 +91,7 @@ class GradeSubmissionTest extends TestCase
         ]);
     }
 
-    public function test_savePolozeniIspiti_azurira_vise_zapisa_odjednom(): void
+    public function test_save_polozeni_ispiti_azurira_vise_zapisa_odjednom(): void
     {
         $ispitService = app(IspitService::class);
 

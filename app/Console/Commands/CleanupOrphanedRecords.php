@@ -31,9 +31,9 @@ class CleanupOrphanedRecords extends Command
             'kandidat',
             [
                 'studijskiProgram_id' => ['table' => 'studijski_program', 'nullable' => false],
-                'tipStudija_id'       => ['table' => 'tip_studija',       'nullable' => false],
+                'tipStudija_id' => ['table' => 'tip_studija',       'nullable' => false],
                 'skolskaGodinaUpisa_id' => ['table' => 'skolska_god_upisa', 'nullable' => true],
-                'statusUpisa_id'      => ['table' => 'status_studiranja', 'nullable' => true],
+                'statusUpisa_id' => ['table' => 'status_studiranja', 'nullable' => true],
             ],
             $dryRun,
             $fixNulls
@@ -42,10 +42,10 @@ class CleanupOrphanedRecords extends Command
         $totalIssues += $this->analyzeTable(
             'upis_godine',
             [
-                'kandidat_id'         => ['table' => 'kandidat',          'nullable' => false],
+                'kandidat_id' => ['table' => 'kandidat',          'nullable' => false],
                 'studijskiProgram_id' => ['table' => 'studijski_program', 'nullable' => false],
-                'tipStudija_id'       => ['table' => 'tip_studija',       'nullable' => false],
-                'statusGodine_id'     => ['table' => 'status_godine',     'nullable' => false],
+                'tipStudija_id' => ['table' => 'tip_studija',       'nullable' => false],
+                'statusGodine_id' => ['table' => 'status_godine',     'nullable' => false],
             ],
             $dryRun,
             $fixNulls
@@ -55,9 +55,9 @@ class CleanupOrphanedRecords extends Command
             'prijava_ispita',
             [
                 'kandidat_id' => ['table' => 'kandidat',               'nullable' => true],
-                'predmet_id'  => ['table' => 'predmet',                'nullable' => true],
+                'predmet_id' => ['table' => 'predmet',                'nullable' => true],
                 'profesor_id' => ['table' => 'profesor',               'nullable' => true],
-                'rok_id'      => ['table' => 'aktivni_ispitni_rokovi', 'nullable' => true],
+                'rok_id' => ['table' => 'aktivni_ispitni_rokovi', 'nullable' => true],
             ],
             $dryRun,
             $fixNulls
@@ -67,8 +67,8 @@ class CleanupOrphanedRecords extends Command
             'polozeni_ispiti',
             [
                 'kandidat_id' => ['table' => 'kandidat',                      'nullable' => true],
-                'predmet_id'  => ['table' => 'predmet',                       'nullable' => true],
-                'prijava_id'  => ['table' => 'prijava_ispita',                'nullable' => true],
+                'predmet_id' => ['table' => 'predmet',                       'nullable' => true],
+                'prijava_id' => ['table' => 'prijava_ispita',                'nullable' => true],
                 'zapisnik_id' => ['table' => 'zapisnik_o_polaganju_ispita',   'nullable' => true],
             ],
             $dryRun,
@@ -78,9 +78,9 @@ class CleanupOrphanedRecords extends Command
         $totalIssues += $this->analyzeTable(
             'zapisnik_o_polaganju_ispita',
             [
-                'predmet_id'  => ['table' => 'predmet',                'nullable' => true],
+                'predmet_id' => ['table' => 'predmet',                'nullable' => true],
                 'profesor_id' => ['table' => 'profesor',               'nullable' => true],
-                'rok_id'      => ['table' => 'aktivni_ispitni_rokovi', 'nullable' => true],
+                'rok_id' => ['table' => 'aktivni_ispitni_rokovi', 'nullable' => true],
             ],
             $dryRun,
             $fixNulls
@@ -99,7 +99,7 @@ class CleanupOrphanedRecords extends Command
         $totalIssues += $this->analyzeTable(
             'zapisnik_o_polaganju__studijski_program',
             [
-                'zapisnik_id'        => ['table' => 'zapisnik_o_polaganju_ispita', 'nullable' => false],
+                'zapisnik_id' => ['table' => 'zapisnik_o_polaganju_ispita', 'nullable' => false],
                 'StudijskiProgram_id' => ['table' => 'studijski_program',           'nullable' => false],
             ],
             $dryRun,
@@ -111,6 +111,7 @@ class CleanupOrphanedRecords extends Command
         if ($totalIssues === 0) {
             $this->info('✓ Nema orphaned zapisa. Baza je čista — možete pokrenuti migraciju.');
             $this->info('  Sledeći korak: php artisan migrate');
+
             return self::SUCCESS;
         }
 
@@ -143,7 +144,7 @@ class CleanupOrphanedRecords extends Command
                 $totalIssues += $orphanCount;
                 $this->warn("  [{$table}.{$column}] {$orphanCount} orphaned zapisa (ref. {$referencedTable})");
 
-                if (!$dryRun) {
+                if (! $dryRun) {
                     if ($isNullable && $fixNulls) {
                         DB::table($table)
                             ->whereNotNull($column)
@@ -159,7 +160,7 @@ class CleanupOrphanedRecords extends Command
                     }
                 }
             } else {
-                $this->line("  <fg=green>✓</> [{$table}.{$column}] OK" . ($nullCount > 0 ? " ({$nullCount} NULL vrednosti)" : ''));
+                $this->line("  <fg=green>✓</> [{$table}.{$column}] OK".($nullCount > 0 ? " ({$nullCount} NULL vrednosti)" : ''));
             }
         }
 

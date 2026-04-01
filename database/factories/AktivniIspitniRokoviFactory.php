@@ -12,7 +12,7 @@ class AktivniIspitniRokoviFactory extends Factory
     public function definition(): array
     {
         $rokovi = ['Januarski', 'Februarski', 'Junski', 'Julski', 'Septembarski', 'Oktobar'];
-        $naziv = $this->faker->randomElement($rokovi) . ' ispitni rok';
+        $naziv = $this->faker->randomElement($rokovi).' ispitni rok';
         $pocetak = $this->faker->dateTimeBetween('now', '+30 days');
         $kraj = clone $pocetak;
         $kraj->modify('+14 days');

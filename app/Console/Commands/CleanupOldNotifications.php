@@ -32,8 +32,9 @@ class CleanupOldNotifications extends Command
 
             return 0;
         } catch (\Exception $e) {
-            Log::error("Notifications cleanup error: " . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage());
+            Log::error('Notifications cleanup error: '.$e->getMessage());
+            $this->error('Error: '.$e->getMessage());
+
             return 1;
         }
     }

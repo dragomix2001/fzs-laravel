@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\DTOs\KandidatData;
 use App\GodinaStudija;
+use App\Jobs\MassEnrollmentJob;
 use App\Kandidat;
 use App\KandidatPrilozenaDokumenta;
 use App\KrsnaSlava;
@@ -17,9 +19,6 @@ use App\StatusGodine;
 use App\StatusStudiranja;
 use App\StudijskiProgram;
 use App\TipStudija;
-use App\Services\UpisService;
-use App\DTOs\KandidatData;
-use App\Jobs\MassEnrollmentJob;
 use App\UpisGodine;
 use App\UspehSrednjaSkola;
 use Carbon\Carbon;
@@ -131,19 +130,19 @@ class KandidatService
     {
         if ($file->isValid() && substr($file->getMimeType(), 0, 5) === 'image') {
             $extension = $file->getClientOriginalExtension();
-            $imageName = 'slika' . $kandidat->id;
+            $imageName = 'slika'.$kandidat->id;
 
             $oldImages = collect(Storage::disk('uploads')->files('images'))
-                ->filter(fn ($f) => str_starts_with(basename($f), $imageName . '.'));
+                ->filter(fn ($f) => str_starts_with(basename($f), $imageName.'.'));
 
             foreach ($oldImages as $old) {
                 Storage::disk('uploads')->delete($old);
             }
 
-            $kandidat->slika = $imageName . '.' . $extension;
+            $kandidat->slika = $imageName.'.'.$extension;
             $kandidat->save();
 
-            Storage::disk('uploads')->putFileAs('images', $file, $imageName . '.' . $extension);
+            Storage::disk('uploads')->putFileAs('images', $file, $imageName.'.'.$extension);
         }
     }
 
@@ -153,7 +152,7 @@ class KandidatService
     public function handleNewImageUpload(Kandidat $kandidat, $file): void
     {
         if ($file->isValid() && substr($file->getMimeType(), 0, 5) === 'image') {
-            $imageName = 'slika' . $kandidat->id . '.' . $file->getClientOriginalExtension();
+            $imageName = 'slika'.$kandidat->id.'.'.$file->getClientOriginalExtension();
             $kandidat->slika = $imageName;
             $kandidat->save();
 
@@ -168,19 +167,19 @@ class KandidatService
     {
         if ($file->isValid() && $file->getMimeType() === 'application/pdf') {
             $extension = $file->getClientOriginalExtension();
-            $pdfName = 'diplomski' . $kandidat->id;
+            $pdfName = 'diplomski'.$kandidat->id;
 
             $oldPdfs = collect(Storage::disk('uploads')->files('pdf'))
-                ->filter(fn ($f) => str_starts_with(basename($f), $pdfName . '.'));
+                ->filter(fn ($f) => str_starts_with(basename($f), $pdfName.'.'));
 
             foreach ($oldPdfs as $old) {
                 Storage::disk('uploads')->delete($old);
             }
 
-            $kandidat->diplomski = $pdfName . $extension;
+            $kandidat->diplomski = $pdfName.$extension;
             $kandidat->save();
 
-            Storage::disk('uploads')->putFileAs('pdf', $file, $pdfName . $extension);
+            Storage::disk('uploads')->putFileAs('pdf', $file, $pdfName.$extension);
         }
     }
 

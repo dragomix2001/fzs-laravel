@@ -2,12 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Kandidat;
-use App\Models\ArhivIndeksa;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
-use App\Models\UpisGodine;
 use App\Services\UpisService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -111,7 +108,7 @@ class EnrollmentTest extends TestCase
         $this->assertDatabaseCount('upis_godine', 4);
     }
 
-    public function test_generisi_broj_indeksa_formato_tipStudija_redBroj_godinaUpisa(): void
+    public function test_generisi_broj_indeksa_formato_tip_studija_red_broj_godina_upisa(): void
     {
         $tipStudija = TipStudija::factory()->create(['naziv' => 'Osnovne akademske studije', 'skrNaziv' => 'OAS', 'indikatorAktivan' => 1]);
         $program = StudijskiProgram::factory()->create(['tipStudija_id' => $tipStudija->id]);

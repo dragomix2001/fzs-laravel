@@ -30,16 +30,16 @@ class Kernel extends ConsoleKernel
     {
         // Daily database backup at 2 AM
         $schedule->command('backup:run --compress')
-                 ->dailyAt('02:00');
+            ->dailyAt('02:00');
 
         // Weekly notification cleanup (Sundays at 3 AM)
         $schedule->command('notifications:cleanup')
-                 ->weekly()
-                 ->sundays()
-                 ->at('03:00');
+            ->weekly()
+            ->sundays()
+            ->at('03:00');
 
         // Monthly zapisnik archive (1st of month at 4 AM)
         $schedule->command('zapisnici:archive')
-                 ->monthlyOn(1, '04:00');
+            ->monthlyOn(1, '04:00');
     }
 }

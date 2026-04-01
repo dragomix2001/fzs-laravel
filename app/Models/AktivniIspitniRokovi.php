@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class AktivniIspitniRokovi extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $table = 'aktivni_ispitni_rokovi';

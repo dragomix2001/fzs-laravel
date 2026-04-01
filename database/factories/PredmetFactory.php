@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Predmet;
-use App\Models\TipStudija;
 use App\Models\StudijskiProgram;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

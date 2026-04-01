@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\AktivniIspitniRokovi;
+use App\DTOs\ZapisnikData;
 use App\GodinaStudija;
+use App\Jobs\GenerateZapisnikPdfJob;
 use App\Kandidat;
+use App\Models\StudijskiProgram;
 use App\PolozeniIspiti;
 use App\Predmet;
 use App\PredmetProgram;
@@ -14,9 +17,6 @@ use App\StatusIspita;
 use App\ZapisnikOPolaganju_Student;
 use App\ZapisnikOPolaganju_StudijskiProgram;
 use App\ZapisnikOPolaganjuIspita;
-use App\Models\StudijskiProgram;
-use App\DTOs\ZapisnikData;
-use App\Jobs\GenerateZapisnikPdfJob;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -191,14 +191,14 @@ class IspitService extends BasePdfService
             ->whereIn('studijskiProgram_id', $studijskiProgramIdsForMap)
             ->get()
             ->keyBy(function ($item) {
-                return $item->tipStudija_id . '_' . $item->studijskiProgram_id;
+                return $item->tipStudija_id.'_'.$item->studijskiProgram_id;
             });
 
         $prijavaIds = [];
         foreach ($zapisnikStudent as $id) {
             $kandidat = $studentiMap->get($id);
 
-            $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id . '_' . $kandidat->studijskiProgram_id);
+            $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
 
             $pom = PrijavaIspita::where(['predmet_id' => $predmetProgram->id, 'rok_id' => $zapisnik->rok_id, 'kandidat_id' => $id])->first();
             if ($pom != null) {
@@ -209,7 +209,7 @@ class IspitService extends BasePdfService
         $polozeniIspitIds = [];
         foreach ($zapisnikStudent as $id) {
             $kandidat = $studentiMap->get($id);
-            $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id . '_' . $kandidat->studijskiProgram_id);
+            $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
             $pom = PolozeniIspiti::where(['zapisnik_id' => $zapisnik->id, 'predmet_id' => $predmetProgram->id, 'kandidat_id' => $id])->first();
             if ($pom != null) {
                 $polozeniIspitIds[$id] = $pom->id;
@@ -218,7 +218,7 @@ class IspitService extends BasePdfService
 
         // Use last kandidat from the loop to determine predmetProgram for the final query below
         $lastKandidat = $studentiMap->last();
-        $predmetProgram = $predmetProgramLookup->get($lastKandidat->tipStudija_id . '_' . $lastKandidat->studijskiProgram_id);
+        $predmetProgram = $predmetProgramLookup->get($lastKandidat->tipStudija_id.'_'.$lastKandidat->studijskiProgram_id);
         $studijskiProgrami = ZapisnikOPolaganju_StudijskiProgram::where(['zapisnik_id' => $zapisnikId])->get();
         $statusIspita = StatusIspita::all();
         $polozeniIspiti = PolozeniIspiti::where(['zapisnik_id' => $zapisnikId])->get();
@@ -509,7 +509,7 @@ class IspitService extends BasePdfService
 
     public function generatePdfAsync(int $zapisnikId): string
     {
-        $storagePath = 'pdfs/zapisnik_' . $zapisnikId . '_' . time() . '.pdf';
+        $storagePath = 'pdfs/zapisnik_'.$zapisnikId.'_'.time().'.pdf';
         GenerateZapisnikPdfJob::dispatch($zapisnikId, $storagePath);
 
         return $storagePath;

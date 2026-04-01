@@ -47,24 +47,24 @@ return new class extends Migration
         Schema::table('kandidat', function (Blueprint $table) {
             // Ne dozvoliti brisanje studijskog programa koji ima kandidate
             $table->foreign('studijskiProgram_id')
-                  ->references('id')->on('studijski_program')
-                  ->onDelete('restrict');
+                ->references('id')->on('studijski_program')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje tipa studija koji ima kandidate
             $table->foreign('tipStudija_id')
-                  ->references('id')->on('tip_studija')
-                  ->onDelete('restrict');
+                ->references('id')->on('tip_studija')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje školske godine upisa koja ima kandidate
             // (nullable kolona — safe za FK bez promene nullable-a)
             $table->foreign('skolskaGodinaUpisa_id')
-                  ->references('id')->on('skolska_god_upisa')
-                  ->onDelete('restrict');
+                ->references('id')->on('skolska_god_upisa')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje statusa upisa koji se koristi (nullable kolona)
             $table->foreign('statusUpisa_id')
-                  ->references('id')->on('status_studiranja')
-                  ->onDelete('restrict');
+                ->references('id')->on('status_studiranja')
+                ->onDelete('restrict');
         });
 
         // ----------------------------------------------------------------
@@ -75,23 +75,23 @@ return new class extends Migration
         Schema::table('upis_godine', function (Blueprint $table) {
             // Kaskadno brisanje: ako se kandidat obriše, brišu se i svi njegovi upisi
             $table->foreign('kandidat_id')
-                  ->references('id')->on('kandidat')
-                  ->onDelete('cascade');
+                ->references('id')->on('kandidat')
+                ->onDelete('cascade');
 
             // Ne dozvoliti brisanje studijskog programa koji ima upisane kandidate
             $table->foreign('studijskiProgram_id')
-                  ->references('id')->on('studijski_program')
-                  ->onDelete('restrict');
+                ->references('id')->on('studijski_program')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje tipa studija koji se koristi u upisima
             $table->foreign('tipStudija_id')
-                  ->references('id')->on('tip_studija')
-                  ->onDelete('restrict');
+                ->references('id')->on('tip_studija')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje statusa godine dok postoje upisi sa tim statusom
             $table->foreign('statusGodine_id')
-                  ->references('id')->on('status_godine')
-                  ->onDelete('restrict');
+                ->references('id')->on('status_godine')
+                ->onDelete('restrict');
         });
 
         // ----------------------------------------------------------------
@@ -103,23 +103,23 @@ return new class extends Migration
         Schema::table('prijava_ispita', function (Blueprint $table) {
             // Kaskadno brisanje: ako se kandidat obriše, brišu se i sve njegove prijave
             $table->foreign('kandidat_id')
-                  ->references('id')->on('kandidat')
-                  ->onDelete('cascade');
+                ->references('id')->on('kandidat')
+                ->onDelete('cascade');
 
             // Ne dozvoliti brisanje predmeta koji ima aktivne prijave
             $table->foreign('predmet_id')
-                  ->references('id')->on('predmet')
-                  ->onDelete('restrict');
+                ->references('id')->on('predmet')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje profesora koji ima prijave ispita
             $table->foreign('profesor_id')
-                  ->references('id')->on('profesor')
-                  ->onDelete('restrict');
+                ->references('id')->on('profesor')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje ispitnog roka koji ima prijave
             $table->foreign('rok_id')
-                  ->references('id')->on('aktivni_ispitni_rokovi')
-                  ->onDelete('restrict');
+                ->references('id')->on('aktivni_ispitni_rokovi')
+                ->onDelete('restrict');
         });
 
         // ----------------------------------------------------------------
@@ -135,24 +135,24 @@ return new class extends Migration
         Schema::table('polozeni_ispiti', function (Blueprint $table) {
             // Kaskadno brisanje: ako se kandidat obriše, brišu se i svi položeni ispiti
             $table->foreign('kandidat_id')
-                  ->references('id')->on('kandidat')
-                  ->onDelete('cascade');
+                ->references('id')->on('kandidat')
+                ->onDelete('cascade');
 
             // Ne dozvoliti brisanje predmeta koji ima položene ispite
             $table->foreign('predmet_id')
-                  ->references('id')->on('predmet')
-                  ->onDelete('restrict');
+                ->references('id')->on('predmet')
+                ->onDelete('restrict');
 
             // Kaskadno brisanje: ako se prijava obriše, briše se i rezultat
             $table->foreign('prijava_id')
-                  ->references('id')->on('prijava_ispita')
-                  ->onDelete('cascade');
+                ->references('id')->on('prijava_ispita')
+                ->onDelete('cascade');
 
             // SET NULL: Dozvoliti brisanje zapisnika — kolona je nullable
             // Čuva evidenciju položenog ispita čak i ako zapisnik bude obrisan
             $table->foreign('zapisnik_id')
-                  ->references('id')->on('zapisnik_o_polaganju_ispita')
-                  ->onDelete('set null');
+                ->references('id')->on('zapisnik_o_polaganju_ispita')
+                ->onDelete('set null');
         });
 
         // ----------------------------------------------------------------
@@ -163,18 +163,18 @@ return new class extends Migration
         Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
             // Ne dozvoliti brisanje predmeta dok postoji zapisnik o polaganju
             $table->foreign('predmet_id')
-                  ->references('id')->on('predmet')
-                  ->onDelete('restrict');
+                ->references('id')->on('predmet')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje profesora dok postoji zapisnik o polaganju
             $table->foreign('profesor_id')
-                  ->references('id')->on('profesor')
-                  ->onDelete('restrict');
+                ->references('id')->on('profesor')
+                ->onDelete('restrict');
 
             // Ne dozvoliti brisanje ispitnog roka dok postoji zapisnik o polaganju
             $table->foreign('rok_id')
-                  ->references('id')->on('aktivni_ispitni_rokovi')
-                  ->onDelete('restrict');
+                ->references('id')->on('aktivni_ispitni_rokovi')
+                ->onDelete('restrict');
         });
 
         // ----------------------------------------------------------------
@@ -185,13 +185,13 @@ return new class extends Migration
         Schema::table('zapisnik_o_polaganju__student', function (Blueprint $table) {
             // Kaskadno brisanje: ako se zapisnik obriše, briše se i veza sa studentom
             $table->foreign('zapisnik_id')
-                  ->references('id')->on('zapisnik_o_polaganju_ispita')
-                  ->onDelete('cascade');
+                ->references('id')->on('zapisnik_o_polaganju_ispita')
+                ->onDelete('cascade');
 
             // Kaskadno brisanje: ako se kandidat obriše, briše se i veza sa zapisnikom
             $table->foreign('kandidat_id')
-                  ->references('id')->on('kandidat')
-                  ->onDelete('cascade');
+                ->references('id')->on('kandidat')
+                ->onDelete('cascade');
         });
 
         // ----------------------------------------------------------------
@@ -204,15 +204,16 @@ return new class extends Migration
         // ----------------------------------------------------------------
         Schema::table('zapisnik_o_polaganju__studijski_program', function (Blueprint $table) {
             // Kaskadno brisanje: ako se zapisnik obriše, briše se i veza sa programom
-            $table->foreign('zapisnik_id')
-                  ->references('id')->on('zapisnik_o_polaganju_ispita')
-                  ->onDelete('cascade');
+            $table->foreign('zapisnik_id', 'zop_studprogram_zapisnik_fk')
+                ->references('id')->on('zapisnik_o_polaganju_ispita')
+                ->onDelete('cascade');
 
             // Kaskadno brisanje: ako se studijski program obriše, briše se i veza
             // Kolona se zove StudijskiProgram_id (veliko S) u originalnoj migraciji
-            $table->foreign('StudijskiProgram_id')
-                  ->references('id')->on('studijski_program')
-                  ->onDelete('cascade');
+            // Custom ime constrainta jer auto-generisano prekoračuje MySQL limit od 64 karaktera
+            $table->foreign('StudijskiProgram_id', 'zop_studprogram_program_fk')
+                ->references('id')->on('studijski_program')
+                ->onDelete('cascade');
         });
     }
 
@@ -227,8 +228,8 @@ return new class extends Migration
         // Drop u obrnutom redosledu od up() metode
 
         Schema::table('zapisnik_o_polaganju__studijski_program', function (Blueprint $table) {
-            $table->dropForeign(['zapisnik_id']);
-            $table->dropForeign(['StudijskiProgram_id']);
+            $table->dropForeign('zop_studprogram_zapisnik_fk');
+            $table->dropForeign('zop_studprogram_program_fk');
         });
 
         Schema::table('zapisnik_o_polaganju__student', function (Blueprint $table) {

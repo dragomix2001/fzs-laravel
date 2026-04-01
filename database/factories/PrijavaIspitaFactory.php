@@ -5,8 +5,8 @@ namespace Database\Factories;
 use App\Models\AktivniIspitniRokovi;
 use App\Models\Kandidat;
 use App\Models\Predmet;
-use App\Models\Profesor;
 use App\Models\PrijavaIspita;
+use App\Models\Profesor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PrijavaIspitaFactory extends Factory

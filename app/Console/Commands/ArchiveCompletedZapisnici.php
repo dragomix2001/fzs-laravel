@@ -32,8 +32,9 @@ class ArchiveCompletedZapisnici extends Command
 
             return 0;
         } catch (\Exception $e) {
-            Log::error("Zapisnici archive error: " . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage());
+            Log::error('Zapisnici archive error: '.$e->getMessage());
+            $this->error('Error: '.$e->getMessage());
+
             return 1;
         }
     }
