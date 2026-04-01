@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
 class Kandidat extends Model
 {
-    use Auditable, Notifiable;
+    use Auditable, HasFactory, Notifiable;
 
     protected $table = 'kandidat';
 
