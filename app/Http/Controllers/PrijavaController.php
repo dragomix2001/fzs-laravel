@@ -344,6 +344,8 @@ class PrijavaController extends Controller
 
     public function storePrijavaIspita(StorePrijavaIspitaRequest $request)
     {
+        $this->authorize('create', PrijavaIspita::class);
+
         $prijava = new PrijavaIspita($request->all());
         $saved = $prijava->save();
 
@@ -363,6 +365,7 @@ class PrijavaController extends Controller
     public function deletePrijavaIspita($id, Request $request)
     {
         $prijava = PrijavaIspita::find($id);
+        $this->authorize('delete', $prijava);
         $kandidat = $prijava->kandidat_id;
         $predmet = PredmetProgram::find($prijava->predmet_id)->predmet_id;
 

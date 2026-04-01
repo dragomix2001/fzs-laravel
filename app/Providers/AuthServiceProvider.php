@@ -2,29 +2,28 @@
 
 namespace App\Providers;
 
+use App\Models\Kandidat;
+use App\Models\PolozeniIspiti;
+use App\Models\PrijavaIspita;
+use App\Models\ZapisnikOPolaganjuIspita;
+use App\Policies\IspitPolicy;
+use App\Policies\KandidatPolicy;
+use App\Policies\PolozeniIspitiPolicy;
+use App\Policies\PrijavaIspitaPolicy;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Kandidat::class => KandidatPolicy::class,
+        ZapisnikOPolaganjuIspita::class => IspitPolicy::class,
+        PrijavaIspita::class => PrijavaIspitaPolicy::class,
+        PolozeniIspiti::class => PolozeniIspitiPolicy::class,
     ];
 
-    /**
-     * Register any application authentication / authorization services.
-     *
-     * @return void
-     */
     public function boot(GateContract $gate)
     {
         $this->registerPolicies($gate);
-
-        //
     }
 }

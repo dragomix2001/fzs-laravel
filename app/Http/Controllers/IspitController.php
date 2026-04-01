@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTOs\ZapisnikData;
 use App\Http\Requests\DodajStudentaRequest;
 use App\Http\Requests\StoreZapisnikRequest;
+use App\Models\ZapisnikOPolaganjuIspita;
 use App\Services\IspitService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -27,6 +28,8 @@ class IspitController extends Controller
 
     public function createZapisnik()
     {
+        $this->authorize('create', ZapisnikOPolaganjuIspita::class);
+
         $data = $this->ispitService->getCreateZapisnikData();
         $rok_id = null;
         $predmet_id = null;
@@ -50,6 +53,8 @@ class IspitController extends Controller
 
     public function storeZapisnik(StoreZapisnikRequest $request)
     {
+        $this->authorize('create', ZapisnikOPolaganjuIspita::class);
+
         try {
             $data = ZapisnikData::fromRequest($request);
             $this->ispitService->storeZapisnik($data);
@@ -67,6 +72,9 @@ class IspitController extends Controller
 
     public function deleteZapisnik($id)
     {
+        $zapisnik = ZapisnikOPolaganjuIspita::findOrFail($id);
+        $this->authorize('delete', $zapisnik);
+
         $this->ispitService->deleteZapisnik((int) $id);
 
         return \Redirect::back();
@@ -172,6 +180,9 @@ class IspitController extends Controller
 
     public function arhivirajZapisnik($id)
     {
+        $zapisnik = ZapisnikOPolaganjuIspita::findOrFail($id);
+        $this->authorize('arhiviraj', $zapisnik);
+
         $this->ispitService->arhivirajZapisnik((int) $id);
 
         return Redirect::back();
