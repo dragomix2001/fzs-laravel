@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\ZapisnikData;
 use App\Http\Requests\DodajStudentaRequest;
 use App\Http\Requests\StoreZapisnikRequest;
 use App\Services\IspitService;
@@ -50,7 +51,8 @@ class IspitController extends Controller
     public function storeZapisnik(StoreZapisnikRequest $request)
     {
         try {
-            $this->ispitService->createZapisnik($request->all(), $request->odabir);
+            $data = ZapisnikData::fromRequest($request);
+            $this->ispitService->storeZapisnik($data);
         } catch (QueryException $ex) {
             Session::flash('flash-error', 'create');
         }

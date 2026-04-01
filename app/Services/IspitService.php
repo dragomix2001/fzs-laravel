@@ -15,6 +15,7 @@ use App\ZapisnikOPolaganju_Student;
 use App\ZapisnikOPolaganju_StudijskiProgram;
 use App\ZapisnikOPolaganjuIspita;
 use App\Models\StudijskiProgram;
+use App\DTOs\ZapisnikData;
 use App\Jobs\GenerateZapisnikPdfJob;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -164,6 +165,11 @@ class IspitService extends BasePdfService
         }
 
         return $zapisnik;
+    }
+
+    public function storeZapisnik(ZapisnikData $data): ZapisnikOPolaganjuIspita
+    {
+        return $this->createZapisnik($data->toArray(), $data->studentiIds);
     }
 
     // -------------------------------------------------------------------------

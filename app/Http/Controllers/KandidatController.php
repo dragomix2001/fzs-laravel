@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\KandidatData;
 use App\GodinaStudija;
 use App\Kandidat;
 use App\KrsnaSlava;
@@ -59,7 +60,8 @@ class KandidatController extends Controller
     {
         if ($request->page == 1) {
 
-            $kandidat = $this->kandidatService->storeKandidatPage1($request);
+            $data = KandidatData::fromRequest($request);
+            $kandidat = $this->kandidatService->storeKandidatPage1($data, $request);
             $insertedId = $kandidat->id;
 
             $dokumentiPrvaGodina = PrilozenaDokumenta::where('skolskaGodina_id', '1')->get();
@@ -107,7 +109,8 @@ class KandidatController extends Controller
     {
         $kandidat = Kandidat::find($id);
 
-        $kandidat = $this->kandidatService->updateKandidat($id, $request);
+        $data = KandidatData::fromRequest($request);
+        $kandidat = $this->kandidatService->updateKandidat($id, $data, $request);
 
         $saved = ! empty($kandidat->id);
 

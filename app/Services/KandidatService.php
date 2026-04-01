@@ -18,6 +18,7 @@ use App\StatusStudiranja;
 use App\StudijskiProgram;
 use App\TipStudija;
 use App\Services\UpisService;
+use App\DTOs\KandidatData;
 use App\Jobs\MassEnrollmentJob;
 use App\UpisGodine;
 use App\UspehSrednjaSkola;
@@ -193,15 +194,12 @@ class KandidatService
         }
     }
 
-    /**
-     * Store kandidat page 1 (basic info + image).
-     */
-    public function storeKandidatPage1(Request $request): Kandidat
+    public function storeKandidatPage1(KandidatData $data, Request $request): Kandidat
     {
         $kandidat = new Kandidat;
-        $kandidat->imeKandidata = $request->ImeKandidata;
-        $kandidat->prezimeKandidata = $request->PrezimeKandidata;
-        $kandidat->jmbg = $request->JMBG;
+        $kandidat->imeKandidata = $data->ime;
+        $kandidat->prezimeKandidata = $data->prezime;
+        $kandidat->jmbg = $data->JMBG;
 
         if (isset($request->uplata)) {
             $kandidat->uplata = 1;
@@ -228,14 +226,14 @@ class KandidatService
         $kandidat->smerZavrseneSkoleFakulteta = $request->SmerZavrseneSkoleFakulteta;
 
         $kandidat->tipStudija_id = 1;
-        $kandidat->studijskiProgram_id = $request->StudijskiProgram;
+        $kandidat->studijskiProgram_id = $data->studijskiProgramId;
         $kandidat->skolskaGodinaUpisa_id = $request->SkolskeGodineUpisa;
 
         $kandidat->drzavaZavrseneSkole = $request->drzavaZavrseneSkole;
         $kandidat->godinaZavrsetkaSkole = $request->godinaZavrsetkaSkole;
         $kandidat->drzavaRodjenja = $request->drzavaRodjenja;
 
-        $kandidat->godinaStudija_id = $request->GodinaStudija;
+        $kandidat->godinaStudija_id = $data->godinaStudijaId;
 
         $kandidat->save();
 
@@ -347,16 +345,13 @@ class KandidatService
         return $kandidat;
     }
 
-    /**
-     * Update kandidat (osnovne studije).
-     */
-    public function updateKandidat(int $id, Request $request): Kandidat
+    public function updateKandidat(int $id, KandidatData $data, Request $request): Kandidat
     {
         $kandidat = Kandidat::find($id);
 
-        $kandidat->imeKandidata = $request->ImeKandidata;
-        $kandidat->prezimeKandidata = $request->PrezimeKandidata;
-        $kandidat->jmbg = $request->JMBG;
+        $kandidat->imeKandidata = $data->ime;
+        $kandidat->prezimeKandidata = $data->prezime;
+        $kandidat->jmbg = $data->JMBG;
 
         if (isset($request->uplata)) {
             $kandidat->uplata = 1;
@@ -384,10 +379,10 @@ class KandidatService
         $kandidat->mestoZavrseneSkoleFakulteta = $request->mestoZavrseneSkoleFakulteta;
         $kandidat->smerZavrseneSkoleFakulteta = $request->SmerZavrseneSkoleFakulteta;
 
-        $kandidat->tipStudija_id = $request->TipStudija;
-        $kandidat->studijskiProgram_id = $request->StudijskiProgram;
+        $kandidat->tipStudija_id = $data->tipStudijaId;
+        $kandidat->studijskiProgram_id = $data->studijskiProgramId;
         $kandidat->skolskaGodinaUpisa_id = $request->SkolskeGodineUpisa;
-        $kandidat->godinaStudija_id = $request->GodinaStudija;
+        $kandidat->godinaStudija_id = $data->godinaStudijaId;
 
         $kandidat->drzavaZavrseneSkole = $request->drzavaZavrseneSkole;
         $kandidat->godinaZavrsetkaSkole = $request->godinaZavrsetkaSkole;
@@ -479,7 +474,7 @@ class KandidatService
         $kandidat->ukupniBrojBodova = $request->ukupniBrojBodova;
         $kandidat->upisniRok = $request->UpisniRok;
         $kandidat->indikatorAktivan = $request->IndikatorAktivan;
-        $kandidat->brojIndeksa = $request->brojIndeksa;
+        $kandidat->brojIndeksa = $data->brojIndeksa;
 
         $kandidat->save();
 
@@ -864,6 +859,13 @@ class KandidatService
             'statusKandidata' => $statusKandidata,
             'prilozenaDokumenta' => $prilozenaDokumenta,
         ]);
+    }
+
+    public function storeKandidat(KandidatData $data): Kandidat
+    {
+        return DB::transaction(function () use ($data) {
+            return Kandidat::create($data->toArray());
+        });
     }
 
     /**
