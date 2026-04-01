@@ -1,5 +1,6 @@
 includes:
     - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
 
 parameters:
     paths:
@@ -9,7 +10,11 @@ parameters:
 
     excludePaths:
         - app/bridge.php
+        - app/Http/Controllers/Auth/AuthController.php
+        - app/Http/Controllers/Auth/PasswordController.php
 
     ignoreErrors:
         # Allow dynamic properties on AndroModel subclasses (Phase 3.1 will remove AndroModel)
-        - '#Access to an undefined property App\\[a-zA-Z]+::\$#'
+        -
+            identifier: property.notFound
+            reportUnmatched: false

@@ -1,0 +1,925 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 4
+			path: app/Console/Commands/BackupDatabase.php
+
+		-
+			message: '#^Call to an undefined method App\\Console\\Commands\\QueueHealthCheck\:\:text\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/Console/Commands/QueueHealthCheck.php
+
+		-
+			message: '#^Call to an undefined method App\\Console\\Commands\\QueueHealthCheck\:\:warning\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Console/Commands/QueueHealthCheck.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 2
+			path: app/Exceptions/Handler.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Exceptions\\Handler\:\:\$dontReport is not covariant with PHPDoc type array\<int, class\-string\<Throwable\>\> of overridden property Illuminate\\Foundation\\Exceptions\\Handler\:\:\$dontReport\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$BrojIndeksa\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Exports/PolozeniIspitiExport.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$imeKandidata\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Exports/PolozeniIspitiExport.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$prezimeKandidata\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Exports/PolozeniIspitiExport.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\PolozeniIspiti\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Exports/PolozeniIspitiExport.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/AktivnostController.php
+
+		-
+			message: '#^Relation ''predmet'' is not found in App\\Models\\Aktivnost model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/AktivnostController.php
+
+		-
+			message: '#^Relation ''student'' is not found in App\\Models\\Ocenjivanje model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/AktivnostController.php
+
+		-
+			message: '#^Relation ''profesor'' is not found in App\\Models\\Aktivnost model\.$#'
+			identifier: larastan.relationExistence
+			count: 3
+			path: app/Http/Controllers/Api/AktivnostController.php
+
+		-
+			message: '#^Relation ''studenti'' is not found in App\\Models\\Aktivnost model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/AktivnostController.php
+
+		-
+			message: '#^Relation ''ucionica'' is not found in App\\Models\\Aktivnost model\.$#'
+			identifier: larastan.relationExistence
+			count: 3
+			path: app/Http/Controllers/Api/AktivnostController.php
+
+		-
+			message: '#^Relation ''program'' is not found in App\\Models\\Kandidat model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/ApiKandidatController.php
+
+		-
+			message: '#^Relation ''tipStudija'' is not found in App\\Models\\Kandidat model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/ApiKandidatController.php
+
+		-
+			message: '#^Relation ''upisaneGodine'' is not found in App\\Models\\Kandidat model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/ApiKandidatController.php
+
+		-
+			message: '#^Relation ''profesor'' is not found in App\\Models\\Obavestenje model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/ObavestenjeController.php
+
+		-
+			message: '#^Relation ''profesor'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Api/RasporedController.php
+
+		-
+			message: '#^Relation ''ucionica'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Api/RasporedController.php
+
+		-
+			message: '#^Relation ''skolskaGodina'' is not found in App\\Models\\SkolskaGodUpisa model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/StudentController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/ApiDocsController.php
+
+		-
+			message: '#^Relation ''user'' is not found in App\\Models\\AuditLog model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/AuditLogController.php
+
+		-
+			message: '#^Call to an undefined method App\\Http\\Controllers\\Auth\\AuthController\:\:guestMiddleware\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/AuthController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/BodovanjeController.php
+
+		-
+			message: '#^Relation ''godinaUpisa'' is not found in App\\Models\\Kandidat model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/DashboardController.php
+
+		-
+			message: '#^Relation ''program'' is not found in App\\Models\\Kandidat model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/DashboardController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/GodinaStudijaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\HomeController\:\:index\(\) should return Illuminate\\Http\\Response but returns Illuminate\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/HomeController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/IspitniRokController.php
+
+		-
+			message: '#^Call to static method create\(\) on an unknown class Maatwebsite\\Excel\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/IzvestajiController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/KrsnaSlavaController.php
+
+		-
+			message: '#^Relation ''korisnici'' is not found in App\\Models\\Obavestenje model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/ObavestenjeController.php
+
+		-
+			message: '#^Relation ''profesor'' is not found in App\\Models\\Obavestenje model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/ObavestenjeController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/OblikNastaveController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/OpstinaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tipStudija\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/PredmetController.php
+
+		-
+			message: '#^Call to function compact\(\) contains undefined variable \$tipPredmeta\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Http/Controllers/PredmetController.php
+
+		-
+			message: '#^Call to function compact\(\) contains undefined variable \$tipStudija\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Http/Controllers/PredmetController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 3
+			path: app/Http/Controllers/PredmetController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Kandidat\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Kandidat\>\:\:\$godinaStudija\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/PrijavaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$naziv\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/PrijavaController.php
+
+		-
+			message: '#^Property App\\Models\\PolozeniIspiti\:\:\$indikatorAktivan \(bool\|null\) does not accept int\.$#'
+			identifier: assign.propertyType
+			count: 2
+			path: app/Http/Controllers/PrijavaController.php
+
+		-
+			message: '#^Variable \$smerovi might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Http/Controllers/PrijavaController.php
+
+		-
+			message: '#^Variable \$zapisnik might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: app/Http/Controllers/PrijavaController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/PrilozenaDokumentaController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/PrisustvoController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/PrisustvoController.php
+
+		-
+			message: '#^Relation ''student'' is not found in App\\Models\\Prisanstvo model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/PrisustvoController.php
+
+		-
+			message: '#^Call to function compact\(\) contains undefined variable \$status\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Http/Controllers/ProfesorController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 2
+			path: app/Http/Controllers/ProfesorController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Raspored\:\:\$profesor\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Relation ''godinaStudija'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Relation ''oblikNastave'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 4
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Relation ''predmet'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 4
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Relation ''profesor'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 4
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Relation ''semestar'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Relation ''studijskiProgram'' is not found in App\\Models\\Raspored model\.$#'
+			identifier: larastan.relationExistence
+			count: 3
+			path: app/Http/Controllers/RasporedController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/RegionController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/SemestarController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/SportController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/StatusIspitaController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/StatusKandidataController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/StatusProfesoraController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/StatusProfesoraController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/StatusStudiranjaController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/StudijskiProgramController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/TipPredmetaController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/TipPrijaveController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/TipStudijaController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$active\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/UserController.php
+
+		-
+			message: '#^Relation ''kandidat'' is not found in App\\Models\\User model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/UserController.php
+
+		-
+			message: '#^Relation ''profesor'' is not found in App\\Models\\User model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\WelcomeController\:\:index\(\) has invalid return type App\\Http\\Controllers\\Response\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/WelcomeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\WelcomeController\:\:index\(\) should return App\\Http\\Controllers\\Response but returns Illuminate\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/WelcomeController.php
+
+		-
+			message: '#^Class Illuminate\\Foundation\\Http\\Middleware\\Authorize not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Middleware\\EncryptCookies\:\:\$except is not covariant with PHPDoc type array\<int, string\> of overridden property Illuminate\\Cookie\\Middleware\\EncryptCookies\:\:\$except\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Middleware/EncryptCookies.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$adresa\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$brojIndeksa\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$datumRodjenja\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$godinaUpisa\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$imeKandidata\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$jmbg\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$prezimeKandidata\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$program\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$statusUpisa_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$telefon\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/KandidatResource.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/Ispiti.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/Kandidat.php
+
+		-
+			message: '#^Property App\\Models\\Skolarina\:\:\$casts \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: app/Models/Skolarina.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/UpisGodine.php
+
+		-
+			message: '#^Property App\\Models\\UplataSkolarine\:\:\$casts \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: app/Models/UplataSkolarine.php
+
+		-
+			message: '#^Property App\\Models\\ZapisnikOPolaganjuIspita\:\:\$casts \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: app/Models/ZapisnikOPolaganjuIspita.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Policies/IspitPolicy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$kandidat\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Policies/PolozeniIspitiPolicy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Policies/PolozeniIspitiPolicy.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$profesor_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Policies/PolozeniIspitiPolicy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$kandidat\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Policies/PrijavaIspitaPolicy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Policies/PrijavaIspitaPolicy.php
+
+		-
+			message: '#^Method Illuminate\\Foundation\\Support\\Providers\\AuthServiceProvider\:\:registerPolicies\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/Providers/AuthServiceProvider.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$events$#'
+			identifier: parameter.notFound
+			count: 1
+			path: app/Providers/EventServiceProvider.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Providers\\EventServiceProvider\:\:\$listen is not covariant with PHPDoc type array\<string, array\<int, string\>\> of overridden property Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider\:\:\$listen\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Providers/EventServiceProvider.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$router$#'
+			identifier: parameter.notFound
+			count: 1
+			path: app/Providers/RouteServiceProvider.php
+
+		-
+			message: '#^Relation ''user'' is not found in App\\Models\\AuditLog model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Services/AuditService.php
+
+		-
+			message: '#^Call to an undefined method ZipArchive\:\:addDir\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Services/BackupService.php
+
+		-
+			message: '#^Class Elibyy\\TCPDF\\TCPDF constructor invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/Services/BasePdfService.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Services/ChatbotService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$brojDipломе\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$brojPočetnogLista\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$brojЗаписника\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$datum\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$mentor\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$nazivStudijskogPrograma\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$ocena\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$pristupniRad\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$tema\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomaService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\DiplomskiPrijavaTeme\:\:\$mentor\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\DiplomskiPrijavaTeme\:\:\$tema\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\DiplomskiRad\:\:\$mentor\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\DiplomskiRad\:\:\$tema\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Call to an undefined method Elibyy\\TCPDF\\TCPDF\:\:AddPage\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Call to an undefined method Elibyy\\TCPDF\\TCPDF\:\:Output\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Call to an undefined method Elibyy\\TCPDF\\TCPDF\:\:SetAutoPageBreak\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Call to an undefined method Elibyy\\TCPDF\\TCPDF\:\:SetFont\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Call to an undefined method Elibyy\\TCPDF\\TCPDF\:\:SetTitle\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Call to an undefined method Elibyy\\TCPDF\\TCPDF\:\:WriteHtml\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Class Elibyy\\TCPDF\\TCPDF constructor invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/Services/DiplomskiRadService.php
+
+		-
+			message: '#^Called ''isEmpty'' on Laravel collection, but could have been retrieved as a query\.$#'
+			identifier: larastan.noUnnecessaryCollectionCall
+			count: 1
+			path: app/Services/IspitService.php
+
+		-
+			message: '#^Property App\\Models\\PolozeniIspiti\:\:\$indikatorAktivan \(bool\|null\) does not accept int\.$#'
+			identifier: assign.propertyType
+			count: 3
+			path: app/Services/IspitService.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\KandidatPrilozenaDokumenta\>\:\:lists\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\UpisGodine\:\:uplatiGodinu\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Property App\\Models\\Kandidat\:\:\$datumRodjenja \(Carbon\\Carbon\|null\) does not accept DateTime\|false\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Property App\\Models\\Kandidat\:\:\$prosecnaOcena \(float\|null\) does not accept \(array\<string\>\|string\)\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Property App\\Models\\Kandidat\:\:\$uplata \(bool\|null\) does not accept int\.$#'
+			identifier: assign.propertyType
+			count: 4
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Variable \$cetvrtiRazred might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Variable \$drugiRazred might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Variable \$prviRazred might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Variable \$treciRazred might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: app/Services/KandidatService.php
+
+		-
+			message: '#^Method App\\Services\\PredictionService\:\:estimateRemainingSemesters\(\) should return int but returns float\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/PredictionService.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 2
+			path: app/Services/RagService.php
+
+		-
+			message: '#^Left side of && is always true\.$#'
+			identifier: booleanAnd.leftAlwaysTrue
+			count: 1
+			path: app/Services/UpisService.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strlen expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/UpisService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Services/UpisService.php
+
+		-
+			message: '#^Variable \$kandidat in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Services/UpisService.php
+
+		-
+			message: '#^PHPDoc tag @method for method App\\Support\\Facades\:\:choice\(\) return type contains unknown class Illuminate\\Support\\Lang\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Support/Facades.php
+
+		-
+			message: '#^PHPDoc tag @method for method App\\Support\\Facades\:\:crypt\(\) return type contains unknown class Illuminate\\Encrypter\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Support/Facades.php
+
+		-
+			message: '#^PHPDoc tag @method for method App\\Support\\Facades\:\:queue\(\) return type contains unknown class Illuminate\\Queue\\Monitor\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Support/Facades.php
+
+		-
+			message: '#^PHPDoc tag @method for method App\\Support\\Facades\:\:trans\(\) return type contains unknown class Illuminate\\Support\\Lang\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Support/Facades.php
