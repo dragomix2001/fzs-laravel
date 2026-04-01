@@ -15,6 +15,7 @@ use App\ZapisnikOPolaganju_Student;
 use App\ZapisnikOPolaganju_StudijskiProgram;
 use App\ZapisnikOPolaganjuIspita;
 use App\Models\StudijskiProgram;
+use App\Jobs\GenerateZapisnikPdfJob;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -499,6 +500,14 @@ class IspitService extends BasePdfService
     // =========================================================================
     // PDF methods (kept from original)
     // =========================================================================
+
+    public function generatePdfAsync(int $zapisnikId): string
+    {
+        $storagePath = 'pdfs/zapisnik_' . $zapisnikId . '_' . time() . '.pdf';
+        GenerateZapisnikPdfJob::dispatch($zapisnikId, $storagePath);
+
+        return $storagePath;
+    }
 
     public function zapisnikStampa(Request $request)
     {

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\NewNotification;
+use App\Jobs\BroadcastNotificationJob;
 use App\Models\Obavestenje;
 use App\Models\User;
 
@@ -30,18 +31,7 @@ class NotificationService
             default => User::where('role', User::ROLE_ADMIN)->pluck('id'),
         };
 
-        foreach ($targetUserIds as $userId) {
-            $this->notifyUser(
-                $userId,
-                'Ново обавештење',
-                $obavestenje->naslov,
-                'info',
-                [
-                    'id' => $obavestenje->id,
-                    'link' => route('obavestenja.show', $obavestenje->id),
-                ]
-            );
-        }
+        BroadcastNotificationJob::dispatch($obavestenje, $targetUserIds->all());
     }
 
     public function notifyExamDeadline(int $userId, string $examName, string $deadline): void

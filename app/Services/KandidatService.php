@@ -18,6 +18,7 @@ use App\StatusStudiranja;
 use App\StudijskiProgram;
 use App\TipStudija;
 use App\Services\UpisService;
+use App\Jobs\MassEnrollmentJob;
 use App\UpisGodine;
 use App\UspehSrednjaSkola;
 use Carbon\Carbon;
@@ -727,6 +728,13 @@ class KandidatService
 
             $this->upisService->generisiBrojIndeksa($kandidatId);
         }
+    }
+
+    public function masovniUpisAsync(array $kandidatIds): array
+    {
+        MassEnrollmentJob::dispatch($kandidatIds);
+
+        return ['status' => 'queued', 'count' => count($kandidatIds)];
     }
 
     /**
