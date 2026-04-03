@@ -18,7 +18,7 @@ class PrijavaIspita extends Model
         'datum' => 'datetime',
     ];
 
-    protected $fillable = ['kandidat_id', 'predmet_id', 'rok_id', 'profesor_id', 'brojPolaganja', 'datum'];
+    protected $fillable = ['kandidat_id', 'predmet_id', 'rok_id', 'profesor_id', 'brojPolaganja', 'datum', 'tipPrijave_id'];
 
     public function kandidat(): BelongsTo
     {
