@@ -29,12 +29,13 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
-    // Public endpoints with rate limiting
+    // Public read-only endpoints with rate limiting
     Route::middleware('throttle:60,1')->group(function () {
-        Route::apiResources([
-            'kandidati' => ApiKandidatController::class,
-            'ispiti' => ApiIspitController::class,
-        ]);
+        // Read-only endpoints for kandidati and ispiti
+        Route::get('/kandidati', [ApiKandidatController::class, 'index']);
+        Route::get('/kandidati/{kandidat}', [ApiKandidatController::class, 'show']);
+        Route::get('/ispiti', [ApiIspitController::class, 'index']);
+        Route::get('/ispiti/{predmet}', [ApiIspitController::class, 'show']);
 
         Route::prefix('auth')->group(function () {
             Route::post('/login', [AuthController::class, 'login']);
@@ -53,6 +54,19 @@ Route::prefix('v1')->group(function () {
             Route::get('/today', [AktivnostController::class, 'today']);
             Route::get('/{aktivnost}', [AktivnostController::class, 'show']);
         });
+    });
+
+    // Protected write operations for kandidati and ispiti
+    Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
+        Route::post('/kandidati', [ApiKandidatController::class, 'store']);
+        Route::put('/kandidati/{kandidat}', [ApiKandidatController::class, 'update']);
+        Route::patch('/kandidati/{kandidat}', [ApiKandidatController::class, 'update']);
+        Route::delete('/kandidati/{kandidat}', [ApiKandidatController::class, 'destroy']);
+
+        Route::post('/ispiti', [ApiIspitController::class, 'store']);
+        Route::put('/ispiti/{predmet}', [ApiIspitController::class, 'update']);
+        Route::patch('/ispiti/{predmet}', [ApiIspitController::class, 'update']);
+        Route::delete('/ispiti/{predmet}', [ApiIspitController::class, 'destroy']);
     });
 
     // Protected endpoints

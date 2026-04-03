@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreKandidatRequest;
+use App\Http\Requests\Api\UpdateKandidatRequest;
 use App\Models\Kandidat;
-use Illuminate\Http\Request;
 
 class ApiKandidatController extends Controller
 {
@@ -15,9 +16,9 @@ class ApiKandidatController extends Controller
         return response()->json($kandidati);
     }
 
-    public function store(Request $request)
+    public function store(StoreKandidatRequest $request)
     {
-        $kandidat = Kandidat::create($request->all());
+        $kandidat = Kandidat::create($request->validated());
 
         return response()->json($kandidat, 201);
     }
@@ -29,9 +30,9 @@ class ApiKandidatController extends Controller
         return response()->json($kandidat);
     }
 
-    public function update(Request $request, Kandidat $kandidat)
+    public function update(UpdateKandidatRequest $request, Kandidat $kandidat)
     {
-        $kandidat->update($request->all());
+        $kandidat->update($request->validated());
 
         return response()->json($kandidat);
     }

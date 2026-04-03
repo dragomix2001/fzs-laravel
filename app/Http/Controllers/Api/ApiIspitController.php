@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StorePredmetRequest;
+use App\Http\Requests\Api\UpdatePredmetRequest;
 use App\Models\Predmet;
-use Illuminate\Http\Request;
 
 class ApiIspitController extends Controller
 {
@@ -15,9 +16,9 @@ class ApiIspitController extends Controller
         return response()->json($predmeti);
     }
 
-    public function store(Request $request)
+    public function store(StorePredmetRequest $request)
     {
-        $predmet = Predmet::create($request->all());
+        $predmet = Predmet::create($request->validated());
 
         return response()->json($predmet, 201);
     }
@@ -27,9 +28,9 @@ class ApiIspitController extends Controller
         return response()->json($predmet);
     }
 
-    public function update(Request $request, Predmet $predmet)
+    public function update(UpdatePredmetRequest $request, Predmet $predmet)
     {
-        $predmet->update($request->all());
+        $predmet->update($request->validated());
 
         return response()->json($predmet);
     }
