@@ -7,6 +7,7 @@ use App\PrilozenaDokumenta;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 
 class PrilozenaDokumentaController extends Controller
 {
@@ -21,7 +22,8 @@ class PrilozenaDokumentaController extends Controller
             $dokument = PrilozenaDokumenta::all();
             $godinaStudija = GodinaStudija::all();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return view('sifarnici.prilozenaDokumenta', compact('dokument', 'godinaStudija'));
@@ -38,7 +40,8 @@ class PrilozenaDokumentaController extends Controller
         try {
             $dokument->save();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/prilozenaDokumenta');
@@ -67,7 +70,8 @@ class PrilozenaDokumentaController extends Controller
         try {
             $dokument->update();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/prilozenaDokumenta');
@@ -78,7 +82,8 @@ class PrilozenaDokumentaController extends Controller
         try {
             $dokument->delete();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return back();

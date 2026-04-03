@@ -6,6 +6,7 @@ use App\Sport;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 
 class SportController extends Controller
 {
@@ -19,7 +20,8 @@ class SportController extends Controller
         try {
             $sport = Sport::all();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return view('sifarnici.sport', compact('sport'));
@@ -35,7 +37,8 @@ class SportController extends Controller
         try {
             $sport->save();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/sport');
@@ -63,7 +66,8 @@ class SportController extends Controller
         try {
             $sport->update();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/sport');
@@ -74,7 +78,8 @@ class SportController extends Controller
         try {
             $sport->delete();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return back();

@@ -6,6 +6,7 @@ use App\Region;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 
 class RegionController extends Controller
 {
@@ -19,7 +20,8 @@ class RegionController extends Controller
         try {
             $region = Region::all();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return view('sifarnici.region', compact('region'));
@@ -33,7 +35,8 @@ class RegionController extends Controller
         try {
             $region->save();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/region');
@@ -56,7 +59,8 @@ class RegionController extends Controller
         try {
             $region->update();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/region');
@@ -67,7 +71,8 @@ class RegionController extends Controller
         try {
             $region->delete();
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return back();
