@@ -4,21 +4,26 @@ namespace Tests\Feature;
 
 use App\Models\UpisGodine;
 use Carbon\Carbon;
+use Database\Seeders\TestHelperSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class ModelCastingTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(TestHelperSeeder::class);
+    }
+
     public function test_upis_godine_datum_upisa_is_datetime(): void
     {
         $upis = UpisGodine::whereNotNull('datumUpisa')->first();
 
-        if (! $upis) {
-            $this->markTestSkipped('No UpisGodine records with datumUpisa found');
-
-            return;
-        }
-
+        $this->assertNotNull($upis, 'UpisGodine with datumUpisa should exist');
         $this->assertNotNull($upis->datumUpisa, 'datumUpisa is null');
 
         $this->assertTrue(
@@ -31,12 +36,7 @@ class ModelCastingTest extends TestCase
     {
         $upis = UpisGodine::whereNotNull('datumPromene')->first();
 
-        if (! $upis) {
-            $this->markTestSkipped('No UpisGodine records with datumPromene found');
-
-            return;
-        }
-
+        $this->assertNotNull($upis, 'UpisGodine with datumPromene should exist');
         $this->assertNotNull($upis->datumPromene, 'datumPromene is null');
 
         $this->assertTrue(
@@ -49,11 +49,7 @@ class ModelCastingTest extends TestCase
     {
         $upis = UpisGodine::whereNotNull('datumUpisa')->first();
 
-        if (! $upis) {
-            $this->markTestSkipped('No UpisGodine records with datumUpisa found');
-
-            return;
-        }
+        $this->assertNotNull($upis, 'UpisGodine with datumUpisa should exist');
 
         $formatted = $upis->datumUpisa->format('d.m.Y.');
         $this->assertNotEmpty($formatted);

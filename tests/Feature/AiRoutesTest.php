@@ -4,25 +4,21 @@ namespace Tests\Feature;
 
 use App\Models\Kandidat;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Database\Seeders\TestHelperSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AiRoutesTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected ?User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->user = User::where('email', 'fzs@fzs.rs')->first();
-        if (! $this->user) {
-            $this->user = User::create([
-                'name' => 'Test User',
-                'email' => 'fzs@fzs.rs',
-                'password' => Hash::make('fzs123'),
-            ]);
-        }
+        $this->seed(TestHelperSeeder::class);
+        $this->user = User::first();
     }
 
     public function test_chatbot_index_page_loads(): void
@@ -44,9 +40,6 @@ class AiRoutesTest extends TestCase
     public function test_prediction_student_page_loads(): void
     {
         $studentId = Kandidat::value('id');
-        if (! $studentId) {
-            $this->markTestSkipped('No students in database');
-        }
 
         $response = $this->actingAs($this->user)->get("/prediction/student/{$studentId}");
 

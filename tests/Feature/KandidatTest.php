@@ -2,11 +2,21 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\TestHelperSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class KandidatTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(TestHelperSeeder::class);
+    }
+
     public function test_kandidat_index_returns_view()
     {
         $response = $this->get(route('kandidat.index'));
@@ -16,9 +26,6 @@ class KandidatTest extends TestCase
     public function test_kandidat_exists_in_database()
     {
         $count = DB::table('kandidat')->count();
-        if ($count === 0) {
-            $this->markTestSkipped('No kandidat data in database');
-        }
         $this->assertGreaterThan(0, $count);
     }
 }

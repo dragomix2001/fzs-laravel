@@ -15,7 +15,10 @@ return [
     |
     */
 
-    'default' => 'mysql',
+    'default' => env(
+        'DB_CONNECTION',
+        env('APP_ENV') === 'testing' && extension_loaded('pdo_sqlite') ? 'sqlite' : 'mysql'
+    ),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,10 +38,10 @@ return [
 
     'connections' => [
 
-        'sqlite_disabled' => [
+        'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => env('DB_SQLITE_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
