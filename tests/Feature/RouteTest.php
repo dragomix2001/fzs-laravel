@@ -244,7 +244,9 @@ class RouteTest extends TestCase
 
     public function test_izvestaji_spiskovi_studenti_route_loads(): void
     {
-        $this->markTestSkipped('View has multiple undefined variables - complex fix needed');
+        $user = User::first();
+        $response = $this->actingAs($user)->get('/izvestaji/spiskoviStudenti');
+        $response->assertStatus(200);
     }
 
     public function test_oblik_nastave_route_loads(): void
