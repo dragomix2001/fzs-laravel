@@ -45,6 +45,15 @@
         }
     },
     "scripts": {
+        "test": [
+            "@php vendor/bin/phpunit --testdox"
+        ],
+        "lint": [
+            "@php vendor/bin/pint"
+        ],
+        "stan": [
+            "@php vendor/bin/phpstan analyse --memory-limit=1G"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
