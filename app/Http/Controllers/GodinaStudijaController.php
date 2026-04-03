@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\GodinaStudija;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class GodinaStudijaController extends Controller
 {
@@ -20,8 +20,9 @@ class GodinaStudijaController extends Controller
         try {
             $godinaStudija = GodinaStudija::all();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return view('sifarnici.godinaStudija', compact('godinaStudija'));
@@ -40,8 +41,9 @@ class GodinaStudijaController extends Controller
         try {
             $godinaStudija->save();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/godinaStudija');
@@ -72,8 +74,9 @@ class GodinaStudijaController extends Controller
         try {
             $godinaStudija->update();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/godinaStudija');
@@ -85,8 +88,9 @@ class GodinaStudijaController extends Controller
         try {
             $godinaStudija->delete();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return back();

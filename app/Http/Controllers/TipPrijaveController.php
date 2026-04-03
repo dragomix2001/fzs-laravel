@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\TipPrijave;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class TipPrijaveController extends Controller
 {
@@ -20,8 +20,9 @@ class TipPrijaveController extends Controller
         try {
             $tip = TipPrijave::all();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return view('sifarnici.tipPrijave', compact('tip'));
@@ -37,8 +38,9 @@ class TipPrijaveController extends Controller
         try {
             $tip->save();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/tipPrijave');
@@ -66,8 +68,9 @@ class TipPrijaveController extends Controller
         try {
             $tip->update();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/tipPrijave');
@@ -78,8 +81,9 @@ class TipPrijaveController extends Controller
         try {
             $tip->delete();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return back();

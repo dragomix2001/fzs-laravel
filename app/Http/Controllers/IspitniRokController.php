@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\IspitniRok;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class IspitniRokController extends Controller
 {
@@ -20,8 +20,9 @@ class IspitniRokController extends Controller
         try {
             $ispitniRok = IspitniRok::all();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return view('sifarnici.ispitniRok', compact('ispitniRok'));
@@ -37,8 +38,9 @@ class IspitniRokController extends Controller
         try {
             $ispitniRok->save();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/ispitniRok');
@@ -66,8 +68,9 @@ class IspitniRokController extends Controller
         try {
             $ispitniRok->update();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return Redirect::to('/ispitniRok');
@@ -78,8 +81,9 @@ class IspitniRokController extends Controller
         try {
             $ispitniRok->delete();
         } catch (QueryException $e) {
-            Log::error('Database error: ' . $e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-                        return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
+            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
         return back();

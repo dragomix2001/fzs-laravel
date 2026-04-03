@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Kandidat;
+use App\Models\SkolskaGodUpisa;
 use App\Models\User;
 use Database\Seeders\TestHelperSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -112,7 +113,7 @@ class RouteTest extends TestCase
 
     public function test_database_has_skolska_god_upisa_records(): void
     {
-        $this->assertGreaterThan(0, \App\Models\SkolskaGodUpisa::count(), 'SkolskaGodUpisa table should have records');
+        $this->assertGreaterThan(0, SkolskaGodUpisa::count(), 'SkolskaGodUpisa table should have records');
     }
 
     public function test_kandidat_index_route_loads(): void
