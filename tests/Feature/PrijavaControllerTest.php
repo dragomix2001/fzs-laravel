@@ -59,6 +59,8 @@ class PrijavaControllerTest extends TestCase
 
         parent::setUp();
 
+        \Illuminate\Database\Eloquent\Model::unguard();
+
         Gate::before(function ($user, string $ability) {
             if ($user && method_exists($user, 'hasRole') && $user->hasRole('admin')) {
                 return true;
@@ -87,7 +89,12 @@ class PrijavaControllerTest extends TestCase
             'indikatorAktivan' => 1,
         ]);
 
-        $this->user = User::factory()->create(['role' => 'admin']);
+        $this->user = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin_' . uniqid() . '@test.com',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
 
         $this->tipStudija = TipStudija::factory()->create([
             'naziv' => 'Osnovne akademske studije',
@@ -126,6 +133,12 @@ class PrijavaControllerTest extends TestCase
             'semestar' => 1,
             'godinaStudija_id' => $this->godinaStudija->id,
             'tipPredmeta_id' => $this->tipPredmeta->id,
+            'espb' => 6,
+            'statusPredmeta' => 1,
+            'predavanja' => 2,
+            'vezbe' => 2,
+            'skolskaGodina_id' => $this->skolskaGodina->id,
+            'indikatorAktivan' => 1,
         ]);
 
         $this->rok = AktivniIspitniRokovi::factory()->create([

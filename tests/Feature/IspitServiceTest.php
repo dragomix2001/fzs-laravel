@@ -20,13 +20,13 @@ use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganju_StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
 use App\Services\IspitService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class IspitServiceTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private IspitService $ispitService;
 

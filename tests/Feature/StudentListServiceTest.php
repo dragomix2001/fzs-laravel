@@ -335,16 +335,15 @@ class StudentListServiceTest extends TestCase
 
     public function test_spisak_po_predmetima_executes_with_prijave(): void
     {
-        $predmet = Predmet::factory()->create();
         $f = $this->buildBaseFixtures(statusUpisa: 3);
-
-        PrijavaIspita::factory()->create([
-            'predmet_id' => $predmet->id,
+        $prijava = PrijavaIspita::factory()->create([
             'kandidat_id' => $f['kandidat']->id,
         ]);
+        $predmetProgramId = $prijava->predmet_id;
+        $predmet = \App\Models\PredmetProgram::find($predmetProgramId);
 
         try {
-            $this->service->spisakPoPredmetima($predmet->id);
+            $this->service->spisakPoPredmetima($predmet ? $predmet->predmet_id : 99999);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
 
