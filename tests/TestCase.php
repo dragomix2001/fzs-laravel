@@ -17,6 +17,9 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        
+        // Buffer output to suppress PDF and other binary data during tests
+        ob_start();
 
         if (! $this->usesManagedDatabaseLifecycle() && ! self::$databasePrepared) {
             Artisan::call('migrate', ['--seed' => true]);
@@ -28,6 +31,13 @@ abstract class TestCase extends BaseTestCase
         }
 
         $this->seed(StatusGodineTableSeeder::class);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clear output buffer to discard any buffered output (PDFs, etc.)
+        ob_end_clean();
+        parent::tearDown();
     }
 
     private function usesManagedDatabaseLifecycle(): bool
