@@ -210,6 +210,7 @@ parameters:
 			identifier: argument.type
 			count: 2
 			path: app/Http/Controllers/PrisustvoController.php
+			reportUnmatched: false
 
 		-
 			message: '#^Relation ''student'' is not found in App\\Models\\Prisanstvo model\.$#'
