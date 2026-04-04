@@ -5,10 +5,12 @@ namespace Tests\Feature;
 use App\Models\AktivniIspitniRokovi;
 use App\Models\Kandidat;
 use App\Models\Predmet;
+use App\Models\PredmetProgram;
 use App\Models\PrijavaIspita;
 use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
+use App\Models\TipPredmeta;
 use App\Models\TipStudija;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -31,16 +33,41 @@ class ExamRegistrationTest extends TestCase
         ], $overrides));
     }
 
+    private function makePredmetProgram(Kandidat $kandidat, ?Predmet $predmet = null): PredmetProgram
+    {
+        $predmet ??= Predmet::factory()->create();
+        $tipPredmeta = TipPredmeta::query()->first() ?? TipPredmeta::forceCreate([
+            'naziv' => 'Obavezni',
+            'skrNaziv' => 'OBV',
+            'indikatorAktivan' => 1,
+        ]);
+
+        return PredmetProgram::create([
+            'predmet_id' => $predmet->id,
+            'studijskiProgram_id' => $kandidat->studijskiProgram_id,
+            'tipStudija_id' => $kandidat->tipStudija_id,
+            'semestar' => 1,
+            'espb' => 6,
+            'godinaStudija_id' => $kandidat->godinaStudija_id,
+            'tipPredmeta_id' => $tipPredmeta->id,
+            'statusPredmeta' => 1,
+            'predavanja' => 0,
+            'vezbe' => 0,
+            'skolskaGodina_id' => $kandidat->skolskaGodinaUpisa_id,
+        ]);
+    }
+
     public function test_prijava_ispita_cuva_u_bazi(): void
     {
         $kandidat = $this->makeKandidat();
         $predmet = Predmet::factory()->create();
+        $predmetProgram = $this->makePredmetProgram($kandidat, $predmet);
         $profesor = Profesor::factory()->create();
         $rok = AktivniIspitniRokovi::factory()->create();
 
         $prijava = PrijavaIspita::create([
             'kandidat_id' => $kandidat->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram->id,
             'profesor_id' => $profesor->id,
             'rok_id' => $rok->id,
             'brojPolaganja' => 1,
@@ -50,7 +77,7 @@ class ExamRegistrationTest extends TestCase
 
         $this->assertDatabaseHas('prijava_ispita', [
             'kandidat_id' => $kandidat->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram->id,
             'rok_id' => $rok->id,
         ]);
 
@@ -65,10 +92,12 @@ class ExamRegistrationTest extends TestCase
 
         $predmet1 = Predmet::factory()->create();
         $predmet2 = Predmet::factory()->create();
+        $predmetProgram1 = $this->makePredmetProgram($kandidat, $predmet1);
+        $predmetProgram2 = $this->makePredmetProgram($kandidat, $predmet2);
 
         PrijavaIspita::create([
             'kandidat_id' => $kandidat->id,
-            'predmet_id' => $predmet1->id,
+            'predmet_id' => $predmetProgram1->id,
             'profesor_id' => $profesor->id,
             'rok_id' => $rok->id,
             'brojPolaganja' => 1,
@@ -78,7 +107,7 @@ class ExamRegistrationTest extends TestCase
 
         PrijavaIspita::create([
             'kandidat_id' => $kandidat->id,
-            'predmet_id' => $predmet2->id,
+            'predmet_id' => $predmetProgram2->id,
             'profesor_id' => $profesor->id,
             'rok_id' => $rok->id,
             'brojPolaganja' => 1,
@@ -126,16 +155,24 @@ class ExamRegistrationTest extends TestCase
         $profesor = Profesor::factory()->create();
         $rok = AktivniIspitniRokovi::factory()->create();
 
-        PrijavaIspita::factory()->count(3)->create([
-            'predmet_id' => $predmet->id,
-            'profesor_id' => $profesor->id,
-            'rok_id' => $rok->id,
-        ]);
+        $kandidati = collect(range(1, 3))->map(function () {
+            return $this->makeKandidat();
+        });
 
-        $count = PrijavaIspita::where([
-            'predmet_id' => $predmet->id,
-            'rok_id' => $rok->id,
-        ])->count();
+        foreach ($kandidati as $kandidat) {
+            $predmetProgram = $this->makePredmetProgram($kandidat, $predmet);
+            PrijavaIspita::factory()->create([
+                'kandidat_id' => $kandidat->id,
+                'predmet_id' => $predmetProgram->id,
+                'profesor_id' => $profesor->id,
+                'rok_id' => $rok->id,
+            ]);
+        }
+
+        $predmetProgramIds = PredmetProgram::where('predmet_id', $predmet->id)->pluck('id');
+        $count = PrijavaIspita::whereIn('predmet_id', $predmetProgramIds)
+            ->where('rok_id', $rok->id)
+            ->count();
 
         $this->assertEquals(3, $count);
     }

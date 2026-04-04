@@ -6,10 +6,12 @@ use App\Models\AktivniIspitniRokovi;
 use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
 use App\Models\Predmet;
+use App\Models\PredmetProgram;
 use App\Models\PrijavaIspita;
 use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
+use App\Models\TipPredmeta;
 use App\Models\TipStudija;
 use App\Models\ZapisnikOPolaganjuIspita;
 use App\Services\IspitService;
@@ -34,14 +36,39 @@ class GradeSubmissionTest extends TestCase
         ], $overrides));
     }
 
+    private function makePredmetProgram(Kandidat $kandidat, ?Predmet $predmet = null): PredmetProgram
+    {
+        $predmet ??= Predmet::factory()->create();
+        $tipPredmeta = TipPredmeta::query()->first() ?? TipPredmeta::forceCreate([
+            'naziv' => 'Obavezni',
+            'skrNaziv' => 'OBV',
+            'indikatorAktivan' => 1,
+        ]);
+
+        return PredmetProgram::create([
+            'predmet_id' => $predmet->id,
+            'studijskiProgram_id' => $kandidat->studijskiProgram_id,
+            'tipStudija_id' => $kandidat->tipStudija_id,
+            'semestar' => 1,
+            'espb' => 6,
+            'godinaStudija_id' => $kandidat->godinaStudija_id,
+            'tipPredmeta_id' => $tipPredmeta->id,
+            'statusPredmeta' => 1,
+            'predavanja' => 0,
+            'vezbe' => 0,
+            'skolskaGodina_id' => $kandidat->skolskaGodinaUpisa_id,
+        ]);
+    }
+
     private function makePolozeniIspit(Kandidat $kandidat, array $overrides = []): PolozeniIspiti
     {
         $predmet = Predmet::factory()->create();
+        $predmetProgram = $this->makePredmetProgram($kandidat, $predmet);
         $profesor = Profesor::factory()->create();
         $rok = AktivniIspitniRokovi::factory()->create();
         $prijava = PrijavaIspita::factory()->create([
             'kandidat_id' => $kandidat->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram->id,
             'profesor_id' => $profesor->id,
             'rok_id' => $rok->id,
         ]);
@@ -53,7 +80,7 @@ class GradeSubmissionTest extends TestCase
 
         return PolozeniIspiti::create(array_merge([
             'kandidat_id' => $kandidat->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram->id,
             'prijava_id' => $prijava->id,
             'zapisnik_id' => $zapisnik->id,
             'indikatorAktivan' => 0,
@@ -99,6 +126,8 @@ class GradeSubmissionTest extends TestCase
         $kandidat2 = $this->makeKandidat();
 
         $predmet = Predmet::factory()->create();
+        $predmetProgram1 = $this->makePredmetProgram($kandidat1, $predmet);
+        $predmetProgram2 = $this->makePredmetProgram($kandidat2, $predmet);
         $profesor = Profesor::factory()->create();
         $rok = AktivniIspitniRokovi::factory()->create();
         $zapisnik = ZapisnikOPolaganjuIspita::factory()->create([
@@ -109,21 +138,21 @@ class GradeSubmissionTest extends TestCase
 
         $prijava1 = PrijavaIspita::factory()->create([
             'kandidat_id' => $kandidat1->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram1->id,
             'profesor_id' => $profesor->id,
             'rok_id' => $rok->id,
         ]);
 
         $prijava2 = PrijavaIspita::factory()->create([
             'kandidat_id' => $kandidat2->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram2->id,
             'profesor_id' => $profesor->id,
             'rok_id' => $rok->id,
         ]);
 
         $ispit1 = PolozeniIspiti::create([
             'kandidat_id' => $kandidat1->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram1->id,
             'prijava_id' => $prijava1->id,
             'zapisnik_id' => $zapisnik->id,
             'indikatorAktivan' => 0,
@@ -131,7 +160,7 @@ class GradeSubmissionTest extends TestCase
 
         $ispit2 = PolozeniIspiti::create([
             'kandidat_id' => $kandidat2->id,
-            'predmet_id' => $predmet->id,
+            'predmet_id' => $predmetProgram2->id,
             'prijava_id' => $prijava2->id,
             'zapisnik_id' => $zapisnik->id,
             'indikatorAktivan' => 0,
