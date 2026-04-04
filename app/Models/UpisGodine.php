@@ -24,4 +24,15 @@ class UpisGodine extends Model
     {
         return $this->belongsTo(StatusGodine::class, 'statusGodine_id');
     }
+
+    public static function uplatiGodinu(int $kandidatId, int $statusGodineId): void
+    {
+        static::query()
+            ->where('kandidat_id', $kandidatId)
+            ->where('statusGodine_id', '!=', $statusGodineId)
+            ->update([
+                'statusGodine_id' => $statusGodineId,
+                'datumPromene' => now(),
+            ]);
+    }
 }
