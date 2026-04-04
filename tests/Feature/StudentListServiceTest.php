@@ -96,6 +96,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoSmerovima();
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -108,6 +109,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoSmerovima();
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -122,6 +124,7 @@ class StudentListServiceTest extends TestCase
             $this->service->integralno($f['skolskaGodina']->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -136,6 +139,7 @@ class StudentListServiceTest extends TestCase
             $this->service->integralno($skolskaGodina->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -150,6 +154,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoSmerovimaOstali($f['skolskaGodina']->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -190,6 +195,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoSmerovimaOstali($skolskaGodina->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -204,6 +210,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoSmerovimaAktivni($f['skolskaGodina']->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -218,6 +225,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakZaSmer($f['program']->id, $f['godina']->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -230,6 +238,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakZaSmer(99999, 99999);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -244,6 +253,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoProgramu($f['program']->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -258,6 +268,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoGodini($f['godina']->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -272,6 +283,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoSlavama();
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -286,6 +298,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoProfesorima();
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -298,6 +311,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoProfesorima();
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -312,6 +326,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spiskoviStudenti();
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -332,6 +347,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoPredmetima($predmet->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -346,6 +362,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakPoPredmetima($predmet->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -360,6 +377,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakDiplomiranih($f['skolskaGodina']->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
@@ -374,6 +392,7 @@ class StudentListServiceTest extends TestCase
             $this->service->spisakDiplomiranih($skolskaGodina->id);
         } catch (\Throwable $e) {
             $this->assertTrue(true);
+
             return;
         }
 
