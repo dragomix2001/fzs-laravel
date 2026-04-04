@@ -17,7 +17,7 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Buffer output to suppress PDF and other binary data during tests
         ob_start();
 

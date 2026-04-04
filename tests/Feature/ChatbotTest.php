@@ -61,6 +61,9 @@ class ChatbotTest extends TestCase
 
     public function test_chatbot_session_handling_works(): void
     {
+        $_ENV['OPENAI_API_KEY'] = 'sk-your-openai-api-key-here';
+        putenv('OPENAI_API_KEY=sk-your-openai-api-key-here');
+
         $ragMock = $this->createMock(RagService::class);
         $ragMock->method('findRelevantContext')->willReturn('Mock context');
 
