@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDiplomskiTemaRequest extends FormRequest
 {
@@ -14,7 +15,12 @@ class StoreDiplomskiTemaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'kandidat_id' => 'unique_with:diplomski_prijava_teme,tipStudija_id',
+            'kandidat_id' => [
+                'required',
+                Rule::unique('diplomski_prijava_teme', 'kandidat_id')->where(function ($query) {
+                    return $query->where('tipStudija_id', $this->input('tipStudija_id'));
+                }),
+            ],
             'predmet_id' => 'required',
             'profesor_id' => 'required',
             'nazivTeme' => 'required',

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePrijavaIspitaRequest extends FormRequest
 {
@@ -14,7 +15,14 @@ class StorePrijavaIspitaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'kandidat_id' => 'unique_with:prijava_ispita,predmet_id,rok_id',
+            'kandidat_id' => [
+                'required',
+                Rule::unique('prijava_ispita', 'kandidat_id')->where(function ($query) {
+                    return $query
+                        ->where('predmet_id', $this->input('predmet_id'))
+                        ->where('rok_id', $this->input('rok_id'));
+                }),
+            ],
         ];
     }
 
