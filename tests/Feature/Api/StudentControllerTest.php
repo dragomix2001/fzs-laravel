@@ -14,9 +14,9 @@ use App\Models\TipPredmeta;
 use App\Models\TipStudija;
 use App\Models\UpisGodine;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
