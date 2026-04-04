@@ -91,12 +91,6 @@ parameters:
 			path: app/Http/Controllers/Api/AktivnostController.php
 
 		-
-			message: '#^Relation ''profesor'' is not found in App\\Models\\Raspored model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
-			path: app/Http/Controllers/Api/RasporedController.php
-
-		-
 			message: '#^Relation ''ucionica'' is not found in App\\Models\\Raspored model\.$#'
 			identifier: larastan.relationExistence
 			count: 2
@@ -239,54 +233,6 @@ parameters:
 			identifier: catch.neverThrown
 			count: 2
 			path: app/Http/Controllers/ProfesorController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Raspored\:\:\$profesor\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/RasporedController.php
-
-		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 1
-			path: app/Http/Controllers/RasporedController.php
-
-		-
-			message: '#^Relation ''godinaStudija'' is not found in App\\Models\\Raspored model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
-			path: app/Http/Controllers/RasporedController.php
-
-		-
-			message: '#^Relation ''oblikNastave'' is not found in App\\Models\\Raspored model\.$#'
-			identifier: larastan.relationExistence
-			count: 4
-			path: app/Http/Controllers/RasporedController.php
-
-		-
-			message: '#^Relation ''predmet'' is not found in App\\Models\\Raspored model\.$#'
-			identifier: larastan.relationExistence
-			count: 4
-			path: app/Http/Controllers/RasporedController.php
-
-		-
-			message: '#^Relation ''profesor'' is not found in App\\Models\\Raspored model\.$#'
-			identifier: larastan.relationExistence
-			count: 4
-			path: app/Http/Controllers/RasporedController.php
-
-		-
-			message: '#^Relation ''semestar'' is not found in App\\Models\\Raspored model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
-			path: app/Http/Controllers/RasporedController.php
-
-		-
-			message: '#^Relation ''studijskiProgram'' is not found in App\\Models\\Raspored model\.$#'
-			identifier: larastan.relationExistence
-			count: 3
-			path: app/Http/Controllers/RasporedController.php
 
 		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Raspored extends Model
 {
@@ -29,37 +30,37 @@ class Raspored extends Model
         'vreme_do' => 'datetime:H:i',
     ];
 
-    public function predmet()
+    public function predmet(): BelongsTo
     {
         return $this->belongsTo(Predmet::class);
     }
 
-    public function profesor()
+    public function profesor(): BelongsTo
     {
         return $this->belongsTo(Profesor::class);
     }
 
-    public function studijskiProgram()
+    public function studijskiProgram(): BelongsTo
     {
         return $this->belongsTo(StudijskiProgram::class, 'studijski_program_id');
     }
 
-    public function godinaStudija()
+    public function godinaStudija(): BelongsTo
     {
         return $this->belongsTo(GodinaStudija::class, 'godina_studija_id');
     }
 
-    public function semestar()
+    public function semestar(): BelongsTo
     {
         return $this->belongsTo(Semestar::class);
     }
 
-    public function skolskaGodina()
+    public function skolskaGodina(): BelongsTo
     {
         return $this->belongsTo(SkolskaGodUpisa::class, 'skolska_godina_id');
     }
 
-    public function oblikNastave()
+    public function oblikNastave(): BelongsTo
     {
         return $this->belongsTo(OblikNastave::class, 'oblik_nastave_id');
     }
