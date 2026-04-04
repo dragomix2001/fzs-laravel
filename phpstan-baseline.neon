@@ -289,12 +289,6 @@ parameters:
 			path: app/Http/Controllers/PrisustvoController.php
 
 		-
-			message: '#^Call to function compact\(\) contains undefined variable \$status\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: app/Http/Controllers/ProfesorController.php
-
-		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
 			identifier: catch.neverThrown
 			count: 2

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use App\OblikNastave;
-use App\PredmetProgram;
-use App\Profesor;
-use App\ProfesorPredmet;
-use App\StatusProfesora;
+use App\Models\OblikNastave;
+use App\Models\PredmetProgram;
+use App\Models\Profesor;
+use App\Models\ProfesorPredmet;
+use App\Models\StatusProfesora;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -85,7 +85,7 @@ class ProfesorController extends Controller
             return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
         }
 
-        return view('sifarnici.editProfesorPredmet', compact('profesor', 'status', 'predmeti'));
+        return view('sifarnici.editProfesorPredmet', compact('profesor', 'predmeti'));
     }
 
     public function add()
