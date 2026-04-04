@@ -53,6 +53,21 @@ class Kandidat extends Model
         return $this->belongsTo(StudijskiProgram::class, 'studijskiProgram_id');
     }
 
+    public function studijskiProgram(): BelongsTo
+    {
+        return $this->program();
+    }
+
+    public function getImeAttribute(): ?string
+    {
+        return $this->imeKandidata;
+    }
+
+    public function getPrezimeAttribute(): ?string
+    {
+        return $this->prezimeKandidata;
+    }
+
     public function upisaneGodine(): HasMany
     {
         return $this->hasMany(UpisGodine::class);
