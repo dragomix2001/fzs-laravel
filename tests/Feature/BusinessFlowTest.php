@@ -23,8 +23,6 @@ class BusinessFlowTest extends TestCase
 
     public function test_authentication_flow(): void
     {
-        $this->markTestSkipped('Pre-existing auth test issue - causes PDF output in CI');
-
         $response = $this->get('/login');
         $response->assertStatus(200);
 

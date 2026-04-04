@@ -41,7 +41,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-          extensions: mbstring, xml, gd, pdo_mysql, redis
+          extensions: mbstring, xml, gd, pdo_mysql, redis, pcov
+          coverage: pcov
 
       - name: Install dependencies
         run: |
@@ -73,8 +74,20 @@ jobs:
           php artisan migrate --force
           php artisan db:seed --class=DatabaseSeeder --force || true
 
-      - name: Run tests
-        run: vendor/bin/phpunit --testdox --do-not-fail-on-skipped --do-not-fail-on-warning
+      - name: Run tests with coverage
+        run: |
+          vendor/bin/phpunit --testdox --do-not-fail-on-warning --coverage-text --coverage-clover=coverage.xml | tee test-output.txt
+          echo ""
+          echo "=== COVERAGE SUMMARY ==="
+          tail -20 test-output.txt
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 30
 
   lint:
     runs-on: ubuntu-latest
