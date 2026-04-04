@@ -142,6 +142,7 @@ class StudentController extends Controller
         $obnovaGodine->kandidat_id = $id;
         $obnovaGodine->godina = $request->godina;
         $obnovaGodine->tipStudija_id = $request->tipStudijaId;
+        $obnovaGodine->studijskiProgram_id = $kandidat->studijskiProgram_id;
         $obnovaGodine->pokusaj = $poslednjiPokusaj + 1;
         $obnovaGodine->statusGodine_id = 1;
         $obnovaGodine->datumUpisa = Carbon::now();

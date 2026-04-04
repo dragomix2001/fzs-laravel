@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
 use App\Models\SkolskaGodUpisa;
+use App\Models\StatusGodine;
 use App\Models\StatusStudiranja;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
@@ -39,6 +40,14 @@ class StudentControllerTest extends TestCase
     protected StatusStudiranja $diplomiraoStatus;
 
     protected StatusStudiranja $odustaoStatus;
+
+    protected StatusGodine $upisanaGodinaStatus;
+
+    protected StatusGodine $ponistenaGodinaStatus;
+
+    protected StatusGodine $obnovljenaGodinaStatus;
+
+    protected StatusGodine $zamrznutaGodinaStatus;
 
     protected Kandidat $osnovniStudent;
 
@@ -118,6 +127,26 @@ class StudentControllerTest extends TestCase
             'naziv' => 'odustao',
             'indikatorAktivan' => 1,
         ]);
+
+        $this->upisanaGodinaStatus = StatusGodine::query()->firstOrCreate(
+            ['id' => 1],
+            ['naziv' => 'Upisana']
+        );
+
+        $this->ponistenaGodinaStatus = StatusGodine::query()->firstOrCreate(
+            ['id' => 3],
+            ['naziv' => 'Poništena']
+        );
+
+        $this->obnovljenaGodinaStatus = StatusGodine::query()->firstOrCreate(
+            ['id' => 4],
+            ['naziv' => 'Obnovljena']
+        );
+
+        $this->zamrznutaGodinaStatus = StatusGodine::query()->firstOrCreate(
+            ['id' => 7],
+            ['naziv' => 'Zamrznuta']
+        );
 
         $this->osnovniStudent = Kandidat::factory()->create([
             'tipStudija_id' => $this->osnovneStudije->id,
@@ -208,6 +237,72 @@ class StudentControllerTest extends TestCase
         $response->assertSessionHas('flash-error', 'upis');
     }
 
+    public function test_upisi_studenta_marks_requested_year_as_enrolled_and_updates_student_year(): void
+    {
+        $nextYear = UpisGodine::create([
+            'kandidat_id' => $this->osnovniStudent->id,
+            'godina' => 2,
+            'pokusaj' => 1,
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'statusGodine_id' => 3,
+            'skolskaGodina_id' => null,
+            'datumUpisa' => null,
+        ]);
+
+        $response = $this->get('/student/'.$this->osnovniStudent->id.'/upisiStudenta?godina=2&pokusaj=1');
+
+        $response->assertRedirect('/student/'.$this->osnovniStudent->id.'/upis');
+        $this->assertDatabaseHas('upis_godine', [
+            'id' => $nextYear->id,
+            'statusGodine_id' => 1,
+        ]);
+        $this->assertDatabaseHas('kandidat', [
+            'id' => $this->osnovniStudent->id,
+            'godinaStudija_id' => 2,
+        ]);
+    }
+
+    public function test_obnovi_godinu_creates_new_attempt_and_updates_previous_attempt(): void
+    {
+        $response = $this->get('/student/'.$this->osnovniStudent->id.'/obnova?godina=1&tipStudijaId='.$this->osnovneStudije->id);
+
+        $response->assertRedirect('/student/'.$this->osnovniStudent->id.'/upis');
+        $this->assertDatabaseHas('upis_godine', [
+            'kandidat_id' => $this->osnovniStudent->id,
+            'godina' => 1,
+            'pokusaj' => 1,
+            'statusGodine_id' => 4,
+        ]);
+        $this->assertDatabaseHas('upis_godine', [
+            'kandidat_id' => $this->osnovniStudent->id,
+            'godina' => 1,
+            'pokusaj' => 2,
+            'statusGodine_id' => 1,
+        ]);
+    }
+
+    public function test_obrisi_obnovu_godine_deletes_selected_attempt(): void
+    {
+        $obnova = UpisGodine::create([
+            'kandidat_id' => $this->osnovniStudent->id,
+            'godina' => 1,
+            'pokusaj' => 2,
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'statusGodine_id' => 1,
+            'skolskaGodina_id' => $this->skolskaGodina->id,
+            'datumUpisa' => now(),
+        ]);
+
+        $response = $this->get('/student/'.$this->osnovniStudent->id.'/obrisiObnovu?upisId='.$obnova->id);
+
+        $response->assertRedirect('/student/'.$this->osnovniStudent->id.'/upis');
+        $this->assertDatabaseMissing('upis_godine', [
+            'id' => $obnova->id,
+        ]);
+    }
+
     public function test_ponisti_upis_marks_selected_upis_as_canceled(): void
     {
         $upisGodine = UpisGodine::where('kandidat_id', $this->osnovniStudent->id)->firstOrFail();
@@ -218,6 +313,138 @@ class StudentControllerTest extends TestCase
         $this->assertDatabaseHas('upis_godine', [
             'id' => $upisGodine->id,
             'statusGodine_id' => 3,
+        ]);
+    }
+
+    public function test_promeni_status_updates_student_and_selected_enrollment_status(): void
+    {
+        $upisGodine = UpisGodine::where('kandidat_id', $this->osnovniStudent->id)->firstOrFail();
+
+        $response = $this->get('/student/'.$this->osnovniStudent->id.'/status/7/'.$upisGodine->id);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('kandidat', [
+            'id' => $this->osnovniStudent->id,
+            'statusUpisa_id' => 7,
+        ]);
+        $this->assertDatabaseHas('upis_godine', [
+            'id' => $upisGodine->id,
+            'statusGodine_id' => 7,
+        ]);
+    }
+
+    public function test_izmena_godine_returns_edit_view(): void
+    {
+        $upisGodine = UpisGodine::where('kandidat_id', $this->osnovniStudent->id)->firstOrFail();
+
+        $response = $this->get('/student/'.$upisGodine->id.'/izmenaGodine');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('upis.edit');
+        $response->assertViewHasAll(['upisGodine', 'statusGodine', 'skolskaGodina']);
+    }
+
+    public function test_store_izmena_godine_updates_selected_enrollment_fields(): void
+    {
+        $upisGodine = UpisGodine::where('kandidat_id', $this->osnovniStudent->id)->firstOrFail();
+
+        $response = $this->post('/student/'.$this->osnovniStudent->id.'/izmenaGodine', [
+            'id' => $upisGodine->id,
+            'statusGodine_id' => 4,
+            'skolskaGodina_id' => $this->skolskaGodina->id,
+            'datumUpisa' => '2025-01-15',
+            'datumUpisa_format' => 'Y-m-d',
+            'datumPromene' => '2025-02-01',
+            'datumPromene_format' => 'Y-m-d',
+        ]);
+
+        $response->assertRedirect('/student/'.$this->osnovniStudent->id.'/upis');
+        $this->assertDatabaseHas('upis_godine', [
+            'id' => $upisGodine->id,
+            'statusGodine_id' => 4,
+            'skolskaGodina_id' => $this->skolskaGodina->id,
+        ]);
+    }
+
+    public function test_masovni_upis_advances_selected_students_to_next_year(): void
+    {
+        $drugiStudent = Kandidat::factory()->create([
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
+            'godinaStudija_id' => 1,
+            'statusUpisa_id' => $this->upisanStatus->id,
+            'indikatorAktivan' => 1,
+        ]);
+
+        UpisGodine::create([
+            'kandidat_id' => $drugiStudent->id,
+            'godina' => 1,
+            'pokusaj' => 1,
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'statusGodine_id' => 1,
+            'skolskaGodina_id' => $this->skolskaGodina->id,
+            'datumUpisa' => now(),
+        ]);
+
+        UpisGodine::create([
+            'kandidat_id' => $this->osnovniStudent->id,
+            'godina' => 2,
+            'pokusaj' => 1,
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'statusGodine_id' => 3,
+            'skolskaGodina_id' => null,
+            'datumUpisa' => null,
+        ]);
+
+        UpisGodine::create([
+            'kandidat_id' => $drugiStudent->id,
+            'godina' => 2,
+            'pokusaj' => 1,
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'statusGodine_id' => 3,
+            'skolskaGodina_id' => null,
+            'datumUpisa' => null,
+        ]);
+
+        $response = $this->post('/student/masovniUpis', [
+            'odabir' => [$this->osnovniStudent->id, $drugiStudent->id],
+        ]);
+
+        $response->assertRedirect('/student/index/1');
+        $this->assertDatabaseHas('kandidat', [
+            'id' => $this->osnovniStudent->id,
+            'godinaStudija_id' => 2,
+        ]);
+        $this->assertDatabaseHas('kandidat', [
+            'id' => $drugiStudent->id,
+            'godinaStudija_id' => 2,
+        ]);
+    }
+
+    public function test_upis_master_studija_creates_master_clone_and_redirects(): void
+    {
+        $osnovniStudentSaIndeksom = Kandidat::factory()->create([
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
+            'godinaStudija_id' => 4,
+            'statusUpisa_id' => $this->upisanStatus->id,
+            'brojIndeksa' => '1001/2024',
+            'indikatorAktivan' => 1,
+        ]);
+
+        $response = $this->get('/student/'.$osnovniStudentSaIndeksom->id.'/upisMasterStudija?kandidat_id='.$osnovniStudentSaIndeksom->id.'&StudijskiProgram='.$this->masterProgram->id.'&SkolskaGodinaUpisa='.$this->skolskaGodina->id);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('flash-success', 'upis');
+        $this->assertDatabaseHas('kandidat', [
+            'tipStudija_id' => $this->masterStudije->id,
+            'studijskiProgram_id' => $this->masterProgram->id,
+            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
         ]);
     }
 
