@@ -59,6 +59,7 @@ parameters:
 			identifier: argument.type
 			count: 4
 			path: app/Http/Controllers/AktivnostController.php
+			reportUnmatched: false
 
 		-
 			message: '#^Relation ''predmet'' is not found in App\\Models\\Aktivnost model\.$#'
