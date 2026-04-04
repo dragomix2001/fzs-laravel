@@ -6,6 +6,7 @@ use App\Models\Obavestenje;
 use App\Models\Profesor;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ObavestenjeController extends Controller
 {
@@ -60,8 +61,11 @@ class ObavestenjeController extends Controller
             'posalji_email' => 'boolean',
         ]);
 
-        $data = $request->all();
-        $data['profesor_id'] = auth()->user()->profesor_id ?? $request->profesor_id;
+        $user = Auth::user();
+        $data = $request->except(['posalji_email']);
+        $data['profesor_id'] = $user !== null && $user->profesor !== null
+            ? $user->profesor->id
+            : $request->profesor_id;
 
         $obavestenje = Obavestenje::create($data);
 
@@ -129,7 +133,8 @@ class ObavestenjeController extends Controller
 
     public function javna(Request $request)
     {
-        $obavestenja = Obavestenje::aktivna()
+        $obavestenja = Obavestenje::with('profesor')
+            ->aktivna()
             ->orderBy('datum_objave', 'desc')
             ->get();
 
@@ -138,9 +143,9 @@ class ObavestenjeController extends Controller
 
     public function moja(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        $obavestenja = Obavestenje::whereHas('korisnici', function ($query) use ($user) {
+        $obavestenja = Obavestenje::with('profesor')->whereHas('korisnici', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->orWhere(function ($query) {
             $query->where('tip', 'opste')->aktivna();

@@ -91,12 +91,6 @@ parameters:
 			path: app/Http/Controllers/Api/AktivnostController.php
 
 		-
-			message: '#^Relation ''profesor'' is not found in App\\Models\\Obavestenje model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Api/ObavestenjeController.php
-
-		-
 			message: '#^Relation ''profesor'' is not found in App\\Models\\Raspored model\.$#'
 			identifier: larastan.relationExistence
 			count: 2
@@ -167,18 +161,6 @@ parameters:
 			identifier: catch.neverThrown
 			count: 1
 			path: app/Http/Controllers/KrsnaSlavaController.php
-
-		-
-			message: '#^Relation ''korisnici'' is not found in App\\Models\\Obavestenje model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/ObavestenjeController.php
-
-		-
-			message: '#^Relation ''profesor'' is not found in App\\Models\\Obavestenje model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/ObavestenjeController.php
 
 		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
@@ -385,18 +367,6 @@ parameters:
 			path: app/Http/Controllers/UserController.php
 
 		-
-			message: '#^Relation ''kandidat'' is not found in App\\Models\\User model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/UserController.php
-
-		-
-			message: '#^Relation ''profesor'' is not found in App\\Models\\User model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/UserController.php
-
-		-
 			message: '#^Method App\\Http\\Controllers\\WelcomeController\:\:index\(\) has invalid return type App\\Http\\Controllers\\Response\.$#'
 			identifier: class.notFound
 			count: 1
@@ -535,40 +505,10 @@ parameters:
 			path: app/Models/ZapisnikOPolaganjuIspita.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Policies/IspitPolicy.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$kandidat\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Policies/PolozeniIspitiPolicy.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Policies/PolozeniIspitiPolicy.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$profesor_id\.$#'
 			identifier: property.notFound
 			count: 2
 			path: app/Policies/PolozeniIspitiPolicy.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$kandidat\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Policies/PrijavaIspitaPolicy.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Policies/PrijavaIspitaPolicy.php
 
 		-
 			message: '#^Method Illuminate\\Foundation\\Support\\Providers\\AuthServiceProvider\:\:registerPolicies\(\) invoked with 1 parameter, 0 required\.$#'

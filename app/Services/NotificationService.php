@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Events\NewNotification;
 use App\Jobs\BroadcastNotificationJob;
+use App\Mail\ObavestenjeMail;
 use App\Models\Obavestenje;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationService
 {
@@ -42,5 +44,18 @@ class NotificationService
             "Пријава за {$examName} истиче {$deadline}",
             'warning'
         );
+    }
+
+    public function sendObavestenjeToAllStudents(string $naslov, string $sadrzaj, string $tip = 'opste'): void
+    {
+        $studentEmails = User::where('role', User::ROLE_STUDENT)
+            ->whereNotNull('email')
+            ->pluck('email')
+            ->filter()
+            ->all();
+
+        foreach ($studentEmails as $email) {
+            Mail::to($email)->send(new ObavestenjeMail($naslov, $sadrzaj, $tip));
+        }
     }
 }

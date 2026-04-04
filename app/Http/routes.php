@@ -430,13 +430,13 @@ Route::get('/raspored/kalendar/events', 'RasporedController@kalendarEvents')->na
 Route::get('/obavestenja', 'ObavestenjeController@index')->name('obavestenja.index');
 Route::get('/obavestenja/create', 'ObavestenjeController@create')->name('obavestenja.create');
 Route::post('/obavestenja', 'ObavestenjeController@store')->name('obavestenja.store');
+Route::get('/obavestenja/javna', 'ObavestenjeController@javna')->name('obavestenja.javna');
+Route::get('/moja-obavestenja', 'ObavestenjeController@moja')->name('obavestenja.moja');
 Route::get('/obavestenja/{obavestenje}', 'ObavestenjeController@show')->name('obavestenja.show');
 Route::get('/obavestenja/{obavestenje}/edit', 'ObavestenjeController@edit')->name('obavestenja.edit');
 Route::put('/obavestenja/{obavestenje}', 'ObavestenjeController@update')->name('obavestenja.update');
 Route::delete('/obavestenja/{obavestenje}', 'ObavestenjeController@destroy')->name('obavestenja.destroy');
 Route::get('/obavestenja/{obavestenje}/toggle', 'ObavestenjeController@toggleStatus')->name('obavestenja.toggle');
-Route::get('/obavestenja/javna', 'ObavestenjeController@javna')->name('obavestenja.javna');
-Route::get('/moja-obavestenja', 'ObavestenjeController@moja')->name('obavestenja.moja');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
 Route::post('/dashboard/widgets', 'DashboardController@saveWidgets')->name('dashboard.widgets');

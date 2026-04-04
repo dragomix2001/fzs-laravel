@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -54,12 +55,12 @@ class User extends Authenticatable
         return in_array($this->role, $roles);
     }
 
-    public function profesor()
+    public function profesor(): BelongsTo
     {
-        return $this->belongsTo(Profesor::class, 'email', 'email');
+        return $this->belongsTo(Profesor::class, 'email', 'mail');
     }
 
-    public function kandidat()
+    public function kandidat(): BelongsTo
     {
         return $this->belongsTo(Kandidat::class, 'email', 'email');
     }

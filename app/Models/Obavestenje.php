@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Obavestenje extends Model
 {
@@ -24,12 +26,12 @@ class Obavestenje extends Model
         'datum_isteka' => 'datetime',
     ];
 
-    public function profesor()
+    public function profesor(): BelongsTo
     {
         return $this->belongsTo(Profesor::class);
     }
 
-    public function korisnici()
+    public function korisnici(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'obavestenja_korisnici')
             ->withPivot('procitano', 'datum_citanja')
