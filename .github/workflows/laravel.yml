@@ -14,7 +14,6 @@ env:
   DB_DATABASE: fzs
   DB_USERNAME: root
   DB_PASSWORD: root
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   laravel-tests:
@@ -36,7 +35,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -84,7 +83,7 @@ jobs:
 
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: coverage.xml
@@ -94,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
