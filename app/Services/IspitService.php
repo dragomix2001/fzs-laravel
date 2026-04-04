@@ -2,21 +2,21 @@
 
 namespace App\Services;
 
-use App\AktivniIspitniRokovi;
 use App\DTOs\ZapisnikData;
-use App\GodinaStudija;
 use App\Jobs\GenerateZapisnikPdfJob;
-use App\Kandidat;
+use App\Models\AktivniIspitniRokovi;
+use App\Models\GodinaStudija;
+use App\Models\Kandidat;
+use App\Models\PolozeniIspiti;
+use App\Models\Predmet;
+use App\Models\PredmetProgram;
+use App\Models\PrijavaIspita;
+use App\Models\Profesor;
+use App\Models\StatusIspita;
 use App\Models\StudijskiProgram;
-use App\PolozeniIspiti;
-use App\Predmet;
-use App\PredmetProgram;
-use App\PrijavaIspita;
-use App\Profesor;
-use App\StatusIspita;
-use App\ZapisnikOPolaganju_Student;
-use App\ZapisnikOPolaganju_StudijskiProgram;
-use App\ZapisnikOPolaganjuIspita;
+use App\Models\ZapisnikOPolaganju_Student;
+use App\Models\ZapisnikOPolaganju_StudijskiProgram;
+use App\Models\ZapisnikOPolaganjuIspita;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -79,7 +79,11 @@ class IspitService extends BasePdfService
             'rok_id' => $rokId,
         ])->select('predmet_id', 'profesor_id')->get();
 
-        $predmetId = array_unique($prijava->pluck('predmet_id')->all());
+        $predmetProgramIds = array_unique($prijava->pluck('predmet_id')->all());
+        $predmetId = PredmetProgram::whereIn('id', $predmetProgramIds)
+            ->pluck('predmet_id')
+            ->unique()
+            ->all();
         $profesorId = array_unique($prijava->pluck('profesor_id')->all());
 
         $profesori = Profesor::whereIn('id', $profesorId)->get()->isEmpty()
@@ -93,14 +97,13 @@ class IspitService extends BasePdfService
 
     public function getZapisnikStudenti(int $predmetId, int $rokId, int $profesorId): array
     {
-        $program = PredmetProgram::where([
-            'predmet_id' => $predmetId,
-        ])->pluck('id');
+        $predmetProgramIds = PredmetProgram::where('predmet_id', $predmetId)->pluck('id');
 
-        $prijava = PrijavaIspita::where([
-            'rok_id' => $rokId,
-            'profesor_id' => $profesorId,
-        ])->whereIn('predmet_id', $program)->get();
+        $prijava = PrijavaIspita::whereIn('predmet_id', $predmetProgramIds)
+            ->where([
+                'rok_id' => $rokId,
+                'profesor_id' => $profesorId,
+            ])->get();
 
         $prijavaId = $prijava->isEmpty() ? null : $prijava->first()->id;
         $studentiId = $prijava->pluck('kandidat_id')->all();
@@ -145,12 +148,12 @@ class IspitService extends BasePdfService
             $kandidat = $kandidatiMap->get($id);
             $smerovi[] = $kandidat->studijskiProgram_id;
 
-            $programId = $predmetProgramMap->get($kandidat->studijskiProgram_id)->id;
+            $predmetProgramRecord = $predmetProgramMap->get($kandidat->studijskiProgram_id);
 
             $polozenIspit = new PolozeniIspiti;
             $polozenIspit->indikatorAktivan = 0;
             $polozenIspit->kandidat_id = $id;
-            $polozenIspit->predmet_id = $programId;
+            $polozenIspit->predmet_id = $predmetProgramRecord->id;
             $polozenIspit->zapisnik_id = $zapisnik->id;
             $polozenIspit->prijava_id = $zapisnik->prijavaIspita_id;
             $polozenIspit->save();
@@ -234,7 +237,7 @@ class IspitService extends BasePdfService
         $statusIspita = StatusIspita::all();
         $polozeniIspiti = PolozeniIspiti::where(['zapisnik_id' => $zapisnikId])->get();
 
-        $polozeniIspiti = $polozeniIspiti->sortBy(function ($name, $key) use ($studentiMap) {
+        $polozeniIspiti = $polozeniIspiti->sortBy(function ($name) use ($studentiMap) {
             $kandidat = $studentiMap->get($name['kandidat_id']);
 
             return $kandidat ? $kandidat->brojIndeksa : '';
@@ -309,11 +312,15 @@ class IspitService extends BasePdfService
                 continue;
             }
             $kandidat = $kandidatiMap->get($id);
-            $predmetProgram = $predmetProgramMapDodaj->get($kandidat->studijskiProgram_id);
+            $predmetProgram = $predmetProgramMapDodaj->get($kandidat->studijskiProgram_id)?->first();
+
+            if ($predmetProgram === null) {
+                continue;
+            }
 
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem = new PrijavaIspita;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->kandidat_id = $id;
-            $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->predmet_id = $predmetProgram->first()->id;
+            $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->predmet_id = $predmetProgram->id;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->profesor_id = $zapisnik->profesor_id;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->rok_id = $zapisnik->rok_id;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->brojPolaganja = 1;
@@ -334,7 +341,7 @@ class IspitService extends BasePdfService
             $polozenIspit = new PolozeniIspiti;
             $polozenIspit->indikatorAktivan = 0;
             $polozenIspit->kandidat_id = $id;
-            $polozenIspit->predmet_id = $zapisnik->predmet_id;
+            $polozenIspit->predmet_id = $predmetProgram->id;
             $polozenIspit->zapisnik_id = $zapisnik->id;
             $polozenIspit->prijava_id = $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->id;
             $polozenIspit->save();
@@ -460,8 +467,8 @@ class IspitService extends BasePdfService
                 $polozenIspit = new PolozeniIspiti;
                 $polozenIspit->kandidat_id = $kandidatId;
                 $polozenIspit->predmet_id = $ispit;
-                $polozenIspit->zapisnik_id = 0;
-                $polozenIspit->prijava_id = 0;
+                $polozenIspit->zapisnik_id = null;
+                $polozenIspit->prijava_id = null;
                 $polozenIspit->konacnaOcena = $konacneOcene[$index];
                 $polozenIspit->statusIspita = 5;
                 $polozenIspit->indikatorAktivan = 1;
@@ -547,9 +554,29 @@ class IspitService extends BasePdfService
             $studenti = Kandidat::whereIn('id', $ids)->orderByRaw('SUBSTR(brojIndeksa, 5)')->orderBy('brojIndeksa')->get();
 
             $prijavaIds = [];
+            $studentiMap = $studenti->keyBy('id');
+            $tipStudijaIds = $studentiMap->pluck('tipStudija_id')->unique()->all();
+            $studijskiProgramIds = $studentiMap->pluck('studijskiProgram_id')->unique()->all();
+            $predmetProgramLookup = PredmetProgram::where('predmet_id', $zapisnik->predmet_id)
+                ->whereIn('tipStudija_id', $tipStudijaIds)
+                ->whereIn('studijskiProgram_id', $studijskiProgramIds)
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->tipStudija_id.'_'.$item->studijskiProgram_id;
+                });
+
             foreach ($ids as $id) {
+                $kandidat = $studentiMap->get($id);
+                $predmetProgram = $kandidat === null
+                    ? null
+                    : $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
+
+                if ($predmetProgram === null) {
+                    continue;
+                }
+
                 $pom = PrijavaIspita::where([
-                    'predmet_id' => $zapisnik->predmet_id,
+                    'predmet_id' => $predmetProgram->id,
                     'rok_id' => $zapisnik->rok_id,
                     'kandidat_id' => $id,
                 ])->first();
@@ -560,9 +587,18 @@ class IspitService extends BasePdfService
 
             $polozeniIspitIds = [];
             foreach ($ids as $id) {
+                $kandidat = $studentiMap->get($id);
+                $predmetProgram = $kandidat === null
+                    ? null
+                    : $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
+
+                if ($predmetProgram === null) {
+                    continue;
+                }
+
                 $pom = PolozeniIspiti::where([
                     'zapisnik_id' => $zapisnik->id,
-                    'predmet_id' => $zapisnik->predmet_id,
+                    'predmet_id' => $predmetProgram->id,
                     'kandidat_id' => $id,
                 ])->first();
                 if ($pom != null) {
@@ -631,7 +667,8 @@ class IspitService extends BasePdfService
             $ispiti = DB::table('polozeni_ispiti')
                 ->where(['polozeni_ispiti.kandidat_id' => $id])
                 ->join('prijava_ispita', 'polozeni_ispiti.prijava_id', '=', 'prijava_ispita.id')
-                ->join('predmet', 'prijava_ispita.predmet_id', '=', 'predmet.id')
+                ->join('predmet_program', 'prijava_ispita.predmet_id', '=', 'predmet_program.id')
+                ->join('predmet', 'predmet_program.predmet_id', '=', 'predmet.id')
                 ->join('profesor', 'prijava_ispita.profesor_id', '=', 'profesor.id')
                 ->select(
                     'predmet.naziv as predmet',

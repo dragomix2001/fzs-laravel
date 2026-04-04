@@ -335,7 +335,8 @@ class StudentListService extends BasePdfService
 
     public function spisakPoPredmetima($predmetId)
     {
-        $prijave = PrijavaIspita::where('predmet_id', $predmetId)->get();
+        $predmetProgramIds = PredmetProgram::where('predmet_id', $predmetId)->pluck('id');
+        $prijave = PrijavaIspita::whereIn('predmet_id', $predmetProgramIds)->get();
         $predmet = Predmet::find($predmetId);
 
         $pdf = $this->createPdf();

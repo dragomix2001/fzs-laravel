@@ -21,8 +21,10 @@ class KandidatFactory extends Factory
             'imeKandidata' => $this->faker->firstName(),
             'prezimeKandidata' => $this->faker->lastName(),
             'jmbg' => $this->faker->unique()->numerify('#############'),
-            'studijskiProgram_id' => StudijskiProgram::factory(),
             'tipStudija_id' => TipStudija::factory(),
+            'studijskiProgram_id' => fn (array $attributes) => StudijskiProgram::factory()->create([
+                'tipStudija_id' => $attributes['tipStudija_id'],
+            ])->id,
             'skolskaGodinaUpisa_id' => SkolskaGodUpisa::factory(),
             'godinaStudija_id' => $godinaStudija,
             'statusUpisa_id' => StatusStudiranja::factory(),
@@ -39,7 +41,7 @@ class KandidatFactory extends Factory
 
     public function osnovneStudije(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'tipStudija_id' => TipStudija::factory()->osnovne(),
             'godinaStudija_id' => 1,
         ]);
@@ -47,7 +49,7 @@ class KandidatFactory extends Factory
 
     public function masterStudije(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'tipStudija_id' => TipStudija::factory()->master(),
             'godinaStudija_id' => 1,
         ]);
@@ -55,7 +57,7 @@ class KandidatFactory extends Factory
 
     public function upisan(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'statusUpisa_id' => StatusStudiranja::factory(),
             'upisan' => 1,
         ]);
