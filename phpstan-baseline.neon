@@ -799,12 +799,6 @@ parameters:
 			path: app/Services/IspitService.php
 
 		-
-			message: '#^Call to an undefined static method App\\Models\\UpisGodine\:\:uplatiGodinu\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 1
-			path: app/Services/KandidatService.php
-
-		-
 			message: '#^Property App\\Models\\Kandidat\:\:\$datumRodjenja \(Carbon\\Carbon\|null\) does not accept DateTime\|false\.$#'
 			identifier: assign.propertyType
 			count: 1
