@@ -64,7 +64,7 @@
 
                         <div class="form-group col-lg-6">
                             <label for="StudijskiProgram">Студијски програм</label>
-                            <input id="StudijskiProgram" type="text" value="{{$kandidat->program->naziv}}"
+                            <input id="StudijskiProgram" type="text" value="{{ $kandidat->program?->naziv ?? '' }}"
                                    class="form-control" disabled/>
                         </div>
                     </div>
@@ -92,11 +92,11 @@
                         <div class="form-group col-lg-4">
                             <label for="formatDatum">Датум пријаве</label>
                             <input id="formatDatum" class="form-control dateMask" type="text" name="formatDatum"
-                                   value="{{ $diplomskiRadTema->datum->format('d.m.Y.') }}"/>
+                                   value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('d.m.Y.') }}"/>
                         </div>
 
                         <input type="hidden" name="datumPrijave" id="datum"
-                               value="{{ $diplomskiRadTema->datum->format('Y-m-d') }}">
+                               value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('Y-m-d') }}">
 
                         <div class="form-group col-lg-4">
                             <label for="formatDatum2">Датум одбране (термин)</label>

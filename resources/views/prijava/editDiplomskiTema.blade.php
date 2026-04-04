@@ -35,7 +35,7 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
                     <input type="hidden" name="diplomskiTema_id" id="diplomskiTema_id"
-                           value="{{ $diplomskiRadTema->id }}">
+                           value="{{ $diplomskiRadTema?->id }}">
                     <input type="hidden" name="tipStudija_id" id="tipStudija_id"
                            value="{{ $kandidat->tipStudija_id }}">
                     <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id"
@@ -64,7 +64,7 @@
 
                         <div class="form-group col-lg-6">
                             <label for="StudijskiProgram">Студијски програм</label>
-                            <input id="StudijskiProgram" type="text" value="{{$kandidat->program->naziv}}"
+                            <input id="StudijskiProgram" type="text" value="{{ $kandidat->program?->naziv ?? '' }}"
                                    class="form-control" disabled/>
                         </div>
                     </div>
@@ -92,11 +92,11 @@
                         <div class="form-group col-lg-4">
                             <label for="formatDatum">Датум</label>
                             <input id="formatDatum" class="form-control dateMask" type="text" name="formatDatum"
-                                   value="{{ $diplomskiRadTema->datum->format('d.m.Y.') }}"/>
+                                   value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('d.m.Y.') }}"/>
                         </div>
 
                         <input type="hidden" name="datum" id="datum"
-                               value="{{ $diplomskiRadTema->datum->format('Y-m-d') }}">
+                               value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('Y-m-d') }}">
 
                     </div>
 

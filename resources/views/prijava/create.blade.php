@@ -23,7 +23,11 @@
             </div>
         @endif
         <div class="row">
-            <a class="btn btn-primary" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
+            @if(!empty($kandidat))
+                <a class="btn btn-primary" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
+            @else
+                <a class="btn btn-primary" href="/prijava/zaPredmet/{{ $predmet->predmet_id }}">Назад на предмет</a>
+            @endif
         </div>
         <br>
         <div class="row">
@@ -184,7 +188,7 @@
                                 <label for="StudijskiProgram">Студијски програм</label>
                                 <select class="form-control" id="StudijskiProgram" name="StudijskiProgram" disabled>
                                     @foreach($studijskiProgram as $item)
-                                        <option value="{{ $item->id }}"{{ ($predmet->program->id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
+                                        <option value="{{ $item->id }}"{{ (($predmet->program?->id ?? null) == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
                                     @endforeach
                                 </select>
                             </div>

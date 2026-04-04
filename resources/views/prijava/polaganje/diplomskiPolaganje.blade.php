@@ -62,7 +62,7 @@
 
                         <div class="form-group col-lg-6">
                             <label for="StudijskiProgram">Студијски програм</label>
-                            <input id="StudijskiProgram" type="text" value="{{$kandidat->program->naziv}}"
+                            <input id="StudijskiProgram" type="text" value="{{ $kandidat->program?->naziv ?? '' }}"
                                    class="form-control" disabled/>
                         </div>
                     </div>
