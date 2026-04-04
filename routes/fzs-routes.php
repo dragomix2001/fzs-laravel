@@ -194,10 +194,10 @@ Route::get('/prisustvo/report', 'App\Http\Controllers\PrisustvoController@report
 Route::get('/aktivnost', 'App\Http\Controllers\AktivnostController@index')->name('aktivnost.index');
 Route::get('/aktivnost/create', 'App\Http\Controllers\AktivnostController@create')->name('aktivnost.create');
 Route::post('/aktivnost', 'App\Http\Controllers\AktivnostController@store')->name('aktivnost.store');
-Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->name('aktivnost.show');
+Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
+Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->where('aktivnost', '[0-9]+')->name('aktivnost.show');
 Route::get('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@ocenjivanje')->name('aktivnost.ocenjivanje');
 Route::post('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@saveOcenjivanje')->name('aktivnost.saveOcenjivanje');
-Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
 
 Route::get('/raspored', 'App\Http\Controllers\RasporedController@index')->name('raspored.index');
 Route::get('/raspored/create', 'App\Http\Controllers\RasporedController@create')->name('raspored.create');
@@ -234,6 +234,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         // Admin only - aktivnost management (SPECIFIC routes before parameterized)
         Route::get('/aktivnost/create', 'App\Http\Controllers\AktivnostController@create')->name('aktivnost.create');
         Route::post('/aktivnost', 'App\Http\Controllers\AktivnostController@store')->name('aktivnost.store');
+        Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
         Route::get('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@ocenjivanje')->name('aktivnost.ocenjivanje');
         Route::post('/aktivnost/{aktivnost}/ocenjivanje', 'App\Http\Controllers\AktivnostController@saveOcenjivanje')->name('aktivnost.saveOcenjivanje');
 
@@ -252,8 +253,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // Aktivnost - view for all
     Route::get('/aktivnost', 'App\Http\Controllers\AktivnostController@index')->name('aktivnost.index');
-    Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->name('aktivnost.show');
     Route::get('/aktivnost/rezime', 'App\Http\Controllers\AktivnostController@rezime')->name('aktivnost.rezime');
+    Route::get('/aktivnost/{aktivnost}', 'App\Http\Controllers\AktivnostController@show')->where('aktivnost', '[0-9]+')->name('aktivnost.show');
 
     // Prisustvo - view for all
     Route::get('/prisustvo', 'App\Http\Controllers\PrisustvoController@index')->name('prisustvo.index');
