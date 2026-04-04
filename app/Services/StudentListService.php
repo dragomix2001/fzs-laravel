@@ -4,12 +4,13 @@ namespace App\Services;
 
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
+use App\Models\Predmet;
+use App\Models\PredmetProgram;
+use App\Models\PrijavaIspita;
+use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
-use App\Predmet;
-use App\PrijavaIspita;
-use App\Profesor;
 use Illuminate\Support\Facades\DB;
 use View;
 
