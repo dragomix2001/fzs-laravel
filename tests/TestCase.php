@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Database\Seeders\StatusGodineTableSeeder;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
@@ -44,6 +45,7 @@ abstract class TestCase extends BaseTestCase
     {
         $traits = class_uses_recursive(static::class);
 
-        return in_array(RefreshDatabase::class, $traits, true);
+        return in_array(RefreshDatabase::class, $traits, true)
+            || in_array(DatabaseTransactions::class, $traits, true);
     }
 }
