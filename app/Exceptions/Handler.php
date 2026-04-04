@@ -111,13 +111,17 @@ class Handler extends ExceptionHandler
     {
         $statusCode = 500;
 
-        if ($e instanceof HttpException) {
+        if ($e instanceof ValidationException) {
+            $statusCode = $e->status;
+        } elseif ($e instanceof HttpException) {
             $statusCode = $e->getStatusCode();
         }
 
         $response = [
             'error' => [
-                'message' => $this->isHttpException($e) ? $e->getMessage() : 'Server Error',
+                'message' => $e instanceof ValidationException
+                    ? 'The given data was invalid.'
+                    : ($this->isHttpException($e) ? $e->getMessage() : 'Server Error'),
                 'code' => $statusCode,
             ],
         ];

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -46,7 +45,15 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+
+        if ($user !== null) {
+            if ($request->bearerToken() !== null) {
+                $user->currentAccessToken()->delete();
+            } else {
+                $user->tokens()->delete();
+            }
+        }
 
         return response()->json([
             'message' => 'Одјава успешна',
