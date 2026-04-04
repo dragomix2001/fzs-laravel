@@ -179,21 +179,21 @@ class PrijavaController extends Controller
 
             $kandidat = $kandidatiMap->get($kandidatId);
 
+            $predmetProgramZaPrijavu = $predmetProgramMap1->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
+
+            if ($predmetProgramZaPrijavu == null) {
+                continue;
+            }
+
             $validator = PrijavaIspita::where([
                 'kandidat_id' => $kandidatId,
                 'rok_id' => $request->rok_id,
-                'predmet_id' => $request->predmet_id,
+                'predmet_id' => $predmetProgramZaPrijavu->id,
             ])->get();
 
             if (! $validator->isEmpty()) {
                 $duplicateArray[] = $kandidat;
 
-                continue;
-            }
-
-            $predmetProgramZaPrijavu = $predmetProgramMap1->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
-
-            if ($predmetProgramZaPrijavu == null) {
                 continue;
             }
 
@@ -346,7 +346,15 @@ class PrijavaController extends Controller
     {
         $this->authorize('create', PrijavaIspita::class);
 
-        $prijava = new PrijavaIspita($request->all());
+        $prijava = new PrijavaIspita($request->only([
+            'kandidat_id',
+            'predmet_id',
+            'rok_id',
+            'profesor_id',
+            'brojPolaganja',
+            'datum',
+            'tipPrijave_id',
+        ]));
         $saved = $prijava->save();
 
         if ($saved) {
@@ -454,8 +462,9 @@ class PrijavaController extends Controller
 
     // region DIPLOMSKI RAD - TEMA
 
-    public function diplomskiTema(Kandidat $kandidat)
+    public function diplomskiTema($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $profesor = Profesor::all();
         $predmeti = PredmetProgram::where([
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -473,8 +482,9 @@ class PrijavaController extends Controller
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
-    public function editdiplomskiTema(Kandidat $kandidat)
+    public function editdiplomskiTema($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $profesor = Profesor::all();
         $predmeti = PredmetProgram::where([
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -502,8 +512,9 @@ class PrijavaController extends Controller
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
-    public function deleteDiplomskiTema(Kandidat $kandidat)
+    public function deleteDiplomskiTema($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $prijavaTeme = DiplomskiPrijavaTeme::where([
             'kandidat_id' => $kandidat->id,
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -516,8 +527,9 @@ class PrijavaController extends Controller
     // endregion
 
     // region DIPLOMSKI RAD - ODBRANA
-    public function diplomskiOdbrana(Kandidat $kandidat)
+    public function diplomskiOdbrana($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $profesor = Profesor::all();
         $predmeti = PredmetProgram::where([
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -542,8 +554,9 @@ class PrijavaController extends Controller
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
-    public function editDiplomskiOdbrana(Kandidat $kandidat)
+    public function editDiplomskiOdbrana($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $profesor = Profesor::all();
         $predmeti = PredmetProgram::where([
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -576,8 +589,9 @@ class PrijavaController extends Controller
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
-    public function deleteDiplomskiOdbrana(Kandidat $kandidat)
+    public function deleteDiplomskiOdbrana($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $prijavaOdbrane = DiplomskiPrijavaOdbrane::where([
             'kandidat_id' => $kandidat->id,
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -590,8 +604,9 @@ class PrijavaController extends Controller
     // endregion
 
     // region DIPLOMSKI RAD - POLAGANJE
-    public function diplomskiPolaganje(Kandidat $kandidat)
+    public function diplomskiPolaganje($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $profesor = Profesor::all();
         $predmeti = PredmetProgram::where([
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -615,8 +630,9 @@ class PrijavaController extends Controller
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
-    public function editDiplomskiPolaganje(Kandidat $kandidat)
+    public function editDiplomskiPolaganje($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $profesor = Profesor::all();
         $predmeti = PredmetProgram::where([
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -646,8 +662,9 @@ class PrijavaController extends Controller
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
-    public function deleteDiplomskiPolaganje(Kandidat $kandidat)
+    public function deleteDiplomskiPolaganje($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $prijavaOdbrane = DiplomskiPolaganje::where([
             'kandidat_id' => $kandidat->id,
             'tipStudija_id' => $kandidat->tipStudija_id,
@@ -664,8 +681,9 @@ class PrijavaController extends Controller
     //  Privremeni deo za unos priznatih ispita retroaktivno
     //
 
-    public function unosPrivremeni(Kandidat $kandidat)
+    public function unosPrivremeni($kandidat)
     {
+        $kandidat = Kandidat::findOrFail($kandidat);
         $ispiti = PredmetProgram::where([
             'studijskiProgram_id' => $kandidat->studijskiProgram_id,
         ])->get();
@@ -693,8 +711,8 @@ class PrijavaController extends Controller
 
         foreach ($ispiti as $index => $ispit) {
             $novIspit = new PolozeniIspiti;
-            $novIspit->prijava_id = 0;
-            $novIspit->zapisnik_id = 0;
+            $novIspit->prijava_id = null;
+            $novIspit->zapisnik_id = null;
             $novIspit->kandidat_id = $kandidat;
             $novIspit->predmet_id = $ispit;
             $novIspit->ocenaPismeni = 0;
