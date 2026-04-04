@@ -347,6 +347,26 @@ class RasporedControllerTest extends TestCase
         $response->assertJsonPath('0.extendedProps.grupa', 'Svi');
     }
 
+    public function test_kalendar_events_maps_sunday_to_fullcalendar_zero_based_weekday(): void
+    {
+        $nedelja = $this->createRaspored([
+            'dan' => 7,
+            'vreme_od' => '16:00:00',
+            'vreme_do' => '18:00:00',
+            'grupa' => 'Nedelja',
+        ]);
+
+        $response = $this->getJson('/raspored/kalendar/events?studijski_program_id='.$this->studijskiProgram->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'id' => $nedelja->id,
+            'daysOfWeek' => [0],
+            'startTime' => '16:00',
+            'endTime' => '18:00',
+        ]);
+    }
+
     protected function createRaspored(array $overrides = []): Raspored
     {
         return Raspored::create(array_merge([

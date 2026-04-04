@@ -227,19 +227,26 @@ class RasporedController extends Controller
                 3 => '#2ecc71',
             ];
 
+            $predmetNaziv = $r->predmet->naziv;
+            $oblikNaziv = $r->oblikNastave->naziv;
+            $title = $oblikNaziv !== null && $oblikNaziv !== ''
+                ? $predmetNaziv.' - '.$oblikNaziv
+                : $predmetNaziv;
+            $calendarDay = $r->dan === 7 ? 0 : $r->dan;
+
             $startTime = $r->vreme_od->format('H:i');
             $endTime = $r->vreme_do->format('H:i');
 
             $events[] = [
                 'id' => $r->id,
-                'title' => ($r->predmet->naziv ?? 'N/A').' - '.($r->oblikNastave->naziv ?? ''),
-                'daysOfWeek' => [$r->dan],
+                'title' => $title,
+                'daysOfWeek' => [$calendarDay],
                 'startTime' => $startTime,
                 'endTime' => $endTime,
                 'backgroundColor' => $boje[$r->oblik_nastave_id] ?? '#3498db',
                 'borderColor' => $boje[$r->oblik_nastave_id] ?? '#3498db',
                 'extendedProps' => [
-                    'profesor' => trim(($r->profesor->ime ?? '').' '.($r->profesor->prezime ?? '')),
+                    'profesor' => trim($r->profesor->ime.' '.$r->profesor->prezime),
                     'prostorija' => $r->prostorija,
                     'grupa' => $r->grupa,
                 ],
