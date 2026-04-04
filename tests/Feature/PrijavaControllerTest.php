@@ -19,6 +19,7 @@ use App\Models\TipPredmeta;
 use App\Models\TipPrijave;
 use App\Models\TipStudija;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
@@ -59,7 +60,7 @@ class PrijavaControllerTest extends TestCase
 
         parent::setUp();
 
-        \Illuminate\Database\Eloquent\Model::unguard();
+        Model::unguard();
 
         Gate::before(function ($user, string $ability) {
             if ($user && method_exists($user, 'hasRole') && $user->hasRole('admin')) {
@@ -91,7 +92,7 @@ class PrijavaControllerTest extends TestCase
 
         $this->user = User::create([
             'name' => 'Admin User',
-            'email' => 'admin_' . uniqid() . '@test.com',
+            'email' => 'admin_'.uniqid().'@test.com',
             'password' => bcrypt('password'),
             'role' => 'admin',
         ]);

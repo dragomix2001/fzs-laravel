@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
 use App\Models\Predmet;
+use App\Models\PredmetProgram;
 use App\Models\PrijavaIspita;
 use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
@@ -340,7 +341,7 @@ class StudentListServiceTest extends TestCase
             'kandidat_id' => $f['kandidat']->id,
         ]);
         $predmetProgramId = $prijava->predmet_id;
-        $predmet = \App\Models\PredmetProgram::find($predmetProgramId);
+        $predmet = PredmetProgram::find($predmetProgramId);
 
         try {
             $this->service->spisakPoPredmetima($predmet ? $predmet->predmet_id : 99999);
