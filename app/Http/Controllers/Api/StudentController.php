@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
 use App\Models\PrijavaIspita;
-use App\Models\SkolskaGodUpisa;
+use App\Models\UpisGodine;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -18,7 +18,7 @@ class StudentController extends Controller
     public function profile(Request $request)
     {
         $user = $request->user();
-        $kandidat = Kandidat::where('user_id', $user->id)->first();
+        $kandidat = Kandidat::where('email', $user->email)->first();
 
         if (! $kandidat) {
             return response()->json([
@@ -39,7 +39,7 @@ class StudentController extends Controller
     public function polozeniIspiti(Request $request)
     {
         $user = $request->user();
-        $kandidat = Kandidat::where('user_id', $user->id)->first();
+        $kandidat = Kandidat::where('email', $user->email)->first();
 
         if (! $kandidat) {
             return response()->json([
@@ -66,7 +66,7 @@ class StudentController extends Controller
     public function prijave(Request $request)
     {
         $user = $request->user();
-        $kandidat = Kandidat::where('user_id', $user->id)->first();
+        $kandidat = Kandidat::where('email', $user->email)->first();
 
         if (! $kandidat) {
             return response()->json([
@@ -92,7 +92,7 @@ class StudentController extends Controller
     public function upis(Request $request)
     {
         $user = $request->user();
-        $kandidat = Kandidat::where('user_id', $user->id)->first();
+        $kandidat = Kandidat::where('email', $user->email)->first();
 
         if (! $kandidat) {
             return response()->json([
@@ -100,9 +100,9 @@ class StudentController extends Controller
             ], 404);
         }
 
-        $upisi = SkolskaGodUpisa::where('kandidat_id', $kandidat->id)
-            ->with('skolskaGodina')
-            ->orderBy('godina_upisa', 'desc')
+        $upisi = UpisGodine::where('kandidat_id', $kandidat->id)
+            ->orderBy('godina', 'desc')
+            ->orderBy('pokusaj', 'desc')
             ->get();
 
         return response()->json([
@@ -118,7 +118,7 @@ class StudentController extends Controller
     public function stats(Request $request)
     {
         $user = $request->user();
-        $kandidat = Kandidat::where('user_id', $user->id)->first();
+        $kandidat = Kandidat::where('email', $user->email)->first();
 
         if (! $kandidat) {
             return response()->json([
