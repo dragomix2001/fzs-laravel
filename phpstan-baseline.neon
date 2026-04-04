@@ -31,24 +31,6 @@ parameters:
 			path: app/Exceptions/Handler.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$BrojIndeksa\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Exports/PolozeniIspitiExport.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$imeKandidata\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Exports/PolozeniIspitiExport.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$prezimeKandidata\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Exports/PolozeniIspitiExport.php
-
-		-
 			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\PolozeniIspiti\>\:\:map\(\) contains unresolvable type\.$#'
 			identifier: argument.unresolvableType
 			count: 1
@@ -103,12 +85,6 @@ parameters:
 			path: app/Http/Controllers/AuditLogController.php
 
 		-
-			message: '#^Call to an undefined method App\\Http\\Controllers\\Auth\\AuthController\:\:guestMiddleware\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/Auth/AuthController.php
-
-		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
 			identifier: catch.neverThrown
 			count: 1
@@ -157,22 +133,10 @@ parameters:
 			path: app/Http/Controllers/OpstinaController.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tipStudija\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/PredmetController.php
-
-		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
 			identifier: catch.neverThrown
 			count: 3
 			path: app/Http/Controllers/PredmetController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$naziv\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/PrijavaController.php
 
 		-
 			message: '#^Property App\\Models\\PolozeniIspiti\:\:\$indikatorAktivan \(bool\|null\) does not accept int\.$#'
@@ -197,12 +161,6 @@ parameters:
 			identifier: catch.neverThrown
 			count: 1
 			path: app/Http/Controllers/PrilozenaDokumentaController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$profesor_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/PrisustvoController.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
@@ -295,12 +253,6 @@ parameters:
 			path: app/Http/Controllers/TipStudijaController.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$active\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/UserController.php
-
-		-
 			message: '#^Method App\\Http\\Controllers\\WelcomeController\:\:index\(\) has invalid return type App\\Http\\Controllers\\Response\.$#'
 			identifier: class.notFound
 			count: 1
@@ -323,90 +275,6 @@ parameters:
 			identifier: property.phpDocType
 			count: 1
 			path: app/Http/Middleware/EncryptCookies.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$adresa\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$brojIndeksa\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$created_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$datumRodjenja\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$email\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$godinaUpisa\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$imeKandidata\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$jmbg\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$prezimeKandidata\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$program\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$statusUpisa_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$telefon\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\KandidatResource\:\:\$updated_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/KandidatResource.php
 
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
@@ -437,12 +305,6 @@ parameters:
 			identifier: property.defaultValue
 			count: 1
 			path: app/Models/ZapisnikOPolaganjuIspita.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$profesor_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Policies/PolozeniIspitiPolicy.php
 
 		-
 			message: '#^Method Illuminate\\Foundation\\Support\\Providers\\AuthServiceProvider\:\:registerPolicies\(\) invoked with 1 parameter, 0 required\.$#'
@@ -491,84 +353,6 @@ parameters:
 			identifier: larastan.noEnvCallsOutsideOfConfig
 			count: 1
 			path: app/Services/ChatbotService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$brojDipломе\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$brojPočetnogLista\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$brojЗаписника\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$datum\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$mentor\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$nazivStudijskogPrograma\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$ocena\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$pristupniRad\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Diploma\:\:\$tema\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomaService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\DiplomskiPrijavaTeme\:\:\$mentor\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomskiRadService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\DiplomskiPrijavaTeme\:\:\$tema\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomskiRadService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\DiplomskiRad\:\:\$mentor\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomskiRadService.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\DiplomskiRad\:\:\$tema\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DiplomskiRadService.php
 
 		-
 			message: '#^Call to an undefined method Elibyy\\TCPDF\\TCPDF\:\:AddPage\(\)\.$#'
