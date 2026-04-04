@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\GodinaStudija;
-use App\Kandidat;
-use App\Skolarina;
-use App\TipStudija;
-use App\UplataSkolarine;
+use App\Models\GodinaStudija;
+use App\Models\Kandidat;
+use App\Models\Skolarina;
+use App\Models\TipStudija;
+use App\Models\UplataSkolarine;
 use Illuminate\Http\Request;
 
 class SkolarinaController extends Controller
 {
     public function index($id)
     {
-        $kandidat = Kandidat::find($id);
-        $trenutnaSkolarina = Skolarina::where([
+        $kandidat = Kandidat::with(['tipStudija', 'program', 'godinaStudija'])->find($id);
+        $trenutnaSkolarina = Skolarina::with('godinaStudija')->where([
             'kandidat_id' => $id,
             'tipStudija_id' => $kandidat->tipStudija_id,
             'godinaStudija_id' => $kandidat->godinaStudija_id,
@@ -24,7 +24,7 @@ class SkolarinaController extends Controller
         $preostaliIznos = 0;
 
         if ($trenutnaSkolarina != null) {
-            $trenutneUplate = UplataSkolarine::where([
+            $trenutneUplate = UplataSkolarine::with('kandidat')->where([
                 'skolarina_id' => $trenutnaSkolarina->id,
             ])->get();
             $uplacenIznos = $trenutneUplate->sum('iznos');
@@ -71,13 +71,18 @@ class SkolarinaController extends Controller
             //                'kandidat_id' => 'unique_with:skolarina,tipStudija_id,godinaStudija_id',
             //            ], $messages);
 
-            $skolarina = Skolarina::create($request->all());
+            $kandidat = Kandidat::findOrFail($request->kandidat_id);
+
+            $skolarina = Skolarina::create(array_merge(
+                $request->all(),
+                ['studijskiProgram_id' => $request->input('studijskiProgram_id', $kandidat->studijskiProgram_id)]
+            ));
             $saved = $skolarina->save();
 
             if (! $saved) {
-                \Session::flash('flash-error', 'update');
+                session()->flash('flash-error', 'update');
             } else {
-                \Session::flash('flash-success', 'update');
+                session()->flash('flash-success', 'update');
             }
 
             $kandidatId = $request->kandidat_id;
@@ -90,9 +95,9 @@ class SkolarinaController extends Controller
             $saved = $skolarina->save();
 
             if (! $saved) {
-                \Session::flash('flash-error', 'update');
+                session()->flash('flash-error', 'update');
             } else {
-                \Session::flash('flash-success', 'update');
+                session()->flash('flash-success', 'update');
             }
 
             $kandidatId = $skolarina->kandidat_id;
@@ -137,7 +142,7 @@ class SkolarinaController extends Controller
         }
 
         if (! $saved) {
-            \Session::flash('error', 'Грешка!');
+            session()->flash('error', 'Грешка!');
         }
 
         return redirect("/skolarina/{$request->kandidat_id}");
@@ -153,22 +158,22 @@ class SkolarinaController extends Controller
 
     public function arhiva($id)
     {
-        $kandidat = Kandidat::find($id);
-        $sveSkolarine = Skolarina::where(['kandidat_id' => $id])->get();
+        $kandidat = Kandidat::with(['tipStudija', 'program', 'godinaStudija'])->find($id);
+        $sveSkolarine = Skolarina::with(['tipStudija', 'godinaStudija', 'uplate'])->where(['kandidat_id' => $id])->get();
 
         return view('skolarina.arhiva', compact('kandidat', 'sveSkolarine'));
     }
 
     public function view($id)
     {
-        $trenutnaSkolarina = Skolarina::find($id);
-        $kandidat = Kandidat::find($trenutnaSkolarina->kandidat_id);
+        $trenutnaSkolarina = Skolarina::with('godinaStudija')->find($id);
+        $kandidat = Kandidat::with(['tipStudija', 'program', 'godinaStudija'])->find($trenutnaSkolarina->kandidat_id);
 
         $uplacenIznos = 0;
         $preostaliIznos = 0;
 
         if ($trenutnaSkolarina != null) {
-            $trenutneUplate = UplataSkolarine::where([
+            $trenutneUplate = UplataSkolarine::with('kandidat')->where([
                 'skolarina_id' => $trenutnaSkolarina->id,
             ])->get();
             $uplacenIznos = $trenutneUplate->sum('iznos');
@@ -187,9 +192,9 @@ class SkolarinaController extends Controller
         $deleted = $skolarina->delete();
 
         if (! $deleted) {
-            \Session::flash('flash-error', 'delete');
+            session()->flash('flash-error', 'delete');
         } else {
-            \Session::flash('flash-success', 'delete');
+            session()->flash('flash-success', 'delete');
         }
 
         return redirect("/skolarina/arhiva/{$kandidatId}");

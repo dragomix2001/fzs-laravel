@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 
 class Kandidat extends Model
@@ -36,47 +38,47 @@ class Kandidat extends Model
         'datumStatusa' => 'datetime',
     ];
 
-    public function angazovanja()
+    public function angazovanja(): HasMany
     {
         return $this->hasMany(SportskoAngazovanje::class);
     }
 
-    public function tipStudija()
+    public function tipStudija(): BelongsTo
     {
         return $this->belongsTo(TipStudija::class, 'tipStudija_id');
     }
 
-    public function program()
+    public function program(): BelongsTo
     {
         return $this->belongsTo(StudijskiProgram::class, 'studijskiProgram_id');
     }
 
-    public function upisaneGodine()
+    public function upisaneGodine(): HasMany
     {
         return $this->hasMany(UpisGodine::class);
     }
 
-    public function prijaveIspita()
+    public function prijaveIspita(): HasMany
     {
         return $this->hasMany(PrijavaIspita::class);
     }
 
-    public function mestoRodjenja()
+    public function mestoRodjenja(): BelongsTo
     {
         return $this->belongsTo(Opstina::class, 'mestoRodjenja_id');
     }
 
-    public function godinaUpisa()
+    public function godinaUpisa(): BelongsTo
     {
         return $this->belongsTo(SkolskaGodUpisa::class, 'skolskaGodinaUpisa_id');
     }
 
-    public function godinaStudija()
+    public function godinaStudija(): BelongsTo
     {
         return $this->belongsTo(GodinaStudija::class, 'godinaStudija_id');
     }
 
-    public function statusUpisa()
+    public function statusUpisa(): BelongsTo
     {
         return $this->belongsTo(StatusGodine::class, 'statusUpisa_id');
     }

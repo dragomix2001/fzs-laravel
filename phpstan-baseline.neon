@@ -91,24 +91,6 @@ parameters:
 			path: app/Http/Controllers/Api/AktivnostController.php
 
 		-
-			message: '#^Relation ''program'' is not found in App\\Models\\Kandidat model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Api/ApiKandidatController.php
-
-		-
-			message: '#^Relation ''tipStudija'' is not found in App\\Models\\Kandidat model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Api/ApiKandidatController.php
-
-		-
-			message: '#^Relation ''upisaneGodine'' is not found in App\\Models\\Kandidat model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Api/ApiKandidatController.php
-
-		-
 			message: '#^Relation ''profesor'' is not found in App\\Models\\Obavestenje model\.$#'
 			identifier: larastan.relationExistence
 			count: 1
@@ -155,18 +137,6 @@ parameters:
 			identifier: catch.neverThrown
 			count: 1
 			path: app/Http/Controllers/BodovanjeController.php
-
-		-
-			message: '#^Relation ''godinaUpisa'' is not found in App\\Models\\Kandidat model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
-			path: app/Http/Controllers/DashboardController.php
-
-		-
-			message: '#^Relation ''program'' is not found in App\\Models\\Kandidat model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
-			path: app/Http/Controllers/DashboardController.php
 
 		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
@@ -233,12 +203,6 @@ parameters:
 			identifier: catch.neverThrown
 			count: 3
 			path: app/Http/Controllers/PredmetController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Kandidat\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Kandidat\>\:\:\$godinaStudija\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/PrijavaController.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$naziv\.$#'
@@ -563,12 +527,6 @@ parameters:
 			identifier: new.static
 			count: 1
 			path: app/Models/UpisGodine.php
-
-		-
-			message: '#^Property App\\Models\\UplataSkolarine\:\:\$casts \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
-			identifier: property.defaultValue
-			count: 1
-			path: app/Models/UplataSkolarine.php
 
 		-
 			message: '#^Property App\\Models\\ZapisnikOPolaganjuIspita\:\:\$casts \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
