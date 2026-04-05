@@ -431,6 +431,7 @@ Route::get('/obavestenja', 'ObavestenjeController@index')->name('obavestenja.ind
 Route::get('/obavestenja/create', 'ObavestenjeController@create')->name('obavestenja.create');
 Route::post('/obavestenja', 'ObavestenjeController@store')->name('obavestenja.store');
 Route::get('/obavestenja/javna', 'ObavestenjeController@javna')->name('obavestenja.javna');
+Route::get('/language/switch', 'LanguageController@switch')->name('language.switch');
 Route::get('/moja-obavestenja', 'ObavestenjeController@moja')->name('obavestenja.moja');
 Route::get('/obavestenja/{obavestenje}', 'ObavestenjeController@show')->name('obavestenja.show');
 Route::get('/obavestenja/{obavestenje}/edit', 'ObavestenjeController@edit')->name('obavestenja.edit');
