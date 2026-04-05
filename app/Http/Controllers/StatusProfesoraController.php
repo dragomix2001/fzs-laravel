@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\StatusProfesora;
+use App\Models\StatusProfesora;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -48,12 +50,12 @@ class StatusProfesoraController extends Controller
 
     public function edit(StatusProfesora $status)
     {
-        return view('sifarnici.editstatusProfesora', compact('status'));
+        return view('sifarnici.editStatusProfesora', compact('status'));
     }
 
     public function add()
     {
-        return view('sifarnici.addstatusProfesora');
+        return view('sifarnici.addStatusProfesora');
     }
 
     public function update(Request $request, StatusProfesora $status)

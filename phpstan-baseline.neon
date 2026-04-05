@@ -261,16 +261,11 @@ parameters:
 			path: app/Http/Controllers/StatusProfesoraController.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: app/Http/Controllers/StatusProfesoraController.php
-
-		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
 			identifier: catch.neverThrown
 			count: 1
 			path: app/Http/Controllers/StatusStudiranjaController.php
+
 
 		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'

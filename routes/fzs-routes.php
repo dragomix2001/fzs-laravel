@@ -140,6 +140,13 @@ Route::get('/statusKandidata/{status}/edit', 'App\Http\Controllers\StatusKandida
 Route::patch('statusKandidata/{status}', 'App\Http\Controllers\StatusKandidataController@update');
 Route::get('statusKandidata/{status}/delete', 'App\Http\Controllers\StatusKandidataController@delete');
 
+Route::get('/statusProfesora', 'App\Http\Controllers\StatusProfesoraController@index');
+Route::post('/statusProfesora/unos', 'App\Http\Controllers\StatusProfesoraController@unos');
+Route::get('/statusProfesora/add', 'App\Http\Controllers\StatusProfesoraController@add');
+Route::get('/statusProfesora/{status}/edit', 'App\Http\Controllers\StatusProfesoraController@edit');
+Route::patch('statusProfesora/{status}', 'App\Http\Controllers\StatusProfesoraController@update');
+Route::get('statusProfesora/{status}/delete', 'App\Http\Controllers\StatusProfesoraController@delete');
+
 Route::get('/mesto', 'App\Http\Controllers\MestoController@index');
 Route::post('/mesto/unos', 'App\Http\Controllers\MestoController@unos');
 Route::get('/mesto/{mesto}/edit', 'App\Http\Controllers\MestoController@edit');
