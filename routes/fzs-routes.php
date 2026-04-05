@@ -112,6 +112,12 @@ Route::get('/semestar/{semestar}/edit', 'App\Http\Controllers\SemestarController
 Route::patch('semestar/{semestar}', 'App\Http\Controllers\SemestarController@update');
 Route::get('semestar/{semestar}/delete', 'App\Http\Controllers\SemestarController@delete');
 
+Route::get('/mesto', 'App\Http\Controllers\MestoController@index');
+Route::post('/mesto/unos', 'App\Http\Controllers\MestoController@unos');
+Route::get('/mesto/{mesto}/edit', 'App\Http\Controllers\MestoController@edit');
+Route::patch('mesto/{mesto}', 'App\Http\Controllers\MestoController@update');
+Route::get('mesto/{mesto}/delete', 'App\Http\Controllers\MestoController@delete');
+
 Route::get('/tipStudija', 'App\Http\Controllers\TipStudijaController@index');
 Route::post('/tipStudija/unos', 'App\Http\Controllers\TipStudijaController@unos');
 Route::get('/tipStudija/add', 'App\Http\Controllers\TipStudijaController@add');

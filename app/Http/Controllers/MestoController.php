@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mesto;
-use App\Opstina;
+use App\Models\Mesto;
+use App\Models\Opstina;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -11,7 +11,7 @@ class MestoController extends Controller
 {
     public function index()
     {
-        $mesto = Mesto::all();
+        $mesto = Mesto::with('opstina')->get();
         $opstina = Opstina::all();
 
         return view('sifarnici.mesto', compact('mesto', 'opstina'));
