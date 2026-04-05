@@ -455,3 +455,15 @@ Route::get('/prediction/student/{id}', 'PredictionController@studentPrediction')
 Route::get('/prediction/statistics', 'PredictionController@classStatistics')->name('prediction.statistics');
 Route::get('/api/prediction/student/{id}', 'PredictionController@apiStudentPrediction')->name('api.prediction.student');
 Route::get('/api/prediction/statistics', 'PredictionController@apiClassStatistics')->name('api.prediction.statistics');
+
+// User management routes (admin only)
+Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    Route::get('/users', 'UserController@index')->name('user.index');
+    Route::get('/users/create', 'UserController@create')->name('user.create');
+    Route::post('/users', 'UserController@store')->name('user.store');
+    Route::get('/users/{user}', 'UserController@show')->name('user.show');
+    Route::get('/users/{user}/edit', 'UserController@edit')->name('user.edit');
+    Route::put('/users/{user}', 'UserController@update')->name('user.update');
+    Route::delete('/users/{user}', 'UserController@destroy')->name('user.destroy');
+    Route::get('/users/{user}/toggle', 'UserController@toggleStatus')->name('user.toggle');
+});
