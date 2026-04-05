@@ -245,7 +245,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test retrieving all logs without filters
      */
-    public function test_getLogs_returns_all_logs_without_filters(): void
+    public function test_get_logs_returns_all_logs_without_filters(): void
     {
         $user1 = User::create(['id' => 100, 'name' => 'User 100', 'email' => 'user100@example.com', 'password' => 'password']);
         $user2 = User::create(['id' => 101, 'name' => 'User 101', 'email' => 'user101@example.com', 'password' => 'password']);
@@ -267,7 +267,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test retrieving logs filtered by table name
      */
-    public function test_getLogs_filters_by_tableName(): void
+    public function test_get_logs_filters_by_table_name(): void
     {
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
 
@@ -287,7 +287,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test retrieving logs filtered by userId
      */
-    public function test_getLogs_filters_by_userId(): void
+    public function test_get_logs_filters_by_user_id(): void
     {
         $user1 = User::create(['id' => 200, 'name' => 'User 200', 'email' => 'user200@example.com', 'password' => 'password']);
         $user2 = User::create(['id' => 201, 'name' => 'User 201', 'email' => 'user201@example.com', 'password' => 'password']);
@@ -311,7 +311,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test retrieving logs with combined filters (tableName and userId)
      */
-    public function test_getLogs_filters_by_combined_tableName_and_userId(): void
+    public function test_get_logs_filters_by_combined_table_name_and_user_id(): void
     {
         $user1 = User::create(['id' => 300, 'name' => 'User 300', 'email' => 'user300@example.com', 'password' => 'password']);
         $user2 = User::create(['id' => 301, 'name' => 'User 301', 'email' => 'user301@example.com', 'password' => 'password']);
@@ -335,7 +335,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test retrieving logs with limit parameter
      */
-    public function test_getLogs_respects_limit_parameter(): void
+    public function test_get_logs_respects_limit_parameter(): void
     {
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
 
@@ -359,7 +359,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test retrieving logs are ordered by created_at descending
      */
-    public function test_getLogs_orders_by_created_at_descending(): void
+    public function test_get_logs_orders_by_created_at_descending(): void
     {
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
 
@@ -383,7 +383,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test getLogs with table filter and limit
      */
-    public function test_getLogs_filters_and_limits_combined(): void
+    public function test_get_logs_filters_and_limits_combined(): void
     {
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
 
@@ -405,7 +405,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test getLogs with userId filter and limit
      */
-    public function test_getLogs_filters_by_userId_and_limit(): void
+    public function test_get_logs_filters_by_user_id_and_limit(): void
     {
         $user1 = User::create(['id' => 400, 'name' => 'User 400', 'email' => 'user400@example.com', 'password' => 'password']);
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
@@ -426,7 +426,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test getLogs returns empty collection when no matches
      */
-    public function test_getLogs_returns_empty_when_no_matches(): void
+    public function test_get_logs_returns_empty_when_no_matches(): void
     {
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
 
@@ -444,7 +444,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test getLogs eager loads user relationship
      */
-    public function test_getLogs_eager_loads_user_relationship(): void
+    public function test_get_logs_eager_loads_user_relationship(): void
     {
         $user = User::create(['id' => 500, 'name' => 'User 500', 'email' => 'user500@example.com', 'password' => 'password']);
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
@@ -461,7 +461,7 @@ class AuditServiceTest extends TestCase
     /**
      * Test getLogs with null userId in database
      */
-    public function test_getLogs_handles_null_userId_entries(): void
+    public function test_get_logs_handles_null_user_id_entries(): void
     {
         $user = User::create(['id' => 600, 'name' => 'User 600', 'email' => 'user600@example.com', 'password' => 'password']);
         $request = $this->createMockRequest('192.168.1.1', 'Mozilla');
