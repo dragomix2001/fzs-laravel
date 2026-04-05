@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\GodinaStudija;
-use App\PrilozenaDokumenta;
+use App\Models\GodinaStudija;
+use App\Models\PrilozenaDokumenta;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +21,7 @@ class PrilozenaDokumentaController extends Controller
     public function index()
     {
         try {
-            $dokument = PrilozenaDokumenta::all();
+            $dokument = PrilozenaDokumenta::with('godinaStudija')->get();
             $godinaStudija = GodinaStudija::all();
         } catch (QueryException $e) {
             Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);

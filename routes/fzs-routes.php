@@ -202,6 +202,13 @@ Route::get('/sport/{sport}/edit', 'App\Http\Controllers\SportController@edit');
 Route::patch('sport/{sport}', 'App\Http\Controllers\SportController@update');
 Route::get('sport/{sport}/delete', 'App\Http\Controllers\SportController@delete');
 
+Route::get('/prilozenaDokumenta', 'App\Http\Controllers\PrilozenaDokumentaController@index');
+Route::post('/prilozenaDokumenta/unos', 'App\Http\Controllers\PrilozenaDokumentaController@unos');
+Route::get('/prilozenaDokumenta/add', 'App\Http\Controllers\PrilozenaDokumentaController@add');
+Route::get('/prilozenaDokumenta/{dokument}/edit', 'App\Http\Controllers\PrilozenaDokumentaController@edit');
+Route::patch('prilozenaDokumenta/{dokument}', 'App\Http\Controllers\PrilozenaDokumentaController@update');
+Route::get('prilozenaDokumenta/{dokument}/delete', 'App\Http\Controllers\PrilozenaDokumentaController@delete');
+
 Route::get('/bodovanje', 'App\Http\Controllers\BodovanjeController@index');
 Route::post('/bodovanje/unos', 'App\Http\Controllers\BodovanjeController@unos');
 Route::get('/bodovanje/add', 'App\Http\Controllers\BodovanjeController@add');
