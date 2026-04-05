@@ -126,6 +126,13 @@ Route::get('/oblikNastave/{oblikNastave}/edit', 'App\Http\Controllers\OblikNasta
 Route::patch('oblikNastave/{oblikNastave}', 'App\Http\Controllers\OblikNastaveController@update');
 Route::get('oblikNastave/{oblikNastave}/delete', 'App\Http\Controllers\OblikNastaveController@delete');
 
+Route::get('/statusIspita', 'App\Http\Controllers\StatusIspitaController@index');
+Route::post('/statusIspita/unos', 'App\Http\Controllers\StatusIspitaController@unos');
+Route::get('/statusIspita/add', 'App\Http\Controllers\StatusIspitaController@add');
+Route::get('/statusIspita/{statusIspita}/edit', 'App\Http\Controllers\StatusIspitaController@edit');
+Route::patch('statusIspita/{statusIspita}', 'App\Http\Controllers\StatusIspitaController@update');
+Route::get('statusIspita/{statusIspita}/delete', 'App\Http\Controllers\StatusIspitaController@delete');
+
 Route::get('/mesto', 'App\Http\Controllers\MestoController@index');
 Route::post('/mesto/unos', 'App\Http\Controllers\MestoController@unos');
 Route::get('/mesto/{mesto}/edit', 'App\Http\Controllers\MestoController@edit');
