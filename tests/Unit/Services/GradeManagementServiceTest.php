@@ -46,7 +46,7 @@ class GradeManagementServiceTest extends TestCase
      * Test createGradesForKandidat creates all 4 grade records
      */
     #[Test]
-    public function test_createGradesForKandidat_creates_four_grades(): void
+    public function test_create_grades_for_kandidat_creates_four_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -67,7 +67,7 @@ class GradeManagementServiceTest extends TestCase
      * Test createGradesForKandidat stores correct kandidat_id
      */
     #[Test]
-    public function test_createGradesForKandidat_stores_correct_kandidat_id(): void
+    public function test_create_grades_for_kandidat_stores_correct_kandidat_id(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -92,7 +92,7 @@ class GradeManagementServiceTest extends TestCase
      * CRITICAL BUG FIX: Verifies RedniBrojRazreda is 1, 2, 3, 4 (not all 1)
      */
     #[Test]
-    public function test_createGradesForKandidat_stores_correct_redniBrojRazreda(): void
+    public function test_create_grades_for_kandidat_stores_correct_redni_broj_razreda(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -126,7 +126,7 @@ class GradeManagementServiceTest extends TestCase
      * Test createGradesForKandidat stores correct opstiUspeh_id
      */
     #[Test]
-    public function test_createGradesForKandidat_stores_correct_opstiUspeh_id(): void
+    public function test_create_grades_for_kandidat_stores_correct_opsti_uspeh_id(): void
     {
         $kandidat = Kandidat::factory()->create();
         $uspehId = 5;
@@ -150,7 +150,7 @@ class GradeManagementServiceTest extends TestCase
      * Test createGradesForKandidat stores correct srednja_ocena
      */
     #[Test]
-    public function test_createGradesForKandidat_stores_correct_srednja_ocena(): void
+    public function test_create_grades_for_kandidat_stores_correct_srednja_ocena(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -180,7 +180,7 @@ class GradeManagementServiceTest extends TestCase
      * Test createGradesForKandidat with single grade
      */
     #[Test]
-    public function test_createGradesForKandidat_with_single_grade(): void
+    public function test_create_grades_for_kandidat_with_single_grade(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -200,7 +200,7 @@ class GradeManagementServiceTest extends TestCase
      * Test updateGradesForKandidat updates existing grades
      */
     #[Test]
-    public function test_updateGradesForKandidat_updates_existing_grades(): void
+    public function test_update_grades_for_kandidat_updates_existing_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -230,7 +230,7 @@ class GradeManagementServiceTest extends TestCase
      * Test updateGradesForKandidat creates missing grades
      */
     #[Test]
-    public function test_updateGradesForKandidat_creates_missing_grades(): void
+    public function test_update_grades_for_kandidat_creates_missing_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -257,7 +257,7 @@ class GradeManagementServiceTest extends TestCase
      * Test updateGradesForKandidat maintains RedniBrojRazreda
      */
     #[Test]
-    public function test_updateGradesForKandidat_maintains_redniBrojRazreda(): void
+    public function test_update_grades_for_kandidat_maintains_redni_broj_razreda(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -294,7 +294,7 @@ class GradeManagementServiceTest extends TestCase
      * Test getGradesForEdit returns all 4 grades
      */
     #[Test]
-    public function test_getGradesForEdit_returns_all_4_grades(): void
+    public function test_get_grades_for_edit_returns_all_4_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -320,7 +320,7 @@ class GradeManagementServiceTest extends TestCase
      * CRITICAL BUG FIX: Verifies RedniBrojRazreda=1 for first grade
      */
     #[Test]
-    public function test_getGradesForEdit_prvrazred_has_correct_redniBrojRazreda(): void
+    public function test_get_grades_for_edit_prvrazred_has_correct_redni_broj_razreda(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -342,7 +342,7 @@ class GradeManagementServiceTest extends TestCase
      * CRITICAL BUG FIX: Verifies RedniBrojRazreda=2 (not 1)
      */
     #[Test]
-    public function test_getGradesForEdit_drugiRazred_has_correct_redniBrojRazreda(): void
+    public function test_get_grades_for_edit_drugi_razred_has_correct_redni_broj_razreda(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -364,7 +364,7 @@ class GradeManagementServiceTest extends TestCase
      * CRITICAL BUG FIX: Verifies RedniBrojRazreda=3 (not 1)
      */
     #[Test]
-    public function test_getGradesForEdit_treciRazred_has_correct_redniBrojRazreda(): void
+    public function test_get_grades_for_edit_treci_razred_has_correct_redni_broj_razreda(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -386,7 +386,7 @@ class GradeManagementServiceTest extends TestCase
      * CRITICAL BUG FIX: Verifies RedniBrojRazreda=4 (not 1)
      */
     #[Test]
-    public function test_getGradesForEdit_cetvrtiRazred_has_correct_redniBrojRazreda(): void
+    public function test_get_grades_for_edit_cetvrti_razred_has_correct_redni_broj_razreda(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -407,7 +407,7 @@ class GradeManagementServiceTest extends TestCase
      * Test getGradesForEdit returns default grades for missing grades
      */
     #[Test]
-    public function test_getGradesForEdit_returns_default_grades_for_missing_grades(): void
+    public function test_get_grades_for_edit_returns_default_grades_for_missing_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -438,7 +438,7 @@ class GradeManagementServiceTest extends TestCase
      * Test getGradesForEdit returns existing grade values
      */
     #[Test]
-    public function test_getGradesForEdit_returns_existing_grade_values(): void
+    public function test_get_grades_for_edit_returns_existing_grade_values(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -469,7 +469,7 @@ class GradeManagementServiceTest extends TestCase
      * Test getGradesForEdit with empty database (all defaults)
      */
     #[Test]
-    public function test_getGradesForEdit_with_no_existing_grades(): void
+    public function test_get_grades_for_edit_with_no_existing_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -501,7 +501,7 @@ class GradeManagementServiceTest extends TestCase
      * CRITICAL: Verifies missing grade deletion feature
      */
     #[Test]
-    public function test_deleteGradesForKandidat_removes_all_grades(): void
+    public function test_delete_grades_for_kandidat_removes_all_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 
@@ -524,7 +524,7 @@ class GradeManagementServiceTest extends TestCase
      * Test deleteGradesForKandidat does not affect other kandidats
      */
     #[Test]
-    public function test_deleteGradesForKandidat_does_not_affect_other_kandidats(): void
+    public function test_delete_grades_for_kandidat_does_not_affect_other_kandidats(): void
     {
         $kandidat1 = Kandidat::factory()->create();
         $kandidat2 = Kandidat::factory()->create();
@@ -551,7 +551,7 @@ class GradeManagementServiceTest extends TestCase
      * Test deleteGradesForKandidat with non-existent kandidat
      */
     #[Test]
-    public function test_deleteGradesForKandidat_with_non_existent_kandidat(): void
+    public function test_delete_grades_for_kandidat_with_non_existent_kandidat(): void
     {
         $this->service->deleteGradesForKandidat(999);
 
@@ -562,7 +562,7 @@ class GradeManagementServiceTest extends TestCase
      * Test deleteGradesForKandidat with partial grades
      */
     #[Test]
-    public function test_deleteGradesForKandidat_with_partial_grades(): void
+    public function test_delete_grades_for_kandidat_with_partial_grades(): void
     {
         $kandidat = Kandidat::factory()->create();
 

@@ -12,8 +12,6 @@ use App\Opstina;
 use App\OpstiUspeh;
 use App\PrijavaIspita;
 use App\PrilozenaDokumenta;
-use App\Services\FileStorageService;
-use App\Services\GradeManagementService;
 use App\SkolskaGodUpisa;
 use App\Sport;
 use App\SportskoAngazovanje;

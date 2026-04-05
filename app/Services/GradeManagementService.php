@@ -37,12 +37,11 @@ class GradeManagementService
      * @param  int  $kandidatId  The ID of the newly created kandidat
      * @param  array  $grades  Array of grade data with structure:
      *                         [
-     *                             ['razred' => 1, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
-     *                             ['razred' => 2, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
-     *                             ['razred' => 3, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
-     *                             ['razred' => 4, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
+     *                         ['razred' => 1, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
+     *                         ['razred' => 2, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
+     *                         ['razred' => 3, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
+     *                         ['razred' => 4, 'uspeh' => $opstiUspeh_id, 'ocena' => $srednja_ocena],
      *                         ]
-     * @return void
      */
     public function createGradesForKandidat(int $kandidatId, array $grades): void
     {
@@ -64,7 +63,6 @@ class GradeManagementService
      *
      * @param  int  $kandidatId  The ID of the kandidat
      * @param  array  $grades  Array of grade data (same format as createGradesForKandidat)
-     * @return void
      */
     public function updateGradesForKandidat(int $kandidatId, array $grades): void
     {
@@ -166,7 +164,6 @@ class GradeManagementService
      * leaving orphaned grade records in the database.
      *
      * @param  int  $kandidatId  The ID of the kandidat whose grades should be deleted
-     * @return void
      */
     public function deleteGradesForKandidat(int $kandidatId): void
     {

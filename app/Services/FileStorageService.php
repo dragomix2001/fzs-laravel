@@ -30,13 +30,13 @@ class FileStorageService
      *
      * @param  Kandidat  $kandidat  The kandidat whose image should be replaced
      * @param  UploadedFile  $file  The uploaded image file
-     * @return string The stored filename (e.g., 'slika123.jpg')
      *
      * @throws \InvalidArgumentException If file is not a valid image
+     * @return string The stored filename (e.g., 'slika123.jpg')
      */
     public function replaceImageForKandidat(Kandidat $kandidat, UploadedFile $file): string
     {
-        if (!$file->isValid() || substr($file->getMimeType(), 0, 5) !== 'image') {
+        if (! $file->isValid() || substr($file->getMimeType(), 0, 5) !== 'image') {
             throw new \InvalidArgumentException('Uploaded file is not a valid image.');
         }
 
@@ -64,13 +64,13 @@ class FileStorageService
      *
      * @param  Kandidat  $kandidat  The new kandidat
      * @param  UploadedFile  $file  The uploaded image file
-     * @return string The stored filename
      *
      * @throws \InvalidArgumentException If file is not a valid image
+     * @return string The stored filename
      */
     public function uploadImageForKandidat(Kandidat $kandidat, UploadedFile $file): string
     {
-        if (!$file->isValid() || substr($file->getMimeType(), 0, 5) !== 'image') {
+        if (! $file->isValid() || substr($file->getMimeType(), 0, 5) !== 'image') {
             throw new \InvalidArgumentException('Uploaded file is not a valid image.');
         }
 
@@ -89,13 +89,13 @@ class FileStorageService
      *
      * @param  Kandidat  $kandidat  The kandidat whose PDF should be replaced
      * @param  UploadedFile  $file  The uploaded PDF file
-     * @return string The stored filename (e.g., 'diplomski123.pdf')
      *
      * @throws \InvalidArgumentException If file is not a valid PDF
+     * @return string The stored filename (e.g., 'diplomski123.pdf')
      */
     public function replacePdfForKandidat(Kandidat $kandidat, UploadedFile $file): string
     {
-        if (!$file->isValid() || $file->getMimeType() !== 'application/pdf') {
+        if (! $file->isValid() || $file->getMimeType() !== 'application/pdf') {
             throw new \InvalidArgumentException('Uploaded file is not a valid PDF.');
         }
 
@@ -126,11 +126,12 @@ class FileStorageService
      */
     public function deleteImageForKandidat(Kandidat $kandidat): bool
     {
-        if (empty($kandidat->slika) || !Storage::disk('uploads')->exists("images/{$kandidat->slika}")) {
+        if (empty($kandidat->slika) || ! Storage::disk('uploads')->exists("images/{$kandidat->slika}")) {
             return false;
         }
 
         Storage::disk('uploads')->delete("images/{$kandidat->slika}");
+
         return true;
     }
 }

@@ -10,7 +10,6 @@ use App\StatusStudiranja;
 use App\StudijskiProgram;
 use App\TipStudija;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -175,5 +174,4 @@ class KandidatServiceTest extends TestCase
         $this->assertArrayHasKey('studijskiProgram', $result);
         $this->assertArrayHasKey('tipStudija', $result);
     }
-
 }

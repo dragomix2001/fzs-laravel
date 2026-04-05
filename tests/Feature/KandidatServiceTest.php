@@ -842,7 +842,7 @@ class KandidatServiceTest extends TestCase
                 ->once()
                 ->andReturn(true);
         });
-        
+
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
@@ -864,7 +864,7 @@ class KandidatServiceTest extends TestCase
                 ->once()
                 ->andReturn(false);
         });
-        
+
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
@@ -885,7 +885,7 @@ class KandidatServiceTest extends TestCase
         $upisServiceMock = $this->mock(UpisService::class, function ($mock) use ($kandidat) {
             $mock->shouldReceive('generisiBrojIndeksa')->with($kandidat->id)->once();
         });
-        
+
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
@@ -912,7 +912,7 @@ class KandidatServiceTest extends TestCase
                 ->once()
                 ->andReturn(true);
         });
-        
+
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
@@ -932,7 +932,7 @@ class KandidatServiceTest extends TestCase
         $upisServiceMock = $this->mock(UpisService::class, function ($mock) {
             $mock->shouldReceive('registrujKandidata')->with(42)->once();
         });
-        
+
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
