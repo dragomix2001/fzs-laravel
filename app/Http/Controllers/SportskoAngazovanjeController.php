@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Kandidat;
-use App\Sport;
-use App\SportskoAngazovanje;
+use App\Models\Kandidat;
+use App\Models\Sport;
+use App\Models\SportskoAngazovanje;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -24,17 +28,26 @@ class SportskoAngazovanjeController extends Controller
 
     public function unos(Request $request)
     {
-        $angazovanje = new SportskoAngazovanje;
+        try {
+            $angazovanje = new SportskoAngazovanje;
 
-        $angazovanje->nazivKluba = $request->nazivKluba;
-        $angazovanje->odDoGodina = $request->odDoGodina;
-        $angazovanje->ukupnoGodina = $request->ukupnoGodina;
-        $angazovanje->sport_id = $request->sport_id;
-        $angazovanje->kandidat_id = Session::get('id');
+            $angazovanje->nazivKluba = $request->nazivKluba;
+            $angazovanje->odDoGodina = $request->odDoGodina;
+            $angazovanje->ukupnoGodina = $request->ukupnoGodina;
+            $angazovanje->sport_id = $request->sport_id;
+            $angazovanje->kandidat_id = Session::get('id');
 
-        $angazovanje->save();
+            $angazovanje->save();
 
-        return back();
+            return back();
+        } catch (QueryException $e) {
+            Log::error('Database error in SportskoAngazovanjeController unos: '.$e->getMessage(), [
+                'method' => 'unos',
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке приликом рада са базом.');
+        }
     }
 
     public function edit(SportskoAngazovanje $angazovanje)
@@ -46,31 +59,49 @@ class SportskoAngazovanjeController extends Controller
 
     public function update(Request $request, SportskoAngazovanje $angazovanje)
     {
-        $angazovanje->nazivKluba = $request->nazivKluba;
-        $angazovanje->odDoGodina = $request->odDoGodina;
-        $angazovanje->ukupnoGodina = $request->ukupnoGodina;
-        $angazovanje->sport_id = $request->sport_id;
-        $angazovanje->kandidat_id = Session::get('id');
-        $id = Session::get('id');
+        try {
+            $angazovanje->nazivKluba = $request->nazivKluba;
+            $angazovanje->odDoGodina = $request->odDoGodina;
+            $angazovanje->ukupnoGodina = $request->ukupnoGodina;
+            $angazovanje->sport_id = $request->sport_id;
+            $angazovanje->kandidat_id = Session::get('id');
+            $id = Session::get('id');
 
-        $angazovanje->update();
+            $angazovanje->update();
 
-        return Redirect::to('/sportskoAngazovanje/'.$id);
+            return Redirect::to('/sportskoAngazovanje/'.$id);
+        } catch (QueryException $e) {
+            Log::error('Database error in SportskoAngazovanjeController update: '.$e->getMessage(), [
+                'method' => 'update',
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке приликом рада са базом.');
+        }
     }
 
     public function delete(SportskoAngazovanje $angazovanje)
     {
-        $id = $angazovanje->kandidat_id;
-        $kandidat = Kandidat::find($id);
-        $sportskoAngazovanje = SportskoAngazovanje::where('kandidat_id', $id)->get();
-        $sportovi = Sport::all();
+        try {
+            $id = $angazovanje->kandidat_id;
+            $kandidat = Kandidat::find($id);
+            $sportskoAngazovanje = SportskoAngazovanje::where('kandidat_id', $id)->get();
+            $sportovi = Sport::all();
 
-        $angazovanje->delete();
+            $angazovanje->delete();
 
-        return redirect("/kandidat/{$id}/sportskoangazovanje")
-            ->with('sport', $sportovi)
-            ->with('kandidat', $kandidat)
-            ->with('sportskoAngazovanje', $sportskoAngazovanje);
+            return redirect("/kandidat/{$id}/sportskoangazovanje")
+                ->with('sport', $sportovi)
+                ->with('kandidat', $kandidat)
+                ->with('sportskoAngazovanje', $sportskoAngazovanje);
+        } catch (QueryException $e) {
+            Log::error('Database error in SportskoAngazovanjeController delete: '.$e->getMessage(), [
+                'method' => 'delete',
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке приликом рада са базом.');
+        }
     }
 
     public function vrati()

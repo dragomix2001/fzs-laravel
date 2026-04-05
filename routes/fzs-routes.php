@@ -92,6 +92,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/skolarina/uplata/delete/{id}', 'App\Http\Controllers\SkolarinaController@deleteUplata');
     Route::get('/skolarina/arhiva/{id}', 'App\Http\Controllers\SkolarinaController@arhiva');
 
+    Route::post('/sportskoAngazovanje/unos', 'App\Http\Controllers\SportskoAngazovanjeController@unos');
+    Route::get('/sportskoAngazovanje/{sportskoAngazovanje}/edit', 'App\Http\Controllers\SportskoAngazovanjeController@edit');
+    Route::patch('/sportskoAngazovanje/{sportskoAngazovanje}', 'App\Http\Controllers\SportskoAngazovanjeController@update');
+    Route::get('/sportskoAngazovanje/{sportskoAngazovanje}/delete', 'App\Http\Controllers\SportskoAngazovanjeController@delete');
+    Route::get('/sportskoAngazovanje/vrati', 'App\Http\Controllers\SportskoAngazovanjeController@vrati');
+
 });
 
 Route::group(['middleware' => ['web', 'admin']], function () {
