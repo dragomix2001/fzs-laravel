@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Tests\Unit\Services;
 
 use App\KandidatPrilozenaDokumenta;
+use App\Models\UspehSrednjaSkola;
 use App\Services\DropdownDataService;
-use App\Services\GradeManagementService;
 use App\SportskoAngazovanje;
 use App\StudijskiProgram;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class DropdownDataServiceTest extends TestCase
@@ -154,10 +153,10 @@ class DropdownDataServiceTest extends TestCase
         $data = $this->service->getEditDropdownData($kandidatId);
 
         // Verify grades exist (GradeManagementService integration returns Model objects)
-        $this->assertInstanceOf(\App\Models\UspehSrednjaSkola::class, $data['prviRazred']);
-        $this->assertInstanceOf(\App\Models\UspehSrednjaSkola::class, $data['drugiRazred']);
-        $this->assertInstanceOf(\App\Models\UspehSrednjaSkola::class, $data['treciRazred']);
-        $this->assertInstanceOf(\App\Models\UspehSrednjaSkola::class, $data['cetvrtiRazred']);
+        $this->assertInstanceOf(UspehSrednjaSkola::class, $data['prviRazred']);
+        $this->assertInstanceOf(UspehSrednjaSkola::class, $data['drugiRazred']);
+        $this->assertInstanceOf(UspehSrednjaSkola::class, $data['treciRazred']);
+        $this->assertInstanceOf(UspehSrednjaSkola::class, $data['cetvrtiRazred']);
     }
 
     public function test_get_edit_dropdown_data_includes_attached_documents(): void
