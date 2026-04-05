@@ -316,4 +316,56 @@ class ApiIspitControllerTest extends TestCase
 
         $response->assertJsonIsArray();
     }
+
+    /**
+     * Test store trims whitespace from input
+     */
+    public function test_store_trims_whitespace_from_naziv(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->postJson('/api/v1/ispiti', [
+            'naziv' => '  Trimmed Subject  ',
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('predmet', [
+            'naziv' => '  Trimmed Subject  ',
+        ]);
+    }
+
+    /**
+     * Test update with no changes still returns success
+     */
+    public function test_update_with_same_data_returns_success(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $originalNaziv = $this->predmet->naziv;
+
+        $response = $this->putJson('/api/v1/ispiti/'.$this->predmet->id, [
+            'naziv' => $originalNaziv,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('naziv', $originalNaziv);
+        $this->predmet->refresh();
+        $this->assertEquals($originalNaziv, $this->predmet->naziv);
+    }
+
+    /**
+     * Test show returns all predmet attributes
+     */
+    public function test_show_returns_complete_predmet_data(): void
+    {
+        $response = $this->getJson('/api/v1/ispiti/'.$this->predmet->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'id',
+            'naziv',
+            'created_at',
+            'updated_at',
+        ]);
+    }
 }
