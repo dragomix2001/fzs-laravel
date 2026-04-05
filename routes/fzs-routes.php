@@ -98,6 +98,13 @@ Route::group(['middleware' => ['web', 'admin']], function () {
     Route::get('/admintest', 'App\Http\Controllers\HomeController@adminTest');
 });
 
+Route::get('/ispitniRok', 'App\Http\Controllers\IspitniRokController@index');
+Route::post('/ispitniRok/unos', 'App\Http\Controllers\IspitniRokController@unos');
+Route::get('/ispitniRok/add', 'App\Http\Controllers\IspitniRokController@add');
+Route::get('/ispitniRok/{ispitniRok}/edit', 'App\Http\Controllers\IspitniRokController@edit');
+Route::patch('ispitniRok/{ispitniRok}', 'App\Http\Controllers\IspitniRokController@update');
+Route::get('ispitniRok/{ispitniRok}/delete', 'App\Http\Controllers\IspitniRokController@delete');
+
 Route::get('/tipStudija', 'App\Http\Controllers\TipStudijaController@index');
 Route::post('/tipStudija/unos', 'App\Http\Controllers\TipStudijaController@unos');
 Route::get('/tipStudija/add', 'App\Http\Controllers\TipStudijaController@add');
