@@ -226,7 +226,7 @@ Route::post('/mesto/unos', 'MestoController@unos');
 Route::post('/statusStudiranja/unos', 'StatusStudiranjaController@unos');
 Route::post('/predmet/unos', 'PredmetController@unos');
 Route::post('/prilozenaDokumenta/unos', 'PrilozenaDokumentaController@unos');
-// Route::post('/sportskoAngazovanje/unos', 'SportskoAngazovanjeController@unos');
+Route::post('/sportskoAngazovanje/unos', 'SportskoAngazovanjeController@unos');
 Route::post('/semestar/unos', 'SemestarController@unos');
 Route::post('/ispitniRok/unos', 'IspitniRokController@unos');
 Route::post('/oblikNastave/unos', 'OblikNastaveController@unos');
@@ -314,6 +314,7 @@ Route::get('/prilozenaDokumenta/{dokument}/edit', 'PrilozenaDokumentaController@
 Route::patch('prilozenaDokumenta/{dokument}', 'PrilozenaDokumentaController@update');
 Route::get('prilozenaDokumenta/{dokument}/delete', 'PrilozenaDokumentaController@delete');
 
+Route::get('/sportskoAngazovanje/vrati', 'SportskoAngazovanjeController@vrati');
 Route::get('/sportskoAngazovanje/{angazovanje}/edit', 'SportskoAngazovanjeController@edit');
 Route::patch('sportskoAngazovanje/{angazovanje}', 'SportskoAngazovanjeController@update');
 Route::get('sportskoAngazovanje/{angazovanje}/delete', 'SportskoAngazovanjeController@delete');
