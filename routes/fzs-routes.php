@@ -119,6 +119,13 @@ Route::get('/krsnaSlava/{krsnaSlava}/edit', 'App\Http\Controllers\KrsnaSlavaCont
 Route::patch('krsnaSlava/{krsnaSlava}', 'App\Http\Controllers\KrsnaSlavaController@update');
 Route::get('krsnaSlava/{krsnaSlava}/delete', 'App\Http\Controllers\KrsnaSlavaController@delete');
 
+Route::get('/oblikNastave', 'App\Http\Controllers\OblikNastaveController@index');
+Route::post('/oblikNastave/unos', 'App\Http\Controllers\OblikNastaveController@unos');
+Route::get('/oblikNastave/add', 'App\Http\Controllers\OblikNastaveController@add');
+Route::get('/oblikNastave/{oblikNastave}/edit', 'App\Http\Controllers\OblikNastaveController@edit');
+Route::patch('oblikNastave/{oblikNastave}', 'App\Http\Controllers\OblikNastaveController@update');
+Route::get('oblikNastave/{oblikNastave}/delete', 'App\Http\Controllers\OblikNastaveController@delete');
+
 Route::get('/mesto', 'App\Http\Controllers\MestoController@index');
 Route::post('/mesto/unos', 'App\Http\Controllers\MestoController@unos');
 Route::get('/mesto/{mesto}/edit', 'App\Http\Controllers\MestoController@edit');
