@@ -1,30 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\SrednjeSkoleFakulteti;
+use App\Models\SrednjeSkoleFakulteti;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class SrednjeSkoleFakultetiController extends Controller
 {
     public function index()
     {
-        $srednjeSkoleFakulteti = SrednjeSkoleFakulteti::all();
+        try {
+            $srednjeSkoleFakulteti = SrednjeSkoleFakulteti::all();
 
-        return view('sifarnici.srednjeSkoleFakulteti', compact('srednjeSkoleFakulteti'));
+            return view('sifarnici.srednjeSkoleFakulteti', compact('srednjeSkoleFakulteti'));
+        } catch (QueryException $e) {
+            Log::error('Database error in SrednjeSkoleFakultetiController index: '.$e->getMessage(), [
+                'method' => 'index',
+                'exception' => $e,
+            ]);
+
+            return back()->with('error', 'Дошло је до непредвиђене грешке приликом учитавања податка.');
+        }
     }
 
     public function unos(Request $request)
     {
-        $srednjeSkoleFakulteti = new SrednjeSkoleFakulteti;
+        try {
+            $srednjeSkoleFakulteti = new SrednjeSkoleFakulteti;
 
-        $srednjeSkoleFakulteti->naziv = $request->naziv;
-        $srednjeSkoleFakulteti->indSkoleFakulteta = $request->indSkoleFakulteta;
+            $srednjeSkoleFakulteti->naziv = $request->naziv;
+            $srednjeSkoleFakulteti->indSkoleFakulteta = $request->indSkoleFakulteta;
 
-        $srednjeSkoleFakulteti->save();
+            $srednjeSkoleFakulteti->save();
 
-        return back();
+            return back();
+        } catch (QueryException $e) {
+            Log::error('Database error in SrednjeSkoleFakultetiController unos: '.$e->getMessage(), [
+                'method' => 'unos',
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке приликом рада са базом.');
+        }
     }
 
     public function edit(SrednjeSkoleFakulteti $srednjeSkoleFakulteti)
@@ -34,18 +56,36 @@ class SrednjeSkoleFakultetiController extends Controller
 
     public function update(Request $request, SrednjeSkoleFakulteti $srednjeSkoleFakulteti)
     {
-        $srednjeSkoleFakulteti->naziv = $request->naziv;
-        $srednjeSkoleFakulteti->indSkoleFakulteta = $request->indSkoleFakulteta;
+        try {
+            $srednjeSkoleFakulteti->naziv = $request->naziv;
+            $srednjeSkoleFakulteti->indSkoleFakulteta = $request->indSkoleFakulteta;
 
-        $srednjeSkoleFakulteti->update();
+            $srednjeSkoleFakulteti->update();
 
-        return Redirect::to('/srednjeSkoleFakulteti');
+            return Redirect::to('/srednjeSkoleFakulteti');
+        } catch (QueryException $e) {
+            Log::error('Database error in SrednjeSkoleFakultetiController update: '.$e->getMessage(), [
+                'method' => 'update',
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке приликом рада са базом.');
+        }
     }
 
     public function delete(SrednjeSkoleFakulteti $srednjeSkoleFakulteti)
     {
-        $srednjeSkoleFakulteti->delete();
+        try {
+            $srednjeSkoleFakulteti->delete();
 
-        return back();
+            return back();
+        } catch (QueryException $e) {
+            Log::error('Database error in SrednjeSkoleFakultetiController delete: '.$e->getMessage(), [
+                'method' => 'delete',
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке приликом рада са базом.');
+        }
     }
 }

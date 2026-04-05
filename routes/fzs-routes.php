@@ -195,6 +195,12 @@ Route::get('/godinaStudija/{godinaStudija}/edit', 'App\Http\Controllers\GodinaSt
 Route::patch('godinaStudija/{godinaStudija}', 'App\Http\Controllers\GodinaStudijaController@update');
 Route::get('godinaStudija/{godinaStudija}/delete', 'App\Http\Controllers\GodinaStudijaController@delete');
 
+Route::get('/srednjeSkoleFakulteti', 'App\Http\Controllers\SrednjeSkoleFakultetiController@index');
+Route::post('/srednjeSkoleFakulteti/unos', 'App\Http\Controllers\SrednjeSkoleFakultetiController@unos');
+Route::get('/srednjeSkoleFakulteti/{srednjeSkoleFakulteti}/edit', 'App\Http\Controllers\SrednjeSkoleFakultetiController@edit');
+Route::patch('srednjeSkoleFakulteti/{srednjeSkoleFakulteti}', 'App\Http\Controllers\SrednjeSkoleFakultetiController@update');
+Route::get('srednjeSkoleFakulteti/{srednjeSkoleFakulteti}/delete', 'App\Http\Controllers\SrednjeSkoleFakultetiController@delete');
+
 Route::get('/sport', 'App\Http\Controllers\SportController@index');
 Route::post('/sport/unos', 'App\Http\Controllers\SportController@unos');
 Route::get('/sport/add', 'App\Http\Controllers\SportController@add');
