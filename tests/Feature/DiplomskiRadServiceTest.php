@@ -13,6 +13,7 @@ use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Services\DiplomskiRadService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
@@ -171,7 +172,7 @@ class DiplomskiRadServiceTest extends TestCase
 
         $response = $this->service->diplomskiAdd($request);
 
-        $this->assertInstanceOf(\Illuminate\Http\RedirectResponse::class, $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals(route('student.index'), $response->getTargetUrl());
     }
 
@@ -185,7 +186,7 @@ class DiplomskiRadServiceTest extends TestCase
 
         $response = $this->service->komisijaStampa($student);
 
-        $this->assertInstanceOf(\Illuminate\Http\RedirectResponse::class, $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
     }
 
     public function test_komisija_stampa_queried_with_correct_student_id()
@@ -211,7 +212,7 @@ class DiplomskiRadServiceTest extends TestCase
 
         $response = $this->service->zapisnikDiplomski($student);
 
-        $this->assertInstanceOf(\Illuminate\Http\RedirectResponse::class, $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
     }
 
     public function test_zapisnik_diplomski_succeeds_when_polaganje_exists()
