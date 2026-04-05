@@ -105,6 +105,13 @@ Route::get('/ispitniRok/{ispitniRok}/edit', 'App\Http\Controllers\IspitniRokCont
 Route::patch('ispitniRok/{ispitniRok}', 'App\Http\Controllers\IspitniRokController@update');
 Route::get('ispitniRok/{ispitniRok}/delete', 'App\Http\Controllers\IspitniRokController@delete');
 
+Route::get('/semestar', 'App\Http\Controllers\SemestarController@index');
+Route::post('/semestar/unos', 'App\Http\Controllers\SemestarController@unos');
+Route::get('/semestar/add', 'App\Http\Controllers\SemestarController@add');
+Route::get('/semestar/{semestar}/edit', 'App\Http\Controllers\SemestarController@edit');
+Route::patch('semestar/{semestar}', 'App\Http\Controllers\SemestarController@update');
+Route::get('semestar/{semestar}/delete', 'App\Http\Controllers\SemestarController@delete');
+
 Route::get('/tipStudija', 'App\Http\Controllers\TipStudijaController@index');
 Route::post('/tipStudija/unos', 'App\Http\Controllers\TipStudijaController@unos');
 Route::get('/tipStudija/add', 'App\Http\Controllers\TipStudijaController@add');
