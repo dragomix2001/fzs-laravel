@@ -202,6 +202,13 @@ Route::get('/sport/{sport}/edit', 'App\Http\Controllers\SportController@edit');
 Route::patch('sport/{sport}', 'App\Http\Controllers\SportController@update');
 Route::get('sport/{sport}/delete', 'App\Http\Controllers\SportController@delete');
 
+Route::get('/bodovanje', 'App\Http\Controllers\BodovanjeController@index');
+Route::post('/bodovanje/unos', 'App\Http\Controllers\BodovanjeController@unos');
+Route::get('/bodovanje/add', 'App\Http\Controllers\BodovanjeController@add');
+Route::get('/bodovanje/{bodovanje}/edit', 'App\Http\Controllers\BodovanjeController@edit');
+Route::patch('bodovanje/{bodovanje}', 'App\Http\Controllers\BodovanjeController@update');
+Route::get('bodovanje/{bodovanje}/delete', 'App\Http\Controllers\BodovanjeController@delete');
+
 Route::get('/statusStudiranja', 'App\Http\Controllers\StatusStudiranjaController@index');
 Route::post('/statusStudiranja/unos', 'App\Http\Controllers\StatusStudiranjaController@unos');
 Route::get('/statusStudiranja/add', 'App\Http\Controllers\StatusStudiranjaController@add');
