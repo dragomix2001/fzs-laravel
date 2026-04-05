@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Services;
 
 use App\Kandidat;
-use App\Models\PolozeniIspiti;
 use App\Models\PrijavaIspita;
 use App\Services\PredictionService;
 use App\StatusStudiranja;
@@ -25,7 +24,7 @@ class PredictionServiceTest extends TestCase
     {
         parent::setUp();
         $this->service = app(PredictionService::class);
-        
+
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
@@ -90,7 +89,7 @@ class PredictionServiceTest extends TestCase
     public function test_get_student_stats_with_exams(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 10);
 
         $result = $this->service->predictStudentSuccess($kandidat->id);
@@ -105,7 +104,7 @@ class PredictionServiceTest extends TestCase
     public function test_calculate_risk_level_low_risk(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 10);
         $this->createPolozeniIspiti($kandidat, 10, 9);
 
@@ -121,7 +120,7 @@ class PredictionServiceTest extends TestCase
     public function test_calculate_risk_level_medium_risk(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 10);
         $this->createPolozeniIspiti($kandidat, 6, 7);
 
@@ -137,7 +136,7 @@ class PredictionServiceTest extends TestCase
     public function test_calculate_risk_level_high_risk(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 10);
         $this->createPolozeniIspiti($kandidat, 2, 6);
 
@@ -152,7 +151,7 @@ class PredictionServiceTest extends TestCase
     public function test_risk_level_includes_factors(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 5);
         $this->createPolozeniIspiti($kandidat, 2, 6);
 
@@ -167,7 +166,7 @@ class PredictionServiceTest extends TestCase
     public function test_generate_recommendations_high_risk(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 5);
         $this->createPolozeniIspiti($kandidat, 1, 6);
 
@@ -176,7 +175,7 @@ class PredictionServiceTest extends TestCase
 
         $this->assertIsArray($recommendations);
         $this->assertNotEmpty($recommendations);
-        
+
         $highPriority = collect($recommendations)->filter(fn ($r) => $r['priority'] === 'high');
         $this->assertNotEmpty($highPriority);
     }
@@ -185,7 +184,7 @@ class PredictionServiceTest extends TestCase
     public function test_generate_recommendations_low_risk(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 10);
         $this->createPolozeniIspiti($kandidat, 10, 9);
 
@@ -194,7 +193,7 @@ class PredictionServiceTest extends TestCase
 
         $this->assertIsArray($recommendations);
         $this->assertNotEmpty($recommendations);
-        
+
         $lowPriority = collect($recommendations)->filter(fn ($r) => $r['priority'] === 'low');
         $this->assertNotEmpty($lowPriority);
     }
@@ -203,7 +202,7 @@ class PredictionServiceTest extends TestCase
     public function test_generate_prediction_contains_required_fields(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 5);
         $this->createPolozeniIspiti($kandidat, 3, 8);
 
@@ -219,7 +218,7 @@ class PredictionServiceTest extends TestCase
     public function test_graduation_probability_is_percentage(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 5);
         $this->createPolozeniIspiti($kandidat, 3, 8);
 
@@ -234,7 +233,7 @@ class PredictionServiceTest extends TestCase
     public function test_estimate_remaining_semesters_calculation(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 10);
         $this->createPolozeniIspiti($kandidat, 10, 8);
 
@@ -249,7 +248,7 @@ class PredictionServiceTest extends TestCase
     public function test_identify_success_factors_with_high_performance(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 10);
         $this->createPolozeniIspiti($kandidat, 10, 9);
 
@@ -264,7 +263,7 @@ class PredictionServiceTest extends TestCase
     public function test_identify_success_factors_with_low_performance(): void
     {
         $kandidat = Kandidat::factory()->create();
-        
+
         $this->createPrijavaIspita($kandidat, 5);
         $this->createPolozeniIspiti($kandidat, 2, 6);
 
@@ -315,7 +314,7 @@ class PredictionServiceTest extends TestCase
         PrijavaIspita::factory()->count($count)->create(['kandidat_id' => $kandidat->id]);
     }
 
-     private function createPolozeniIspiti(Kandidat $kandidat, int $count, int $ocena): void
+    private function createPolozeniIspiti(Kandidat $kandidat, int $count, int $ocena): void
     {
         for ($i = 0; $i < $count; $i++) {
             \DB::table('polozeni_ispiti')->insert([

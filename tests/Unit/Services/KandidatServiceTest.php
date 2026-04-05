@@ -5,19 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\Services;
 
 use App\Kandidat;
-use App\KrsnaSlava;
-use App\Opstina;
-use App\OpstiUspeh;
-use App\PrilozenaDokumenta;
 use App\Services\KandidatService;
-use App\Services\UpisService;
-use App\SkolskaGodUpisa;
-use App\Sport;
-use App\SportskoAngazovanje;
 use App\StatusStudiranja;
 use App\StudijskiProgram;
 use App\TipStudija;
-use App\UspehSrednjaSkola;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -44,7 +35,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         Kandidat::factory()->count(3)->create();
 
         $result = $this->service->getAll([]);
@@ -110,7 +101,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create();
 
         $result = $this->service->findById($kandidat->id);
@@ -144,7 +135,7 @@ class KandidatServiceTest extends TestCase
     {
         TipStudija::factory()->create(['id' => 1]);
         TipStudija::factory()->create(['id' => 2]);
-        
+
         StudijskiProgram::factory()->count(2)->create(['tipStudija_id' => 1]);
         StudijskiProgram::factory()->count(3)->create(['tipStudija_id' => 2]);
 
@@ -191,7 +182,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create();
         $file = UploadedFile::fake()->image('test.jpg');
 
@@ -208,7 +199,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf');
 
@@ -224,7 +215,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create(['slika' => null]);
         $file = UploadedFile::fake()->image('test.png');
 
@@ -241,7 +232,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100, 'application/pdf');
 
@@ -257,7 +248,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create();
         $file = UploadedFile::fake()->image('test.jpg');
 
@@ -273,13 +264,13 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create();
-        
+
         // Upload an image first
         $file = UploadedFile::fake()->image('test.jpg');
         $this->service->handleNewImageUpload($kandidat, $file);
-        
+
         $kandidat->refresh();
         Storage::disk('uploads')->assertExists('images/'.$kandidat->slika);
 
@@ -295,7 +286,7 @@ class KandidatServiceTest extends TestCase
         TipStudija::factory()->create();
         StatusStudiranja::factory()->create();
         StudijskiProgram::factory()->create();
-        
+
         $kandidat = Kandidat::factory()->create(['slika' => null]);
 
         // Should not throw exception
