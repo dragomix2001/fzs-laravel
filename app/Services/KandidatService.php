@@ -28,10 +28,37 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Kandidat Service - Main orchestrator for student candidate operations.
+ * 
+ * WARNING: This is a God Service (935 lines, 35 methods) - known technical debt.
+ * See docs/ADR/001-god-services.md for refactoring strategy.
+ * 
+ * Main Responsibilities:
+ * - Kandidat CRUD operations (create, update, delete)
+ * - Image and PDF file handling (upload, update, delete)
+ * - High school grades management (UspehSrednjaSkola)
+ * - Sports engagement management (SportskoAngazovanje)
+ * - Documents management (KandidatPrilozenaDokumenta)
+ * - Dropdown data retrieval for forms
+ * - Cache management for active studijski programs
+ * - Mass enrollment dispatch (Queue jobs)
+ * 
+ * @see KandidatController
+ * @see StoreKandidatRequest
+ * @see UpdateKandidatRequest
+ * @see Kandidat
+ */
 class KandidatService
 {
     public function __construct(protected UpisService $upisService) {}
 
+    /**
+     * Get all candidates with optional filtering.
+     * 
+     * @param array $filters Associative array of filters (tipStudija_id, statusUpisa_id, studijskiProgram_id)
+     * @return \Illuminate\Database\Eloquent\Collection Collection of candidates
+     */
     public function getAll(array $filters = [])
     {
         $query = Kandidat::query();
@@ -52,7 +79,10 @@ class KandidatService
     }
 
     /**
-     * Get kandidat by ID
+     * Get candidate by ID.
+     * 
+     * @param int $id Primary key of the candidate
+     * @return Kandidat|null The candidate instance or null if not found
      */
     public function findById(int $id): ?Kandidat
     {
@@ -60,7 +90,11 @@ class KandidatService
     }
 
     /**
-     * Get active studijski program for osnovne studije
+     * Get active study program ID for osnovne studije.
+     * 
+     * Uses cache for 1 hour to reduce database queries.
+     * 
+     * @return int|null The active program ID or null if none active
      */
     public function getActiveStudijskiProgramOsnovne(): ?int
     {
@@ -70,7 +104,10 @@ class KandidatService
     }
 
     /**
-     * Get studijski programi for tip studija
+     * Get all study programs for a specific study type.
+     * 
+     * @param int $tipStudijaId ID of the study type (e.g., 1 for Osnovne, 2 for Master)
+     * @return \Illuminate\Database\Eloquent\Collection Collection of study programs
      */
     public function getStudijskiProgrami(int $tipStudijaId): mixed
     {
@@ -78,7 +115,11 @@ class KandidatService
     }
 
     /**
-     * Get all dropdown data for kandidat create form
+     * Get all dropdown and metadata needed for candidate creation forms.
+     * 
+     * Retrieves locations, religions, schools, grades, sports, and available study programs.
+     * 
+     * @return array Associative array of collections for form select inputs
      */
     public function getDropdownData(): array
     {
@@ -99,7 +140,11 @@ class KandidatService
     }
 
     /**
-     * Get dropdown data for master form
+     * Get dropdown data specifically for the master student creation form.
+     * 
+     * Focuses on active master programs and specific document requirements.
+     * 
+     * @return array Associative array of collections for master student select inputs
      */
     public function getDropdownDataMaster(): array
     {
@@ -120,7 +165,16 @@ class KandidatService
     }
 
     /**
-     * Handle image upload for kandidat. Saves image and updates kandidat.slika.
+     * Handle candidate image upload with validation.
+     * 
+     * Validates image MIME type, replaces old images if they exist,
+     * updates the candidate record, and stores the file in 'uploads/images'.
+     * 
+     * @param Kandidat $kandidat Candidate instance to update
+     * @param \Illuminate\Http\UploadedFile $file The uploaded image file
+     * @return void
+     * 
+     * @throws \Exception If storage writing fails
      */
     public function handleImageUpload(Kandidat $kandidat, $file): void
     {
@@ -189,6 +243,21 @@ class KandidatService
         }
     }
 
+    /**
+     * Store kandidat page 1 (basic information).
+     * 
+     * Creates a new Kandidat record with basic personal information, study program selection,
+     * and optional image upload. This is the first step of the 2-step application process.
+     * 
+     * NOTE: This method accepts both KandidatData DTO and raw Request object.
+     * Legacy technical debt - see docs/ADR/002-request-coupling.md
+     * 
+     * @param KandidatData $data Validated DTO containing personal and program info
+     * @param Request $request Raw HTTP request (legacy - should be migrated to DTO)
+     * @return Kandidat Created kandidat instance
+     * 
+     * @throws \Exception If image upload fails
+     */
     public function storeKandidatPage1(KandidatData $data, Request $request): Kandidat
     {
         $kandidat = new Kandidat;
@@ -240,7 +309,18 @@ class KandidatService
     }
 
     /**
-     * Store kandidat page 2 (grades, sports, documents, scores).
+     * Store kandidat page 2 (grades, sports, documents, and scores).
+     * 
+     * Completes the candidate profile by saving high school grades, sports engagement,
+     * submitted documents, and calculating the total score based on academic success.
+     * 
+     * NOTE: This method accepts raw Request object and relies on $request->insertedId.
+     * Legacy technical debt - see docs/ADR/002-request-coupling.md
+     * 
+     * @param Request $request Raw HTTP request containing all secondary data
+     * @return Kandidat Updated kandidat instance
+     * 
+     * @throws ModelNotFoundException If the candidate from page 1 is not found
      */
     public function storeKandidatPage2(Request $request): Kandidat
     {
@@ -340,6 +420,22 @@ class KandidatService
         return $kandidat;
     }
 
+    /**
+     * Update existing kandidat information (combined page 1 & 2).
+     * 
+     * Updates candidate personal data, study program, high school success,
+     * and handles image/PDF file updates.
+     * 
+     * NOTE: This method combines both basic and detailed info updates.
+     * Legacy technical debt - see docs/ADR/002-request-coupling.md
+     * 
+     * @param int $id Candidate ID to update
+     * @param KandidatData $data Validated DTO containing main fields
+     * @param Request $request Raw HTTP request for supplemental fields
+     * @return Kandidat Updated kandidat instance
+     * 
+     * @throws ModelNotFoundException If candidate or related success records don't exist
+     */
     public function updateKandidat(int $id, KandidatData $data, Request $request): Kandidat
     {
         $kandidat = Kandidat::find($id);
@@ -477,7 +573,18 @@ class KandidatService
     }
 
     /**
-     * Store master kandidat.
+     * Store new master student candidate.
+     * 
+     * Creates a candidate record for master studies, handles automatic registration,
+     * submitted documents, and optional image upload.
+     * 
+     * NOTE: This method accepts raw Request object and lacks DTO validation.
+     * Legacy technical debt - see docs/ADR/002-request-coupling.md
+     * 
+     * @param Request $request Raw HTTP request with master student data
+     * @return Kandidat Created master candidate instance
+     * 
+     * @throws \Exception If image upload or registration fails
      */
     public function storeMasterKandidat(Request $request): Kandidat
     {
@@ -544,7 +651,19 @@ class KandidatService
     }
 
     /**
-     * Update master kandidat.
+     * Update existing master student candidate.
+     * 
+     * Updates master student personal data, study program, documents,
+     * and handles image file updates.
+     * 
+     * NOTE: This method accepts raw Request object and lacks DTO validation.
+     * Legacy technical debt - see docs/ADR/002-request-coupling.md
+     * 
+     * @param int $id Master candidate ID to update
+     * @param Request $request Raw HTTP request with updated data
+     * @return Kandidat Updated master candidate instance
+     * 
+     * @throws ModelNotFoundException If master candidate is not found
      */
     public function updateMasterKandidat(int $id, Request $request): Kandidat
     {
@@ -607,7 +726,15 @@ class KandidatService
     }
 
     /**
-     * Delete kandidat with all related records (osnovne studije).
+     * Delete candidate and all related records (transnational).
+     * 
+     * Removes candidate, documents, enrollment history, sports records,
+     * exam registrations, and the candidate image from storage.
+     * 
+     * @param int $id Candidate ID to delete
+     * @return bool True if deletion succeeded
+     * 
+     * @throws \Exception If transaction fails
      */
     public function deleteKandidat(int $id): bool
     {
@@ -720,6 +847,14 @@ class KandidatService
         }
     }
 
+    /**
+     * Dispatch mass enrollment for students (async queue).
+     * 
+     * Handles processing large sets of candidates using background jobs.
+     * 
+     * @param array $kandidatIds List of candidate IDs to enroll
+     * @return array Status message indicating background processing started
+     */
     public function masovniUpisAsync(array $kandidatIds): array
     {
         MassEnrollmentJob::dispatch($kandidatIds);
