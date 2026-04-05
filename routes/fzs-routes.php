@@ -112,6 +112,13 @@ Route::get('/semestar/{semestar}/edit', 'App\Http\Controllers\SemestarController
 Route::patch('semestar/{semestar}', 'App\Http\Controllers\SemestarController@update');
 Route::get('semestar/{semestar}/delete', 'App\Http\Controllers\SemestarController@delete');
 
+Route::get('/krsnaSlava', 'App\Http\Controllers\KrsnaSlavaController@index');
+Route::post('/krsnaSlava/unos', 'App\Http\Controllers\KrsnaSlavaController@unos');
+Route::get('/krsnaSlava/add', 'App\Http\Controllers\KrsnaSlavaController@add');
+Route::get('/krsnaSlava/{krsnaSlava}/edit', 'App\Http\Controllers\KrsnaSlavaController@edit');
+Route::patch('krsnaSlava/{krsnaSlava}', 'App\Http\Controllers\KrsnaSlavaController@update');
+Route::get('krsnaSlava/{krsnaSlava}/delete', 'App\Http\Controllers\KrsnaSlavaController@delete');
+
 Route::get('/mesto', 'App\Http\Controllers\MestoController@index');
 Route::post('/mesto/unos', 'App\Http\Controllers\MestoController@unos');
 Route::get('/mesto/{mesto}/edit', 'App\Http\Controllers\MestoController@edit');
