@@ -174,6 +174,13 @@ Route::get('/tipPredmeta/{tipPredmeta}/edit', 'App\Http\Controllers\TipPredmetaC
 Route::patch('tipPredmeta/{tipPredmeta}', 'App\Http\Controllers\TipPredmetaController@update');
 Route::get('tipPredmeta/{tipPredmeta}/delete', 'App\Http\Controllers\TipPredmetaController@delete');
 
+Route::get('/tipPrijave', 'App\Http\Controllers\TipPrijaveController@index');
+Route::post('/tipPrijave/unos', 'App\Http\Controllers\TipPrijaveController@unos');
+Route::get('/tipPrijave/add', 'App\Http\Controllers\TipPrijaveController@add');
+Route::get('/tipPrijave/{tip}/edit', 'App\Http\Controllers\TipPrijaveController@edit');
+Route::patch('tipPrijave/{tip}', 'App\Http\Controllers\TipPrijaveController@update');
+Route::get('tipPrijave/{tip}/delete', 'App\Http\Controllers\TipPrijaveController@delete');
+
 Route::get('/studijskiProgram', 'App\Http\Controllers\StudijskiProgramController@index');
 Route::post('/studijskiProgram/unos', 'App\Http\Controllers\StudijskiProgramController@unos');
 Route::get('/studijskiProgram/add', 'App\Http\Controllers\StudijskiProgramController@add');
