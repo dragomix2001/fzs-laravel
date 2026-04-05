@@ -3,22 +3,13 @@
 namespace App\Services;
 
 use App\DTOs\KandidatData;
-use App\GodinaStudija;
 use App\Jobs\MassEnrollmentJob;
 use App\Kandidat;
 use App\KandidatPrilozenaDokumenta;
-use App\KrsnaSlava;
-use App\Opstina;
-use App\OpstiUspeh;
 use App\PrijavaIspita;
-use App\PrilozenaDokumenta;
-use App\SkolskaGodUpisa;
 use App\Sport;
 use App\SportskoAngazovanje;
-use App\StatusGodine;
-use App\StatusStudiranja;
 use App\StudijskiProgram;
-use App\TipStudija;
 use App\UpisGodine;
 use App\UspehSrednjaSkola;
 use Carbon\Carbon;
@@ -54,7 +45,10 @@ class KandidatService
     public function __construct(
         protected UpisService $upisService,
         protected FileStorageService $fileStorageService,
-        protected GradeManagementService $gradeManagementService
+        protected GradeManagementService $gradeManagementService,
+        protected DropdownDataService $dropdownDataService,
+        protected SportsManagementService $sportsManagementService,
+        protected DocumentManagementService $documentManagementService
     ) {}
 
     /**
@@ -115,7 +109,7 @@ class KandidatService
      */
     public function getStudijskiProgrami(int $tipStudijaId): mixed
     {
-        return StudijskiProgram::where('tipStudija_id', $tipStudijaId)->get();
+        return $this->dropdownDataService->getStudijskiProgrami($tipStudijaId);
     }
 
     /**
@@ -127,20 +121,7 @@ class KandidatService
      */
     public function getDropdownData(): array
     {
-        return [
-            'mestoRodjenja' => Opstina::all(),
-            'krsnaSlava' => KrsnaSlava::all(),
-            'mestoZavrseneSkoleFakulteta' => Opstina::all(),
-            'opstiUspehSrednjaSkola' => OpstiUspeh::all(),
-            'uspehSrednjaSkola' => UspehSrednjaSkola::all(),
-            'sportskoAngazovanje' => SportskoAngazovanje::all(),
-            'prilozeniDokumentPrvaGodina' => PrilozenaDokumenta::all(),
-            'statusaUpisaKandidata' => StatusStudiranja::all(),
-            'studijskiProgram' => StudijskiProgram::where('tipStudija_id', '1')->get(),
-            'tipStudija' => TipStudija::all(),
-            'godinaStudija' => GodinaStudija::all(),
-            'skolskeGodineUpisa' => SkolskaGodUpisa::all(),
-        ];
+        return $this->dropdownDataService->getDropdownData();
     }
 
     /**
@@ -152,20 +133,7 @@ class KandidatService
      */
     public function getDropdownDataMaster(): array
     {
-        return [
-            'mestoRodjenja' => Opstina::all(),
-            'krsnaSlava' => KrsnaSlava::all(),
-            'opstiUspehSrednjaSkola' => OpstiUspeh::all(),
-            'uspehSrednjaSkola' => UspehSrednjaSkola::all(),
-            'sportskoAngazovanje' => SportskoAngazovanje::all(),
-            'prilozeniDokumentPrvaGodina' => PrilozenaDokumenta::all(),
-            'statusaUpisaKandidata' => StatusStudiranja::all(),
-            'studijskiProgram' => StudijskiProgram::where(['tipStudija_id' => 2, 'indikatorAktivan' => 1])->get(),
-            'tipStudija' => TipStudija::all(),
-            'godinaStudija' => GodinaStudija::all(),
-            'skolskeGodineUpisa' => SkolskaGodUpisa::all(),
-            'dokumentaMaster' => PrilozenaDokumenta::where('skolskaGodina_id', '3')->get(),
-        ];
+        return $this->dropdownDataService->getDropdownDataMaster();
     }
 
     /**
@@ -263,57 +231,40 @@ class KandidatService
         $kandidat->srednjaOcenaSrednjaSkola = $request->SrednjaOcenaSrednjaSkola;
 
         if ($request->sport1 != 0) {
-            $sport1 = new SportskoAngazovanje;
-            $sport1->sport_id = $request->sport1;
-            $sport1->kandidat_id = $request->insertedId;
-            $sport1->nazivKluba = $request->klub1;
-            $sport1->odDoGodina = $request->uzrast1;
-            $sport1->ukupnoGodina = $request->godine1;
-            $sport1->save();
+            $this->sportsManagementService->createSportForKandidat($request->insertedId, [
+                'sport' => $request->sport1,
+                'klub' => $request->klub1,
+                'uzrast' => $request->uzrast1,
+                'godine' => $request->godine1,
+            ]);
         }
 
         if ($request->sport2 != 0) {
-            $sport2 = new SportskoAngazovanje;
-            $sport2->sport_id = $request->sport2;
-            $sport2->kandidat_id = $request->insertedId;
-            $sport2->nazivKluba = $request->klub2;
-            $sport2->odDoGodina = $request->uzrast2;
-            $sport2->ukupnoGodina = $request->godine2;
-            $sport2->save();
+            $this->sportsManagementService->createSportForKandidat($request->insertedId, [
+                'sport' => $request->sport2,
+                'klub' => $request->klub2,
+                'uzrast' => $request->uzrast2,
+                'godine' => $request->godine2,
+            ]);
         }
 
         if ($request->sport3 != 0) {
-            $sport3 = new SportskoAngazovanje;
-            $sport3->sport_id = $request->sport3;
-            $sport3->kandidat_id = $request->insertedId;
-            $sport3->nazivKluba = $request->klub3;
-            $sport3->odDoGodina = $request->uzrast3;
-            $sport3->ukupnoGodina = $request->godine3;
-            $sport3->save();
+            $this->sportsManagementService->createSportForKandidat($request->insertedId, [
+                'sport' => $request->sport3,
+                'klub' => $request->klub3,
+                'uzrast' => $request->uzrast3,
+                'godine' => $request->godine3,
+            ]);
         }
 
         $kandidat->visina = str_replace(',', '.', $request->VisinaKandidata);
         $kandidat->telesnaTezina = str_replace(',', '.', $request->TelesnaTezinaKandidata);
 
-        if ($request->has('dokumentiPrva')) {
-            foreach ($request->dokumentiPrva as $dokument) {
-                $prilozenDokument = new KandidatPrilozenaDokumenta;
-                $prilozenDokument->prilozenaDokumenta_id = $dokument;
-                $prilozenDokument->kandidat_id = $request->insertedId;
-                $prilozenDokument->indikatorAktivan = 1;
-                $prilozenDokument->save();
-            }
-        }
-
-        if ($request->has('dokumentiDruga')) {
-            foreach ($request->dokumentiDruga as $dokument) {
-                $prilozenDokument = new KandidatPrilozenaDokumenta;
-                $prilozenDokument->prilozenaDokumenta_id = $dokument;
-                $prilozenDokument->kandidat_id = $request->insertedId;
-                $prilozenDokument->indikatorAktivan = 1;
-                $prilozenDokument->save();
-            }
-        }
+        $this->documentManagementService->attachDocumentsForKandidat(
+            $request->insertedId,
+            $request->get('dokumentiPrva', []),
+            $request->get('dokumentiDruga', [])
+        );
 
         $kandidat->brojBodovaTest = $request->BrojBodovaTest;
         $kandidat->brojBodovaSkola = $request->BrojBodovaSkola;
@@ -403,27 +354,12 @@ class KandidatService
         $kandidat->visina = str_replace(',', '.', $request->VisinaKandidata);
         $kandidat->telesnaTezina = str_replace(',', '.', $request->TelesnaTezinaKandidata);
 
-        KandidatPrilozenaDokumenta::where('kandidat_id', $id)->delete();
-
-        if ($request->has('dokumentiPrva')) {
-            foreach ($request->dokumentiPrva as $dokument) {
-                $prilozenDokument = new KandidatPrilozenaDokumenta;
-                $prilozenDokument->prilozenaDokumenta_id = $dokument;
-                $prilozenDokument->kandidat_id = $id;
-                $prilozenDokument->indikatorAktivan = 1;
-                $prilozenDokument->save();
-            }
-        }
-
-        if ($request->has('dokumentiDruga')) {
-            foreach ($request->dokumentiDruga as $dokument) {
-                $prilozenDokument = new KandidatPrilozenaDokumenta;
-                $prilozenDokument->prilozenaDokumenta_id = $dokument;
-                $prilozenDokument->kandidat_id = $id;
-                $prilozenDokument->indikatorAktivan = 1;
-                $prilozenDokument->save();
-            }
-        }
+        $this->documentManagementService->deleteDocumentsForKandidat($id);
+        $this->documentManagementService->attachDocumentsForKandidat(
+            $id,
+            $request->get('dokumentiPrva', []),
+            $request->get('dokumentiDruga', [])
+        );
 
         $kandidat->brojBodovaTest = $request->BrojBodovaTest;
         $kandidat->brojBodovaSkola = $request->BrojBodovaSkola;
@@ -499,17 +435,12 @@ class KandidatService
         if ($saved) {
             $this->upisService->registrujKandidata($insertedId);
 
-            KandidatPrilozenaDokumenta::where('kandidat_id', $insertedId)->delete();
-
-            if ($request->has('dokumentaMaster')) {
-                foreach ($request->dokumentaMaster as $dokument) {
-                    $prilozenDokument = new KandidatPrilozenaDokumenta;
-                    $prilozenDokument->prilozenaDokumenta_id = $dokument;
-                    $prilozenDokument->kandidat_id = $insertedId;
-                    $prilozenDokument->indikatorAktivan = 1;
-                    $prilozenDokument->save();
-                }
-            }
+            $this->documentManagementService->deleteDocumentsForKandidat($insertedId);
+            $this->documentManagementService->attachDocumentsForKandidat(
+                $insertedId,
+                $request->get('dokumentaMaster', []),
+                []
+            );
         }
 
         return $kandidat;
@@ -575,17 +506,12 @@ class KandidatService
 
         $saved = $kandidat->save();
 
-        KandidatPrilozenaDokumenta::where('kandidat_id', $id)->delete();
-
-        if ($request->has('dokumentaMaster')) {
-            foreach ($request->dokumentaMaster as $dokument) {
-                $prilozenDokument = new KandidatPrilozenaDokumenta;
-                $prilozenDokument->prilozenaDokumenta_id = $dokument;
-                $prilozenDokument->kandidat_id = $id;
-                $prilozenDokument->indikatorAktivan = 1;
-                $prilozenDokument->save();
-            }
-        }
+        $this->documentManagementService->deleteDocumentsForKandidat($id);
+        $this->documentManagementService->attachDocumentsForKandidat(
+            $id,
+            $request->get('dokumentaMaster', []),
+            []
+        );
 
         return $kandidat;
     }
@@ -605,9 +531,9 @@ class KandidatService
     {
         return DB::transaction(function () use ($id) {
             $kandidat = Kandidat::find($id);
-            KandidatPrilozenaDokumenta::where(['kandidat_id' => $id])->delete();
+            $this->documentManagementService->deleteDocumentsForKandidat($id);
             UpisGodine::where(['kandidat_id' => $id])->delete();
-            SportskoAngazovanje::where(['kandidat_id' => $id])->delete();
+            $this->sportsManagementService->deleteSportsForKandidat($id);
             PrijavaIspita::where(['kandidat_id' => $id])->delete();
 
             $this->fileStorageService->deleteImageForKandidat($kandidat);
@@ -630,15 +556,7 @@ class KandidatService
      */
     public function storeSport(int $kandidatId, array $data): SportskoAngazovanje
     {
-        $sport = new SportskoAngazovanje;
-        $sport->sport_id = $data['sport'];
-        $sport->kandidat_id = $kandidatId;
-        $sport->nazivKluba = $data['klub'];
-        $sport->odDoGodina = $data['uzrast'];
-        $sport->ukupnoGodina = $data['godine'];
-        $sport->save();
-
-        return $sport;
+        return $this->sportsManagementService->createSportForKandidat($kandidatId, $data);
     }
 
     /**
@@ -778,36 +696,7 @@ class KandidatService
      */
     public function getEditDropdownData(int $id): array
     {
-        $sport = Sport::all();
-        $dokumentiPrvaGodina = PrilozenaDokumenta::where('skolskaGodina_id', '1')->get();
-        $dokumentiOstaleGodine = PrilozenaDokumenta::where('skolskaGodina_id', '2')->get();
-        $statusKandidata = StatusGodine::whereNotIn('id', [4, 5])->get();
-        $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 1, 'indikatorAktivan' => 1])->get();
-
-        $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->pluck('prilozenaDokumenta_id')->toArray();
-
-        // Get grades using GradeManagementService
-        $grades = $this->gradeManagementService->getGradesForEdit($id);
-        $prviRazred = $grades['prviRazred'];
-        $drugiRazred = $grades['drugiRazred'];
-        $treciRazred = $grades['treciRazred'];
-        $cetvrtiRazred = $grades['cetvrtiRazred'];
-
-        $sportskoAngazovanjeKandidata = SportskoAngazovanje::where('kandidat_id', $id)->get();
-
-        return array_merge($this->getDropdownData(), [
-            'sport' => $sport,
-            'dokumentiPrvaGodina' => $dokumentiPrvaGodina,
-            'dokumentiOstaleGodine' => $dokumentiOstaleGodine,
-            'statusKandidata' => $statusKandidata,
-            'studijskiProgram' => $studijskiProgram,
-            'prilozenaDokumenta' => $prilozenaDokumenta,
-            'prviRazred' => $prviRazred,
-            'drugiRazred' => $drugiRazred,
-            'treciRazred' => $treciRazred,
-            'cetvrtiRazred' => $cetvrtiRazred,
-            'sportskoAngazovanjeKandidata' => $sportskoAngazovanjeKandidata,
-        ]);
+        return $this->dropdownDataService->getEditDropdownData($id);
     }
 
     /**
@@ -815,13 +704,7 @@ class KandidatService
      */
     public function getEditDropdownDataMaster(int $id): array
     {
-        $statusKandidata = StatusGodine::whereNotIn('id', [4, 5])->get();
-        $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->pluck('prilozenaDokumenta_id')->toArray();
-
-        return array_merge($this->getDropdownDataMaster(), [
-            'statusKandidata' => $statusKandidata,
-            'prilozenaDokumenta' => $prilozenaDokumenta,
-        ]);
+        return $this->dropdownDataService->getEditDropdownDataMaster($id);
     }
 
     public function storeKandidat(KandidatData $data): Kandidat
