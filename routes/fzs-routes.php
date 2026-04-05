@@ -118,6 +118,13 @@ Route::get('/mesto/{mesto}/edit', 'App\Http\Controllers\MestoController@edit');
 Route::patch('mesto/{mesto}', 'App\Http\Controllers\MestoController@update');
 Route::get('mesto/{mesto}/delete', 'App\Http\Controllers\MestoController@delete');
 
+Route::get('/region', 'App\Http\Controllers\RegionController@index');
+Route::post('/region/unos', 'App\Http\Controllers\RegionController@unos');
+Route::get('/region/add', 'App\Http\Controllers\RegionController@add');
+Route::get('/region/{region}/edit', 'App\Http\Controllers\RegionController@edit');
+Route::patch('region/{region}', 'App\Http\Controllers\RegionController@update');
+Route::get('region/{region}/delete', 'App\Http\Controllers\RegionController@delete');
+
 Route::get('/tipStudija', 'App\Http\Controllers\TipStudijaController@index');
 Route::post('/tipStudija/unos', 'App\Http\Controllers\TipStudijaController@unos');
 Route::get('/tipStudija/add', 'App\Http\Controllers\TipStudijaController@add');
