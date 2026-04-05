@@ -467,4 +467,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::put('/users/{user}', 'UserController@update')->name('user.update');
     Route::delete('/users/{user}', 'UserController@destroy')->name('user.destroy');
     Route::get('/users/{user}/toggle', 'UserController@toggleStatus')->name('user.toggle');
+
+    // Audit log routes
+    Route::get('/audit-logs', 'AuditLogController@index')->name('audit.index');
 });
