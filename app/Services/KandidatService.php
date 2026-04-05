@@ -326,33 +326,22 @@ class KandidatService
     {
         $kandidat = Kandidat::find($request->insertedId);
 
-        $prviRazred = new UspehSrednjaSkola;
-        $prviRazred->kandidat_id = $request->insertedId;
-        $prviRazred->opstiUspeh_id = $request->prviRazred;
-        $prviRazred->srednja_ocena = $request->SrednjaOcena1;
-        $prviRazred->RedniBrojRazreda = 1;
-        $prviRazred->save();
+        // Store high school grades for all 4 grades in a single loop
+        $grades = [
+            ['razred' => 1, 'uspeh' => $request->prviRazred, 'ocena' => $request->SrednjaOcena1],
+            ['razred' => 2, 'uspeh' => $request->drugiRazred, 'ocena' => $request->SrednjaOcena2],
+            ['razred' => 3, 'uspeh' => $request->treciRazred, 'ocena' => $request->SrednjaOcena3],
+            ['razred' => 4, 'uspeh' => $request->cetvrtiRazred, 'ocena' => $request->SrednjaOcena4],
+        ];
 
-        $drugiRazred = new UspehSrednjaSkola;
-        $drugiRazred->kandidat_id = $request->insertedId;
-        $drugiRazred->opstiUspeh_id = $request->drugiRazred;
-        $drugiRazred->srednja_ocena = $request->SrednjaOcena2;
-        $drugiRazred->RedniBrojRazreda = 2;
-        $drugiRazred->save();
-
-        $treciRazred = new UspehSrednjaSkola;
-        $treciRazred->kandidat_id = $request->insertedId;
-        $treciRazred->opstiUspeh_id = $request->treciRazred;
-        $treciRazred->srednja_ocena = $request->SrednjaOcena3;
-        $treciRazred->RedniBrojRazreda = 3;
-        $treciRazred->save();
-
-        $cetvrtiRazred = new UspehSrednjaSkola;
-        $cetvrtiRazred->kandidat_id = $request->insertedId;
-        $cetvrtiRazred->opstiUspeh_id = $request->cetvrtiRazred;
-        $cetvrtiRazred->srednja_ocena = $request->SrednjaOcena4;
-        $cetvrtiRazred->RedniBrojRazreda = 4;
-        $cetvrtiRazred->save();
+        foreach ($grades as $grade) {
+            UspehSrednjaSkola::create([
+                'kandidat_id' => $request->insertedId,
+                'opstiUspeh_id' => $grade['uspeh'],
+                'srednja_ocena' => $grade['ocena'],
+                'RedniBrojRazreda' => $grade['razred'],
+            ]);
+        }
 
         $kandidat->opstiUspehSrednjaSkola_id = $request->OpstiUspehSrednjaSkola;
         $kandidat->srednjaOcenaSrednjaSkola = $request->SrednjaOcenaSrednjaSkola;
@@ -484,52 +473,19 @@ class KandidatService
             Carbon::now() :
             date_create_from_format('d.m.Y.', $request->datumStatusa);
 
-        try {
-            $prviRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 1])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $prviRazred = new UspehSrednjaSkola;
-        } finally {
-            $prviRazred->kandidat_id = $id;
-            $prviRazred->opstiUspeh_id = $request->prviRazred;
-            $prviRazred->srednja_ocena = $request->SrednjaOcena1;
-            $prviRazred->RedniBrojRazreda = 1;
-            $prviRazred->save();
-        }
+        // Update high school grades for all 4 grades using updateOrCreate in a single loop
+        $grades = [
+            ['razred' => 1, 'uspeh' => $request->prviRazred, 'ocena' => $request->SrednjaOcena1],
+            ['razred' => 2, 'uspeh' => $request->drugiRazred, 'ocena' => $request->SrednjaOcena2],
+            ['razred' => 3, 'uspeh' => $request->treciRazred, 'ocena' => $request->SrednjaOcena3],
+            ['razred' => 4, 'uspeh' => $request->cetvrtiRazred, 'ocena' => $request->SrednjaOcena4],
+        ];
 
-        try {
-            $drugiRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 2])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $drugiRazred = new UspehSrednjaSkola;
-        } finally {
-            $drugiRazred->kandidat_id = $id;
-            $drugiRazred->opstiUspeh_id = $request->drugiRazred;
-            $drugiRazred->srednja_ocena = $request->SrednjaOcena2;
-            $drugiRazred->RedniBrojRazreda = 2;
-            $drugiRazred->save();
-        }
-
-        try {
-            $treciRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 3])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $treciRazred = new UspehSrednjaSkola;
-        } finally {
-            $treciRazred->kandidat_id = $id;
-            $treciRazred->opstiUspeh_id = $request->treciRazred;
-            $treciRazred->srednja_ocena = $request->SrednjaOcena3;
-            $treciRazred->RedniBrojRazreda = 3;
-            $treciRazred->save();
-        }
-
-        try {
-            $cetvrtiRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 4])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $cetvrtiRazred = new UspehSrednjaSkola;
-        } finally {
-            $cetvrtiRazred->kandidat_id = $id;
-            $cetvrtiRazred->opstiUspeh_id = $request->cetvrtiRazred;
-            $cetvrtiRazred->srednja_ocena = $request->SrednjaOcena4;
-            $cetvrtiRazred->RedniBrojRazreda = 4;
-            $cetvrtiRazred->save();
+        foreach ($grades as $grade) {
+            UspehSrednjaSkola::updateOrCreate(
+                ['kandidat_id' => $id, 'RedniBrojRazreda' => $grade['razred']],
+                ['opstiUspeh_id' => $grade['uspeh'], 'srednja_ocena' => $grade['ocena']]
+            );
         }
 
         $kandidat->opstiUspehSrednjaSkola_id = $request->OpstiUspehSrednjaSkola;
