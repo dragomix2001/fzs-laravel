@@ -26,10 +26,10 @@ use View;
 
 /**
  * Ispit Service - Main orchestrator for exam operations and records.
- * 
+ *
  * WARNING: This is a God Service (723 lines, 25 methods) - known technical debt.
  * See docs/ADR/001-god-services.md for refactoring strategy.
- * 
+ *
  * Main Responsibilities:
  * - Exam records (Zapisnik) CRUD operations
  * - Exam registration management (PrijavaIspita)
@@ -37,7 +37,7 @@ use View;
  * - Exam results exporting (PDF generation)
  * - Dropdown data retrieval for exam forms
  * - ARCHIVE management for old exam periods
- * 
+ *
  * @see IspitController
  * @see ZapisnikData
  * @see ZapisnikOPolaganjuIspita
@@ -50,8 +50,8 @@ class IspitService extends BasePdfService
 
     /**
      * Get all exam records (Zapisnici) with optional filters.
-     * 
-     * @param array $filters Associative array (filter_predmet_id, filter_rok_id, filter_profesor_id)
+     *
+     * @param  array  $filters  Associative array (filter_predmet_id, filter_rok_id, filter_profesor_id)
      * @return array Contains 'zapisnici', 'predmeti', 'profesori', 'aktivniIspitniRok'
      */
     public function getZapisniciForIndex(array $filters): array
@@ -82,7 +82,7 @@ class IspitService extends BasePdfService
 
     /**
      * Get all reference data needed for creating a new exam record (Zapisnik).
-     * 
+     *
      * @return array Contains 'aktivniIspitniRok', 'predmeti', 'profesori'
      */
     public function getCreateZapisnikData(): array
@@ -104,8 +104,8 @@ class IspitService extends BasePdfService
 
     /**
      * Get subjects and professors linked to a specific exam period (Rok).
-     * 
-     * @param int $rokId The exam period ID
+     *
+     * @param  int  $rokId  The exam period ID
      * @return array Contains 'predmeti', 'profesori'
      */
     public function getZapisnikPredmetData(int $rokId): array
@@ -132,10 +132,10 @@ class IspitService extends BasePdfService
 
     /**
      * Get students registered for a specific exam (subject, period, professor).
-     * 
-     * @param int $predmetId Subject ID
-     * @param int $rokId Exam period ID
-     * @param int $profesorId Professor ID
+     *
+     * @param  int  $predmetId  Subject ID
+     * @param  int  $rokId  Exam period ID
+     * @param  int  $profesorId  Professor ID
      * @return array List of candidate IDs and their data
      */
     public function getZapisnikStudenti(int $predmetId, int $rokId, int $profesorId): array
@@ -168,15 +168,15 @@ class IspitService extends BasePdfService
 
     /**
      * Create a new exam record (Zapisnik) and associate students.
-     * 
+     *
      * Handles the creation of ZapisnikOPolaganjuIspita, links students,
      * creates placeholder grade records (PolozeniIspiti), and links study programs.
-     * 
-     * @param array $data Main Zapisnik data (predmet_id, rok_id, profesor_id, etc.)
-     * @param array $odabir List of student IDs to include in the record
-     * @return ZapisnikOPolaganjuIspita The created record instance
-     * 
+     *
+     * @param  array  $data  Main Zapisnik data (predmet_id, rok_id, profesor_id, etc.)
+     * @param  array  $odabir  List of student IDs to include in the record
+     *
      * @throws \Exception If database transaction fails
+     * @return ZapisnikOPolaganjuIspita The created record instance
      */
     public function createZapisnik(array $data, array $odabir): ZapisnikOPolaganjuIspita
     {
@@ -227,8 +227,8 @@ class IspitService extends BasePdfService
 
     /**
      * Store a new exam record using a validated DTO.
-     * 
-     * @param ZapisnikData $data Validated DTO containing main record and student info
+     *
+     * @param  ZapisnikData  $data  Validated DTO containing main record and student info
      * @return ZapisnikOPolaganjuIspita The created record instance
      */
     public function storeZapisnik(ZapisnikData $data): ZapisnikOPolaganjuIspita
@@ -324,13 +324,13 @@ class IspitService extends BasePdfService
 
     /**
      * Save/update exam grades and scores for multiple students in a record.
-     * 
-     * @param array $ispitIds List of PolozeniIspiti IDs
-     * @param array $ocenePismeni List of written exam grades
-     * @param array $oceneUsmeni List of oral exam grades
-     * @param array $konacneOcene List of final grades
-     * @param array $brojBodova List of total points
-     * @param array $statusIspita List of exam statuses (passed, failed, etc.)
+     *
+     * @param  array  $ispitIds  List of PolozeniIspiti IDs
+     * @param  array  $ocenePismeni  List of written exam grades
+     * @param  array  $oceneUsmeni  List of oral exam grades
+     * @param  array  $konacneOcene  List of final grades
+     * @param  array  $brojBodova  List of total points
+     * @param  array  $statusIspita  List of exam statuses (passed, failed, etc.)
      * @return int The ID of the associated Zapisnik
      */
     public function savePolozeniIspiti(array $ispitIds, array $ocenePismeni, array $oceneUsmeni, array $konacneOcene, array $brojBodova, array $statusIspita): int
@@ -358,10 +358,9 @@ class IspitService extends BasePdfService
 
     /**
      * Add more students to an existing exam record (Zapisnik).
-     * 
-     * @param int $zapisnikId The record ID to update
-     * @param array $odabir List of student IDs to add
-     * @return void
+     *
+     * @param  int  $zapisnikId  The record ID to update
+     * @param  array  $odabir  List of student IDs to add
      */
     public function addStudentToZapisnik(int $zapisnikId, array $odabir): void
     {
@@ -441,9 +440,9 @@ class IspitService extends BasePdfService
 
     /**
      * Remove a student from an exam record and clean up associated records.
-     * 
-     * @param int $zapisnikId The record ID
-     * @param int $kandidatId The student ID to remove
+     *
+     * @param  int  $zapisnikId  The record ID
+     * @param  int  $kandidatId  The student ID to remove
      * @return bool True if the record was also deleted (because it became empty)
      */
     public function removeStudentFromZapisnik(int $zapisnikId, int $kandidatId): bool
@@ -477,9 +476,8 @@ class IspitService extends BasePdfService
 
     /**
      * Delete an exam record and all its associated student and study program links.
-     * 
-     * @param int $id The record ID to delete
-     * @return void
+     *
+     * @param  int  $id  The record ID to delete
      */
     public function deleteZapisnikWithChildren(int $id): void
     {
@@ -490,9 +488,8 @@ class IspitService extends BasePdfService
 
     /**
      * Alias for deleteZapisnikWithChildren.
-     * 
-     * @param int $id The record ID to delete
-     * @return void
+     *
+     * @param  int  $id  The record ID to delete
      */
     public function deleteZapisnik(int $id): void
     {
