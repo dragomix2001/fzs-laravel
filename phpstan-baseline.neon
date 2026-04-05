@@ -391,30 +391,6 @@ parameters:
 			path: app/Services/KandidatService.php
 
 		-
-			message: '#^Variable \$cetvrtiRazred might not be defined\.$#'
-			identifier: variable.undefined
-			count: 5
-			path: app/Services/KandidatService.php
-
-		-
-			message: '#^Variable \$drugiRazred might not be defined\.$#'
-			identifier: variable.undefined
-			count: 5
-			path: app/Services/KandidatService.php
-
-		-
-			message: '#^Variable \$prviRazred might not be defined\.$#'
-			identifier: variable.undefined
-			count: 5
-			path: app/Services/KandidatService.php
-
-		-
-			message: '#^Variable \$treciRazred might not be defined\.$#'
-			identifier: variable.undefined
-			count: 5
-			path: app/Services/KandidatService.php
-
-		-
 			message: '#^Method App\\Services\\PredictionService\:\:estimateRemainingSemesters\(\) should return int but returns float\.$#'
 			identifier: return.type
 			count: 1
