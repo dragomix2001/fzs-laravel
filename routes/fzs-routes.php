@@ -133,6 +133,13 @@ Route::get('/statusIspita/{statusIspita}/edit', 'App\Http\Controllers\StatusIspi
 Route::patch('statusIspita/{statusIspita}', 'App\Http\Controllers\StatusIspitaController@update');
 Route::get('statusIspita/{statusIspita}/delete', 'App\Http\Controllers\StatusIspitaController@delete');
 
+Route::get('/statusKandidata', 'App\Http\Controllers\StatusKandidataController@index');
+Route::post('/statusKandidata/unos', 'App\Http\Controllers\StatusKandidataController@unos');
+Route::get('/statusKandidata/add', 'App\Http\Controllers\StatusKandidataController@add');
+Route::get('/statusKandidata/{status}/edit', 'App\Http\Controllers\StatusKandidataController@edit');
+Route::patch('statusKandidata/{status}', 'App\Http\Controllers\StatusKandidataController@update');
+Route::get('statusKandidata/{status}/delete', 'App\Http\Controllers\StatusKandidataController@delete');
+
 Route::get('/mesto', 'App\Http\Controllers\MestoController@index');
 Route::post('/mesto/unos', 'App\Http\Controllers\MestoController@unos');
 Route::get('/mesto/{mesto}/edit', 'App\Http\Controllers\MestoController@edit');
