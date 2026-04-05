@@ -9,6 +9,8 @@ use App\Models\SportskoAngazovanje;
 use App\Models\StatusStudiranja;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
+use App\Services\FileStorageService;
+use App\Services\GradeManagementService;
 use App\Services\KandidatService;
 use App\Services\UpisService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -840,8 +842,11 @@ class KandidatServiceTest extends TestCase
                 ->once()
                 ->andReturn(true);
         });
+        
+        $fileStorageServiceMock = $this->mock(FileStorageService::class);
+        $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock);
+        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
         $result = $service->masovniUpis([$kandidat->id]);
 
         $this->assertTrue($result);
@@ -859,8 +864,11 @@ class KandidatServiceTest extends TestCase
                 ->once()
                 ->andReturn(false);
         });
+        
+        $fileStorageServiceMock = $this->mock(FileStorageService::class);
+        $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock);
+        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
         $result = $service->masovniUpis([$kandidat->id]);
 
         $this->assertFalse($result);
@@ -877,8 +885,11 @@ class KandidatServiceTest extends TestCase
         $upisServiceMock = $this->mock(UpisService::class, function ($mock) use ($kandidat) {
             $mock->shouldReceive('generisiBrojIndeksa')->with($kandidat->id)->once();
         });
+        
+        $fileStorageServiceMock = $this->mock(FileStorageService::class);
+        $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock);
+        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
         $service->masovniUpisMaster([$kandidat->id]);
 
         $this->assertDatabaseHas('kandidat', ['id' => $kandidat->id, 'statusUpisa_id' => 1]);
@@ -901,8 +912,11 @@ class KandidatServiceTest extends TestCase
                 ->once()
                 ->andReturn(true);
         });
+        
+        $fileStorageServiceMock = $this->mock(FileStorageService::class);
+        $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock);
+        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
         $result = $service->upisKandidata($kandidat->id);
 
         $this->assertTrue($result['success']);
@@ -918,8 +932,11 @@ class KandidatServiceTest extends TestCase
         $upisServiceMock = $this->mock(UpisService::class, function ($mock) {
             $mock->shouldReceive('registrujKandidata')->with(42)->once();
         });
+        
+        $fileStorageServiceMock = $this->mock(FileStorageService::class);
+        $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock);
+        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
         $service->registracijaKandidata(42);
 
         // If we get here without exception, the mock expectation was met

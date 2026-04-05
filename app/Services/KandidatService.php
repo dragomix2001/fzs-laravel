@@ -12,6 +12,8 @@ use App\Opstina;
 use App\OpstiUspeh;
 use App\PrijavaIspita;
 use App\PrilozenaDokumenta;
+use App\Services\FileStorageService;
+use App\Services\GradeManagementService;
 use App\SkolskaGodUpisa;
 use App\Sport;
 use App\SportskoAngazovanje;
@@ -25,10 +27,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Kandidat Service - Main orchestrator for student candidate operations.
@@ -53,7 +53,11 @@ use Illuminate\Support\Facades\Storage;
  */
 class KandidatService
 {
-    public function __construct(protected UpisService $upisService) {}
+    public function __construct(
+        protected UpisService $upisService,
+        protected FileStorageService $fileStorageService,
+        protected GradeManagementService $gradeManagementService
+    ) {}
 
     /**
      * Get all candidates with optional filtering.
@@ -167,84 +171,6 @@ class KandidatService
     }
 
     /**
-     * Handle candidate image upload with validation.
-     *
-     * Validates image MIME type, replaces old images if they exist,
-     * updates the candidate record, and stores the file in 'uploads/images'.
-     *
-     * @param  Kandidat  $kandidat  Candidate instance to update
-     * @param  UploadedFile  $file  The uploaded image file
-     *
-     * @throws \Exception If storage writing fails
-     */
-    public function handleImageUpload(Kandidat $kandidat, $file): void
-    {
-        if ($file->isValid() && substr($file->getMimeType(), 0, 5) === 'image') {
-            $extension = $file->getClientOriginalExtension();
-            $imageName = 'slika'.$kandidat->id;
-
-            $oldImages = collect(Storage::disk('uploads')->files('images'))
-                ->filter(fn ($f) => str_starts_with(basename($f), $imageName.'.'));
-
-            foreach ($oldImages as $old) {
-                Storage::disk('uploads')->delete($old);
-            }
-
-            $kandidat->slika = $imageName.'.'.$extension;
-            $kandidat->save();
-
-            Storage::disk('uploads')->putFileAs('images', $file, $imageName.'.'.$extension);
-        }
-    }
-
-    /**
-     * Handle image upload for new kandidat (no existing file to delete).
-     */
-    public function handleNewImageUpload(Kandidat $kandidat, $file): void
-    {
-        if ($file->isValid() && substr($file->getMimeType(), 0, 5) === 'image') {
-            $imageName = 'slika'.$kandidat->id.'.'.$file->getClientOriginalExtension();
-            $kandidat->slika = $imageName;
-            $kandidat->save();
-
-            Storage::disk('uploads')->putFileAs('images', $file, $imageName);
-        }
-    }
-
-    /**
-     * Handle PDF upload for kandidat.
-     */
-    public function handlePdfUpload(Kandidat $kandidat, $file): void
-    {
-        if ($file->isValid() && $file->getMimeType() === 'application/pdf') {
-            $extension = $file->getClientOriginalExtension();
-            $pdfName = 'diplomski'.$kandidat->id;
-
-            $oldPdfs = collect(Storage::disk('uploads')->files('pdf'))
-                ->filter(fn ($f) => str_starts_with(basename($f), $pdfName.'.'));
-
-            foreach ($oldPdfs as $old) {
-                Storage::disk('uploads')->delete($old);
-            }
-
-            $kandidat->diplomski = $pdfName.$extension;
-            $kandidat->save();
-
-            Storage::disk('uploads')->putFileAs('pdf', $file, $pdfName.$extension);
-        }
-    }
-
-    /**
-     * Delete kandidat image from storage.
-     */
-    public function deleteKandidatImage(Kandidat $kandidat): void
-    {
-        if (! empty($kandidat->slika) && Storage::disk('uploads')->exists("images/{$kandidat->slika}")) {
-            Storage::disk('uploads')->delete("images/{$kandidat->slika}");
-        }
-    }
-
-    /**
      * Store kandidat page 1 (basic information).
      *
      * Creates a new Kandidat record with basic personal information, study program selection,
@@ -303,7 +229,7 @@ class KandidatService
         $kandidat->save();
 
         if ($request->hasFile('imageUpload')) {
-            $this->handleNewImageUpload($kandidat, $request->file('imageUpload'));
+            $this->fileStorageService->uploadImageForKandidat($kandidat, $request->file('imageUpload'));
         }
 
         return $kandidat;
@@ -327,22 +253,13 @@ class KandidatService
     {
         $kandidat = Kandidat::find($request->insertedId);
 
-        // Store high school grades for all 4 grades in a single loop
-        $grades = [
+        // Store high school grades using GradeManagementService
+        $this->gradeManagementService->createGradesForKandidat($request->insertedId, [
             ['razred' => 1, 'uspeh' => $request->prviRazred, 'ocena' => $request->SrednjaOcena1],
             ['razred' => 2, 'uspeh' => $request->drugiRazred, 'ocena' => $request->SrednjaOcena2],
             ['razred' => 3, 'uspeh' => $request->treciRazred, 'ocena' => $request->SrednjaOcena3],
             ['razred' => 4, 'uspeh' => $request->cetvrtiRazred, 'ocena' => $request->SrednjaOcena4],
-        ];
-
-        foreach ($grades as $grade) {
-            UspehSrednjaSkola::create([
-                'kandidat_id' => $request->insertedId,
-                'opstiUspeh_id' => $grade['uspeh'],
-                'srednja_ocena' => $grade['ocena'],
-                'RedniBrojRazreda' => $grade['razred'],
-            ]);
-        }
+        ]);
 
         $kandidat->opstiUspehSrednjaSkola_id = $request->OpstiUspehSrednjaSkola;
         $kandidat->srednjaOcenaSrednjaSkola = $request->SrednjaOcenaSrednjaSkola;
@@ -439,11 +356,11 @@ class KandidatService
         }
 
         if ($request->hasFile('imageUpload')) {
-            $this->handleImageUpload($kandidat, $request->file('imageUpload'));
+            $this->fileStorageService->replaceImageForKandidat($kandidat, $request->file('imageUpload'));
         }
 
         if ($request->hasFile('pdfUpload')) {
-            $this->handlePdfUpload($kandidat, $request->file('pdfUpload'));
+            $this->fileStorageService->replacePdfForKandidat($kandidat, $request->file('pdfUpload'));
         }
 
         $kandidat->datumRodjenja = date_create_from_format('d.m.Y.', $request->DatumRodjenja);
@@ -474,20 +391,13 @@ class KandidatService
             Carbon::now() :
             date_create_from_format('d.m.Y.', $request->datumStatusa);
 
-        // Update high school grades for all 4 grades using updateOrCreate in a single loop
-        $grades = [
+        // Update high school grades using GradeManagementService
+        $this->gradeManagementService->updateGradesForKandidat($id, [
             ['razred' => 1, 'uspeh' => $request->prviRazred, 'ocena' => $request->SrednjaOcena1],
             ['razred' => 2, 'uspeh' => $request->drugiRazred, 'ocena' => $request->SrednjaOcena2],
             ['razred' => 3, 'uspeh' => $request->treciRazred, 'ocena' => $request->SrednjaOcena3],
             ['razred' => 4, 'uspeh' => $request->cetvrtiRazred, 'ocena' => $request->SrednjaOcena4],
-        ];
-
-        foreach ($grades as $grade) {
-            UspehSrednjaSkola::updateOrCreate(
-                ['kandidat_id' => $id, 'RedniBrojRazreda' => $grade['razred']],
-                ['opstiUspeh_id' => $grade['uspeh'], 'srednja_ocena' => $grade['ocena']]
-            );
-        }
+        ]);
 
         $kandidat->opstiUspehSrednjaSkola_id = $request->OpstiUspehSrednjaSkola;
         $kandidat->srednjaOcenaSrednjaSkola = $request->SrednjaOcenaSrednjaSkola;
@@ -583,7 +493,7 @@ class KandidatService
         $saved = $kandidat->save();
 
         if ($request->hasFile('imageUpload')) {
-            $this->handleNewImageUpload($kandidat, $request->file('imageUpload'));
+            $this->fileStorageService->uploadImageForKandidat($kandidat, $request->file('imageUpload'));
         }
 
         $insertedId = $kandidat->id;
@@ -640,7 +550,7 @@ class KandidatService
             date_create_from_format('d.m.Y.', $request->datumStatusa);
 
         if ($request->hasFile('imageUpload')) {
-            $this->handleImageUpload($kandidat, $request->file('imageUpload'));
+            $this->fileStorageService->replaceImageForKandidat($kandidat, $request->file('imageUpload'));
         }
 
         $kandidat->mestoRodjenja = $request->mestoRodjenja;
@@ -702,7 +612,8 @@ class KandidatService
             SportskoAngazovanje::where(['kandidat_id' => $id])->delete();
             PrijavaIspita::where(['kandidat_id' => $id])->delete();
 
-            $this->deleteKandidatImage($kandidat);
+            $this->fileStorageService->deleteImageForKandidat($kandidat);
+            $this->gradeManagementService->deleteGradesForKandidat($id);
 
             return (bool) Kandidat::destroy($id);
         });
@@ -877,45 +788,12 @@ class KandidatService
 
         $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->pluck('prilozenaDokumenta_id')->toArray();
 
-        try {
-            $prviRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 1])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $prviRazred = new UspehSrednjaSkola;
-            $prviRazred->kandidat_id = 0;
-            $prviRazred->opstiUspeh_id = 1;
-            $prviRazred->srednja_ocena = 0;
-            $prviRazred->RedniBrojRazreda = 1;
-        }
-
-        try {
-            $drugiRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 2])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $drugiRazred = new UspehSrednjaSkola;
-            $drugiRazred->kandidat_id = 0;
-            $drugiRazred->opstiUspeh_id = 1;
-            $drugiRazred->srednja_ocena = 0;
-            $drugiRazred->RedniBrojRazreda = 1;
-        }
-
-        try {
-            $treciRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 3])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $treciRazred = new UspehSrednjaSkola;
-            $treciRazred->kandidat_id = 0;
-            $treciRazred->opstiUspeh_id = 1;
-            $treciRazred->srednja_ocena = 0;
-            $treciRazred->RedniBrojRazreda = 1;
-        }
-
-        try {
-            $cetvrtiRazred = UspehSrednjaSkola::where(['kandidat_id' => $id, 'RedniBrojRazreda' => 4])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $cetvrtiRazred = new UspehSrednjaSkola;
-            $cetvrtiRazred->kandidat_id = 0;
-            $cetvrtiRazred->opstiUspeh_id = 1;
-            $cetvrtiRazred->srednja_ocena = 0;
-            $cetvrtiRazred->RedniBrojRazreda = 1;
-        }
+        // Get grades using GradeManagementService
+        $grades = $this->gradeManagementService->getGradesForEdit($id);
+        $prviRazred = $grades['prviRazred'];
+        $drugiRazred = $grades['drugiRazred'];
+        $treciRazred = $grades['treciRazred'];
+        $cetvrtiRazred = $grades['cetvrtiRazred'];
 
         $sportskoAngazovanjeKandidata = SportskoAngazovanje::where('kandidat_id', $id)->get();
 
