@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\DiplomskiPoljanjeFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DiplomskiPolaganje extends Model
 {
+    use HasFactory;
+
     public $table = 'diplomski_polaganje';
 
     public $dates = ['datum'];
@@ -41,5 +45,10 @@ class DiplomskiPolaganje extends Model
     public function predsednik()
     {
         return $this->belongsTo(Profesor::class, 'profesor_id_predsednik');
+    }
+
+    protected static function newFactory(): DiplomskiPoljanjeFactory
+    {
+        return DiplomskiPoljanjeFactory::new();
     }
 }

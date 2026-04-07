@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DiplomskiRad extends Model
 {
+    use HasFactory;
+
     protected $table = 'diplomski_rad';
 
     public function student()

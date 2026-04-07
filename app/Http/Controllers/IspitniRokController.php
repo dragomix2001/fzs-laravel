@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\IspitniRok;
+use App\Models\IspitniRok;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

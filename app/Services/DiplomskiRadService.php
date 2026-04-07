@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\DiplomskiAddData;
 use App\Models\DiplomskiPolaganje;
 use App\Models\DiplomskiPrijavaTeme;
 use App\Models\DiplomskiRad;
@@ -10,7 +11,6 @@ use App\Models\Profesor;
 use App\Models\ProfesorPredmet;
 use Elibyy\TCPDF\TCPDF;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 use View;
 
 class DiplomskiRadService extends BasePdfService
@@ -24,23 +24,35 @@ class DiplomskiRadService extends BasePdfService
             ->with('profesor', $profesor);
     }
 
-    public function diplomskiAdd(Request $request)
+    public function diplomskiAdd(DiplomskiAddData $data)
     {
+        $kandidat = Kandidat::findOrFail($data->kandidatId);
+
         $diplomski = new DiplomskiRad;
-        $diplomski->kandidat_id = $request->kandidat_id;
-        $diplomski->tema = $request->tema;
-        $diplomski->mentor = $request->mentor;
-        $diplomski->datumPrijave = $request->datumPrijave;
+        $diplomski->kandidat_id = $data->kandidatId;
+        $diplomski->predmet_id = $data->predmetId;
+        $diplomski->naziv = $data->naziv;
+        $diplomski->mentor_id = $data->mentorId;
+        $diplomski->predsednik_id = $data->predsednikId;
+        $diplomski->clan_id = $data->clanId;
+        $diplomski->ocenaOpis = $data->ocenaOpis;
+        $diplomski->ocenaBroj = $data->ocenaBroj;
+        $diplomski->datumPrijave = $data->datumPrijave;
+        $diplomski->datumOdbrane = $data->datumOdbrane;
         $diplomski->save();
 
         $prijava = new DiplomskiPrijavaTeme;
-        $prijava->kandidat_id = $request->kandidat_id;
-        $prijava->tema = $request->tema;
-        $prijava->mentor = $request->mentor;
-        $prijava->datum = $request->datumPrijave;
+        $prijava->tipStudija_id = $kandidat->tipStudija_id;
+        $prijava->studijskiProgram_id = $kandidat->studijskiProgram_id;
+        $prijava->kandidat_id = $data->kandidatId;
+        $prijava->predmet_id = $data->predmetId;
+        $prijava->nazivTeme = $data->naziv;
+        $prijava->profesor_id = $data->mentorId;
+        $prijava->datum = $data->datumPrijave;
+        $prijava->indikatorOdobreno = 0;
         $prijava->save();
 
-        return redirect()->route('student.index');
+        return redirect('/student');
     }
 
     public function komisijaStampa(Kandidat $student)

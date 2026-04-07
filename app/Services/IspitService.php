@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\DTOs\NastavniPlanData;
 use App\DTOs\ZapisnikData;
+use App\DTOs\ZapisnikStampaData;
 use App\Jobs\GenerateZapisnikPdfJob;
 use App\Models\AktivniIspitniRokovi;
 use App\Models\GodinaStudija;
@@ -19,7 +21,6 @@ use App\Models\ZapisnikOPolaganju_StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
 use View;
@@ -403,6 +404,8 @@ class IspitService extends BasePdfService
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->rok_id = $zapisnik->rok_id;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->brojPolaganja = 1;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->datum = Carbon::now();
+            $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->datum2 = Carbon::now();
+            $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->vreme = $zapisnik->vreme;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->tipPrijave_id = 0;
             $novaPrijavaZaDodatogStudentaNaZapisnikPrekoRedaMamuVamJebem->save();
 
@@ -633,11 +636,11 @@ class IspitService extends BasePdfService
         return $storagePath;
     }
 
-    public function zapisnikStampa(Request $request)
+    public function zapisnikStampa(ZapisnikStampaData $data)
     {
         try {
-            $zapisnik = ZapisnikOPolaganjuIspita::find($request->id);
-            $zapisnikStudent = ZapisnikOPolaganju_Student::where(['zapisnik_id' => $request->id])->get();
+            $zapisnik = ZapisnikOPolaganjuIspita::find($data->zapisnikId);
+            $zapisnikStudent = ZapisnikOPolaganju_Student::where(['zapisnik_id' => $data->zapisnikId])->get();
 
             $ids = array_map(function (ZapisnikOPolaganju_Student $o) {
                 return $o->kandidat_id;
@@ -699,7 +702,7 @@ class IspitService extends BasePdfService
             }
 
             $polozeniIspiti = DB::table('polozeni_ispiti')
-                ->where(['polozeni_ispiti.zapisnik_id' => $request->id])
+                ->where(['polozeni_ispiti.zapisnik_id' => $data->zapisnikId])
                 ->join('kandidat', 'polozeni_ispiti.kandidat_id', '=', 'kandidat.id')
                 ->join('prijava_ispita', 'polozeni_ispiti.prijava_id', '=', 'prijava_ispita.id')
                 ->select(
@@ -733,9 +736,9 @@ class IspitService extends BasePdfService
             ->with('studenti', $studenti)
             ->with('ispit', $ispit->naziv)
             ->with('polozeniIspiti', $polozeniIspiti)
-            ->with('predmet', $request->predmet)
-            ->with('rok', $request->rok)
-            ->with('profesor', $request->profesor)
+            ->with('predmet', $data->predmet)
+            ->with('rok', $data->rok)
+            ->with('profesor', $data->profesor)
             ->with('programi', $programi)
             ->with('datum', $zapisnik->datum)
             ->with('vreme', $zapisnik->vreme)
@@ -788,12 +791,12 @@ class IspitService extends BasePdfService
         $pdf->Output('Ispiti.pdf');
     }
 
-    public function nastavniPlan(Request $request)
+    public function nastavniPlan(NastavniPlanData $data)
     {
         try {
-            $predmet = Predmet::where('id', $request->predmet)->first();
-            $program = StudijskiProgram::where('id', $request->program)->first();
-            $godina = GodinaStudija::where('id', $request->godina)->first();
+            $predmet = Predmet::where('id', $data->predmetId)->first();
+            $program = StudijskiProgram::where('id', $data->programId)->first();
+            $godina = GodinaStudija::where('id', $data->godinaId)->first();
         } catch (QueryException $e) {
             dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
         }

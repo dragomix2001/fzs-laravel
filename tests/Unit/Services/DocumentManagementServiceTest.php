@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use App\KandidatPrilozenaDokumenta;
+use App\Models\KandidatPrilozenaDokumenta;
 use App\Services\DocumentManagementService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

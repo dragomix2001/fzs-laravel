@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Kandidat;
+use App\Models\Kandidat;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateMasterKandidatRequest extends FormRequest

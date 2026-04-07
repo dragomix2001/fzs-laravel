@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\GodinaStudija;
+use App\Models\GodinaStudija;
 use App\Http\Requests;
-use App\Predmet;
-use App\PredmetProgram;
-use App\SkolskaGodUpisa;
-use App\StudijskiProgram;
-use App\TipPredmeta;
-use App\TipStudija;
+use App\Models\Predmet;
+use App\Models\PredmetProgram;
+use App\Models\SkolskaGodUpisa;
+use App\Models\StudijskiProgram;
+use App\Models\TipPredmeta;
+use App\Models\TipStudija;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

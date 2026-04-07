@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use App\Kandidat;
+use App\Models\Kandidat;
 use App\Models\PrijavaIspita;
 use App\Services\PredictionService;
-use App\StatusStudiranja;
-use App\StudijskiProgram;
-use App\TipStudija;
+use App\Models\StatusStudiranja;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;

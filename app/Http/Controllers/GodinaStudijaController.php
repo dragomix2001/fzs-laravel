@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\GodinaStudija;
+use App\Models\GodinaStudija;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\GodinaStudija;
-use App\KandidatPrilozenaDokumenta;
-use App\KrsnaSlava;
-use App\Opstina;
-use App\OpstiUspeh;
-use App\PrilozenaDokumenta;
-use App\SkolskaGodUpisa;
-use App\Sport;
-use App\SportskoAngazovanje;
-use App\StatusGodine;
-use App\StatusStudiranja;
-use App\StudijskiProgram;
-use App\TipStudija;
-use App\UspehSrednjaSkola;
+use App\Models\GodinaStudija;
+use App\Models\KandidatPrilozenaDokumenta;
+use App\Models\KrsnaSlava;
+use App\Models\Opstina;
+use App\Models\OpstiUspeh;
+use App\Models\PrilozenaDokumenta;
+use App\Models\SkolskaGodUpisa;
+use App\Models\Sport;
+use App\Models\SportskoAngazovanje;
+use App\Models\StatusGodine;
+use App\Models\StatusStudiranja;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
+use App\Models\UspehSrednjaSkola;
 use Illuminate\Database\Eloquent\Collection;
 
 /**

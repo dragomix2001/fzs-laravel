@@ -55,7 +55,7 @@ class CleanupOrphanedRecords extends Command
             'prijava_ispita',
             [
                 'kandidat_id' => ['table' => 'kandidat',               'nullable' => true],
-                'predmet_id' => ['table' => 'predmet',                'nullable' => true],
+                'predmet_id' => ['table' => 'predmet_program',        'nullable' => true],
                 'profesor_id' => ['table' => 'profesor',               'nullable' => true],
                 'rok_id' => ['table' => 'aktivni_ispitni_rokovi', 'nullable' => true],
             ],
@@ -67,7 +67,7 @@ class CleanupOrphanedRecords extends Command
             'polozeni_ispiti',
             [
                 'kandidat_id' => ['table' => 'kandidat',                      'nullable' => true],
-                'predmet_id' => ['table' => 'predmet',                       'nullable' => true],
+                'predmet_id' => ['table' => 'predmet_program',               'nullable' => true],
                 'prijava_id' => ['table' => 'prijava_ispita',                'nullable' => true],
                 'zapisnik_id' => ['table' => 'zapisnik_o_polaganju_ispita',   'nullable' => true],
             ],
@@ -81,6 +81,7 @@ class CleanupOrphanedRecords extends Command
                 'predmet_id' => ['table' => 'predmet',                'nullable' => true],
                 'profesor_id' => ['table' => 'profesor',               'nullable' => true],
                 'rok_id' => ['table' => 'aktivni_ispitni_rokovi', 'nullable' => true],
+                'prijavaIspita_id' => ['table' => 'prijava_ispita',   'nullable' => true],
             ],
             $dryRun,
             $fixNulls
@@ -91,6 +92,7 @@ class CleanupOrphanedRecords extends Command
             [
                 'zapisnik_id' => ['table' => 'zapisnik_o_polaganju_ispita', 'nullable' => false],
                 'kandidat_id' => ['table' => 'kandidat',                    'nullable' => false],
+                'prijavaIspita_id' => ['table' => 'prijava_ispita',         'nullable' => false],
             ],
             $dryRun,
             $fixNulls

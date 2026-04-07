@@ -3,19 +3,22 @@
 namespace App\Services;
 
 use App\DTOs\KandidatData;
+use App\DTOs\KandidatPage1Data;
+use App\DTOs\KandidatPage2Data;
+use App\DTOs\KandidatUpdateData;
+use App\DTOs\MasterKandidatData;
 use App\Jobs\MassEnrollmentJob;
-use App\Kandidat;
-use App\KandidatPrilozenaDokumenta;
-use App\PrijavaIspita;
-use App\Sport;
-use App\SportskoAngazovanje;
-use App\StudijskiProgram;
-use App\UpisGodine;
-use App\UspehSrednjaSkola;
+use App\Models\Kandidat;
+use App\Models\KandidatPrilozenaDokumenta;
+use App\Models\PrijavaIspita;
+use App\Models\Sport;
+use App\Models\SportskoAngazovanje;
+use App\Models\StudijskiProgram;
+use App\Models\UpisGodine;
+use App\Models\UspehSrednjaSkola;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -142,60 +145,52 @@ class KandidatService
      * Creates a new Kandidat record with basic personal information, study program selection,
      * and optional image upload. This is the first step of the 2-step application process.
      *
-     * NOTE: This method accepts both KandidatData DTO and raw Request object.
-     * Legacy technical debt - see docs/ADR/002-request-coupling.md
-     *
-     * @param  KandidatData  $data  Validated DTO containing personal and program info
-     * @param  Request  $request  Raw HTTP request (legacy - should be migrated to DTO)
+     * @param  KandidatPage1Data  $data  Typed page 1 candidate input
      *
      * @throws \Exception If image upload fails
      * @return Kandidat Created kandidat instance
      */
-    public function storeKandidatPage1(KandidatData $data, Request $request): Kandidat
+    public function storeKandidatPage1(KandidatPage1Data $data): Kandidat
     {
         $kandidat = new Kandidat;
         $kandidat->imeKandidata = $data->ime;
         $kandidat->prezimeKandidata = $data->prezime;
         $kandidat->jmbg = $data->JMBG;
 
-        if (isset($request->uplata)) {
-            $kandidat->uplata = 1;
-        } else {
-            $kandidat->uplata = 0;
-        }
+        $kandidat->uplata = $data->uplata ? 1 : 0;
 
         $kandidat->statusUpisa_id = 3;
         $kandidat->datumStatusa = Carbon::now();
 
-        if (date_create_from_format('d.m.Y.', $request->DatumRodjenja)) {
-            $kandidat->datumRodjenja = date_create_from_format('d.m.Y.', $request->DatumRodjenja);
+        if ($data->datumRodjenja !== null) {
+            $kandidat->datumRodjenja = $data->datumRodjenja;
         }
 
-        $kandidat->mestoRodjenja = $request->mestoRodjenja;
-        $kandidat->krsnaSlava_id = $request->KrsnaSlava;
-        $kandidat->kontaktTelefon = $request->KontaktTelefon;
-        $kandidat->adresaStanovanja = $request->AdresaStanovanja;
-        $kandidat->email = $request->Email;
-        $kandidat->imePrezimeJednogRoditelja = $request->ImePrezimeJednogRoditelja;
-        $kandidat->kontaktTelefonRoditelja = $request->KontaktTelefonRoditelja;
-        $kandidat->srednjeSkoleFakulteti = $request->NazivSkoleFakulteta;
-        $kandidat->mestoZavrseneSkoleFakulteta = $request->mestoZavrseneSkoleFakulteta;
-        $kandidat->smerZavrseneSkoleFakulteta = $request->SmerZavrseneSkoleFakulteta;
+        $kandidat->mestoRodjenja = $data->mestoRodjenja;
+        $kandidat->krsnaSlava_id = $data->krsnaSlavaId;
+        $kandidat->kontaktTelefon = $data->kontaktTelefon;
+        $kandidat->adresaStanovanja = $data->adresaStanovanja;
+        $kandidat->email = $data->email;
+        $kandidat->imePrezimeJednogRoditelja = $data->imePrezimeJednogRoditelja;
+        $kandidat->kontaktTelefonRoditelja = $data->kontaktTelefonRoditelja;
+        $kandidat->srednjeSkoleFakulteti = $data->srednjeSkoleFakulteti;
+        $kandidat->mestoZavrseneSkoleFakulteta = $data->mestoZavrseneSkoleFakulteta;
+        $kandidat->smerZavrseneSkoleFakulteta = $data->smerZavrseneSkoleFakulteta;
 
         $kandidat->tipStudija_id = 1;
         $kandidat->studijskiProgram_id = $data->studijskiProgramId;
-        $kandidat->skolskaGodinaUpisa_id = $request->SkolskeGodineUpisa;
+        $kandidat->skolskaGodinaUpisa_id = $data->skolskaGodinaUpisaId;
 
-        $kandidat->drzavaZavrseneSkole = $request->drzavaZavrseneSkole;
-        $kandidat->godinaZavrsetkaSkole = $request->godinaZavrsetkaSkole;
-        $kandidat->drzavaRodjenja = $request->drzavaRodjenja;
+        $kandidat->drzavaZavrseneSkole = $data->drzavaZavrseneSkole;
+        $kandidat->godinaZavrsetkaSkole = $data->godinaZavrsetkaSkole;
+        $kandidat->drzavaRodjenja = $data->drzavaRodjenja;
 
         $kandidat->godinaStudija_id = $data->godinaStudijaId;
 
         $kandidat->save();
 
-        if ($request->hasFile('imageUpload')) {
-            $this->fileStorageService->uploadImageForKandidat($kandidat, $request->file('imageUpload'));
+        if ($data->imageUpload !== null) {
+            $this->fileStorageService->uploadImageForKandidat($kandidat, $data->imageUpload);
         }
 
         return $kandidat;
@@ -207,69 +202,37 @@ class KandidatService
      * Completes the candidate profile by saving high school grades, sports engagement,
      * submitted documents, and calculating the total score based on academic success.
      *
-     * NOTE: This method accepts raw Request object and relies on $request->insertedId.
-     * Legacy technical debt - see docs/ADR/002-request-coupling.md
-     *
-     * @param  Request  $request  Raw HTTP request containing all secondary data
+     * @param  KandidatPage2Data  $data  Typed page 2 candidate input
      *
      * @throws ModelNotFoundException If the candidate from page 1 is not found
      * @return Kandidat Updated kandidat instance
      */
-    public function storeKandidatPage2(Request $request): Kandidat
+    public function storeKandidatPage2(KandidatPage2Data $data): Kandidat
     {
-        $kandidat = Kandidat::find($request->insertedId);
+        $kandidat = Kandidat::findOrFail($data->kandidatId);
 
-        // Store high school grades using GradeManagementService
-        $this->gradeManagementService->createGradesForKandidat($request->insertedId, [
-            ['razred' => 1, 'uspeh' => $request->prviRazred, 'ocena' => $request->SrednjaOcena1],
-            ['razred' => 2, 'uspeh' => $request->drugiRazred, 'ocena' => $request->SrednjaOcena2],
-            ['razred' => 3, 'uspeh' => $request->treciRazred, 'ocena' => $request->SrednjaOcena3],
-            ['razred' => 4, 'uspeh' => $request->cetvrtiRazred, 'ocena' => $request->SrednjaOcena4],
-        ]);
+        $this->gradeManagementService->createGradesForKandidat($data->kandidatId, $data->grades);
 
-        $kandidat->opstiUspehSrednjaSkola_id = $request->OpstiUspehSrednjaSkola;
-        $kandidat->srednjaOcenaSrednjaSkola = $request->SrednjaOcenaSrednjaSkola;
+        $kandidat->opstiUspehSrednjaSkola_id = $data->opstiUspehSrednjaSkolaId;
+        $kandidat->srednjaOcenaSrednjaSkola = $data->srednjaOcenaSrednjaSkola;
 
-        if ($request->sport1 != 0) {
-            $this->sportsManagementService->createSportForKandidat($request->insertedId, [
-                'sport' => $request->sport1,
-                'klub' => $request->klub1,
-                'uzrast' => $request->uzrast1,
-                'godine' => $request->godine1,
-            ]);
+        foreach ($data->sports as $sportData) {
+            $this->sportsManagementService->createSportForKandidat($data->kandidatId, $sportData);
         }
 
-        if ($request->sport2 != 0) {
-            $this->sportsManagementService->createSportForKandidat($request->insertedId, [
-                'sport' => $request->sport2,
-                'klub' => $request->klub2,
-                'uzrast' => $request->uzrast2,
-                'godine' => $request->godine2,
-            ]);
-        }
-
-        if ($request->sport3 != 0) {
-            $this->sportsManagementService->createSportForKandidat($request->insertedId, [
-                'sport' => $request->sport3,
-                'klub' => $request->klub3,
-                'uzrast' => $request->uzrast3,
-                'godine' => $request->godine3,
-            ]);
-        }
-
-        $kandidat->visina = str_replace(',', '.', $request->VisinaKandidata);
-        $kandidat->telesnaTezina = str_replace(',', '.', $request->TelesnaTezinaKandidata);
+        $kandidat->visina = $data->visina;
+        $kandidat->telesnaTezina = $data->telesnaTezina;
 
         $this->documentManagementService->attachDocumentsForKandidat(
-            $request->insertedId,
-            $request->get('dokumentiPrva', []),
-            $request->get('dokumentiDruga', [])
+            $data->kandidatId,
+            $data->dokumentiPrva,
+            $data->dokumentiDruga
         );
 
-        $kandidat->brojBodovaTest = $request->BrojBodovaTest;
-        $kandidat->brojBodovaSkola = $request->BrojBodovaSkola;
-        $kandidat->ukupniBrojBodova = $request->ukupniBrojBodova;
-        $kandidat->upisniRok = $request->UpisniRok;
+        $kandidat->brojBodovaTest = $data->brojBodovaTest;
+        $kandidat->brojBodovaSkola = $data->brojBodovaSkola;
+        $kandidat->ukupniBrojBodova = $data->ukupniBrojBodova;
+        $kandidat->upisniRok = $data->upisniRok;
 
         $kandidat->save();
 
@@ -282,90 +245,78 @@ class KandidatService
      * Updates candidate personal data, study program, high school success,
      * and handles image/PDF file updates.
      *
-     * NOTE: This method combines both basic and detailed info updates.
-     * Legacy technical debt - see docs/ADR/002-request-coupling.md
-     *
      * @param  int  $id  Candidate ID to update
-     * @param  KandidatData  $data  Validated DTO containing main fields
-     * @param  Request  $request  Raw HTTP request for supplemental fields
+     * @param  KandidatUpdateData  $data  Typed update input
      *
      * @throws ModelNotFoundException If candidate or related success records don't exist
      * @return Kandidat Updated kandidat instance
      */
-    public function updateKandidat(int $id, KandidatData $data, Request $request): Kandidat
+    public function updateKandidat(int $id, KandidatUpdateData $data): Kandidat
     {
-        $kandidat = Kandidat::find($id);
+        $kandidat = Kandidat::findOrFail($id);
 
         $kandidat->imeKandidata = $data->ime;
         $kandidat->prezimeKandidata = $data->prezime;
         $kandidat->jmbg = $data->JMBG;
 
-        if (isset($request->uplata)) {
+        if ($data->uplata) {
             $kandidat->uplata = 1;
         }
 
-        if ($request->hasFile('imageUpload')) {
-            $this->fileStorageService->replaceImageForKandidat($kandidat, $request->file('imageUpload'));
+        if ($data->imageUpload !== null) {
+            $this->fileStorageService->replaceImageForKandidat($kandidat, $data->imageUpload);
         }
 
-        if ($request->hasFile('pdfUpload')) {
-            $this->fileStorageService->replacePdfForKandidat($kandidat, $request->file('pdfUpload'));
+        if ($data->pdfUpload !== null) {
+            $this->fileStorageService->replacePdfForKandidat($kandidat, $data->pdfUpload);
         }
 
-        $kandidat->datumRodjenja = date_create_from_format('d.m.Y.', $request->DatumRodjenja);
+        $kandidat->datumRodjenja = $data->datumRodjenja;
 
-        $kandidat->mestoRodjenja = $request->mestoRodjenja;
-        $kandidat->krsnaSlava_id = $request->KrsnaSlava;
-        $kandidat->kontaktTelefon = $request->KontaktTelefon;
-        $kandidat->adresaStanovanja = $request->AdresaStanovanja;
-        $kandidat->email = $request->Email;
-        $kandidat->imePrezimeJednogRoditelja = $request->ImePrezimeJednogRoditelja;
-        $kandidat->kontaktTelefonRoditelja = $request->KontaktTelefonRoditelja;
+        $kandidat->mestoRodjenja = $data->mestoRodjenja;
+        $kandidat->krsnaSlava_id = $data->krsnaSlavaId;
+        $kandidat->kontaktTelefon = $data->kontaktTelefon;
+        $kandidat->adresaStanovanja = $data->adresaStanovanja;
+        $kandidat->email = $data->email;
+        $kandidat->imePrezimeJednogRoditelja = $data->imePrezimeJednogRoditelja;
+        $kandidat->kontaktTelefonRoditelja = $data->kontaktTelefonRoditelja;
 
-        $kandidat->srednjeSkoleFakulteti = $request->NazivSkoleFakulteta;
-        $kandidat->mestoZavrseneSkoleFakulteta = $request->mestoZavrseneSkoleFakulteta;
-        $kandidat->smerZavrseneSkoleFakulteta = $request->SmerZavrseneSkoleFakulteta;
+        $kandidat->srednjeSkoleFakulteti = $data->srednjeSkoleFakulteti;
+        $kandidat->mestoZavrseneSkoleFakulteta = $data->mestoZavrseneSkoleFakulteta;
+        $kandidat->smerZavrseneSkoleFakulteta = $data->smerZavrseneSkoleFakulteta;
 
         $kandidat->tipStudija_id = $data->tipStudijaId;
         $kandidat->studijskiProgram_id = $data->studijskiProgramId;
-        $kandidat->skolskaGodinaUpisa_id = $request->SkolskeGodineUpisa;
+        $kandidat->skolskaGodinaUpisa_id = $data->skolskaGodinaUpisaId;
         $kandidat->godinaStudija_id = $data->godinaStudijaId;
 
-        $kandidat->drzavaZavrseneSkole = $request->drzavaZavrseneSkole;
-        $kandidat->godinaZavrsetkaSkole = $request->godinaZavrsetkaSkole;
-        $kandidat->drzavaRodjenja = $request->drzavaRodjenja;
+        $kandidat->drzavaZavrseneSkole = $data->drzavaZavrseneSkole;
+        $kandidat->godinaZavrsetkaSkole = $data->godinaZavrsetkaSkole;
+        $kandidat->drzavaRodjenja = $data->drzavaRodjenja;
 
-        $kandidat->statusUpisa_id = $request->statusUpisa_id;
-        $kandidat->datumStatusa = empty($request->datumStatusa) ?
-            Carbon::now() :
-            date_create_from_format('d.m.Y.', $request->datumStatusa);
+        $kandidat->statusUpisa_id = $data->statusUpisaId;
+        $kandidat->datumStatusa = $data->datumStatusa ?? Carbon::now();
 
-        // Update high school grades using GradeManagementService
-        $this->gradeManagementService->updateGradesForKandidat($id, [
-            ['razred' => 1, 'uspeh' => $request->prviRazred, 'ocena' => $request->SrednjaOcena1],
-            ['razred' => 2, 'uspeh' => $request->drugiRazred, 'ocena' => $request->SrednjaOcena2],
-            ['razred' => 3, 'uspeh' => $request->treciRazred, 'ocena' => $request->SrednjaOcena3],
-            ['razred' => 4, 'uspeh' => $request->cetvrtiRazred, 'ocena' => $request->SrednjaOcena4],
-        ]);
+        $this->gradeManagementService->updateGradesForKandidat($id, $data->grades);
 
-        $kandidat->opstiUspehSrednjaSkola_id = $request->OpstiUspehSrednjaSkola;
-        $kandidat->srednjaOcenaSrednjaSkola = $request->SrednjaOcenaSrednjaSkola;
+        $kandidat->opstiUspehSrednjaSkola_id = $data->opstiUspehSrednjaSkolaId;
+        $kandidat->srednjaOcenaSrednjaSkola = $data->srednjaOcenaSrednjaSkola;
 
-        $kandidat->visina = str_replace(',', '.', $request->VisinaKandidata);
-        $kandidat->telesnaTezina = str_replace(',', '.', $request->TelesnaTezinaKandidata);
+        $kandidat->visina = $data->visina;
+        $kandidat->telesnaTezina = $data->telesnaTezina;
 
         $this->documentManagementService->deleteDocumentsForKandidat($id);
         $this->documentManagementService->attachDocumentsForKandidat(
             $id,
-            $request->get('dokumentiPrva', []),
-            $request->get('dokumentiDruga', [])
+            $data->dokumentiPrva,
+            $data->dokumentiDruga
         );
 
-        $kandidat->brojBodovaTest = $request->BrojBodovaTest;
-        $kandidat->brojBodovaSkola = $request->BrojBodovaSkola;
-        $kandidat->ukupniBrojBodova = $request->ukupniBrojBodova;
-        $kandidat->upisniRok = $request->UpisniRok;
-        $kandidat->indikatorAktivan = $request->IndikatorAktivan;
+        $kandidat->brojBodovaTest = $data->brojBodovaTest;
+        $kandidat->brojBodovaSkola = $data->brojBodovaSkola;
+        $kandidat->ukupniBrojBodova = $data->ukupniBrojBodova;
+        $kandidat->upisniRok = $data->upisniRok;
+        $kandidat->indikatorAktivan = $data->indikatorAktivan;
         $kandidat->brojIndeksa = $data->brojIndeksa;
 
         $kandidat->save();
@@ -379,55 +330,48 @@ class KandidatService
      * Creates a candidate record for master studies, handles automatic registration,
      * submitted documents, and optional image upload.
      *
-     * NOTE: This method accepts raw Request object and lacks DTO validation.
-     * Legacy technical debt - see docs/ADR/002-request-coupling.md
-     *
-     * @param  Request  $request  Raw HTTP request with master student data
+     * @param  MasterKandidatData  $data  Typed master candidate input
      *
      * @throws \Exception If image upload or registration fails
      * @return Kandidat Created master candidate instance
      */
-    public function storeMasterKandidat(Request $request): Kandidat
+    public function storeMasterKandidat(MasterKandidatData $data): Kandidat
     {
         $kandidat = new Kandidat;
-        $kandidat->imeKandidata = $request->ImeKandidata;
-        $kandidat->prezimeKandidata = $request->PrezimeKandidata;
-        $kandidat->jmbg = $request->JMBG;
+        $kandidat->imeKandidata = $data->ime;
+        $kandidat->prezimeKandidata = $data->prezime;
+        $kandidat->jmbg = $data->JMBG;
 
         $kandidat->statusUpisa_id = 3;
         $kandidat->datumStatusa = Carbon::now();
 
-        if (isset($request->uplata)) {
-            $kandidat->uplata = 1;
-        } else {
-            $kandidat->uplata = 0;
-        }
+        $kandidat->uplata = $data->uplata ? 1 : 0;
 
-        $kandidat->mestoRodjenja = $request->mestoRodjenja;
-        $kandidat->kontaktTelefon = $request->KontaktTelefon;
-        $kandidat->adresaStanovanja = $request->AdresaStanovanja;
-        $kandidat->email = $request->Email;
+        $kandidat->mestoRodjenja = $data->mestoRodjenja;
+        $kandidat->kontaktTelefon = $data->kontaktTelefon;
+        $kandidat->adresaStanovanja = $data->adresaStanovanja;
+        $kandidat->email = $data->email;
 
-        $kandidat->srednjeSkoleFakulteti = $request->NazivSkoleFakulteta;
-        $kandidat->mestoZavrseneSkoleFakulteta = $request->mestoZavrseneSkoleFakulteta;
-        $kandidat->smerZavrseneSkoleFakulteta = $request->SmerZavrseneSkoleFakulteta;
+        $kandidat->srednjeSkoleFakulteti = $data->srednjeSkoleFakulteti;
+        $kandidat->mestoZavrseneSkoleFakulteta = $data->mestoZavrseneSkoleFakulteta;
+        $kandidat->smerZavrseneSkoleFakulteta = $data->smerZavrseneSkoleFakulteta;
 
         $kandidat->tipStudija_id = 2;
-        $kandidat->studijskiProgram_id = $request->StudijskiProgram;
-        $kandidat->skolskaGodinaUpisa_id = $request->SkolskeGodineUpisa;
+        $kandidat->studijskiProgram_id = $data->studijskiProgramId;
+        $kandidat->skolskaGodinaUpisa_id = $data->skolskaGodinaUpisaId;
 
-        $kandidat->prosecnaOcena = str_replace(',', '.', $request->ProsecnaOcena);
-        $kandidat->upisniRok = $request->UpisniRok;
-        $kandidat->godinaStudija_id = 1;
+        $kandidat->prosecnaOcena = $data->prosecnaOcena;
+        $kandidat->upisniRok = $data->upisniRok;
+        $kandidat->godinaStudija_id = $data->godinaStudijaId;
 
-        $kandidat->drzavaZavrseneSkole = $request->drzavaZavrseneSkole;
-        $kandidat->godinaZavrsetkaSkole = $request->godinaZavrsetkaSkole;
-        $kandidat->drzavaRodjenja = $request->drzavaRodjenja;
+        $kandidat->drzavaZavrseneSkole = $data->drzavaZavrseneSkole;
+        $kandidat->godinaZavrsetkaSkole = $data->godinaZavrsetkaSkole;
+        $kandidat->drzavaRodjenja = $data->drzavaRodjenja;
 
         $saved = $kandidat->save();
 
-        if ($request->hasFile('imageUpload')) {
-            $this->fileStorageService->uploadImageForKandidat($kandidat, $request->file('imageUpload'));
+        if ($data->imageUpload !== null) {
+            $this->fileStorageService->uploadImageForKandidat($kandidat, $data->imageUpload);
         }
 
         $insertedId = $kandidat->id;
@@ -438,7 +382,7 @@ class KandidatService
             $this->documentManagementService->deleteDocumentsForKandidat($insertedId);
             $this->documentManagementService->attachDocumentsForKandidat(
                 $insertedId,
-                $request->get('dokumentaMaster', []),
+                $data->dokumentaMaster,
                 []
             );
         }
@@ -452,64 +396,59 @@ class KandidatService
      * Updates master student personal data, study program, documents,
      * and handles image file updates.
      *
-     * NOTE: This method accepts raw Request object and lacks DTO validation.
-     * Legacy technical debt - see docs/ADR/002-request-coupling.md
-     *
      * @param  int  $id  Master candidate ID to update
-     * @param  Request  $request  Raw HTTP request with updated data
+     * @param  MasterKandidatData  $data  Typed updated master candidate input
      *
      * @throws ModelNotFoundException If master candidate is not found
      * @return Kandidat Updated master candidate instance
      */
-    public function updateMasterKandidat(int $id, Request $request): Kandidat
+    public function updateMasterKandidat(int $id, MasterKandidatData $data): Kandidat
     {
-        $kandidat = Kandidat::find($id);
+        $kandidat = Kandidat::findOrFail($id);
 
-        $kandidat->imeKandidata = $request->ImeKandidata;
-        $kandidat->prezimeKandidata = $request->PrezimeKandidata;
-        $kandidat->jmbg = $request->JMBG;
+        $kandidat->imeKandidata = $data->ime;
+        $kandidat->prezimeKandidata = $data->prezime;
+        $kandidat->jmbg = $data->JMBG;
 
-        if (isset($request->uplata)) {
+        if ($data->uplata) {
             $kandidat->uplata = 1;
         }
 
-        $kandidat->statusUpisa_id = $request->statusUpisa_id;
-        $kandidat->datumStatusa = empty($request->datumStatusa) ?
-            Carbon::now() :
-            date_create_from_format('d.m.Y.', $request->datumStatusa);
+        $kandidat->statusUpisa_id = $data->statusUpisaId;
+        $kandidat->datumStatusa = $data->datumStatusa ?? Carbon::now();
 
-        if ($request->hasFile('imageUpload')) {
-            $this->fileStorageService->replaceImageForKandidat($kandidat, $request->file('imageUpload'));
+        if ($data->imageUpload !== null) {
+            $this->fileStorageService->replaceImageForKandidat($kandidat, $data->imageUpload);
         }
 
-        $kandidat->mestoRodjenja = $request->mestoRodjenja;
-        $kandidat->kontaktTelefon = $request->KontaktTelefon;
-        $kandidat->adresaStanovanja = $request->AdresaStanovanja;
-        $kandidat->email = $request->Email;
+        $kandidat->mestoRodjenja = $data->mestoRodjenja;
+        $kandidat->kontaktTelefon = $data->kontaktTelefon;
+        $kandidat->adresaStanovanja = $data->adresaStanovanja;
+        $kandidat->email = $data->email;
 
-        $kandidat->srednjeSkoleFakulteti = $request->NazivSkoleFakulteta;
-        $kandidat->mestoZavrseneSkoleFakulteta = $request->mestoZavrseneSkoleFakulteta;
-        $kandidat->smerZavrseneSkoleFakulteta = $request->SmerZavrseneSkoleFakulteta;
+        $kandidat->srednjeSkoleFakulteti = $data->srednjeSkoleFakulteti;
+        $kandidat->mestoZavrseneSkoleFakulteta = $data->mestoZavrseneSkoleFakulteta;
+        $kandidat->smerZavrseneSkoleFakulteta = $data->smerZavrseneSkoleFakulteta;
 
-        $kandidat->tipStudija_id = $request->TipStudija;
-        $kandidat->studijskiProgram_id = $request->StudijskiProgram;
-        $kandidat->skolskaGodinaUpisa_id = $request->SkolskeGodineUpisa;
+        $kandidat->tipStudija_id = $data->tipStudijaId;
+        $kandidat->studijskiProgram_id = $data->studijskiProgramId;
+        $kandidat->skolskaGodinaUpisa_id = $data->skolskaGodinaUpisaId;
 
-        $kandidat->prosecnaOcena = str_replace(',', '.', $request->ProsecnaOcena);
-        $kandidat->upisniRok = $request->UpisniRok;
+        $kandidat->prosecnaOcena = $data->prosecnaOcena;
+        $kandidat->upisniRok = $data->upisniRok;
 
-        $kandidat->brojIndeksa = $request->brojIndeksa;
+        $kandidat->brojIndeksa = $data->brojIndeksa;
 
-        $kandidat->drzavaZavrseneSkole = $request->drzavaZavrseneSkole;
-        $kandidat->godinaZavrsetkaSkole = $request->godinaZavrsetkaSkole;
-        $kandidat->drzavaRodjenja = $request->drzavaRodjenja;
+        $kandidat->drzavaZavrseneSkole = $data->drzavaZavrseneSkole;
+        $kandidat->godinaZavrsetkaSkole = $data->godinaZavrsetkaSkole;
+        $kandidat->drzavaRodjenja = $data->drzavaRodjenja;
 
-        $saved = $kandidat->save();
+        $kandidat->save();
 
         $this->documentManagementService->deleteDocumentsForKandidat($id);
         $this->documentManagementService->attachDocumentsForKandidat(
             $id,
-            $request->get('dokumentaMaster', []),
+            $data->dokumentaMaster,
             []
         );
 

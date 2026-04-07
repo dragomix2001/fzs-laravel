@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use App\KandidatPrilozenaDokumenta;
+use App\Models\KandidatPrilozenaDokumenta;
 use App\Models\UspehSrednjaSkola;
 use App\Services\DropdownDataService;
-use App\SportskoAngazovanje;
-use App\StudijskiProgram;
+use App\Models\SportskoAngazovanje;
+use App\Models\StudijskiProgram;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;

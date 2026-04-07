@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
+use App\DTOs\DiplomaAddData;
 use App\Models\Diploma;
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
 use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
-use Illuminate\Http\Request;
 use View;
 
 class DiplomaService extends BasePdfService
@@ -42,20 +42,20 @@ class DiplomaService extends BasePdfService
             ->with('profesor', $profesor);
     }
 
-    public function diplomaAdd(Request $request)
+    public function diplomaAdd(DiplomaAddData $data)
     {
         $diploma = new Diploma;
-        $diploma->kandidat_id = $request->kandidat_id;
-        $diploma->brojDipломе = $request->brojDiplome;
-        $diploma->datumOdbrane = $request->datumOdbrane;
-        $diploma->nazivStudijskogPrograma = $request->nazivStudijskogPrograma;
-        $diploma->brojPočetnogLista = $request->brojPocetnogLista;
-        $diploma->brojЗаписника = $request->brojZapisnika;
-        $diploma->datum = $request->datum;
-        $diploma->pristupniRad = $request->pristupniRad;
-        $diploma->tema = $request->tema;
-        $diploma->mentor = $request->mentor;
-        $diploma->ocena = $request->ocena;
+        $diploma->kandidat_id = $data->kandidatId;
+        $diploma->brojDipломе = $data->brojDiplome;
+        $diploma->datumOdbrane = $data->datumOdbrane;
+        $diploma->nazivStudijskogPrograma = $data->nazivStudijskogPrograma;
+        $diploma->brojPočetnogLista = $data->brojPocetnogLista;
+        $diploma->brojЗаписника = $data->brojZapisnika;
+        $diploma->datum = $data->datum;
+        $diploma->pristupniRad = $data->pristupniRad;
+        $diploma->tema = $data->tema;
+        $diploma->mentor = $data->mentor;
+        $diploma->ocena = $data->ocena;
         $diploma->save();
 
         return redirect()->route('student.index');

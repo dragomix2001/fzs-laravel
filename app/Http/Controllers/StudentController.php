@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Kandidat;
+use App\Models\Kandidat;
 use App\Services\UpisService;
-use App\SkolskaGodUpisa;
-use App\StatusGodine;
-use App\StudijskiProgram;
-use App\TipStudija;
-use App\UpisGodine;
+use App\Models\SkolskaGodUpisa;
+use App\Models\StatusGodine;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
+use App\Models\UpisGodine;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

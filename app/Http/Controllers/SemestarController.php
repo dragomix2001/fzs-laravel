@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Semestar;
+use App\Models\Semestar;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

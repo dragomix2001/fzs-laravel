@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\AktivniIspitniRokovi;
-use App\IspitniRok;
+use App\Models\AktivniIspitniRokovi;
+use App\Models\IspitniRok;
 use Illuminate\Http\Request;
 
 class KalendarController extends Controller

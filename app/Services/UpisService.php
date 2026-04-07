@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use App\ArhivIndeksa;
-use App\Kandidat;
+use App\Models\ArhivIndeksa;
+use App\Models\Kandidat;
 use App\Models\TipStudija;
-use App\SkolskaGodUpisa;
-use App\UpisGodine;
+use App\Models\SkolskaGodUpisa;
+use App\Models\UpisGodine;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 

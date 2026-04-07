@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\KandidatPrilozenaDokumenta;
+use App\Models\KandidatPrilozenaDokumenta;
 
 /**
  * Document Management Service - Centralized candidate document attachment management.

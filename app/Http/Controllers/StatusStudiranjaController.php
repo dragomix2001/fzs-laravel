@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\StatusStudiranja;
+use App\Models\StatusStudiranja;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

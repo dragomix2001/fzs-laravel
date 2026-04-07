@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\StudijskiProgram;
-use App\TipStudija;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

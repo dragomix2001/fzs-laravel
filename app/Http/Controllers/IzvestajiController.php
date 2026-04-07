@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Kandidat;
+use App\DTOs\DiplomaAddData;
+use App\DTOs\DiplomskiAddData;
+use App\DTOs\NastavniPlanData;
+use App\DTOs\ZapisnikStampaData;
+use App\Models\Kandidat;
 use App\Services\DiplomaService;
 use App\Services\DiplomskiRadService;
 use App\Services\IspitService;
@@ -90,7 +94,7 @@ class IzvestajiController extends Controller
 
     public function diplomaAdd(Request $request)
     {
-        return $this->diplomaService->diplomaAdd($request);
+        return $this->diplomaService->diplomaAdd(DiplomaAddData::fromRequest($request));
     }
 
     public function spisakPoPredmetima(Request $request)
@@ -110,7 +114,7 @@ class IzvestajiController extends Controller
 
     public function diplomskiAdd(Request $request)
     {
-        return $this->diplomskiRadService->diplomskiAdd($request);
+        return $this->diplomskiRadService->diplomskiAdd(DiplomskiAddData::fromRequest($request));
     }
 
     public function komisijaStampa(Kandidat $student)
@@ -125,7 +129,7 @@ class IzvestajiController extends Controller
 
     public function nastavniPlan(Request $request)
     {
-        return $this->ispitService->nastavniPlan($request);
+        return $this->ispitService->nastavniPlan(NastavniPlanData::fromRequest($request));
     }
 
     public function spisakDiplomiranih(Request $request)
@@ -135,7 +139,7 @@ class IzvestajiController extends Controller
 
     public function zapisnikStampa(Request $request)
     {
-        return $this->ispitService->zapisnikStampa($request);
+        return $this->ispitService->zapisnikStampa(ZapisnikStampaData::fromRequest($request));
     }
 
     public function zapisnikDiplomski(Kandidat $student)

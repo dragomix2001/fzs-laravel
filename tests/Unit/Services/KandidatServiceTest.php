@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use App\Kandidat;
+use App\Models\Kandidat;
 use App\Services\KandidatService;
-use App\StatusStudiranja;
-use App\StudijskiProgram;
-use App\TipStudija;
+use App\Models\StatusStudiranja;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;

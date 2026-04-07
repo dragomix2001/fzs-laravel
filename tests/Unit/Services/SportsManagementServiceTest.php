@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Services;
 
 use App\Services\SportsManagementService;
-use App\SportskoAngazovanje;
+use App\Models\SportskoAngazovanje;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 

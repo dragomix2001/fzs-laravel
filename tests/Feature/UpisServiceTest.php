@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\ArhivIndeksa;
-use App\Kandidat;
+use App\Models\ArhivIndeksa;
+use App\Models\Kandidat;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Services\UpisService;
-use App\SkolskaGodUpisa;
-use App\UpisGodine;
+use App\Models\SkolskaGodUpisa;
+use App\Models\UpisGodine;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Opstina;
-use App\Region;
+use App\Models\Opstina;
+use App\Models\Region;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

@@ -21,6 +21,17 @@ return new class extends Migration
         return $result[0]->cnt > 0;
     }
 
+    private function dropForeignIfExists(string $table, string $constraintName): void
+    {
+        if (! $this->foreignKeyExists($table, $constraintName)) {
+            return;
+        }
+
+        Schema::table($table, function (Blueprint $tableBlueprint) use ($constraintName) {
+            $tableBlueprint->dropForeign($constraintName);
+        });
+    }
+
     public function up(): void
     {
         Schema::table('kandidat', function (Blueprint $table) {
@@ -131,6 +142,11 @@ return new class extends Migration
                     ->references('id')->on('aktivni_ispitni_rokovi')
                     ->onDelete('restrict');
             }
+            if (! $this->foreignKeyExists('zapisnik_o_polaganju_ispita', 'zapisnik_o_polaganju_ispita_prijavaispita_id_foreign')) {
+                $table->foreign('prijavaIspita_id')
+                    ->references('id')->on('prijava_ispita')
+                    ->onDelete('set null');
+            }
         });
 
         Schema::table('zapisnik_o_polaganju__student', function (Blueprint $table) {
@@ -142,6 +158,11 @@ return new class extends Migration
             if (! $this->foreignKeyExists('zapisnik_o_polaganju__student', 'zapisnik_o_polaganju__student_kandidat_id_foreign')) {
                 $table->foreign('kandidat_id')
                     ->references('id')->on('kandidat')
+                    ->onDelete('cascade');
+            }
+            if (! $this->foreignKeyExists('zapisnik_o_polaganju__student', 'zapisnik_o_polaganju__student_prijavaispita_id_foreign')) {
+                $table->foreign('prijavaIspita_id')
+                    ->references('id')->on('prijava_ispita')
                     ->onDelete('cascade');
             }
         });
@@ -162,48 +183,36 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('zapisnik_o_polaganju__studijski_program', function (Blueprint $table) {
-            $table->dropForeign('zop_studprogram_zapisnik_fk');
-            $table->dropForeign('zop_studprogram_program_fk');
-        });
+        $this->dropForeignIfExists('zapisnik_o_polaganju__studijski_program', 'zop_studprogram_zapisnik_fk');
+        $this->dropForeignIfExists('zapisnik_o_polaganju__studijski_program', 'zop_studprogram_program_fk');
 
-        Schema::table('zapisnik_o_polaganju__student', function (Blueprint $table) {
-            $table->dropForeign(['zapisnik_id']);
-            $table->dropForeign(['kandidat_id']);
-        });
+        $this->dropForeignIfExists('zapisnik_o_polaganju__student', 'zapisnik_o_polaganju__student_prijavaispita_id_foreign');
+        $this->dropForeignIfExists('zapisnik_o_polaganju__student', 'zapisnik_o_polaganju__student_zapisnik_id_foreign');
+        $this->dropForeignIfExists('zapisnik_o_polaganju__student', 'zapisnik_o_polaganju__student_kandidat_id_foreign');
 
-        Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
-            $table->dropForeign(['predmet_id']);
-            $table->dropForeign(['profesor_id']);
-            $table->dropForeign(['rok_id']);
-        });
+        $this->dropForeignIfExists('zapisnik_o_polaganju_ispita', 'zapisnik_o_polaganju_ispita_prijavaispita_id_foreign');
+        $this->dropForeignIfExists('zapisnik_o_polaganju_ispita', 'zapisnik_o_polaganju_ispita_predmet_id_foreign');
+        $this->dropForeignIfExists('zapisnik_o_polaganju_ispita', 'zapisnik_o_polaganju_ispita_profesor_id_foreign');
+        $this->dropForeignIfExists('zapisnik_o_polaganju_ispita', 'zapisnik_o_polaganju_ispita_rok_id_foreign');
 
-        Schema::table('polozeni_ispiti', function (Blueprint $table) {
-            $table->dropForeign(['kandidat_id']);
-            $table->dropForeign(['predmet_id']);
-            $table->dropForeign(['prijava_id']);
-            $table->dropForeign(['zapisnik_id']);
-        });
+        $this->dropForeignIfExists('polozeni_ispiti', 'polozeni_ispiti_kandidat_id_foreign');
+        $this->dropForeignIfExists('polozeni_ispiti', 'polozeni_ispiti_predmet_id_foreign');
+        $this->dropForeignIfExists('polozeni_ispiti', 'polozeni_ispiti_prijava_id_foreign');
+        $this->dropForeignIfExists('polozeni_ispiti', 'polozeni_ispiti_zapisnik_id_foreign');
 
-        Schema::table('prijava_ispita', function (Blueprint $table) {
-            $table->dropForeign(['kandidat_id']);
-            $table->dropForeign(['predmet_id']);
-            $table->dropForeign(['profesor_id']);
-            $table->dropForeign(['rok_id']);
-        });
+        $this->dropForeignIfExists('prijava_ispita', 'prijava_ispita_kandidat_id_foreign');
+        $this->dropForeignIfExists('prijava_ispita', 'prijava_ispita_predmet_id_foreign');
+        $this->dropForeignIfExists('prijava_ispita', 'prijava_ispita_profesor_id_foreign');
+        $this->dropForeignIfExists('prijava_ispita', 'prijava_ispita_rok_id_foreign');
 
-        Schema::table('upis_godine', function (Blueprint $table) {
-            $table->dropForeign(['kandidat_id']);
-            $table->dropForeign(['studijskiProgram_id']);
-            $table->dropForeign(['tipStudija_id']);
-            $table->dropForeign(['statusGodine_id']);
-        });
+        $this->dropForeignIfExists('upis_godine', 'upis_godine_kandidat_id_foreign');
+        $this->dropForeignIfExists('upis_godine', 'upis_godine_studijskiprogram_id_foreign');
+        $this->dropForeignIfExists('upis_godine', 'upis_godine_tipstudija_id_foreign');
+        $this->dropForeignIfExists('upis_godine', 'upis_godine_statusgodine_id_foreign');
 
-        Schema::table('kandidat', function (Blueprint $table) {
-            $table->dropForeign(['studijskiProgram_id']);
-            $table->dropForeign(['tipStudija_id']);
-            $table->dropForeign(['skolskaGodinaUpisa_id']);
-            $table->dropForeign(['statusUpisa_id']);
-        });
+        $this->dropForeignIfExists('kandidat', 'kandidat_studijskiprogram_id_foreign');
+        $this->dropForeignIfExists('kandidat', 'kandidat_tipstudija_id_foreign');
+        $this->dropForeignIfExists('kandidat', 'kandidat_skolskagodinaupisa_id_foreign');
+        $this->dropForeignIfExists('kandidat', 'kandidat_statusupisa_id_foreign');
     }
 };

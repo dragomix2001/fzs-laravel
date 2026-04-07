@@ -2,24 +2,25 @@
 
 namespace Tests\Feature;
 
+use App\DTOs\DiplomskiAddData;
 use App\Models\DiplomskiPolaganje;
 use App\Models\DiplomskiPrijavaTeme;
 use App\Models\DiplomskiRad;
 use App\Models\Kandidat;
+use App\Models\PredmetProgram;
 use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StatusGodine;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Services\DiplomskiRadService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Tests\TestCase;
 
 class DiplomskiRadServiceTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private DiplomskiRadService $service;
 
@@ -78,20 +79,28 @@ class DiplomskiRadServiceTest extends TestCase
     public function test_diplomski_add_creates_diplomski_rad_record()
     {
         $student = Kandidat::factory()->create();
+        $mentor = Profesor::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
 
-        $request = new Request([
-            'kandidat_id' => $student->id,
-            'tema' => 'Moja diplomska tema',
-            'mentor' => 'Dr. Pera Perić',
-            'datumPrijave' => '2024-05-01',
-        ]);
+        $data = new DiplomskiAddData(
+            kandidatId: $student->id,
+            predmetId: $predmetProgram->id,
+            naziv: 'Moja diplomska tema',
+            mentorId: $mentor->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-05-01',
+            datumOdbrane: null
+        );
 
-        $this->service->diplomskiAdd($request);
+        $this->service->diplomskiAdd($data);
 
         $this->assertDatabaseHas('diplomski_rad', [
             'kandidat_id' => $student->id,
-            'tema' => 'Moja diplomska tema',
-            'mentor' => 'Dr. Pera Perić',
+            'naziv' => 'Moja diplomska tema',
+            'mentor_id' => $mentor->id,
             'datumPrijave' => '2024-05-01',
         ]);
     }
@@ -99,20 +108,28 @@ class DiplomskiRadServiceTest extends TestCase
     public function test_diplomski_add_creates_diplomski_prijava_teme_record()
     {
         $student = Kandidat::factory()->create();
+        $mentor = Profesor::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
 
-        $request = new Request([
-            'kandidat_id' => $student->id,
-            'tema' => 'Moja diplomska tema',
-            'mentor' => 'Dr. Pera Perić',
-            'datumPrijave' => '2024-05-01',
-        ]);
+        $data = new DiplomskiAddData(
+            kandidatId: $student->id,
+            predmetId: $predmetProgram->id,
+            naziv: 'Moja diplomska tema',
+            mentorId: $mentor->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-05-01',
+            datumOdbrane: null
+        );
 
-        $this->service->diplomskiAdd($request);
+        $this->service->diplomskiAdd($data);
 
         $this->assertDatabaseHas('diplomski_prijava_teme', [
             'kandidat_id' => $student->id,
-            'tema' => 'Moja diplomska tema',
-            'mentor' => 'Dr. Pera Perić',
+            'nazivTeme' => 'Moja diplomska tema',
+            'profesor_id' => $mentor->id,
             'datum' => '2024-05-01',
         ]);
     }
@@ -120,60 +137,84 @@ class DiplomskiRadServiceTest extends TestCase
     public function test_diplomski_add_creates_both_records_atomically()
     {
         $student = Kandidat::factory()->create();
+        $mentor = Profesor::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
 
-        $request = new Request([
-            'kandidat_id' => $student->id,
-            'tema' => 'Atomska diplomska tema',
-            'mentor' => 'Dr. Test Testić',
-            'datumPrijave' => '2024-06-15',
-        ]);
+        $data = new DiplomskiAddData(
+            kandidatId: $student->id,
+            predmetId: $predmetProgram->id,
+            naziv: 'Atomska diplomska tema',
+            mentorId: $mentor->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-06-15',
+            datumOdbrane: null
+        );
 
-        $this->service->diplomskiAdd($request);
+        $this->service->diplomskiAdd($data);
 
         $diplomski = DiplomskiRad::where('kandidat_id', $student->id)->first();
         $prijava = DiplomskiPrijavaTeme::where('kandidat_id', $student->id)->first();
 
         $this->assertNotNull($diplomski);
         $this->assertNotNull($prijava);
-        $this->assertEquals($diplomski->tema, $prijava->tema);
-        $this->assertEquals($diplomski->mentor, $prijava->mentor);
+        $this->assertEquals($diplomski->naziv, $prijava->nazivTeme);
+        $this->assertEquals($diplomski->mentor_id, $prijava->profesor_id);
     }
 
     public function test_diplomski_add_stores_correct_field_values()
     {
         $student = Kandidat::factory()->create();
+        $mentor = Profesor::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
 
-        $request = new Request([
-            'kandidat_id' => $student->id,
-            'tema' => 'Blockchain u obrazovanju',
-            'mentor' => 'Prof. Dr. Marko Marković',
-            'datumPrijave' => '2024-07-20',
-        ]);
+        $data = new DiplomskiAddData(
+            kandidatId: $student->id,
+            predmetId: $predmetProgram->id,
+            naziv: 'Blockchain u obrazovanju',
+            mentorId: $mentor->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-07-20',
+            datumOdbrane: null
+        );
 
-        $this->service->diplomskiAdd($request);
+        $this->service->diplomskiAdd($data);
 
-        $diplomski = DiplomskiRad::where('tema', 'Blockchain u obrazovanju')->first();
+        $diplomski = DiplomskiRad::where('naziv', 'Blockchain u obrazovanju')->first();
 
         $this->assertNotNull($diplomski);
         $this->assertEquals($student->id, $diplomski->kandidat_id);
-        $this->assertEquals('Prof. Dr. Marko Marković', $diplomski->mentor);
+        $this->assertEquals($mentor->id, $diplomski->mentor_id);
     }
 
     public function test_diplomski_add_redirects_to_student_index()
     {
         $student = Kandidat::factory()->create();
+        $mentor = Profesor::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
 
-        $request = new Request([
-            'kandidat_id' => $student->id,
-            'tema' => 'Test tema',
-            'mentor' => 'Test mentor',
-            'datumPrijave' => '2024-05-01',
-        ]);
+        $data = new DiplomskiAddData(
+            kandidatId: $student->id,
+            predmetId: $predmetProgram->id,
+            naziv: 'Test tema',
+            mentorId: $mentor->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-05-01',
+            datumOdbrane: null
+        );
 
-        $response = $this->service->diplomskiAdd($request);
+        $response = $this->service->diplomskiAdd($data);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertEquals(route('student.index'), $response->getTargetUrl());
+        $this->assertStringEndsWith('/student', $response->getTargetUrl());
     }
 
     // =========================================================================
@@ -232,19 +273,27 @@ class DiplomskiRadServiceTest extends TestCase
     {
         $student = Kandidat::factory()->create();
         Profesor::factory()->count(2)->create();
+        $mentor = Profesor::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
 
         $view = $this->service->diplomskiUnos($student);
         $this->assertIsObject($view);
         $this->assertEquals($student->id, $view->getData()['student']->id);
 
-        $request = new Request([
-            'kandidat_id' => $student->id,
-            'tema' => 'Final tema',
-            'mentor' => 'Final mentor',
-            'datumPrijave' => '2024-08-01',
-        ]);
+        $data = new DiplomskiAddData(
+            kandidatId: $student->id,
+            predmetId: $predmetProgram->id,
+            naziv: 'Final tema',
+            mentorId: $mentor->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-08-01',
+            datumOdbrane: null
+        );
 
-        $this->service->diplomskiAdd($request);
+        $this->service->diplomskiAdd($data);
 
         $this->assertDatabaseHas('diplomski_rad', ['kandidat_id' => $student->id]);
         $this->assertDatabaseHas('diplomski_prijava_teme', ['kandidat_id' => $student->id]);
@@ -254,31 +303,47 @@ class DiplomskiRadServiceTest extends TestCase
     {
         $student1 = Kandidat::factory()->create();
         $student2 = Kandidat::factory()->create();
+        $mentor1 = Profesor::factory()->create();
+        $mentor2 = Profesor::factory()->create();
+        $predmetProgram1 = PredmetProgram::factory()->create();
+        $predmetProgram2 = PredmetProgram::factory()->create();
 
-        $request1 = new Request([
-            'kandidat_id' => $student1->id,
-            'tema' => 'Tema student1',
-            'mentor' => 'Mentor1',
-            'datumPrijave' => '2024-05-01',
-        ]);
-        $this->service->diplomskiAdd($request1);
+        $data1 = new DiplomskiAddData(
+            kandidatId: $student1->id,
+            predmetId: $predmetProgram1->id,
+            naziv: 'Tema student1',
+            mentorId: $mentor1->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-05-01',
+            datumOdbrane: null
+        );
+        $this->service->diplomskiAdd($data1);
 
-        $request2 = new Request([
-            'kandidat_id' => $student2->id,
-            'tema' => 'Tema student2',
-            'mentor' => 'Mentor2',
-            'datumPrijave' => '2024-05-02',
-        ]);
-        $this->service->diplomskiAdd($request2);
+        $data2 = new DiplomskiAddData(
+            kandidatId: $student2->id,
+            predmetId: $predmetProgram2->id,
+            naziv: 'Tema student2',
+            mentorId: $mentor2->id,
+            predsednikId: null,
+            clanId: null,
+            ocenaOpis: null,
+            ocenaBroj: null,
+            datumPrijave: '2024-05-02',
+            datumOdbrane: null
+        );
+        $this->service->diplomskiAdd($data2);
 
         $this->assertDatabaseHas('diplomski_rad', [
             'kandidat_id' => $student1->id,
-            'tema' => 'Tema student1',
+            'naziv' => 'Tema student1',
         ]);
 
         $this->assertDatabaseHas('diplomski_rad', [
             'kandidat_id' => $student2->id,
-            'tema' => 'Tema student2',
+            'naziv' => 'Tema student2',
         ]);
 
         $this->assertCount(2, DiplomskiRad::all());

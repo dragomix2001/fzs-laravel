@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\AktivniIspitniRokovi;
 use App\Models\Predmet;
+use App\Models\PrijavaIspita;
 use App\Models\Profesor;
 use App\Models\ZapisnikOPolaganjuIspita;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,7 +23,7 @@ class ZapisnikOPolaganjuIspitaFactory extends Factory
             'datum2' => now()->addDays(7)->toDateString(),
             'vreme' => '10:00:00',
             'ucionica' => $this->faker->numerify('##'),
-            'prijavaIspita_id' => null,
+            'prijavaIspita_id' => PrijavaIspita::factory(),
             'kandidat_id' => null,
         ];
     }

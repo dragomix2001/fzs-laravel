@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\KandidatData;
-use App\GodinaStudija;
+use App\DTOs\KandidatPage1Data;
+use App\DTOs\KandidatPage2Data;
+use App\DTOs\KandidatUpdateData;
+use App\DTOs\MasterKandidatData;
+use App\Models\GodinaStudija;
 use App\Http\Requests\StoreKandidatRequest;
 use App\Http\Requests\StoreMasterKandidatRequest;
 use App\Http\Requests\UpdateKandidatRequest;
 use App\Http\Requests\UpdateMasterKandidatRequest;
-use App\Kandidat;
-use App\Opstina;
-use App\OpstiUspeh;
-use App\PrilozenaDokumenta;
+use App\Models\Kandidat;
+use App\Models\Opstina;
+use App\Models\OpstiUspeh;
+use App\Models\PrilozenaDokumenta;
 use App\Services\KandidatService;
-use App\SkolskaGodUpisa;
-use App\Sport;
-use App\SportskoAngazovanje;
-use App\StatusStudiranja;
-use App\StudijskiProgram;
-use App\TipStudija;
-use App\UspehSrednjaSkola;
+use App\Models\SkolskaGodUpisa;
+use App\Models\Sport;
+use App\Models\SportskoAngazovanje;
+use App\Models\StatusStudiranja;
+use App\Models\StudijskiProgram;
+use App\Models\TipStudija;
+use App\Models\UspehSrednjaSkola;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -62,8 +65,8 @@ class KandidatController extends Controller
     {
         if ($request->page == 1) {
 
-            $data = KandidatData::fromRequest($request);
-            $kandidat = $this->kandidatService->storeKandidatPage1($data, $request);
+            $data = KandidatPage1Data::fromRequest($request);
+            $kandidat = $this->kandidatService->storeKandidatPage1($data);
             $insertedId = $kandidat->id;
 
             $dokumentiPrvaGodina = PrilozenaDokumenta::where('skolskaGodina_id', '1')->get();
@@ -86,7 +89,8 @@ class KandidatController extends Controller
 
         } elseif ($request->page == 2) {
 
-            $this->kandidatService->storeKandidatPage2($request);
+            $data = KandidatPage2Data::fromRequest($request);
+            $this->kandidatService->storeKandidatPage2($data);
 
             return redirect('/kandidat/');
         }
@@ -111,8 +115,8 @@ class KandidatController extends Controller
     {
         $kandidat = Kandidat::find($id);
 
-        $data = KandidatData::fromRequest($request);
-        $kandidat = $this->kandidatService->updateKandidat($id, $data, $request);
+        $data = KandidatUpdateData::fromRequest($request);
+        $kandidat = $this->kandidatService->updateKandidat($id, $data);
 
         $saved = ! empty($kandidat->id);
 
@@ -191,7 +195,8 @@ class KandidatController extends Controller
 
     public function storeMaster(StoreMasterKandidatRequest $request)
     {
-        $kandidat = $this->kandidatService->storeMasterKandidat($request);
+        $data = MasterKandidatData::fromRequest($request);
+        $kandidat = $this->kandidatService->storeMasterKandidat($data);
 
         return redirect('/master?studijskiProgramId='.$kandidat->studijskiProgram_id);
     }
@@ -208,7 +213,8 @@ class KandidatController extends Controller
     {
         $kandidat = Kandidat::find($id);
 
-        $kandidat = $this->kandidatService->updateMasterKandidat($id, $request);
+        $data = MasterKandidatData::fromRequest($request);
+        $kandidat = $this->kandidatService->updateMasterKandidat($id, $data);
         $saved = ! empty($kandidat->id);
 
         if ($saved) {
