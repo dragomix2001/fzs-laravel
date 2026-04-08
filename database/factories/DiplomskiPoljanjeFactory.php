@@ -3,10 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\AktivniIspitniRokovi;
+use App\Models\DiplomskiPolaganje;
 use App\Models\Kandidat;
 use App\Models\PredmetProgram;
 use App\Models\Profesor;
-use App\Models\DiplomskiPolaganje;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DiplomskiPoljanjeFactory extends Factory

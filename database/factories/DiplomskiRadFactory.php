@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\DiplomskiRad;
 use App\Models\Kandidat;
 use App\Models\PredmetProgram;
 use App\Models\Profesor;
-use App\Models\DiplomskiRad;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DiplomskiRadFactory extends Factory

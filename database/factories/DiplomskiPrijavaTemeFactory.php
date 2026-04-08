@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\DiplomskiPrijavaTeme;
 use App\Models\Kandidat;
 use App\Models\PredmetProgram;
 use App\Models\Profesor;
-use App\Models\DiplomskiPrijavaTeme;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DiplomskiPrijavaTemeFactory extends Factory

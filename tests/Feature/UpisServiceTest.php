@@ -6,11 +6,11 @@ namespace Tests\Feature;
 
 use App\Models\ArhivIndeksa;
 use App\Models\Kandidat;
+use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
-use App\Services\UpisService;
-use App\Models\SkolskaGodUpisa;
 use App\Models\UpisGodine;
+use App\Services\UpisService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;

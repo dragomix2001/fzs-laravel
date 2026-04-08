@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AktivniIspitniRokovi;
-use App\Models\GodinaStudija;
 use App\Http\Requests\StoreDiplomskiOdbranaRequest;
 use App\Http\Requests\StoreDiplomskiPolaganjeRequest;
 use App\Http\Requests\StoreDiplomskiTemaRequest;
@@ -12,10 +10,12 @@ use App\Http\Requests\StorePrijavaIspitaRequest;
 use App\Http\Requests\UpdateDiplomskiOdbranaRequest;
 use App\Http\Requests\UpdateDiplomskiPolaganjeRequest;
 use App\Http\Requests\UpdateDiplomskiTemaRequest;
-use App\Models\Kandidat;
+use App\Models\AktivniIspitniRokovi;
 use App\Models\DiplomskiPolaganje;
 use App\Models\DiplomskiPrijavaOdbrane;
 use App\Models\DiplomskiPrijavaTeme;
+use App\Models\GodinaStudija;
+use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
 use App\Models\Predmet;
 use App\Models\PredmetProgram;

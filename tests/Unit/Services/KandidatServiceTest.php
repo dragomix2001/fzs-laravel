@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\Services;
 
 use App\Models\Kandidat;
-use App\Services\KandidatService;
 use App\Models\StatusStudiranja;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
+use App\Services\KandidatService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
