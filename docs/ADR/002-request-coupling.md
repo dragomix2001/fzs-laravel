@@ -1,6 +1,6 @@
 # ADR-002: Request Object Coupling in Services
 
-**Status:** Accepted (technical debt)
+**Status:** Accepted (actively mitigated)
 
 **Date:** 2024-01-XX
 
@@ -36,8 +36,8 @@ public function storeKandidatPage2(Request $request): Kandidat
 **We accept Request coupling as technical debt** with **partial mitigation** already in place.
 
 **Current state:**
-- Some methods use DTOs (e.g., `KandidatData::fromRequest()`)
-- Some methods still accept raw `Request` objects
+- Core write paths in `KandidatService`, `IspitService`, `DiplomaService`, and `DiplomskiRadService` use DTO inputs.
+- Raw `Request` usage in the service layer is now exception-based, not the default pattern.
 
 **Reasons for acceptance:**
 1. **Partial progress**: DTO pattern already introduced in some places
@@ -111,11 +111,33 @@ $this->kandidatService->storeKandidatGrades($dto);
 
 ## Future
 
-**Target:** Convert all service methods to use DTOs within 6-12 months.
+**Target:** Keep `Request` out of business services by default and use DTO-first signatures for all new service methods.
 
-**Priority methods:**
-1. KandidatService::storeKandidatPage2 (high complexity)
-2. IspitService methods accepting Request
-3. DiplomaService, DiplomskiRadService
+**Priority methods (remaining):**
+1. Remove remaining edge-case `Request` usage in support/infrastructure services.
+2. Continue DTO normalization for any newly introduced service APIs.
+3. Keep controller/job layer responsible for `Request -> DTO` mapping.
 
-**Estimated effort:** 15-20 hours per service (5 services = 75-100 hours total)
+**Estimated effort:** Low ongoing maintenance effort (incremental updates during feature work).
+
+---
+
+## Update (2026-04-08): DTO Migration Moved from Plan to Practice
+
+**Status:** Substantially Implemented
+
+The ADR intent has been implemented across key flows:
+
+- `KandidatService` uses typed DTOs for create/update paths.
+- `IspitService` accepts DTOs for zapisnik and report generation flows.
+- `DiplomaService` and `DiplomskiRadService` now use DTO inputs for add/create flows.
+
+### Practical Effect
+
+- Stronger type safety and fewer magic-string dependencies in business services.
+- Better unit-test ergonomics because service methods can be called without HTTP request construction.
+- Cleaner separation of concerns (`Request` parsing in controller/job layer, business logic in services).
+
+### Remaining Risk
+
+One-off support services may still accept `Request` for audit/context capture; this is tolerated when it does not leak HTTP concerns into core domain logic.

@@ -115,3 +115,22 @@ $this->app->bind(CacheInterface::class, LaravelCacheAdapter::class);
 - Test suite becomes unmaintainable due to facade mocking (not yet an issue)
 
 **Estimated effort if needed:** 160-200 hours (8-10 services × 20-25 hours)
+
+---
+
+## Update (2026-04-08): Decision Still Valid, Scope Reduced in Core Flows
+
+**Status:** Unchanged (Accepted)
+
+The core decision remains valid: full facade abstraction is still not justified by current cost/benefit.
+
+Recent refactoring reduced the practical impact in one important way:
+
+- File/storage concerns were extracted from `KandidatService` into dedicated helper services.
+- `KandidatService` still uses selected facades (`Cache`, `DB`) for orchestration and transactional boundaries.
+
+### Current Guidance
+
+1. Do not introduce broad adapter layers unless a concrete migration/use-case appears.
+2. Keep facade usage localized and test-covered in small services where possible.
+3. Prioritize decomposition and DTO boundaries before interface-driven facade abstraction.

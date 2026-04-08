@@ -1,6 +1,6 @@
 # ADR-001: God Services (Known Technical Debt)
 
-**Status:** Accepted (legacy)
+**Status:** Accepted (active mitigation)
 
 **Date:** 2024-01-XX
 
@@ -357,3 +357,36 @@ KandidatService (785 lines, core orchestrator)
 **Long-term goal (10.0/10):** KandidatService reduced to 300-400 lines (pure orchestration layer)
 
 **Current progress:** ~60% complete (5/8 target services extracted).
+
+---
+
+## Update (2026-04-08): Current State After DTO and CI Stabilization
+
+**Status:** In Progress
+
+The decomposition strategy remains valid and is still the recommended path. The latest cycle delivered additional architectural cleanup and CI hardening, while keeping `KandidatService` and `IspitService` as orchestrator-heavy services.
+
+### Measured Current Service Size
+
+- `KandidatService`: 733 lines
+- `IspitService`: 818 lines
+- `DiplomaService`: 84 lines
+- `DiplomskiRadService`: 119 lines
+
+### What Changed in This Cycle
+
+- Request-to-service coupling was reduced through additional DTO usage in report and diploma flows.
+- Legacy model reference cleanup was completed (`App\\Models\\...` standardization and legacy bridge removal).
+- CI reliability was improved (Pint + PHPStan failures resolved and green pipeline restored).
+
+### Architectural Interpretation
+
+- `KandidatService` continues trending down in size and remains a partial orchestrator by design.
+- `IspitService` is now the primary god-service candidate and should become the next decomposition focus.
+- Smaller report/diploma services indicate that extraction-by-flow works and should continue.
+
+### Updated Next Steps
+
+1. Prioritize `IspitService` decomposition (report generation, zapisnik orchestration, and mass operations).
+2. Continue extracting transaction-heavy blocks from `KandidatService` into focused services.
+3. Keep architecture changes coupled with DTO boundaries and targeted tests.
