@@ -54,6 +54,15 @@ class KandidatService
         protected DocumentManagementService $documentManagementService
     ) {}
 
+    private function asCarbon(?\DateTimeInterface $value): ?Carbon
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return Carbon::instance(\DateTime::createFromInterface($value));
+    }
+
     /**
      * Get all candidates with optional filtering.
      *
@@ -163,7 +172,7 @@ class KandidatService
         $kandidat->datumStatusa = Carbon::now();
 
         if ($data->datumRodjenja !== null) {
-            $kandidat->datumRodjenja = $data->datumRodjenja;
+            $kandidat->datumRodjenja = $this->asCarbon($data->datumRodjenja);
         }
 
         $kandidat->mestoRodjenja = $data->mestoRodjenja;
@@ -271,7 +280,7 @@ class KandidatService
             $this->fileStorageService->replacePdfForKandidat($kandidat, $data->pdfUpload);
         }
 
-        $kandidat->datumRodjenja = $data->datumRodjenja;
+        $kandidat->datumRodjenja = $this->asCarbon($data->datumRodjenja);
 
         $kandidat->mestoRodjenja = $data->mestoRodjenja;
         $kandidat->krsnaSlava_id = $data->krsnaSlavaId;
@@ -295,7 +304,7 @@ class KandidatService
         $kandidat->drzavaRodjenja = $data->drzavaRodjenja;
 
         $kandidat->statusUpisa_id = $data->statusUpisaId;
-        $kandidat->datumStatusa = $data->datumStatusa ?? Carbon::now();
+        $kandidat->datumStatusa = $this->asCarbon($data->datumStatusa) ?? Carbon::now();
 
         $this->gradeManagementService->updateGradesForKandidat($id, $data->grades);
 
@@ -415,7 +424,7 @@ class KandidatService
         }
 
         $kandidat->statusUpisa_id = $data->statusUpisaId;
-        $kandidat->datumStatusa = $data->datumStatusa ?? Carbon::now();
+        $kandidat->datumStatusa = $this->asCarbon($data->datumStatusa) ?? Carbon::now();
 
         if ($data->imageUpload !== null) {
             $this->fileStorageService->replaceImageForKandidat($kandidat, $data->imageUpload);

@@ -9,7 +9,7 @@ parameters:
     level: 5
 
     excludePaths:
-        - app/bridge.php
+        - app/bridge.php (?)
         - app/Http/Controllers/Auth/AuthController.php
         - app/Http/Controllers/Auth/PasswordController.php
 

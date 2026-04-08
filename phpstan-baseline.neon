@@ -373,18 +373,6 @@ parameters:
 			path: app/Services/IspitService.php
 
 		-
-			message: '#^Property App\\Models\\Kandidat\:\:\$datumRodjenja \(Carbon\\Carbon\|null\) does not accept DateTime\|false\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: app/Services/KandidatService.php
-
-		-
-			message: '#^Property App\\Models\\Kandidat\:\:\$prosecnaOcena \(float\|null\) does not accept \(array\<string\>\|string\)\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: app/Services/KandidatService.php
-
-		-
 			message: '#^Property App\\Models\\Kandidat\:\:\$uplata \(bool\|null\) does not accept int\.$#'
 			identifier: assign.propertyType
 			count: 4

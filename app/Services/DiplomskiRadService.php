@@ -49,7 +49,7 @@ class DiplomskiRadService extends BasePdfService
         $prijava->nazivTeme = $data->naziv;
         $prijava->profesor_id = $data->mentorId;
         $prijava->datum = $data->datumPrijave;
-        $prijava->indikatorOdobreno = 0;
+        $prijava->indikatorOdobreno = false;
         $prijava->save();
 
         return redirect('/student');
