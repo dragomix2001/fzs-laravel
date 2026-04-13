@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\DTOs\ZapisnikStampaData;
-use App\Services\IspitService;
+use App\Services\IspitPdfService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -22,12 +22,12 @@ class GenerateZapisnikPdfJob implements ShouldQueue
         public string $storagePath
     ) {}
 
-    public function handle(IspitService $ispitService): void
+    public function handle(IspitPdfService $ispitPdfService): void
     {
         $data = new ZapisnikStampaData($this->zapisnikId, null, null, null);
 
         ob_start();
-        $ispitService->zapisnikStampa($data);
+        $ispitPdfService->zapisnikStampa($data);
         $pdfOutput = ob_get_clean();
 
         Storage::disk('local')->put($this->storagePath, $pdfOutput);

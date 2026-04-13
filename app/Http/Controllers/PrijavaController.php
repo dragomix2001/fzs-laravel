@@ -226,7 +226,7 @@ class PrijavaController extends Controller
                 $programId = $predmetProgramMap2->get($kandidat->studijskiProgram_id)->id;
 
                 $polozenIspit = new PolozeniIspiti;
-                $polozenIspit->indikatorAktivan = 0;
+                $polozenIspit->indikatorAktivan = false;
                 $polozenIspit->kandidat_id = $kandidatId;
                 $polozenIspit->predmet_id = $programId;
                 $polozenIspit->zapisnik_id = $zapisnik->id;
@@ -705,7 +705,6 @@ class PrijavaController extends Controller
 
     public function dodajPolozeneIspite(Request $request)
     {
-        // dd($request->all());
         $kandidat = $request->kandidat_id;
         $ispiti = $request->odabir;
 
@@ -721,7 +720,7 @@ class PrijavaController extends Controller
             $novIspit->brojBodova = 0;
             $novIspit->statusIspita = 1;
             $novIspit->odluka_id = 0;
-            $novIspit->indikatorAktivan = 1;
+            $novIspit->indikatorAktivan = true;
             $novIspit->save();
         }
 

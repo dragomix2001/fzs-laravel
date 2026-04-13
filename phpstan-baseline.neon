@@ -67,64 +67,10 @@ parameters:
 			path: app/Http/Controllers/Api/AktivnostController.php
 
 		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/BodovanjeController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/GodinaStudijaController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\HomeController\:\:index\(\) should return Illuminate\\Http\\Response but returns Illuminate\\View\\View\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Controllers/HomeController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/IspitniRokController.php
-
-		-
 			message: '#^Call to static method create\(\) on an unknown class Maatwebsite\\Excel\.$#'
 			identifier: class.notFound
 			count: 1
 			path: app/Http/Controllers/IzvestajiController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/KrsnaSlavaController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/OblikNastaveController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/OpstinaController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 3
-			path: app/Http/Controllers/PredmetController.php
-
-		-
-			message: '#^Property App\\Models\\PolozeniIspiti\:\:\$indikatorAktivan \(bool\|null\) does not accept int\.$#'
-			identifier: assign.propertyType
-			count: 2
-			path: app/Http/Controllers/PrijavaController.php
 
 		-
 			message: '#^Variable \$smerovi might not be defined\.$#'
@@ -139,100 +85,10 @@ parameters:
 			path: app/Http/Controllers/PrijavaController.php
 
 		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/PrilozenaDokumentaController.php
-
-		-
 			message: '#^Relation ''student'' is not found in App\\Models\\Prisanstvo model\.$#'
 			identifier: larastan.relationExistence
 			count: 2
 			path: app/Http/Controllers/PrisustvoController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 2
-			path: app/Http/Controllers/ProfesorController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/RegionController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/SemestarController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/SportController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/StatusIspitaController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/StatusKandidataController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/StatusProfesoraController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/StatusStudiranjaController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/StudijskiProgramController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/TipPredmetaController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/TipPrijaveController.php
-
-		-
-			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: app/Http/Controllers/TipStudijaController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\WelcomeController\:\:index\(\) has invalid return type App\\Http\\Controllers\\Response\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Http/Controllers/WelcomeController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\WelcomeController\:\:index\(\) should return App\\Http\\Controllers\\Response but returns Illuminate\\View\\View\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Controllers/WelcomeController.php
 
 		-
 			message: '#^Class Illuminate\\Foundation\\Http\\Middleware\\Authorize not found\.$#'
@@ -259,22 +115,10 @@ parameters:
 			path: app/Models/Kandidat.php
 
 		-
-			message: '#^Property App\\Models\\Skolarina\:\:\$casts \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
-			identifier: property.defaultValue
-			count: 1
-			path: app/Models/Skolarina.php
-
-		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			identifier: new.static
 			count: 1
 			path: app/Models/UpisGodine.php
-
-		-
-			message: '#^Property App\\Models\\ZapisnikOPolaganjuIspita\:\:\$casts \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
-			identifier: property.defaultValue
-			count: 1
-			path: app/Models/ZapisnikOPolaganjuIspita.php
 
 		-
 			message: '#^Method Illuminate\\Foundation\\Support\\Providers\\AuthServiceProvider\:\:registerPolicies\(\) invoked with 1 parameter, 0 required\.$#'
@@ -367,52 +211,10 @@ parameters:
 			path: app/Services/IspitService.php
 
 		-
-			message: '#^Property App\\Models\\PolozeniIspiti\:\:\$indikatorAktivan \(bool\|null\) does not accept int\.$#'
-			identifier: assign.propertyType
-			count: 3
-			path: app/Services/IspitService.php
-
-		-
-			message: '#^Property App\\Models\\Kandidat\:\:\$uplata \(bool\|null\) does not accept int\.$#'
-			identifier: assign.propertyType
-			count: 4
-			path: app/Services/KandidatService.php
-
-		-
-			message: '#^Method App\\Services\\PredictionService\:\:estimateRemainingSemesters\(\) should return int but returns float\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Services/PredictionService.php
-
-		-
 			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
 			identifier: larastan.noEnvCallsOutsideOfConfig
 			count: 2
 			path: app/Services/RagService.php
-
-		-
-			message: '#^Left side of && is always true\.$#'
-			identifier: booleanAnd.leftAlwaysTrue
-			count: 1
-			path: app/Services/UpisService.php
-
-		-
-			message: '#^Parameter \#1 \$string of function strlen expects string, int given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Services/UpisService.php
-
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: app/Services/UpisService.php
-
-		-
-			message: '#^Variable \$kandidat in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: app/Services/UpisService.php
 
 		-
 			message: '#^PHPDoc tag @method for method App\\Support\\Facades\:\:choice\(\) return type contains unknown class Illuminate\\Support\\Lang\.$#'

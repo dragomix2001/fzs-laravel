@@ -9,7 +9,7 @@ use App\DTOs\ZapisnikStampaData;
 use App\Models\Kandidat;
 use App\Services\DiplomaService;
 use App\Services\DiplomskiRadService;
-use App\Services\IspitService;
+use App\Services\IspitPdfService;
 use App\Services\StudentListService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel;
@@ -22,14 +22,14 @@ class IzvestajiController extends Controller
 
     protected $diplomskiRadService;
 
-    protected $ispitService;
+    protected $ispitPdfService;
 
     public function __construct()
     {
         $this->studentListService = new StudentListService;
         $this->diplomaService = new DiplomaService;
         $this->diplomskiRadService = new DiplomskiRadService;
-        $this->ispitService = new IspitService;
+        $this->ispitPdfService = new IspitPdfService;
     }
 
     public function spisakPoSmerovima()
@@ -124,12 +124,12 @@ class IzvestajiController extends Controller
 
     public function polozeniStampa($id)
     {
-        return $this->ispitService->polozeniStampa($id);
+        return $this->ispitPdfService->polozeniStampa($id);
     }
 
     public function nastavniPlan(Request $request)
     {
-        return $this->ispitService->nastavniPlan(NastavniPlanData::fromRequest($request));
+        return $this->ispitPdfService->nastavniPlan(NastavniPlanData::fromRequest($request));
     }
 
     public function spisakDiplomiranih(Request $request)
@@ -139,7 +139,7 @@ class IzvestajiController extends Controller
 
     public function zapisnikStampa(Request $request)
     {
-        return $this->ispitService->zapisnikStampa(ZapisnikStampaData::fromRequest($request));
+        return $this->ispitPdfService->zapisnikStampa(ZapisnikStampaData::fromRequest($request));
     }
 
     public function zapisnikDiplomski(Kandidat $student)

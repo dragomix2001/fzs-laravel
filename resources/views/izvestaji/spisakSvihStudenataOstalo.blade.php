@@ -29,7 +29,7 @@
                     <td style="border: 1px solid black;">{{$index + 1}}</td>
                     <td style="border: 1px solid black;">{{SUBSTR($item->brojIndeksa, 5)}}/{{SUBSTR($item->brojIndeksa, 0, 4)}}</td>
                     <td style="border: 1px solid black;">{{$item->prezimeKandidata}} {{$item->imeKandidata}}</td>
-                    <td style="border: 1px solid black;">{{$item->program->naziv}}</td>
+                    <td style="border: 1px solid black;">{{$item->program}}</td>
                     <td style="border: 1px solid black;">@if($item->statusUpisa_id == 1)Уписан @elseif($item->statusUpisa_id == 2)Исписан @elseif($item->statusUpisa_id == 4)Обновио @elseif($item->statusUpisa_id == 5)Завршио @elseif($item->statusUpisa_id == 6)Дипломирао @elseif($item->statusUpisa_id == 7)Мировање @endif</td>
                 </tr>
 

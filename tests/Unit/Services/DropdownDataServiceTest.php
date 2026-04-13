@@ -11,6 +11,7 @@ use App\Models\UspehSrednjaSkola;
 use App\Services\DropdownDataService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class DropdownDataServiceTest extends TestCase

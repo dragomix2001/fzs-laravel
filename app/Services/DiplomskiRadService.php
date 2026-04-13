@@ -113,7 +113,8 @@ class DiplomskiRadService extends BasePdfService
             $pdf->WriteHtml($contents);
             $pdf->Output('ZapisnikDiplomski.pdf');
         } catch (QueryException $e) {
-            dd('Дошло је до непредвиђене грешке.'.$e->getMessage());
+            report($e);
+            throw new \RuntimeException('Грешка при генерисању записника дипломског: '.$e->getMessage(), 0, $e);
         }
     }
 }

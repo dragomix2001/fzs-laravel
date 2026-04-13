@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\StatusProfesora;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class StatusProfesoraController extends Controller
@@ -19,13 +17,7 @@ class StatusProfesoraController extends Controller
 
     public function index()
     {
-        try {
-            $status = StatusProfesora::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $status = StatusProfesora::all();
 
         return view('sifarnici.statusProfesora', compact('status'));
     }
@@ -37,13 +29,7 @@ class StatusProfesoraController extends Controller
         $status->naziv = $request->naziv;
         $status->indikatorAktivan = 1;
 
-        try {
-            $status->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $status->save();
 
         return Redirect::to('/statusProfesora');
     }
@@ -67,26 +53,14 @@ class StatusProfesoraController extends Controller
             $status->indikatorAktivan = 0;
         }
 
-        try {
-            $status->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $status->update();
 
         return Redirect::to('/statusProfesora');
     }
 
     public function delete(StatusProfesora $status)
     {
-        try {
-            $status->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $status->delete();
 
         return back();
     }

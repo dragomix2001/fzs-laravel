@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Semestar;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class SemestarController extends Controller
@@ -17,13 +15,7 @@ class SemestarController extends Controller
 
     public function index()
     {
-        try {
-            $semestar = Semestar::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $semestar = Semestar::all();
 
         return view('sifarnici.semestar', compact('semestar'));
     }
@@ -37,13 +29,7 @@ class SemestarController extends Controller
         $semestar->nazivBrojcano = $request->nazivBrojcano;
         $semestar->indikatorAktivan = 1;
 
-        try {
-            $semestar->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $semestar->save();
 
         return Redirect::to('/semestar');
     }
@@ -69,26 +55,14 @@ class SemestarController extends Controller
             $semestar->indikatorAktivan = 0;
         }
 
-        try {
-            $semestar->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $semestar->update();
 
         return Redirect::to('/semestar');
     }
 
     public function delete(Semestar $semestar)
     {
-        try {
-            $semestar->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $semestar->delete();
 
         return back();
     }

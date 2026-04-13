@@ -8,9 +8,7 @@ use App\Models\PredmetProgram;
 use App\Models\Profesor;
 use App\Models\ProfesorPredmet;
 use App\Models\StatusProfesora;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class ProfesorController extends Controller
@@ -22,14 +20,8 @@ class ProfesorController extends Controller
 
     public function index()
     {
-        try {
-            $profesor = Profesor::all();
-            $status = StatusProfesora::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $profesor = Profesor::all();
+        $status = StatusProfesora::all();
 
         return view('sifarnici.profesor', compact('profesor', 'status'));
     }
@@ -48,55 +40,31 @@ class ProfesorController extends Controller
         $profesor->indikatorAktivan = 1;
         $profesor->status_id = $request->status_id;
 
-        try {
-            $profesor->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $profesor->save();
 
         return Redirect::to('/profesor');
     }
 
     public function edit(Profesor $profesor)
     {
-        try {
-            $status = StatusProfesora::all();
-            $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $status = StatusProfesora::all();
+        $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
 
         return view('sifarnici.editProfesor', compact('profesor', 'status', 'predmeti'));
     }
 
     public function editPredmet(Profesor $profesor)
     {
-        try {
-            // $status = StatusProfesora::all();
-            $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
-            // return($predmeti->first());
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        // $status = StatusProfesora::all();
+        $predmeti = ProfesorPredmet::where('profesor_id', $profesor->id)->get();
+        // return($predmeti->first());
 
         return view('sifarnici.editProfesorPredmet', compact('profesor', 'predmeti'));
     }
 
     public function add()
     {
-        try {
-            $status = StatusProfesora::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $status = StatusProfesora::all();
 
         return view('sifarnici.addProfesor', compact('status'));
     }
@@ -117,53 +85,29 @@ class ProfesorController extends Controller
             $profesor->indikatorAktivan = 0;
         }
 
-        try {
-            $profesor->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $profesor->update();
 
         return Redirect::to('/profesor');
     }
 
     public function delete(Profesor $profesor)
     {
-        try {
-            $profesor->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $profesor->delete();
 
         return back();
     }
 
     public function deletePredmet(ProfesorPredmet $predmet)
     {
-        try {
-            $predmet->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $predmet->delete();
 
         return back();
     }
 
     public function addPredmet(Profesor $profesor)
     {
-        try {
-            $predmet = PredmetProgram::all();
-            $oblik = OblikNastave::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $predmet = PredmetProgram::all();
+        $oblik = OblikNastave::all();
 
         return view('sifarnici.addProfesorPredmet', compact('predmet', 'oblik', 'profesor'));
     }
@@ -177,13 +121,7 @@ class ProfesorController extends Controller
         $predmet->oblik_nastave_id = $request->oblikNastave_id;
         $predmet->indikatorAktivan = 1;
 
-        try {
-            $predmet->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $predmet->save();
 
         return Redirect::to('/profesor/'.$predmet->profesor_id.'/editPredmet');
     }

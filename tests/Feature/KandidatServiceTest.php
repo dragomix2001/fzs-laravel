@@ -846,7 +846,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
+        $service = app(KandidatService::class);
         $result = $service->masovniUpis([$kandidat->id]);
 
         $this->assertTrue($result);
@@ -868,7 +868,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
+        $service = app(KandidatService::class);
         $result = $service->masovniUpis([$kandidat->id]);
 
         $this->assertFalse($result);
@@ -889,7 +889,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
+        $service = app(KandidatService::class);
         $service->masovniUpisMaster([$kandidat->id]);
 
         $this->assertDatabaseHas('kandidat', ['id' => $kandidat->id, 'statusUpisa_id' => 1]);
@@ -916,7 +916,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
+        $service = app(KandidatService::class);
         $result = $service->upisKandidata($kandidat->id);
 
         $this->assertTrue($result['success']);
@@ -936,7 +936,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = new KandidatService($upisServiceMock, $fileStorageServiceMock, $gradeManagementServiceMock);
+        $service = app(KandidatService::class);
         $service->registracijaKandidata(42);
 
         // If we get here without exception, the mock expectation was met

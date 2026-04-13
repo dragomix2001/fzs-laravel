@@ -7,15 +7,11 @@ use App\DTOs\KandidatPage1Data;
 use App\DTOs\KandidatPage2Data;
 use App\DTOs\KandidatUpdateData;
 use App\DTOs\MasterKandidatData;
-use App\Jobs\MassEnrollmentJob;
 use App\Models\Kandidat;
-use App\Models\KandidatPrilozenaDokumenta;
 use App\Models\PrijavaIspita;
-use App\Models\Sport;
 use App\Models\SportskoAngazovanje;
 use App\Models\StudijskiProgram;
 use App\Models\UpisGodine;
-use App\Models\UspehSrednjaSkola;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -25,10 +21,7 @@ use Illuminate\Support\Facades\DB;
 /**
  * Kandidat Service - Main orchestrator for student candidate operations.
  *
- * WARNING: This is a God Service (935 lines, 35 methods) - known technical debt.
- * See docs/ADR/001-god-services.md for refactoring strategy.
- *
- * Main Responsibilities:
+ * Responsibilities:
  * - Kandidat CRUD operations (create, update, delete)
  * - Image and PDF file handling (upload, update, delete)
  * - High school grades management (UspehSrednjaSkola)
@@ -36,11 +29,9 @@ use Illuminate\Support\Facades\DB;
  * - Documents management (KandidatPrilozenaDokumenta)
  * - Dropdown data retrieval for forms
  * - Cache management for active studijski programs
- * - Mass enrollment dispatch (Queue jobs)
  *
  * @see KandidatController
- * @see StoreKandidatRequest
- * @see UpdateKandidatRequest
+ * @see KandidatEnrollmentService  For enrollment/mass operations (extracted)
  * @see Kandidat
  */
 class KandidatService
@@ -166,7 +157,7 @@ class KandidatService
         $kandidat->prezimeKandidata = $data->prezime;
         $kandidat->jmbg = $data->JMBG;
 
-        $kandidat->uplata = $data->uplata ? 1 : 0;
+        $kandidat->uplata = (bool) $data->uplata;
 
         $kandidat->statusUpisa_id = 3;
         $kandidat->datumStatusa = Carbon::now();
@@ -269,7 +260,7 @@ class KandidatService
         $kandidat->jmbg = $data->JMBG;
 
         if ($data->uplata) {
-            $kandidat->uplata = 1;
+            $kandidat->uplata = true;
         }
 
         if ($data->imageUpload !== null) {
@@ -354,7 +345,7 @@ class KandidatService
         $kandidat->statusUpisa_id = 3;
         $kandidat->datumStatusa = Carbon::now();
 
-        $kandidat->uplata = $data->uplata ? 1 : 0;
+        $kandidat->uplata = (bool) $data->uplata;
 
         $kandidat->mestoRodjenja = $data->mestoRodjenja;
         $kandidat->kontaktTelefon = $data->kontaktTelefon;
@@ -420,7 +411,7 @@ class KandidatService
         $kandidat->jmbg = $data->JMBG;
 
         if ($data->uplata) {
-            $kandidat->uplata = 1;
+            $kandidat->uplata = true;
         }
 
         $kandidat->statusUpisa_id = $data->statusUpisaId;
@@ -509,134 +500,72 @@ class KandidatService
 
     /**
      * Masovna uplata za osnovne studije.
+     *
+     * @deprecated Use KandidatEnrollmentService::masovnaUplata() instead.
      */
     public function masovnaUplata(array $kandidatIds): void
     {
-        $kandidatiMap = Kandidat::whereIn('id', $kandidatIds)->get()->keyBy('id');
-
-        foreach ($kandidatIds as $kandidatId) {
-            $kandidat = $kandidatiMap->get($kandidatId);
-            $kandidat->uplata = 1;
-            $kandidat->save();
-
-            UpisGodine::uplatiGodinu($kandidatId, 1);
-        }
+        app(KandidatEnrollmentService::class)->masovnaUplata($kandidatIds);
     }
 
     /**
      * Masovni upis za osnovne studije.
+     *
+     * @deprecated Use KandidatEnrollmentService::masovniUpis() instead.
      */
     public function masovniUpis(array $kandidatIds): bool
     {
-        $kandidatiMap = Kandidat::whereIn('id', $kandidatIds)->get()->keyBy('id');
-
-        foreach ($kandidatIds as $kandidatId) {
-            $kandidat = $kandidatiMap->get($kandidatId);
-            $this->upisService->registrujKandidata($kandidatId);
-
-            $returnValue = $this->upisService->upisiGodinu($kandidatId, $kandidat->godinaStudija_id, $kandidat->skolskaGodinaUpisa_id);
-
-            if ($returnValue) {
-                $kandidat->statusUpisa_id = 1;
-                $kandidat->datumStatusa = Carbon::now();
-                $kandidat->save();
-            } else {
-                return false;
-            }
-        }
-
-        return true;
+        return app(KandidatEnrollmentService::class)->masovniUpis($kandidatIds);
     }
 
     /**
      * Masovna uplata za master studije.
+     *
+     * @deprecated Use KandidatEnrollmentService::masovnaUplataMaster() instead.
      */
     public function masovnaUplataMaster(array $kandidatIds): void
     {
-        $kandidatiMap = Kandidat::whereIn('id', $kandidatIds)->get()->keyBy('id');
-
-        foreach ($kandidatIds as $kandidatId) {
-            $kandidat = $kandidatiMap->get($kandidatId);
-            $kandidat->uplata = 1;
-            $kandidat->save();
-        }
+        app(KandidatEnrollmentService::class)->masovnaUplataMaster($kandidatIds);
     }
 
     /**
      * Masovni upis za master studije.
+     *
+     * @deprecated Use KandidatEnrollmentService::masovniUpisMaster() instead.
      */
     public function masovniUpisMaster(array $kandidatIds): void
     {
-        $kandidatiMap = Kandidat::whereIn('id', $kandidatIds)->get()->keyBy('id');
-
-        foreach ($kandidatIds as $kandidatId) {
-            $kandidat = $kandidatiMap->get($kandidatId);
-            $kandidat->statusUpisa_id = 1;
-            $kandidat->datumStatusa = Carbon::now();
-            $kandidat->save();
-
-            $this->upisService->generisiBrojIndeksa($kandidatId);
-        }
+        app(KandidatEnrollmentService::class)->masovniUpisMaster($kandidatIds);
     }
 
     /**
      * Dispatch mass enrollment for students (async queue).
      *
-     * Handles processing large sets of candidates using background jobs.
-     *
-     * @param  array  $kandidatIds  List of candidate IDs to enroll
-     * @return array Status message indicating background processing started
+     * @deprecated Use KandidatEnrollmentService::masovniUpisAsync() instead.
      */
     public function masovniUpisAsync(array $kandidatIds): array
     {
-        MassEnrollmentJob::dispatch($kandidatIds);
-
-        return ['status' => 'queued', 'count' => count($kandidatIds)];
+        return app(KandidatEnrollmentService::class)->masovniUpisAsync($kandidatIds);
     }
 
     /**
      * Upis kandidata (enrollment logic).
+     *
+     * @deprecated Use KandidatEnrollmentService::upisKandidata() instead.
      */
     public function upisKandidata(int $id): array
     {
-        $kandidat = Kandidat::find($id);
-        $this->upisService->registrujKandidata($id);
-
-        if ($kandidat->tipStudija_id == 1) {
-            $check = $this->upisService->upisiGodinu($id, $kandidat->godinaStudija_id, $kandidat->skolskaGodinaUpisa_id);
-            if (! $check) {
-                return ['success' => false, 'tipStudija_id' => $kandidat->tipStudija_id];
-            }
-        } elseif ($kandidat->tipStudija_id == 2) {
-            $checkTwo = $this->upisService->upisiGodinu($id, $kandidat->godinaStudija_id, $kandidat->skolskaGodinaUpisa_id);
-            if (! $checkTwo) {
-                return ['success' => false, 'tipStudija_id' => $kandidat->tipStudija_id];
-            }
-            $this->upisService->generisiBrojIndeksa($kandidat->id);
-        } elseif ($kandidat->tipStudija_id == 3) {
-            $checkTwo = $this->upisService->upisiGodinu($id, $kandidat->godinaStudija_id, $kandidat->skolskaGodinaUpisa_id);
-            if (! $checkTwo) {
-                return ['success' => false, 'tipStudija_id' => $kandidat->tipStudija_id];
-            }
-            $this->upisService->generisiBrojIndeksa($kandidat->id);
-        }
-
-        $kandidat->statusUpisa_id = 1;
-        $kandidat->datumStatusa = Carbon::now();
-        $saved = $kandidat->save();
-
-        return [
-            'success' => $saved,
-            'tipStudija_id' => $kandidat->tipStudija_id,
-        ];
+        return app(KandidatEnrollmentService::class)->upisKandidata($id);
     }
 
     /**
      * Registracija kandidata.
+     *
+     * @deprecated Use KandidatEnrollmentService::registracijaKandidata() instead.
      */
     public function registracijaKandidata(int $id): void
     {
-        $this->upisService->registrujKandidata($id);
+        app(KandidatEnrollmentService::class)->registracijaKandidata($id);
     }
 
     /**

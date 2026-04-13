@@ -10,9 +10,7 @@ use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipPredmeta;
 use App\Models\TipStudija;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class PredmetController extends Controller
@@ -24,17 +22,11 @@ class PredmetController extends Controller
 
     public function index()
     {
-        try {
-            $predmet = Predmet::all();
-            $tipPredmeta = TipPredmeta::all();
-            $tipStudija = TipStudija::all();
-            $studijskiProgram = StudijskiProgram::all();
-            $godinaStudija = GodinaStudija::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $predmet = Predmet::all();
+        $tipPredmeta = TipPredmeta::all();
+        $tipStudija = TipStudija::all();
+        $studijskiProgram = StudijskiProgram::all();
+        $godinaStudija = GodinaStudija::all();
 
         return view('sifarnici.predmet', compact('predmet', 'tipStudija', 'studijskiProgram', 'godinaStudija', 'tipPredmeta'));
     }
@@ -45,60 +37,29 @@ class PredmetController extends Controller
 
         $predmet->naziv = $request->naziv;
 
-        try {
-            $predmet->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $predmet->save();
 
         return Redirect::to('/predmet');
     }
 
     public function edit(Predmet $predmet)
     {
-        try {
-            // $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
-            // return $programi;
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        // $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
+        // return $programi;
 
         return view('sifarnici.editPredmet', compact('predmet'));
     }
 
     public function editProgram(Predmet $predmet)
     {
-        try {
-            try {
-                $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
-
-            } catch (QueryException $e) {
-                Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-                return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-            }
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $programi = PredmetProgram::where(['predmet_id' => $predmet->id])->get();
 
         return view('sifarnici.editPredmetProgram', compact('programi', 'predmet'));
     }
 
     public function add()
     {
-        try {
-            $godinaStudija = GodinaStudija::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $godinaStudija = GodinaStudija::all();
 
         return view('sifarnici.addPredmet');
     }
@@ -107,58 +68,34 @@ class PredmetController extends Controller
     {
         $predmet->naziv = $request->naziv;
 
-        try {
-            $predmet->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $predmet->update();
 
         return Redirect::to('/predmet');
     }
 
     public function delete(Predmet $predmet)
     {
-        try {
-            $predmet->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $predmet->delete();
 
         return back();
     }
 
     public function deleteProgram(PredmetProgram $program)
     {
-        try {
-            $program->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $program->delete();
 
         return back();
     }
 
     public function addProgram(Predmet $predmet)
     {
-        try {
-            $programi = StudijskiProgram::all();
-            $godinaStudija = GodinaStudija::all();
-            $tipPredmeta = TipPredmeta::all();
-            $tipStudija = TipStudija::all();
-            $skolskaGodina = SkolskaGodUpisa::all();
-            // $semestar = Semestar::all();
-            // $oblik = OblikNastave::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $programi = StudijskiProgram::all();
+        $godinaStudija = GodinaStudija::all();
+        $tipPredmeta = TipPredmeta::all();
+        $tipStudija = TipStudija::all();
+        $skolskaGodina = SkolskaGodUpisa::all();
+        // $semestar = Semestar::all();
+        // $oblik = OblikNastave::all();
 
         return view('sifarnici.addPredmetProgram', compact('programi', 'predmet', 'godinaStudija', 'tipPredmeta', 'tipStudija', 'skolskaGodina'));
     }
@@ -180,13 +117,7 @@ class PredmetController extends Controller
         $program->statusPredmeta = 1;
         $program->indikatorAktivan = 1;
 
-        try {
-            $program->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $program->save();
 
         return Redirect::to('/predmet/'.$request->predmet_id.'/editProgram');
     }

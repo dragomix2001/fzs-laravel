@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KrsnaSlava;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class KrsnaSlavaController extends Controller
@@ -17,13 +15,7 @@ class KrsnaSlavaController extends Controller
 
     public function index()
     {
-        try {
-            $krsnaSlava = KrsnaSlava::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $krsnaSlava = KrsnaSlava::all();
 
         return view('sifarnici.krsnaSlava', compact('krsnaSlava'));
     }
@@ -35,13 +27,7 @@ class KrsnaSlavaController extends Controller
         $krsnaSlava->datumSlave = $request->datumSlave;
         $krsnaSlava->indikatorAktivan = 1;
 
-        try {
-            $krsnaSlava->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $krsnaSlava->save();
 
         return Redirect::to('/krsnaSlava');
     }
@@ -66,26 +52,14 @@ class KrsnaSlavaController extends Controller
             $krsnaSlava->indikatorAktivan = 0;
         }
 
-        try {
-            $krsnaSlava->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $krsnaSlava->update();
 
         return Redirect::to('/krsnaSlava');
     }
 
     public function delete(KrsnaSlava $krsnaSlava)
     {
-        try {
-            $krsnaSlava->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $krsnaSlava->delete();
 
         return back();
     }

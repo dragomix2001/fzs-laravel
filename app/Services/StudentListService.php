@@ -8,6 +8,7 @@ use App\Models\Predmet;
 use App\Models\PredmetProgram;
 use App\Models\PrijavaIspita;
 use App\Models\Profesor;
+use App\Models\ProfesorPredmet;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
@@ -98,7 +99,8 @@ class StudentListService extends BasePdfService
         $view = View::make('izvestaji.integralno')
             ->with('kandidat', $kandidat)
             ->with('godina', $godina)
-            ->with('tipStudija', $tipStudija);
+            ->with('tip', $tipStudija)
+            ->with('tipSvi', $tipStudija);
 
         $contents = $view->render();
         $pdf->SetTitle('Интегрални списак');
@@ -169,11 +171,16 @@ class StudentListService extends BasePdfService
 
         $program = StudijskiProgram::whereIn('id', $uslov)->get();
 
+        $tipStudija = TipStudija::all();
+        $godinaStudija = GodinaStudija::all();
+
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.spisakSvihStudenata')
             ->with('kandidat', $kandidat)
             ->with('program', $program)
-            ->with('godina', $godina);
+            ->with('tip', $tipStudija)
+            ->with('tipSvi', $tipStudija)
+            ->with('godina', $godinaStudija);
 
         $contents = $view->render();
         $pdf->SetTitle('Списак свих студената');
@@ -199,8 +206,8 @@ class StudentListService extends BasePdfService
 
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.spisakSmer')
-            ->with('kandidat', $kandidat)
-            ->with('program', $program)
+            ->with('studenti', $kandidat)
+            ->with('program', $program ? $program->naziv : '')
             ->with('godina', $godina);
 
         $contents = $view->render();
@@ -251,7 +258,7 @@ class StudentListService extends BasePdfService
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.spisakPoGodini')
             ->with('kandidat', $kandidat)
-            ->with('godina', $godina);
+            ->with('godinaNaziv', $godina);
 
         $contents = $view->render();
         $pdf->SetTitle('Списак по години');
@@ -270,9 +277,20 @@ class StudentListService extends BasePdfService
             ->orderBy('brojIndeksa')
             ->get();
 
+        $uslov = Kandidat::where('statusUpisa_id', 3)
+            ->whereNotNull('krsnaSlava_id')
+            ->distinct('krsnaSlava_id')
+            ->select('krsnaSlava_id')
+            ->groupBy('krsnaSlava_id')
+            ->get();
+
+        $slave = DB::table('krsna_slava')->get();
+
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.spisakPoSlavama')
-            ->with('kandidat', $kandidat);
+            ->with('kandidat', $kandidat)
+            ->with('uslov', $uslov)
+            ->with('slave', $slave);
 
         $contents = $view->render();
         $pdf->SetTitle('Списак по крсним славама');
@@ -285,10 +303,12 @@ class StudentListService extends BasePdfService
     public function spisakPoProfesorima()
     {
         $profesori = Profesor::all();
+        $veza = ProfesorPredmet::with('predmet.predmet')->get();
 
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.predmetiPoProfesorima')
-            ->with('profesori', $profesori);
+            ->with('profesori', $profesori)
+            ->with('veza', $veza);
 
         $contents = $view->render();
         $pdf->SetTitle('Списак предмета по професорима');
@@ -337,13 +357,20 @@ class StudentListService extends BasePdfService
     public function spisakPoPredmetima($predmetId)
     {
         $predmetProgramIds = PredmetProgram::where('predmet_id', $predmetId)->pluck('id');
+        $programi = PredmetProgram::where('predmet_id', $predmetId)->with('program')->get();
         $prijave = PrijavaIspita::whereIn('predmet_id', $predmetProgramIds)->get();
         $predmet = Predmet::find($predmetId);
 
+        $kandidatIds = $prijave->pluck('kandidat_id')->unique();
+        $studenti = Kandidat::whereIn('id', $kandidatIds)
+            ->select('kandidat.*', 'kandidat.godinaStudija_id as godina', 'kandidat.studijskiProgram_id as program_id')
+            ->get();
+
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.spisakPoPredmetima')
-            ->with('prijave', $prijave)
-            ->with('predmet', $predmet);
+            ->with('studenti', $studenti)
+            ->with('programi', $programi)
+            ->with('predmet', $predmet ? $predmet->naziv : '');
 
         $contents = $view->render();
         $pdf->SetTitle('Списак студената по предметима');
@@ -368,7 +395,7 @@ class StudentListService extends BasePdfService
 
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.diplomirani')
-            ->with('kandidat', $kandidat)
+            ->with('diplomirani', $kandidat)
             ->with('godina', $godina);
 
         $contents = $view->render();

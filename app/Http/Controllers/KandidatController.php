@@ -22,14 +22,17 @@ use App\Models\StatusStudiranja;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Models\UspehSrednjaSkola;
+use App\Services\KandidatEnrollmentService;
 use App\Services\KandidatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class KandidatController extends Controller
 {
-    public function __construct(protected KandidatService $kandidatService)
-    {
+    public function __construct(
+        protected KandidatService $kandidatService,
+        protected KandidatEnrollmentService $enrollmentService,
+    ) {
         $this->middleware('auth');
     }
 
@@ -278,7 +281,7 @@ class KandidatController extends Controller
 
     public function upisKandidata($id)
     {
-        $result = $this->kandidatService->upisKandidata($id);
+        $result = $this->enrollmentService->upisKandidata($id);
 
         if (! $result['success']) {
             Session::flash('flash-error', 'upis');
@@ -300,14 +303,14 @@ class KandidatController extends Controller
 
     public function masovnaUplata(Request $request)
     {
-        $this->kandidatService->masovnaUplata($request->odabir);
+        $this->enrollmentService->masovnaUplata($request->odabir);
 
         return redirect('/kandidat/');
     }
 
     public function masovniUpis(Request $request)
     {
-        $success = $this->kandidatService->masovniUpis($request->odabir);
+        $success = $this->enrollmentService->masovniUpis($request->odabir);
 
         if (! $success) {
             Session::flash('flash-error', 'upis');
@@ -318,21 +321,21 @@ class KandidatController extends Controller
 
     public function masovnaUplataMaster(Request $request)
     {
-        $this->kandidatService->masovnaUplataMaster($request->odabir);
+        $this->enrollmentService->masovnaUplataMaster($request->odabir);
 
         return redirect('/master/');
     }
 
     public function masovniUpisMaster(Request $request)
     {
-        $this->kandidatService->masovniUpisMaster($request->odabir);
+        $this->enrollmentService->masovniUpisMaster($request->odabir);
 
         return redirect('/master/');
     }
 
     public function registracijaKandidata($id)
     {
-        $this->kandidatService->registracijaKandidata($id);
+        $this->enrollmentService->registracijaKandidata($id);
 
         return redirect('/kandidat/');
     }

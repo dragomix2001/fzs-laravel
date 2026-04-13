@@ -6,9 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GodinaStudija;
 use App\Models\PrilozenaDokumenta;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class PrilozenaDokumentaController extends Controller
@@ -20,14 +18,8 @@ class PrilozenaDokumentaController extends Controller
 
     public function index()
     {
-        try {
-            $dokument = PrilozenaDokumenta::with('godinaStudija')->get();
-            $godinaStudija = GodinaStudija::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $dokument = PrilozenaDokumenta::with('godinaStudija')->get();
+        $godinaStudija = GodinaStudija::all();
 
         return view('sifarnici.prilozenaDokumenta', compact('dokument', 'godinaStudija'));
     }
@@ -40,13 +32,7 @@ class PrilozenaDokumentaController extends Controller
         $dokument->naziv = $request->naziv;
         $dokument->skolskaGodina_id = $request->skolskaGodina_id;
 
-        try {
-            $dokument->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $dokument->save();
 
         return Redirect::to('/prilozenaDokumenta');
     }
@@ -71,26 +57,14 @@ class PrilozenaDokumentaController extends Controller
         $dokument->naziv = $request->naziv;
         $dokument->skolskaGodina_id = $request->skolskaGodina_id;
 
-        try {
-            $dokument->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $dokument->update();
 
         return Redirect::to('/prilozenaDokumenta');
     }
 
     public function delete(PrilozenaDokumenta $dokument)
     {
-        try {
-            $dokument->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $dokument->delete();
 
         return back();
     }

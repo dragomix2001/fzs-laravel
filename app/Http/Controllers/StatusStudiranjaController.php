@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StatusStudiranja;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class StatusStudiranjaController extends Controller
@@ -17,13 +15,7 @@ class StatusStudiranjaController extends Controller
 
     public function index()
     {
-        try {
-            $statusStudiranja = StatusStudiranja::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $statusStudiranja = StatusStudiranja::all();
 
         return view('sifarnici.statusStudiranja', compact('statusStudiranja'));
     }
@@ -35,13 +27,7 @@ class StatusStudiranjaController extends Controller
         $statusStudiranja->naziv = $request->naziv;
         $statusStudiranja->indikatorAktivan = 1;
 
-        try {
-            $statusStudiranja->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $statusStudiranja->save();
 
         return Redirect::to('/statusStudiranja');
     }
@@ -65,26 +51,14 @@ class StatusStudiranjaController extends Controller
             $statusStudiranja->indikatorAktivan = 0;
         }
 
-        try {
-            $statusStudiranja->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $statusStudiranja->update();
 
         return Redirect::to('/statusStudiranja');
     }
 
     public function delete(StatusStudiranja $statusStudiranja)
     {
-        try {
-            $statusStudiranja->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $statusStudiranja->delete();
 
         return back();
     }

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\OblikNastave;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class OblikNastaveController extends Controller
@@ -19,13 +17,7 @@ class OblikNastaveController extends Controller
 
     public function index()
     {
-        try {
-            $oblikNastave = OblikNastave::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $oblikNastave = OblikNastave::all();
 
         return view('sifarnici.oblikNastave', compact('oblikNastave'));
     }
@@ -38,13 +30,7 @@ class OblikNastaveController extends Controller
         $oblikNastave->skrNaziv = $request->skrNaziv;
         $oblikNastave->indikatorAktivan = 1;
 
-        try {
-            $oblikNastave->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $oblikNastave->save();
 
         return Redirect::to('/oblikNastave');
     }
@@ -69,26 +55,14 @@ class OblikNastaveController extends Controller
             $oblikNastave->indikatorAktivan = 0;
         }
 
-        try {
-            $oblikNastave->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $oblikNastave->update();
 
         return Redirect::to('/oblikNastave');
     }
 
     public function delete(OblikNastave $oblikNastave)
     {
-        try {
-            $oblikNastave->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $oblikNastave->delete();
 
         return back();
     }

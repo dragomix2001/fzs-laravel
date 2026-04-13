@@ -12,7 +12,7 @@ class Skolarina extends Model
 
     protected $table = 'skolarina';
 
-    protected $casts = ['datum'];
+    protected $casts = ['datum' => 'date'];
 
     public function kandidat(): BelongsTo
     {

@@ -9,7 +9,6 @@ use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Models\UpisGodine;
 use App\Services\UpisService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
@@ -84,32 +83,8 @@ class StudentController extends Controller
 
             return redirect("student/{$id}/upis");
         }
-        $kandidat = Kandidat::find($id);
 
-        $godina = $request->godina;
-        if ($godina > 1) {
-            $max = UpisGodine::where(['kandidat_id' => $id, 'godina' => $godina - 1])->max('pokusaj');
-            $prethodnaGodina = UpisGodine::where([
-                'kandidat_id' => $id,
-                'godina' => $godina - 1,
-                'pokusaj' => $max,
-                'tipStudija_id' => $kandidat->tipStudija_id])->first();
-            $prethodnaGodina->statusGodine_id = 5;
-            $prethodnaGodina->save();
-        }
-
-        $upisaneGodine = UpisGodine::where([
-            'kandidat_id' => $id,
-            'godina' => $request->godina,
-            'pokusaj' => $request->pokusaj,
-            'tipStudija_id' => $kandidat->tipStudija_id])->first();
-        $upisaneGodine->statusGodine_id = 1;
-        $upisaneGodine->datumUpisa = Carbon::now();
-        $upisaneGodine->save();
-
-        $kandidat->godinaStudija_id = $request->godina;
-
-        $kandidat->save();
+        $this->upisService->upisiStudentaGodinu($id, $request->godina, $request->pokusaj);
 
         return redirect("student/{$id}/upis");
     }
@@ -122,35 +97,7 @@ class StudentController extends Controller
             return redirect("student/{$id}/upis");
         }
 
-        $kandidat = Kandidat::find($id);
-
-        $poslednjiPokusaj = UpisGodine::where([
-            'kandidat_id' => $id,
-            'godina' => $request->godina,
-            'tipStudija_id' => $kandidat->tipStudija_id])->max('pokusaj');
-
-        $prethodnaGodina = UpisGodine::where([
-            'kandidat_id' => $id,
-            'godina' => $request->godina,
-            'pokusaj' => $poslednjiPokusaj,
-            'tipStudija_id' => $kandidat->tipStudija_id])->first();
-        $prethodnaGodina->statusGodine_id = 4;
-        $prethodnaGodina->datumPromene = Carbon::now();
-        $prethodnaGodina->save();
-
-        $obnovaGodine = new UpisGodine;
-        $obnovaGodine->kandidat_id = $id;
-        $obnovaGodine->godina = $request->godina;
-        $obnovaGodine->tipStudija_id = $request->tipStudijaId;
-        $obnovaGodine->studijskiProgram_id = $kandidat->studijskiProgram_id;
-        $obnovaGodine->pokusaj = $poslednjiPokusaj + 1;
-        $obnovaGodine->statusGodine_id = 1;
-        $obnovaGodine->datumUpisa = Carbon::now();
-        $obnovaGodine->save();
-
-        $kandidat->godinaStudija_id = $request->godina;
-
-        $kandidat->save();
+        $this->upisService->obnoviGodinu($id, $request->godina, $request->tipStudijaId);
 
         return redirect("student/{$id}/upis");
     }
@@ -163,7 +110,7 @@ class StudentController extends Controller
             return redirect("student/{$id}/upis");
         }
 
-        UpisGodine::destroy($request->upisId);
+        $this->upisService->obrisiObnovuGodine($request->upisId);
 
         return redirect("student/{$id}/upis");
     }
@@ -176,49 +123,16 @@ class StudentController extends Controller
             return redirect("student/{$id}/upis");
         }
 
-        $upis = UpisGodine::find($request->upisId);
-        $upis->statusGodine_id = 3;
-        $upis->save();
+        $this->upisService->ponistiUpis($request->upisId);
 
         return redirect("student/{$id}/upis");
     }
 
     public function promeniStatus($id, $statusId, $godinaId)
     {
-        $kandidat = Kandidat::find($id);
-        if ($statusId == $this->status['zavrsio'] || $statusId == $this->status['odustao'] || $statusId == $this->status['obnovio']) {
-
-        } elseif ($kandidat->statusUpisa_id == $this->status['odustao'] && $statusId == 1) {
-            // deo gde se upisuje ispisani kandidat
-            $kandidat->statusUpisa_id = $statusId;
-            $kandidat->datumStatusa = Carbon::now();
-            $kandidat->skolskaGodinaUpisa_id = $godinaId;
-            $kandidat->save();
-
-            $this->upisService->generisiBrojIndeksa($kandidat->id);
-
-            return Redirect::back();
-        } else {
-            $kandidat->statusUpisa_id = $statusId;
-        }
-
-        $kandidat->datumStatusa = Carbon::now();
-
-        if ($godinaId != 0) {
-            $aktivnaGodina = UpisGodine::find($godinaId);
-            $aktivnaGodina->statusGodine_id = $statusId;
-            if ($statusId == $this->status['upisan']) {
-                $aktivnaGodina->datumUpisa = Carbon::now();
-            }
-            $aktivnaGodina->datumPromene = Carbon::now();
-
-            $aktivnaGodina->save();
-        }
-
-        $kandidat->save();
+        $this->upisService->promeniStatus($id, $statusId, $godinaId, $this->status);
 
         return Redirect::back();
-        // return redirect("student/index/{$kandidat->tipStudija_id}?godina={$kandidat->godinaStudija_id}&studijskiProgramId={$kandidat->studijskiProgram_id}");
     }
 
     public function masovniUpis(Request $request)
@@ -260,22 +174,23 @@ class StudentController extends Controller
 
     public function storeIzmenaGodine(Request $request)
     {
-        $upisGodine = UpisGodine::find($request->id);
-        $upisGodine->statusGodine_id = $request->statusGodine_id;
-        $upisGodine->skolskaGodina_id = $request->skolskaGodina_id;
+        try {
+            $kandidatId = $this->upisService->sacuvajIzmenuGodine(
+                $request->id,
+                $request->statusGodine_id,
+                $request->skolskaGodina_id,
+                $request->datumUpisa,
+                $request->datumUpisa_format,
+                $request->datumPromene,
+                $request->datumPromene_format,
+            );
+        } catch (\RuntimeException $e) {
+            Session::flash('error', $e->getMessage());
 
-        $upisGodine->datumUpisa = (empty($request->datumUpisa) || empty($request->datumUpisa_format)) ?
-            null : $request->datumUpisa;
-
-        $upisGodine->datumPromene = (empty($request->datumPromene) || empty($request->datumPromene_format)) ?
-            null : $request->datumPromene;
-
-        $saved = $upisGodine->save();
-        if (! $saved) {
-            Session::flash('error', 'Дошло је до грешке при чувању!');
+            return Redirect::back();
         }
 
-        return redirect("/student/{$upisGodine->kandidat_id}/upis");
+        return redirect("/student/{$kandidatId}/upis");
     }
 
     public function zamrznutiStudenti()

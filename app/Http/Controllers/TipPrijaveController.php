@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\TipPrijave;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class TipPrijaveController extends Controller
@@ -19,13 +17,7 @@ class TipPrijaveController extends Controller
 
     public function index()
     {
-        try {
-            $tip = TipPrijave::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tip = TipPrijave::all();
 
         return view('sifarnici.tipPrijave', compact('tip'));
     }
@@ -37,13 +29,7 @@ class TipPrijaveController extends Controller
         $tip->naziv = $request->naziv;
         $tip->indikatorAktivan = 1;
 
-        try {
-            $tip->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tip->save();
 
         return Redirect::to('/tipPrijave');
     }
@@ -67,26 +53,14 @@ class TipPrijaveController extends Controller
             $tip->indikatorAktivan = 0;
         }
 
-        try {
-            $tip->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tip->update();
 
         return Redirect::to('/tipPrijave');
     }
 
     public function delete(TipPrijave $tip)
     {
-        try {
-            $tip->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tip->delete();
 
         return back();
     }

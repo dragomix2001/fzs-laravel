@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TipStudija;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class TipStudijaController extends Controller
@@ -17,13 +15,7 @@ class TipStudijaController extends Controller
 
     public function index()
     {
-        try {
-            $tipStudija = TipStudija::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipStudija = TipStudija::all();
 
         return view('sifarnici.tipStudija', compact('tipStudija'));
     }
@@ -36,13 +28,7 @@ class TipStudijaController extends Controller
         $tipStudija->skrNaziv = $request->skrNaziv;
         $tipStudija->indikatorAktivan = 1;
 
-        try {
-            $tipStudija->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipStudija->save();
 
         return Redirect::to('/tipStudija');
     }
@@ -67,26 +53,14 @@ class TipStudijaController extends Controller
             $tipStudija->indikatorAktivan = 0;
         }
 
-        try {
-            $tipStudija->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipStudija->update();
 
         return Redirect::to('/tipStudija');
     }
 
     public function delete(TipStudija $tipStudija)
     {
-        try {
-            $tipStudija->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipStudija->delete();
 
         return back();
     }

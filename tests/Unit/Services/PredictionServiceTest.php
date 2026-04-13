@@ -98,6 +98,7 @@ class PredictionServiceTest extends TestCase
         $this->assertEquals(10, $stats['total_exams']);
         $this->assertGreaterThanOrEqual(0, $stats['passed_exams']);
         $this->assertGreaterThanOrEqual(0, $stats['failed_exams']);
+        $this->assertEquals($stats['total_exams'], $stats['passed_exams'] + $stats['failed_exams']);
     }
 
     #[Test]
@@ -289,11 +290,12 @@ class PredictionServiceTest extends TestCase
     #[Test]
     public function test_get_class_statistics_counts_students(): void
     {
+        $existingCount = Kandidat::count();
         Kandidat::factory()->count(5)->create();
 
         $result = $this->service->getClassStatistics();
 
-        $this->assertEquals(5, $result['total_students']);
+        $this->assertEquals($existingCount + 5, $result['total_students']);
     }
 
     #[Test]

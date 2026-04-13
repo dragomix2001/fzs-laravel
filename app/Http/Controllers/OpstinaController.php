@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Opstina;
 use App\Models\Region;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class OpstinaController extends Controller
@@ -18,14 +16,8 @@ class OpstinaController extends Controller
 
     public function index()
     {
-        try {
-            $opstina = Opstina::all();
-            $region = Region::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $opstina = Opstina::all();
+        $region = Region::all();
 
         return view('sifarnici.opstina', compact('opstina', 'region'));
     }
@@ -37,39 +29,21 @@ class OpstinaController extends Controller
         $opstina->naziv = $request->naziv;
         $opstina->region_id = $request->region_id;
 
-        try {
-            $opstina->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $opstina->save();
 
         return Redirect::to('/opstina');
     }
 
     public function edit(Opstina $opstina)
     {
-        try {
-            $region = Region::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $region = Region::all();
 
         return view('sifarnici.editOpstina', compact('opstina', 'region'));
     }
 
     public function add()
     {
-        try {
-            $region = Region::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $region = Region::all();
 
         return view('sifarnici.addOpstina', compact('region'));
     }
@@ -79,26 +53,14 @@ class OpstinaController extends Controller
         $opstina->naziv = $request->naziv;
         $opstina->region_id = $request->region_id;
 
-        try {
-            $opstina->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $opstina->update();
 
         return Redirect::to('/opstina');
     }
 
     public function delete(Opstina $opstina)
     {
-        try {
-            $opstina->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $opstina->delete();
 
         return back();
     }

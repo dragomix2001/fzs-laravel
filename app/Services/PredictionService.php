@@ -189,7 +189,7 @@ class PredictionService
         $remainingExams = max(0, 40 - $stats['passed_exams']);
         $avgExamsPerSemester = max(1, $stats['passed_exams'] / 4);
 
-        return ceil($remainingExams / $avgExamsPerSemester);
+        return (int) ceil($remainingExams / $avgExamsPerSemester);
     }
 
     protected function identifySuccessFactors(array $stats): array

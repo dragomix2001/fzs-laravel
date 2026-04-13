@@ -303,11 +303,11 @@ class UpisServiceTest extends TestCase
             'brojIndeksa' => '1001/2024',
         ]);
 
-        $newProgramId = 10;
+        $masterProgram = StudijskiProgram::factory()->create(['tipStudija_id' => $tipMAS->id]);
 
         $result = $this->upisService->upisMasterPostojeciKandidat(
             $kandidatOAS->id,
-            $newProgramId,
+            $masterProgram->id,
             $skolskaGodinaUpisa->id
         );
 
@@ -316,7 +316,7 @@ class UpisServiceTest extends TestCase
 
         $newKandidat = Kandidat::find($result);
         $this->assertEquals($tipMAS->id, $newKandidat->tipStudija_id);
-        $this->assertEquals($newProgramId, $newKandidat->studijskiProgram_id);
+        $this->assertEquals($masterProgram->id, $newKandidat->studijskiProgram_id);
         $this->assertEquals($skolskaGodinaUpisa->id, $newKandidat->skolskaGodinaUpisa_id);
         $this->assertEquals(1, $newKandidat->statusUpisa_id);
         $this->assertNotNull($newKandidat->brojIndeksa);
@@ -337,10 +337,9 @@ class UpisServiceTest extends TestCase
 
     public function test_upis_master_postojeci_kandidat_returns_false_when_kandidat_not_found(): void
     {
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Call to a member function replicate() on null');
+        $result = $this->upisService->upisMasterPostojeciKandidat(999999, 10, 1);
 
-        $this->upisService->upisMasterPostojeciKandidat(999999, 10, 1);
+        $this->assertFalse($result);
     }
 
     // =========================================================================

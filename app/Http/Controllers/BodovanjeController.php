@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Bodovanje;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class BodovanjeController extends Controller
@@ -19,13 +17,7 @@ class BodovanjeController extends Controller
 
     public function index()
     {
-        try {
-            $bodovanje = Bodovanje::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $bodovanje = Bodovanje::all();
 
         return view('sifarnici.bodovanje', compact('bodovanje'));
     }
@@ -40,13 +32,7 @@ class BodovanjeController extends Controller
         $bodovanje->ocena = $request->ocena;
         $bodovanje->indikatorAktivan = 1;
 
-        try {
-            $bodovanje->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $bodovanje->save();
 
         return Redirect::to('/bodovanje');
     }
@@ -73,26 +59,14 @@ class BodovanjeController extends Controller
             $bodovanje->indikatorAktivan = 0;
         }
 
-        try {
-            $bodovanje->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $bodovanje->update();
 
         return Redirect::to('/bodovanje');
     }
 
     public function delete(Bodovanje $bodovanje)
     {
-        try {
-            $bodovanje->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $bodovanje->delete();
 
         return back();
     }

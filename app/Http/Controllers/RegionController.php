@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Region;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class RegionController extends Controller
@@ -17,13 +15,7 @@ class RegionController extends Controller
 
     public function index()
     {
-        try {
-            $region = Region::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $region = Region::all();
 
         return view('sifarnici.region', compact('region'));
     }
@@ -33,13 +25,7 @@ class RegionController extends Controller
         $region = new Region;
         $region->naziv = $request->naziv;
 
-        try {
-            $region->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $region->save();
 
         return Redirect::to('/region');
     }
@@ -58,26 +44,14 @@ class RegionController extends Controller
     {
         $region->naziv = $request->naziv;
 
-        try {
-            $region->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $region->update();
 
         return Redirect::to('/region');
     }
 
     public function delete(Region $region)
     {
-        try {
-            $region->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $region->delete();
 
         return back();
     }

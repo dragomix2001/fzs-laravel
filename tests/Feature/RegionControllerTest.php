@@ -165,13 +165,15 @@ class RegionControllerTest extends TestCase
     public function test_unos_with_empty_naziv(): void
     {
         $user = User::factory()->create();
+        $countBefore = Region::count();
 
         $this->actingAs($user)->post('/region/unos', [
             'naziv' => '',
         ]);
 
-        $count = Region::where('naziv', '')->count();
-        $this->assertGreaterThanOrEqual(0, $count);
+        // Note: no server-side validation currently rejects empty names.
+        // This assertion documents current behavior — consider adding validation.
+        $this->assertEquals($countBefore + 1, Region::count());
     }
 
     public function test_unos_persists_data_correctly_in_database(): void

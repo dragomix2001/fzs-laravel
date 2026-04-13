@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+
 class WelcomeController extends Controller
 {
     /*
@@ -27,10 +29,8 @@ class WelcomeController extends Controller
 
     /**
      * Show the application welcome screen to the user.
-     *
-     * @return Response
      */
-    public function index()
+    public function index(): View
     {
         return view('welcome');
     }

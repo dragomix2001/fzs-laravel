@@ -19,6 +19,7 @@ use App\Models\TipStudija;
 use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganju_StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
+use App\Services\IspitPdfService;
 use App\Services\IspitService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Queue;
@@ -30,10 +31,13 @@ class IspitServiceTest extends TestCase
 
     private IspitService $ispitService;
 
+    private IspitPdfService $ispitPdfService;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->ispitService = app(IspitService::class);
+        $this->ispitPdfService = app(IspitPdfService::class);
     }
 
     private function createPredmetProgram(Kandidat $kandidat, ?Predmet $predmet = null): PredmetProgram
@@ -663,7 +667,7 @@ class IspitServiceTest extends TestCase
 
         $zapisnik = ZapisnikOPolaganjuIspita::factory()->create();
 
-        $storagePath = $this->ispitService->generatePdfAsync($zapisnik->id);
+        $storagePath = $this->ispitPdfService->generatePdfAsync($zapisnik->id);
 
         Queue::assertPushed(GenerateZapisnikPdfJob::class, function ($job) use ($zapisnik, $storagePath) {
             return $job->zapisnikId === $zapisnik->id && $job->storagePath === $storagePath;

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\TipPredmeta;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class TipPredmetaController extends Controller
@@ -19,13 +17,7 @@ class TipPredmetaController extends Controller
 
     public function index()
     {
-        try {
-            $tipPredmeta = TipPredmeta::all();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipPredmeta = TipPredmeta::all();
 
         return view('sifarnici.tipPredmeta', compact('tipPredmeta'));
     }
@@ -38,13 +30,7 @@ class TipPredmetaController extends Controller
         $tipPredmeta->skrNaziv = $request->skrNaziv;
         $tipPredmeta->indikatorAktivan = 1;
 
-        try {
-            $tipPredmeta->save();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipPredmeta->save();
 
         return Redirect::to('/tipPredmeta');
     }
@@ -69,26 +55,14 @@ class TipPredmetaController extends Controller
             $tipPredmeta->indikatorAktivan = 0;
         }
 
-        try {
-            $tipPredmeta->update();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipPredmeta->update();
 
         return Redirect::to('/tipPredmeta');
     }
 
     public function delete(TipPredmeta $tipPredmeta)
     {
-        try {
-            $tipPredmeta->delete();
-        } catch (QueryException $e) {
-            Log::error('Database error: '.$e->getMessage(), ['exception' => $e, 'trace' => $e->getTraceAsString()]);
-
-            return redirect()->back()->with('error', 'Дошло је до непредвиђене грешке. Молимо покушајте поново.');
-        }
+        $tipPredmeta->delete();
 
         return back();
     }

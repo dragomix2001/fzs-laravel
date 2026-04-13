@@ -4,11 +4,16 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class StatusGodineTableSeeder extends Seeder
 {
     public function run(): void
     {
+        if (! Schema::hasTable('status_godine')) {
+            return;
+        }
+
         if (DB::table('status_godine')->count() > 0) {
             return;
         }

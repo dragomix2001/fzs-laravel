@@ -132,6 +132,10 @@ return new class extends Migration
         // Fix: rok_id mora biti UNSIGNED da odgovara aktivni_ispitni_rokovi.id (increments = INT UNSIGNED)
         DB::statement('ALTER TABLE zapisnik_o_polaganju_ispita MODIFY COLUMN rok_id INT UNSIGNED NULL');
 
+        // Fix: prijavaIspita_id mora biti UNSIGNED NULL da odgovara prijava_ispita.id (increments = INT UNSIGNED)
+        // Also made nullable here because the FK migration uses onDelete('set null')
+        DB::statement('ALTER TABLE zapisnik_o_polaganju_ispita MODIFY COLUMN prijavaIspita_id INT UNSIGNED NULL');
+
         // ----------------------------------------------------------------
         // 5. ZAPISNIK_O_POLAGANJU__STUDENT (pivot tabela)
         // Obe FK kolone su SIGNED INT i NOT NULL.
@@ -141,6 +145,9 @@ return new class extends Migration
 
         // Fix: kandidat_id mora biti UNSIGNED da odgovara kandidat.id (increments = INT UNSIGNED)
         DB::statement('ALTER TABLE zapisnik_o_polaganju__student MODIFY COLUMN kandidat_id INT UNSIGNED NOT NULL');
+
+        // Fix: prijavaIspita_id mora biti UNSIGNED da odgovara prijava_ispita.id (increments = INT UNSIGNED)
+        DB::statement('ALTER TABLE zapisnik_o_polaganju__student MODIFY COLUMN prijavaIspita_id INT UNSIGNED NOT NULL');
 
         // ----------------------------------------------------------------
         // 6. ZAPISNIK_O_POLAGANJU__STUDIJSKI_PROGRAM (pivot tabela)
@@ -168,11 +175,13 @@ return new class extends Migration
         // zapisnik_o_polaganju__student
         DB::statement('ALTER TABLE zapisnik_o_polaganju__student MODIFY COLUMN zapisnik_id INT NOT NULL');
         DB::statement('ALTER TABLE zapisnik_o_polaganju__student MODIFY COLUMN kandidat_id INT NOT NULL');
+        DB::statement('ALTER TABLE zapisnik_o_polaganju__student MODIFY COLUMN prijavaIspita_id INT NOT NULL');
 
         // zapisnik_o_polaganju_ispita
         DB::statement('ALTER TABLE zapisnik_o_polaganju_ispita MODIFY COLUMN predmet_id INT NULL');
         DB::statement('ALTER TABLE zapisnik_o_polaganju_ispita MODIFY COLUMN profesor_id INT NULL');
         DB::statement('ALTER TABLE zapisnik_o_polaganju_ispita MODIFY COLUMN rok_id INT NULL');
+        DB::statement('ALTER TABLE zapisnik_o_polaganju_ispita MODIFY COLUMN prijavaIspita_id INT NOT NULL');
 
         // polozeni_ispiti
         DB::statement('ALTER TABLE polozeni_ispiti MODIFY COLUMN kandidat_id INT NULL');

@@ -93,73 +93,38 @@ class StudentListServiceTest extends TestCase
     {
         $this->buildBaseFixtures(statusUpisa: 3);
 
-        try {
-            $this->service->spisakPoSmerovima();
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoSmerovima();
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_smerovima_with_no_data_does_not_crash_queries(): void
     {
-        try {
-            $this->service->spisakPoSmerovima();
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoSmerovima();
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_integralno_executes_with_matching_data(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 1);
 
-        try {
-            $this->service->integralno($f['skolskaGodina']->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->integralno($f['skolskaGodina']->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_integralno_with_no_matching_records(): void
     {
         $skolskaGodina = SkolskaGodUpisa::factory()->create();
 
-        try {
-            $this->service->integralno($skolskaGodina->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->integralno($skolskaGodina->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_smerovima_ostali_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 2);
 
-        try {
-            $this->service->spisakPoSmerovimaOstali($f['skolskaGodina']->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoSmerovimaOstali($f['skolskaGodina']->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_smerovima_ostali_with_multiple_statuses(): void
@@ -192,146 +157,76 @@ class StudentListServiceTest extends TestCase
             ]);
         }
 
-        try {
-            $this->service->spisakPoSmerovimaOstali($skolskaGodina->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoSmerovimaOstali($skolskaGodina->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_smerovima_aktivni_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
-        try {
-            $this->service->spisakPoSmerovimaAktivni($f['skolskaGodina']->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoSmerovimaAktivni($f['skolskaGodina']->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_za_smer_executes_with_matching_data(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
-        try {
-            $this->service->spisakZaSmer($f['program']->id, $f['godina']->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakZaSmer($f['program']->id, $f['godina']->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_za_smer_with_nonexistent_ids(): void
     {
-        try {
-            $this->service->spisakZaSmer(99999, 99999);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakZaSmer(99999, 99999);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_programu_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
-        try {
-            $this->service->spisakPoProgramu($f['program']->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoProgramu($f['program']->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_godini_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
-        try {
-            $this->service->spisakPoGodini($f['godina']->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoGodini($f['godina']->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_slavama_executes_query_logic(): void
     {
         $this->buildBaseFixtures(statusUpisa: 3);
 
-        try {
-            $this->service->spisakPoSlavama();
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoSlavama();
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_profesorima_executes_with_profesori(): void
     {
         Profesor::factory()->count(3)->create();
 
-        try {
-            $this->service->spisakPoProfesorima();
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoProfesorima();
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_profesorima_executes_with_no_profesori(): void
     {
-        try {
-            $this->service->spisakPoProfesorima();
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoProfesorima();
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spiskovi_studenti_executes_with_full_data(): void
     {
         $this->buildBaseFixtures(statusUpisa: 3);
 
-        try {
-            $this->service->spiskoviStudenti();
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spiskoviStudenti();
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_predmetima_executes_with_prijave(): void
@@ -343,59 +238,31 @@ class StudentListServiceTest extends TestCase
         $predmetProgramId = $prijava->predmet_id;
         $predmet = PredmetProgram::find($predmetProgramId);
 
-        try {
-            $this->service->spisakPoPredmetima($predmet ? $predmet->predmet_id : 99999);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoPredmetima($predmet ? $predmet->predmet_id : 99999);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_po_predmetima_with_no_prijave(): void
     {
         $predmet = Predmet::factory()->create();
 
-        try {
-            $this->service->spisakPoPredmetima($predmet->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakPoPredmetima($predmet->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_diplomiranih_executes_with_matching_data(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 6);
 
-        try {
-            $this->service->spisakDiplomiranih($f['skolskaGodina']->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakDiplomiranih($f['skolskaGodina']->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 
     public function test_spisak_diplomiranih_with_no_data(): void
     {
         $skolskaGodina = SkolskaGodUpisa::factory()->create();
 
-        try {
-            $this->service->spisakDiplomiranih($skolskaGodina->id);
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(true);
+        $this->service->spisakDiplomiranih($skolskaGodina->id);
+        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
     }
 }

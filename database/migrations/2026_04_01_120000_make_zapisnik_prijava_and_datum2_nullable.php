@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
             if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'prijavaIspita_id')) {
-                $table->integer('prijavaIspita_id')->nullable()->change();
+                $table->unsignedInteger('prijavaIspita_id')->nullable()->change();
             }
             if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'datum2')) {
                 $table->date('datum2')->nullable()->change();
@@ -31,7 +31,7 @@ return new class extends Migration
     {
         Schema::table('zapisnik_o_polaganju_ispita', function (Blueprint $table) {
             if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'prijavaIspita_id')) {
-                $table->integer('prijavaIspita_id')->nullable(false)->change();
+                $table->unsignedInteger('prijavaIspita_id')->nullable(false)->change();
             }
             if (Schema::hasColumn('zapisnik_o_polaganju_ispita', 'datum2')) {
                 $table->date('datum2')->nullable(false)->change();
