@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreObavestenjeRequest;
+use App\Http\Requests\UpdateObavestenjeRequest;
 use App\Models\Obavestenje;
 use App\Models\Profesor;
 use App\Services\NotificationService;
@@ -49,18 +51,8 @@ class ObavestenjeController extends Controller
         return view('obavestenja.create', compact('profesori', 'tipovi'));
     }
 
-    public function store(Request $request)
+    public function store(StoreObavestenjeRequest $request)
     {
-        $request->validate([
-            'naslov' => 'required|string|max:255',
-            'sadrzaj' => 'required',
-            'tip' => 'required|string|max:50',
-            'aktivan' => 'boolean',
-            'datum_objave' => 'required',
-            'datum_isteka' => 'nullable|after:datum_objave',
-            'posalji_email' => 'boolean',
-        ]);
-
         $user = Auth::user();
         $data = $request->except(['posalji_email']);
         $data['profesor_id'] = $user !== null && $user->profesor !== null
@@ -101,17 +93,8 @@ class ObavestenjeController extends Controller
         return view('obavestenja.edit', compact('obavestenje', 'profesori', 'tipovi'));
     }
 
-    public function update(Request $request, Obavestenje $obavestenje)
+    public function update(UpdateObavestenjeRequest $request, Obavestenje $obavestenje)
     {
-        $request->validate([
-            'naslov' => 'required|string|max:255',
-            'sadrzaj' => 'required',
-            'tip' => 'required|string|max:50',
-            'aktivan' => 'boolean',
-            'datum_objave' => 'required',
-            'datum_isteka' => 'nullable|after:datum_objave',
-        ]);
-
         $obavestenje->update($request->all());
 
         return redirect()->route('obavestenja.index')->with('success', 'Обавештење ажурирано');

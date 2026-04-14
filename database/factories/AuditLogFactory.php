@@ -36,8 +36,8 @@ class AuditLogFactory extends Factory
             ],
             'ip_address' => $this->faker->ipv4(),
             'user_agent' => $this->faker->userAgent(),
-            'created_at' => now()->subDays(rand(0, 30))->subHours(rand(0, 23))->subMinutes(rand(0, 59)),
-            'updated_at' => now()->subDays(rand(0, 30))->subHours(rand(0, 23))->subMinutes(rand(0, 59)),
+            'created_at' => now('UTC')->subDays(rand(0, 30))->subHours(rand(0, 23))->subMinutes(rand(0, 59)),
+            'updated_at' => now('UTC')->subDays(rand(0, 30))->subHours(rand(0, 23))->subMinutes(rand(0, 59)),
         ];
     }
 

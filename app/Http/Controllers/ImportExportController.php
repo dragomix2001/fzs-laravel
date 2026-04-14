@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\KandidatiExport;
 use App\Exports\PolozeniIspitiExport;
 use App\Exports\StudentiExport;
+use App\Http\Requests\ImportFileRequest;
 use App\Imports\KandidatiImport;
 use App\Models\Kandidat;
 use Illuminate\Http\Request;
@@ -17,12 +18,8 @@ class ImportExportController extends Controller
         return view('import-export.index');
     }
 
-    public function import(Request $request)
+    public function import(ImportFileRequest $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
-        ]);
-
         try {
             Excel::import(new KandidatiImport, $request->file('file'));
 

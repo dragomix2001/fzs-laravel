@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRasporedRequest;
 use App\Models\GodinaStudija;
 use App\Models\OblikNastave;
 use App\Models\Predmet;
@@ -64,23 +65,8 @@ class RasporedController extends Controller
         ));
     }
 
-    public function store(Request $request)
+    public function store(StoreRasporedRequest $request)
     {
-        $request->validate([
-            'predmet_id' => 'required|exists:predmet,id',
-            'profesor_id' => 'required|exists:profesor,id',
-            'studijski_program_id' => 'required|exists:studijski_program,id',
-            'godina_studija_id' => 'required|exists:godina_studija,id',
-            'semestar_id' => 'required|exists:semestar,id',
-            'skolska_godina_id' => 'required|exists:skolska_god_upisa,id',
-            'oblik_nastave_id' => 'required|exists:oblik_nastave,id',
-            'dan' => 'required|integer|min:1|max:7',
-            'vreme_od' => 'required',
-            'vreme_do' => 'required|after:vreme_od',
-            'prostorija' => 'nullable|string|max:50',
-            'grupa' => 'nullable|string|max:50',
-        ]);
-
         Raspored::create($request->all());
 
         return redirect()->route('raspored.index')->with('success', 'Распоред креиран');
@@ -102,23 +88,8 @@ class RasporedController extends Controller
         ));
     }
 
-    public function update(Request $request, Raspored $raspored)
+    public function update(StoreRasporedRequest $request, Raspored $raspored)
     {
-        $request->validate([
-            'predmet_id' => 'required|exists:predmet,id',
-            'profesor_id' => 'required|exists:profesor,id',
-            'studijski_program_id' => 'required|exists:studijski_program,id',
-            'godina_studija_id' => 'required|exists:godina_studija,id',
-            'semestar_id' => 'required|exists:semestar,id',
-            'skolska_godina_id' => 'required|exists:skolska_god_upisa,id',
-            'oblik_nastave_id' => 'required|exists:oblik_nastave,id',
-            'dan' => 'required|integer|min:1|max:7',
-            'vreme_od' => 'required',
-            'vreme_do' => 'required|after:vreme_od',
-            'prostorija' => 'nullable|string|max:50',
-            'grupa' => 'nullable|string|max:50',
-        ]);
-
         $raspored->update($request->all());
 
         return redirect()->route('raspored.index')->with('success', 'Распоред ажуриран');

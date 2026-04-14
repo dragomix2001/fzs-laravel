@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChatMessageRequest;
+use App\Http\Requests\QuickQuestionRequest;
 use App\Services\ChatbotService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class ChatbotController extends Controller
@@ -23,12 +24,8 @@ class ChatbotController extends Controller
         return view('chatbot.index', compact('quickQuestions'));
     }
 
-    public function chat(Request $request)
+    public function chat(ChatMessageRequest $request)
     {
-        $request->validate([
-            'message' => 'required|string|max:1000',
-        ]);
-
         $message = $request->input('message');
 
         // Get conversation history from session
@@ -75,12 +72,8 @@ class ChatbotController extends Controller
         ]);
     }
 
-    public function quickQuestion(Request $request)
+    public function quickQuestion(QuickQuestionRequest $request)
     {
-        $request->validate([
-            'question' => 'required|string',
-        ]);
-
         $question = $request->input('question');
 
         // Get conversation history from session
