@@ -58,7 +58,6 @@ class BusinessFlowTest extends TestCase
         $user = User::first();
         $kandidat = Kandidat::first();
         $this->assertNotNull($kandidat);
-        $this->assertTrue(true);
     }
 
     public function test_ispitni_rok_access(): void
@@ -93,7 +92,9 @@ class BusinessFlowTest extends TestCase
 
     public function test_izvestaji_access(): void
     {
-        $this->assertTrue(true);
+        $user = User::first();
+        $response = $this->actingAs($user)->get('/izvestaji/spisakPoSmerovima');
+        $response->assertStatus(200);
     }
 
     public function test_database_relationships(): void

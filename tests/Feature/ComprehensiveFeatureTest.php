@@ -120,7 +120,8 @@ class ComprehensiveFeatureTest extends TestCase
 
     public function test_guest_cannot_access_protected_routes(): void
     {
-        $this->assertTrue(true);
+        $response = $this->get('/kandidat');
+        $response->assertRedirect('/login');
     }
 
     public function test_login_redirects_authenticated_users(): void

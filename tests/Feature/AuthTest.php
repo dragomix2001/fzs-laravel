@@ -58,7 +58,11 @@ class AuthTest extends TestCase
 
     public function test_user_cannot_access_protected_routes_without_login(): void
     {
-        $this->assertTrue(true);
+        $response = $this->get('/kandidat');
+        $response->assertRedirect('/login');
+
+        $response = $this->get('/master');
+        $response->assertRedirect('/login');
     }
 
     public function test_user_can_access_protected_routes_after_login(): void

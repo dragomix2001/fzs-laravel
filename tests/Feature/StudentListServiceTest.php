@@ -93,38 +93,53 @@ class StudentListServiceTest extends TestCase
     {
         $this->buildBaseFixtures(statusUpisa: 3);
 
+        ob_start();
         $this->service->spisakPoSmerovima();
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_smerovima_with_no_data_does_not_crash_queries(): void
     {
+        ob_start();
         $this->service->spisakPoSmerovima();
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_integralno_executes_with_matching_data(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 1);
 
+        ob_start();
         $this->service->integralno($f['skolskaGodina']->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_integralno_with_no_matching_records(): void
     {
         $skolskaGodina = SkolskaGodUpisa::factory()->create();
 
+        ob_start();
         $this->service->integralno($skolskaGodina->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_smerovima_ostali_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 2);
 
+        ob_start();
         $this->service->spisakPoSmerovimaOstali($f['skolskaGodina']->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_smerovima_ostali_with_multiple_statuses(): void
@@ -157,76 +172,106 @@ class StudentListServiceTest extends TestCase
             ]);
         }
 
+        ob_start();
         $this->service->spisakPoSmerovimaOstali($skolskaGodina->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_smerovima_aktivni_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
+        ob_start();
         $this->service->spisakPoSmerovimaAktivni($f['skolskaGodina']->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_za_smer_executes_with_matching_data(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
+        ob_start();
         $this->service->spisakZaSmer($f['program']->id, $f['godina']->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_za_smer_with_nonexistent_ids(): void
     {
+        ob_start();
         $this->service->spisakZaSmer(99999, 99999);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_programu_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
+        ob_start();
         $this->service->spisakPoProgramu($f['program']->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_godini_executes_query_logic(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 3);
 
+        ob_start();
         $this->service->spisakPoGodini($f['godina']->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_slavama_executes_query_logic(): void
     {
         $this->buildBaseFixtures(statusUpisa: 3);
 
+        ob_start();
         $this->service->spisakPoSlavama();
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_profesorima_executes_with_profesori(): void
     {
         Profesor::factory()->count(3)->create();
 
+        ob_start();
         $this->service->spisakPoProfesorima();
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_profesorima_executes_with_no_profesori(): void
     {
+        ob_start();
         $this->service->spisakPoProfesorima();
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spiskovi_studenti_executes_with_full_data(): void
     {
         $this->buildBaseFixtures(statusUpisa: 3);
 
+        ob_start();
         $this->service->spiskoviStudenti();
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_predmetima_executes_with_prijave(): void
@@ -238,31 +283,43 @@ class StudentListServiceTest extends TestCase
         $predmetProgramId = $prijava->predmet_id;
         $predmet = PredmetProgram::find($predmetProgramId);
 
+        ob_start();
         $this->service->spisakPoPredmetima($predmet ? $predmet->predmet_id : 99999);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_po_predmetima_with_no_prijave(): void
     {
         $predmet = Predmet::factory()->create();
 
+        ob_start();
         $this->service->spisakPoPredmetima($predmet->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_diplomiranih_executes_with_matching_data(): void
     {
         $f = $this->buildBaseFixtures(statusUpisa: 6);
 
+        ob_start();
         $this->service->spisakDiplomiranih($f['skolskaGodina']->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 
     public function test_spisak_diplomiranih_with_no_data(): void
     {
         $skolskaGodina = SkolskaGodUpisa::factory()->create();
 
+        ob_start();
         $this->service->spisakDiplomiranih($skolskaGodina->id);
-        $this->assertTrue(true); // Smoke test: verifies method executes without throwing
+        $output = ob_get_clean();
+        $this->assertNotEmpty($output);
+        $this->assertStringContainsString('%PDF', $output);
     }
 }
