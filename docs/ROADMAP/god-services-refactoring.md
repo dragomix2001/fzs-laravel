@@ -1,40 +1,52 @@
 # God Services Refactoring Roadmap
 
-**Last Updated:** 2025-04-06  
-**Current Quality:** 8.0/10  
+**Last Updated:** 2026-04-14  
+**Current Quality:** 9.0/10  
 **Target Quality:** 10.0/10  
-**Progress:** ~60% complete (5/8 target services extracted)
+**Progress:** ~75% complete (priority improvements done + 5/8 KandidatService helper services extracted)
 
 ---
 
 ## Quick Start for Next Session
 
 ### Current State
-- **KandidatService:** 785 lines (originally 1026 lines)
-- **Extracted Services (5):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
-- **Total Helper Code:** 644 lines
-- **Test Coverage:** 111 unit tests, 100% coverage for all helper services
+- **KandidatService:** 662 lines (originally 1026 lines)
+- **IspitService:** 614 lines (originally 818 lines, IspitPdfService extracted)
+- **PrijavaController:** 280 lines (originally 731, PrijavaService extracted)
+- **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
+- **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
+- **Additional Services:** PrijavaService (849), IspitPdfService (222), BasePdfService (53), KandidatEnrollmentService
+- **Total Helper Code:** 644 lines (KandidatService helpers only)
+- **Test Coverage:** 1378 tests, 3426 assertions, 0 errors
+- **PHPStan:** Level 5, 0 errors, empty baseline
+- **FormRequest classes:** 31 total
 
-### What's Done (Waves 1 & 2)
+### What's Done (Waves 1 & 2 + Priority Improvements)
 ✅ FileStorageService (Wave 1) - 136 lines, 27 tests  
 ✅ GradeManagementService (Wave 1) - 175 lines, 22 tests  
 ✅ DropdownDataService (Wave 2) - 172 lines, 14 tests  
 ✅ SportsManagementService (Wave 2) - 79 lines, 9 tests  
 ✅ DocumentManagementService (Wave 2) - 82 lines, 10 tests  
+✅ PrijavaService (Priority) - 849 lines, extracted from PrijavaController (731→280)  
+✅ IspitPdfService (Priority) - 222 lines, extracted from IspitService  
+✅ BasePdfService DRY refactor - 53 lines, StudentListService 408→323  
+✅ PHPStan baseline eliminated - 40→0 errors  
+✅ 9 new FormRequest classes added (22→31 total)  
+✅ 23 smoke tests replaced with real assertions (+22 assertions)
 
-### Next Target: 9.0/10 Quality
+### Next Target: 9.5/10 Quality
 
 **Wave 3: Mass Operations Extraction**
 - Extract `masovniUpis()`, `masovnaUplata()`, `masovniUpisAsync()`
 - Expected reduction: ~150 lines
-- Target: KandidatService → ~600 lines
+- Target: KandidatService → ~510 lines
 - Estimated effort: 15-20 hours
 
 ---
 
 ## Detailed Roadmap
 
-### Phase 1: 9.0/10 Quality (Next Session)
+### Phase 1: 9.5/10 Quality (Next Session)
 
 #### Task 1: Extract MassOperationsService (~150 lines)
 
@@ -62,8 +74,8 @@ class MassOperationsService
 ```
 
 **Expected Impact:**
-- KandidatService: 785 → ~635 lines (19% additional reduction)
-- Total reduction from original: 1026 → 635 lines (38% decrease)
+- KandidatService: 662 → ~510 lines (23% additional reduction)
+- Total reduction from original: 1026 → 510 lines (50% decrease)
 
 **Test Requirements:**
 - Test mass enroll with 1 kandidat
@@ -75,9 +87,9 @@ class MassOperationsService
 
 **Acceptance Criteria:**
 - [ ] MassOperationsService created with 3 public methods
-- [ ] KandidatService reduced to ~635 lines
+- [ ] KandidatService reduced to ~510 lines
 - [ ] Minimum 12 tests with 100% coverage
-- [ ] All 123+ unit tests pass (111 existing + 12 new)
+- [ ] All 1378+ tests pass
 - [ ] CI/CD passes (Laravel CI/CD + CodeQL)
 - [ ] ADR-001 updated with Wave 3 metrics
 
@@ -105,7 +117,7 @@ class CacheManagementService
 ```
 
 **Expected Impact:**
-- KandidatService: 635 → ~585 lines (8% additional reduction)
+- KandidatService: 510 → ~460 lines (10% additional reduction)
 
 **Test Requirements:**
 - Test cache hit
@@ -138,8 +150,8 @@ class KandidatValidationService
 ```
 
 **Expected Impact:**
-- KandidatService: 585 → ~505 lines (14% additional reduction)
-- **Total reduction from original: 1026 → 505 lines (51% decrease)**
+- KandidatService: 460 → ~380 lines (17% additional reduction)
+- **Total reduction from original: 1026 → 380 lines (63% decrease)**
 
 ---
 
@@ -228,12 +240,12 @@ class KandidatValidationService
 
 ## Session Checklists
 
-### Next Session: Wave 3 (9.0 Quality Target)
+### Next Session: Wave 3 (9.5 Quality Target)
 
 **Before Starting:**
 - [ ] Read `docs/ADR/001-god-services.md` (full context)
 - [ ] Read `docs/ROADMAP/god-services-refactoring.md` (this file)
-- [ ] Review current KandidatService.php (785 lines)
+- [ ] Review current KandidatService.php (662 lines)
 - [ ] Identify mass operations methods (masovniUpis, masovnaUplata, masovniUpisAsync)
 
 **Execution Steps:**
@@ -247,11 +259,11 @@ class KandidatValidationService
 8. [ ] Commit, push, verify CI/CD
 
 **Success Criteria:**
-- [ ] KandidatService reduced to ~635 lines
+- [ ] KandidatService reduced to ~510 lines
 - [ ] MassOperationsService 100% test coverage
-- [ ] All 123+ tests pass
+- [ ] All 1378+ tests pass
 - [ ] CI/CD green (Laravel + CodeQL)
-- [ ] Code quality: 9.0/10
+- [ ] Code quality: 9.5/10
 
 **Estimated Time:** 4-5 hours
 
@@ -291,7 +303,13 @@ class KandidatValidationService
 - `docs/ROADMAP/god-services-refactoring.md` - This file (roadmap)
 
 ### Services (Current State)
-- `app/Services/KandidatService.php` - 785 lines (main target)
+- `app/Services/KandidatService.php` - 662 lines (main target)
+- `app/Services/IspitService.php` - 614 lines (IspitPdfService extracted)
+- `app/Services/PrijavaService.php` - 849 lines (extracted from PrijavaController)
+- `app/Services/StudentListService.php` - 323 lines (DRY refactored)
+- `app/Services/BasePdfService.php` - 53 lines (shared PDF generation)
+- `app/Services/IspitPdfService.php` - 222 lines (extracted from IspitService)
+- `app/Services/UpisService.php` - 387 lines
 - `app/Services/FileStorageService.php` - 136 lines (Wave 1)
 - `app/Services/GradeManagementService.php` - 175 lines (Wave 1)
 - `app/Services/DropdownDataService.php` - 172 lines (Wave 2)
@@ -361,9 +379,9 @@ vendor/bin/phpunit --testsuite Unit --stop-on-failure
 - [x] 7.0/10 - Initial state (KandidatService 1026 lines, 0 helper services)
 - [x] 7.5/10 - Wave 1 complete (FileStorage + GradeManagement extracted)
 - [x] 8.0/10 - Wave 2 complete (Dropdown + Sports + Documents extracted)
-- [ ] 9.0/10 - Wave 3 target (MassOperations extracted, ~635 lines)
-- [ ] 9.5/10 - Wave 4 target (CacheManagement extracted, ~585 lines)
-- [ ] 10.0/10 - Wave 5 target (Validation extracted, ~505 lines)
+- [x] 9.0/10 - Priority improvements (PrijavaController refactor, PHPStan 0, FormRequests, test assertions, DRY StudentListService)
+- [ ] 9.5/10 - Wave 3 target (MassOperations extracted, ~510 lines)
+- [ ] 10.0/10 - Wave 4+5 target (Cache + Validation extracted, ~380 lines)
 
 ### Coverage Milestones
 - [x] 58.94% - Current coverage (2025-04-06)
@@ -414,6 +432,24 @@ vendor/bin/phpunit --testsuite Unit --stop-on-failure
 - KandidatService: 904 → 785 lines
 - Added 33 new tests
 - Duration: ~5 hours
+- CI/CD: All green ✅
+
+### 2026-04-08: DTO and CI Stabilization (8.0 → 8.5)
+- Request-to-service coupling reduced through DTO usage
+- Legacy model reference cleanup
+- CI reliability improved (Pint + PHPStan green)
+- IspitPdfService extracted from IspitService (818→614)
+- KandidatEnrollmentService extracted
+- KandidatService: 785 → 733 lines
+
+### 2026-04-14: Priority Improvements (8.5 → 9.0)
+- PrijavaController refactored: 731→280 LOC, PrijavaService created (849 LOC)
+- PHPStan baseline fully eliminated: 40→0 errors across 20+ files
+- 9 new FormRequest classes added (22→31 total)
+- 23 smoke tests replaced with real assertions (+22 assertions)
+- StudentListService DRY refactor: 408→323 LOC via BasePdfService
+- KandidatService: 733 → 662 lines
+- Final state: 1378 tests, 3426 assertions, 0 errors
 - CI/CD: All green ✅
 
 ---

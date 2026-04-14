@@ -1,6 +1,8 @@
 # FZS-Laravel: Preostala Poboljšanja
 
-Ovaj dokument opisuje preostale arhitektonske i funkcionalnosti poboljšanja za FZS-Laravel aplikaciju nakon uspešno završenih Faza 1 i 2.
+Ovaj dokument opisuje preostale arhitektonske i funkcionalnosti poboljšanja za FZS-Laravel aplikaciju nakon uspešno završenih Faza 1, 2 i prioritetnih poboljšanja.
+
+**Trenutna ocena kvaliteta: 9.0/10**
 
 ---
 
@@ -15,11 +17,54 @@ Ovaj dokument opisuje preostale arhitektonske i funkcionalnosti poboljšanja za 
 - [x] **1.6** Dodat PHPStan level 5 u CI
 - [x] **1.7** Prebačene file operacije na Storage facade
 
-### Faza 2 — Arhitektonski Refaktoring (4/6 završeno)
+### Faza 2 — Arhitektonski Refaktoring (6/6 završeno)
 - [x] **2.1** Ekstrahovana business logika KandidatController → KandidatService
 - [x] **2.2** Ekstrahovana business logika IspitController → IspitService
 - [x] **2.3** Ekstrahovane static metode UpisGodine → UpisService
 - [x] **2.4** Standardizovane validacije na Form Request klase
+- [x] **2.5** IspitPdfService ekstrakcija iz IspitService (821→614 LOC)
+- [x] **2.6** KandidatEnrollmentService ekstrakcija iz KandidatService
+
+## ✅ Završeno — Prioritetna Poboljšanja (April 2026)
+
+### P1: Refaktor PrijavaController (731→280 LOC)
+- [x] Ekstrahovana kompletna business logika u PrijavaService (849 LOC)
+- [x] PrijavaController sveden na thin HTTP sloj
+- [x] Svi testovi prolaze bez regresije
+
+### P2: PHPStan baseline potpuno eliminisan (40→0 grešaka)
+- [x] Ispravljeno 40+ grešaka: env→config, PHPDoc tipovi, class reference, return tipovi
+- [x] Popravljen TCPDF konstruktor (višak parametra)
+- [x] Kreiran PHPStan stub za TCPDF
+- [x] Ispravljen unsafe `new static()` u Auditable trait-u
+- [x] Ispravljene ZipArchive metode u BackupService
+- [x] Baseline neon fajl potpuno prazan — 0 ignoreErrors entry-a
+
+### P3: Dodato 9 novih FormRequest klasa (22→31 ukupno)
+- [x] StoreRasporedRequest, StoreObavestenjeRequest, UpdateObavestenjeRequest
+- [x] StoreUserRequest, UpdateUserRequest
+- [x] ChatMessageRequest, QuickQuestionRequest
+- [x] ImportFileRequest, LoginRequest
+- [x] 5 kontrolera ažurirano da koriste FormRequest klase
+- [x] Popravljen AuditLogFactory DST timezone bag
+
+### P4: Poboljšane test asercije (assertTrue(true) → pravi testovi)
+- [x] 23 smoke testa zamenjeno pravim asercijama
+- [x] PDF output validacija (%PDF magic bytes) za StudentListService
+- [x] Guest redirect asercije za AuthTest i ComprehensiveFeatureTest
+- [x] Route access testovi za BusinessFlowTest
+- [x] Asercije: 3404→3426 (+22)
+
+### P5: DRY StudentListService (408→323 LOC)
+- [x] Ekstrahovan zajednički `generatePdf()` metod u BasePdfService
+- [x] Refaktorisano svih 12 PDF metoda da koriste shared metod
+- [x] 85 linija uklonjeno (21% smanjenje)
+
+### Trenutno stanje nakon svih poboljšanja:
+- **Testovi**: 1378 testova, 3426 asercija, 0 grešaka
+- **PHPStan**: Level 5, 0 grešaka, prazan baseline
+- **Pint**: pass
+- **CI/CD**: Oba pipeline-a zelena (Laravel CI/CD + CodeQL)
 
 ---
 

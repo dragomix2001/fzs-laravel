@@ -19,23 +19,24 @@ For detailed domain concepts, see [docs/DOMAIN.md](docs/DOMAIN.md).
 
 **Application Structure:**
 - Controllers: HTTP request handlers (thin layer)
-- Services: Business logic orchestrators (KandidatService, IspitService)
-- Models: 57 Eloquent ORM models
-- Requests: 22 Form validators
+- Services: 21 business logic services (KandidatService, IspitService, PrijavaService, UpisService, StudentListService, BasePdfService, IspitPdfService, KandidatEnrollmentService, and 13 more)
+- Models: 56 Eloquent ORM models
+- Requests: 31 Form Request validators
 - Policies: Authorization
 
 **Known Technical Debt:**
-- God Services: KandidatService (935 lines), IspitService (723 lines)
-- Request coupling in some services
-- Direct Facade usage (Cache, Storage, DB)
+- KandidatService (662 lines) — partially decomposed, 5 helper services extracted
+- IspitService (614 lines) — IspitPdfService extracted
+- Direct Facade usage (Cache, Storage, DB) — accepted, see ADR-003
 
 See [docs/ADR/](docs/ADR/) for architectural decision records.
 
 ## 📊 Test Coverage
 
-- **60% code coverage** (3,721/6,207 executable lines)
-- **468 feature tests** covering controllers and business logic
-- CI/CD: GitHub Actions (Laravel CI/CD + CodeQL Advanced)
+- **1378 tests, 3426 assertions** — 0 errors, 0 failures
+- **PHPStan level 5** — 0 errors (empty baseline)
+- **Pint** code style: pass
+- CI/CD: GitHub Actions (Laravel CI/CD + CodeQL Advanced) — green
 
 ## Технички стек
 
@@ -105,7 +106,7 @@ php artisan serve
 
 ## Тестови
 
-Тренутно: **468 testova**, 60% code coverage
+Тренутно: **1378 testova**, 3426 asercija, PHPStan level 5 (0 grešaka)
 
 ```bash
 # Покрени тестове (SEQUENTIALLY ONLY - shared MySQL DB)
@@ -144,10 +145,12 @@ php artisan serve
 ## 📖 Documentation
 
 - [Domain Glossary](docs/DOMAIN.md) - Business entities and workflows
+- [Improvements Roadmap](README_IMPROVEMENTS.md) - Remaining architectural improvements
 - [Architecture Decision Records](docs/ADR/) - Technical debt documentation
   - [ADR-001: God Services](docs/ADR/001-god-services.md)
   - [ADR-002: Request Coupling](docs/ADR/002-request-coupling.md)
   - [ADR-003: Facade Usage](docs/ADR/003-facade-usage.md)
+- [God Services Refactoring Roadmap](docs/ROADMAP/god-services-refactoring.md)
 
 ## Лиценца
 

@@ -390,3 +390,94 @@ The decomposition strategy remains valid and is still the recommended path. The 
 1. Prioritize `IspitService` decomposition (report generation, zapisnik orchestration, and mass operations).
 2. Continue extracting transaction-heavy blocks from `KandidatService` into focused services.
 3. Keep architecture changes coupled with DTO boundaries and targeted tests.
+
+---
+
+## Update (2026-04-14): Priority Improvements Complete — 9.0/10
+
+**Status:** Significant Progress
+
+Five priority improvements were completed in a single session, bringing overall code quality from ~7.5/10 to 9.0/10.
+
+### Measured Current Service Sizes
+
+| Service | Lines | Change |
+|---|---|---|
+| KandidatService | 662 | ↓ from 733 (previous update) |
+| IspitService | 614 | ↓ from 818 (IspitPdfService extracted) |
+| PrijavaService | 849 | NEW (extracted from PrijavaController) |
+| PrijavaController | 280 | ↓ from 731 (refactored to thin controller) |
+| StudentListService | 323 | ↓ from 408 (DRY refactor) |
+| BasePdfService | 53 | NEW (shared PDF generation method) |
+| IspitPdfService | 222 | Existing (extracted in earlier session) |
+| UpisService | 387 | Existing |
+
+### What Changed in This Cycle
+
+#### 1. PrijavaController Refactor (731→280 LOC)
+- Complete business logic extracted into PrijavaService (849 LOC)
+- PrijavaController reduced to thin HTTP layer with dependency injection
+- All existing tests continue to pass
+
+#### 2. PHPStan Baseline Fully Eliminated (40→0 errors)
+- Fixed 40+ errors across 20+ files: `env()`→`config()`, PHPDoc types, class references, return types
+- Fixed TCPDF constructor (extra parameter silently ignored)
+- Created PHPStan stub for TCPDF vendor class
+- Fixed unsafe `new static()` in Auditable trait → `$this->getTable()`
+- Fixed ZipArchive method names in BackupService
+- Baseline neon file now contains `ignoreErrors: []`
+
+#### 3. Added 9 New FormRequest Classes (22→31 total)
+- StoreRasporedRequest, StoreObavestenjeRequest, UpdateObavestenjeRequest
+- StoreUserRequest, UpdateUserRequest
+- ChatMessageRequest, QuickQuestionRequest
+- ImportFileRequest, LoginRequest
+- 5 controllers updated to use FormRequest classes
+- Fixed AuditLogFactory DST timezone bug (Europe/Belgrade spring-forward gap)
+
+#### 4. Improved Test Assertions
+- 23 `assertTrue(true)` smoke tests replaced with real assertions
+- PDF output validation (`%PDF` magic bytes) for StudentListService
+- Guest redirect assertions for auth tests
+- Assertions: 3404→3426 (+22)
+
+#### 5. DRY StudentListService (408→323 LOC)
+- Extracted shared `generatePdf()` method into BasePdfService
+- All 12 PDF generation methods refactored to use shared method
+- 85 lines removed (21% reduction)
+
+### Test Suite State
+
+- **1378 tests, 3426 assertions** — 0 errors, 0 failures
+- **PHPStan**: Level 5, 0 errors, empty baseline
+- **Pint**: pass
+- **CI/CD**: Both pipelines green (Laravel CI/CD + CodeQL Advanced)
+
+### Updated Service Dependency Graph
+
+```
+KandidatService (662 lines, core orchestrator)
+├── UpisService (387 lines)
+├── FileStorageService (136 lines, Wave 1)
+├── GradeManagementService (175 lines, Wave 1)
+├── DropdownDataService (172 lines, Wave 2)
+│   └── GradeManagementService (injected)
+├── SportsManagementService (79 lines, Wave 2)
+└── DocumentManagementService (82 lines, Wave 2)
+
+IspitService (614 lines)
+└── IspitPdfService (222 lines)
+
+PrijavaController (280 lines, thin)
+└── PrijavaService (849 lines)
+
+StudentListService (323 lines)
+└── BasePdfService (53 lines, shared PDF generation)
+```
+
+### Next Steps
+
+1. Continue KandidatService decomposition — extract MassOperationsService (~150 lines)
+2. IspitService further decomposition — zapisnik orchestration, mass operations
+3. Consider extracting PrijavaService sub-services if it grows further
+4. Increase test coverage toward 70%+ target
