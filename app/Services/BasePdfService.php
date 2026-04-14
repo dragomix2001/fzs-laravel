@@ -39,4 +39,15 @@ class BasePdfService
             false,
         ]);
     }
+
+    protected function generatePdf(string $view, array $data, string $title, string $filename): void
+    {
+        $pdf = $this->createPdf();
+        $contents = View::make($view, $data)->render();
+        $pdf->SetTitle($title);
+        $pdf->AddPage();
+        $pdf->SetFont('freeserif', '', 10);
+        $pdf->WriteHtml($contents);
+        $pdf->Output($filename);
+    }
 }

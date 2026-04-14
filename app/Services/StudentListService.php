@@ -13,7 +13,6 @@ use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use Illuminate\Support\Facades\DB;
-use View;
 
 class StudentListService extends BasePdfService
 {
@@ -54,19 +53,12 @@ class StudentListService extends BasePdfService
         $program = StudijskiProgram::whereIn('id', $uslov)->get();
         $godina = GodinaStudija::whereIn('id', $uslov2)->get();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.test')
-            ->with('studijskiProgram', $program)
-            ->with('kandidat', $kandidat)
-            ->with('godina', $godina)
-            ->with('uslov', $picks3);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак кандидата по модулима');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('Spisak.pdf');
+        $this->generatePdf('izvestaji.test', [
+            'studijskiProgram' => $program,
+            'kandidat' => $kandidat,
+            'godina' => $godina,
+            'uslov' => $picks3,
+        ], 'Seznam кандидата по модулима', 'Spisak.pdf');
     }
 
     public function integralno($godina)
@@ -95,19 +87,12 @@ class StudentListService extends BasePdfService
 
         $tipStudija = TipStudija::whereIn('id', $uslov2)->get();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.integralno')
-            ->with('kandidat', $kandidat)
-            ->with('godina', $godina)
-            ->with('tip', $tipStudija)
-            ->with('tipSvi', $tipStudija);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Интегрални списак');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('Integralni.pdf');
+        $this->generatePdf('izvestaji.integralno', [
+            'kandidat' => $kandidat,
+            'godina' => $godina,
+            'tip' => $tipStudija,
+            'tipSvi' => $tipStudija,
+        ], 'Интегрални списак', 'Integralni.pdf');
     }
 
     public function spisakPoSmerovimaOstali($godina)
@@ -137,18 +122,11 @@ class StudentListService extends BasePdfService
 
         $program = StudijskiProgram::whereIn('id', $uslov)->get();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spisakSvihStudenataOstalo')
-            ->with('kandidat', $kandidat)
-            ->with('program', $program)
-            ->with('godina', $godina);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак свих студената - остали');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakOstali.pdf');
+        $this->generatePdf('izvestaji.spisakSvihStudenataOstalo', [
+            'kandidat' => $kandidat,
+            'program' => $program,
+            'godina' => $godina,
+        ], 'Seznam свих студената - остали', 'SpisakOstali.pdf');
     }
 
     public function spisakPoSmerovimaAktivni($godina)
@@ -174,20 +152,13 @@ class StudentListService extends BasePdfService
         $tipStudija = TipStudija::all();
         $godinaStudija = GodinaStudija::all();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spisakSvihStudenata')
-            ->with('kandidat', $kandidat)
-            ->with('program', $program)
-            ->with('tip', $tipStudija)
-            ->with('tipSvi', $tipStudija)
-            ->with('godina', $godinaStudija);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак свих студената');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakAktivni.pdf');
+        $this->generatePdf('izvestaji.spisakSvihStudenata', [
+            'kandidat' => $kandidat,
+            'program' => $program,
+            'tip' => $tipStudija,
+            'tipSvi' => $tipStudija,
+            'godina' => $godinaStudija,
+        ], 'Seznam свих студената', 'SpisakAktivni.pdf');
     }
 
     public function spisakZaSmer($programId, $godinaId)
@@ -204,18 +175,11 @@ class StudentListService extends BasePdfService
         $program = StudijskiProgram::find($programId);
         $godina = GodinaStudija::find($godinaId);
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spisakSmer')
-            ->with('studenti', $kandidat)
-            ->with('program', $program ? $program->naziv : '')
-            ->with('godina', $godina);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак за смер');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakSmer.pdf');
+        $this->generatePdf('izvestaji.spisakSmer', [
+            'studenti' => $kandidat,
+            'program' => $program ? $program->naziv : '',
+            'godina' => $godina,
+        ], 'Seznam за смер', 'SpisakSmer.pdf');
     }
 
     public function spisakPoProgramu($programId)
@@ -230,17 +194,10 @@ class StudentListService extends BasePdfService
 
         $program = StudijskiProgram::find($programId);
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spisakPoProgramu')
-            ->with('kandidat', $kandidat)
-            ->with('program', $program);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак по програму');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakPoProgramu.pdf');
+        $this->generatePdf('izvestaji.spisakPoProgramu', [
+            'kandidat' => $kandidat,
+            'program' => $program,
+        ], 'Seznam по програму', 'SpisakPoProgramu.pdf');
     }
 
     public function spisakPoGodini($godinaId)
@@ -255,17 +212,10 @@ class StudentListService extends BasePdfService
 
         $godina = GodinaStudija::find($godinaId);
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spisakPoGodini')
-            ->with('kandidat', $kandidat)
-            ->with('godinaNaziv', $godina);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак по години');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakPoGodini.pdf');
+        $this->generatePdf('izvestaji.spisakPoGodini', [
+            'kandidat' => $kandidat,
+            'godinaNaziv' => $godina,
+        ], 'Seznam по години', 'SpisakPoGodini.pdf');
     }
 
     public function spisakPoSlavama()
@@ -286,18 +236,11 @@ class StudentListService extends BasePdfService
 
         $slave = DB::table('krsna_slava')->get();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spisakPoSlavama')
-            ->with('kandidat', $kandidat)
-            ->with('uslov', $uslov)
-            ->with('slave', $slave);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак по крсним славама');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakPoSlavama.pdf');
+        $this->generatePdf('izvestaji.spisakPoSlavama', [
+            'kandidat' => $kandidat,
+            'uslov' => $uslov,
+            'slave' => $slave,
+        ], 'Seznam по крсним славама', 'SpisakPoSlavama.pdf');
     }
 
     public function spisakPoProfesorima()
@@ -305,17 +248,10 @@ class StudentListService extends BasePdfService
         $profesori = Profesor::all();
         $veza = ProfesorPredmet::with('predmet.predmet')->get();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.predmetiPoProfesorima')
-            ->with('profesori', $profesori)
-            ->with('veza', $veza);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак предмета по професорима');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakPoProfesorima.pdf');
+        $this->generatePdf('izvestaji.predmetiPoProfesorima', [
+            'profesori' => $profesori,
+            'veza' => $veza,
+        ], 'Seznam предмета по професорима', 'SpisakPoProfesorima.pdf');
     }
 
     public function spiskoviStudenti()
@@ -328,30 +264,23 @@ class StudentListService extends BasePdfService
         $program = StudijskiProgram::all();
         $skolskaGodina6 = SkolskaGodUpisa::all();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spiskoviStudenti')
-            ->with('kandidat', $kandidat)
-            ->with('program', $program)
-            ->with('programS', $program)
-            ->with('programPlan', $program)
-            ->with('programE', $program)
-            ->with('skolskaGodina6', $skolskaGodina6)
-            ->with('skolskaGodina3', $skolskaGodina6)
-            ->with('skolskaGodina', $skolskaGodina6)
-            ->with('skolskaGodina4', $skolskaGodina6)
-            ->with('tipStudija', TipStudija::all())
-            ->with('predmeti', Predmet::all())
-            ->with('skolskaGodinaE', $skolskaGodina6)
-            ->with('skolskaGodina7', $skolskaGodina6)
-            ->with('skolskaGodina8', $skolskaGodina6)
-            ->with('skolskaGodina9', $skolskaGodina6);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списци студената');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpiskoviStudenti.pdf');
+        $this->generatePdf('izvestaji.spiskoviStudenti', [
+            'kandidat' => $kandidat,
+            'program' => $program,
+            'programS' => $program,
+            'programPlan' => $program,
+            'programE' => $program,
+            'skolskaGodina6' => $skolskaGodina6,
+            'skolskaGodina3' => $skolskaGodina6,
+            'skolskaGodina' => $skolskaGodina6,
+            'skolskaGodina4' => $skolskaGodina6,
+            'tipStudija' => TipStudija::all(),
+            'predmeti' => Predmet::all(),
+            'skolskaGodinaE' => $skolskaGodina6,
+            'skolskaGodina7' => $skolskaGodina6,
+            'skolskaGodina8' => $skolskaGodina6,
+            'skolskaGodina9' => $skolskaGodina6,
+        ], 'Списци студената', 'SpiskoviStudenti.pdf');
     }
 
     public function spisakPoPredmetima($predmetId)
@@ -366,18 +295,11 @@ class StudentListService extends BasePdfService
             ->select('kandidat.*', 'kandidat.godinaStudija_id as godina', 'kandidat.studijskiProgram_id as program_id')
             ->get();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.spisakPoPredmetima')
-            ->with('studenti', $studenti)
-            ->with('programi', $programi)
-            ->with('predmet', $predmet ? $predmet->naziv : '');
-
-        $contents = $view->render();
-        $pdf->SetTitle('Списак студената по предметима');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('SpisakPoPredmetima.pdf');
+        $this->generatePdf('izvestaji.spisakPoPredmetima', [
+            'studenti' => $studenti,
+            'programi' => $programi,
+            'predmet' => $predmet ? $predmet->naziv : '',
+        ], 'Seznam студената по предметима', 'SpisakPoPredmetima.pdf');
     }
 
     public function spisakDiplomiranih($godina)
@@ -393,16 +315,9 @@ class StudentListService extends BasePdfService
             ->orderBy('kandidat.brojIndeksa')
             ->get();
 
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.diplomirani')
-            ->with('diplomirani', $kandidat)
-            ->with('godina', $godina);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Дипломирани студенти');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 10);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('Diplomirani.pdf');
+        $this->generatePdf('izvestaji.diplomirani', [
+            'diplomirani' => $kandidat,
+            'godina' => $godina,
+        ], 'Дипломирани студенти', 'Diplomirani.pdf');
     }
 }
