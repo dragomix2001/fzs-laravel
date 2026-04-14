@@ -11,6 +11,7 @@ use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Services\FileStorageService;
 use App\Services\GradeManagementService;
+use App\Services\KandidatEnrollmentService;
 use App\Services\KandidatService;
 use App\Services\UpisService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -692,7 +693,7 @@ class KandidatServiceTest extends TestCase
         // masovnaUplata calls UpisGodine::uplatiGodinu which is undefined.
         // The kandidat.uplata=1 save happens BEFORE that call, so catch the error.
         try {
-            $this->kandidatService->masovnaUplata([$kandidat->id]);
+            app(KandidatEnrollmentService::class)->masovnaUplata([$kandidat->id]);
         } catch (\BadMethodCallException) {
             // Expected: UpisGodine::uplatiGodinu is not defined
         }
@@ -728,7 +729,7 @@ class KandidatServiceTest extends TestCase
             'uplata' => 0,
         ]);
 
-        $this->kandidatService->masovnaUplataMaster([$kandidat1->id, $kandidat2->id]);
+        app(KandidatEnrollmentService::class)->masovnaUplataMaster([$kandidat1->id, $kandidat2->id]);
 
         $this->assertDatabaseHas('kandidat', ['id' => $kandidat1->id, 'uplata' => 1]);
         $this->assertDatabaseHas('kandidat', ['id' => $kandidat2->id, 'uplata' => 1]);
@@ -738,7 +739,7 @@ class KandidatServiceTest extends TestCase
     {
         $kandidat = $this->createKandidat(['uplata' => 0]);
 
-        $this->kandidatService->masovnaUplataMaster([$kandidat->id]);
+        app(KandidatEnrollmentService::class)->masovnaUplataMaster([$kandidat->id]);
 
         $this->assertDatabaseHas('kandidat', ['id' => $kandidat->id, 'uplata' => 1]);
     }
@@ -753,7 +754,7 @@ class KandidatServiceTest extends TestCase
 
         $kandidatIds = [1, 2, 3];
 
-        $result = $this->kandidatService->masovniUpisAsync($kandidatIds);
+        $result = app(KandidatEnrollmentService::class)->masovniUpisAsync($kandidatIds);
 
         Queue::assertPushed(MassEnrollmentJob::class, function ($job) use ($kandidatIds) {
             return $job->kandidatIds === $kandidatIds;
@@ -768,7 +769,7 @@ class KandidatServiceTest extends TestCase
     {
         Queue::fake();
 
-        $result = $this->kandidatService->masovniUpisAsync([]);
+        $result = app(KandidatEnrollmentService::class)->masovniUpisAsync([]);
 
         Queue::assertPushed(MassEnrollmentJob::class);
 
@@ -846,7 +847,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = app(KandidatService::class);
+        $service = app(KandidatEnrollmentService::class);
         $result = $service->masovniUpis([$kandidat->id]);
 
         $this->assertTrue($result);
@@ -868,7 +869,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = app(KandidatService::class);
+        $service = app(KandidatEnrollmentService::class);
         $result = $service->masovniUpis([$kandidat->id]);
 
         $this->assertFalse($result);
@@ -889,7 +890,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = app(KandidatService::class);
+        $service = app(KandidatEnrollmentService::class);
         $service->masovniUpisMaster([$kandidat->id]);
 
         $this->assertDatabaseHas('kandidat', ['id' => $kandidat->id, 'statusUpisa_id' => 1]);
@@ -916,7 +917,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = app(KandidatService::class);
+        $service = app(KandidatEnrollmentService::class);
         $result = $service->upisKandidata($kandidat->id);
 
         $this->assertTrue($result['success']);
@@ -936,7 +937,7 @@ class KandidatServiceTest extends TestCase
         $fileStorageServiceMock = $this->mock(FileStorageService::class);
         $gradeManagementServiceMock = $this->mock(GradeManagementService::class);
 
-        $service = app(KandidatService::class);
+        $service = app(KandidatEnrollmentService::class);
         $service->registracijaKandidata(42);
 
         // If we get here without exception, the mock expectation was met
