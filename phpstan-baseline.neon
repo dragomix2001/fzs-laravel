@@ -73,18 +73,6 @@ parameters:
 			path: app/Http/Controllers/IzvestajiController.php
 
 		-
-			message: '#^Variable \$smerovi might not be defined\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: app/Http/Controllers/PrijavaController.php
-
-		-
-			message: '#^Variable \$zapisnik might not be defined\.$#'
-			identifier: variable.undefined
-			count: 5
-			path: app/Http/Controllers/PrijavaController.php
-
-		-
 			message: '#^Relation ''student'' is not found in App\\Models\\Prisanstvo model\.$#'
 			identifier: larastan.relationExistence
 			count: 2
