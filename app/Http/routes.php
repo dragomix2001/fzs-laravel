@@ -36,25 +36,25 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
     Route::resource('kandidat', 'KandidatController');
-    Route::get('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sport');
-    Route::post('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sportStore');
+    Route::get('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sport')->name('kandidat.sport');
+    Route::post('/kandidat/{id}/sportskoangazovanje', 'KandidatController@sportStore')->name('kandidat.sportStore');
 
-    Route::get('/kandidat/{id}/delete', 'KandidatController@destroy');
+    Route::get('/kandidat/{id}/delete', 'KandidatController@destroy')->name('kandidat.delete');
 
-    Route::post('/kandidat/masovnaUplata', 'KandidatController@masovnaUplata');
-    Route::post('/kandidat/masovniUpis', 'KandidatController@masovniUpis');
+    Route::post('/kandidat/masovnaUplata', 'KandidatController@masovnaUplata')->name('kandidat.masovnaUplata');
+    Route::post('/kandidat/masovniUpis', 'KandidatController@masovniUpis')->name('kandidat.masovniUpis');
 
-    Route::get('/master/create', 'KandidatController@createMaster');
-    Route::get('/master/', 'KandidatController@indexMaster');
-    Route::get('/master/{id}/edit', 'KandidatController@editMaster');
-    Route::post('/master/{id}/edit', 'KandidatController@updateMaster');
-    Route::post('/storeMaster/', 'KandidatController@storeMaster');
-    Route::get('/master/{id}/delete', 'KandidatController@destroyMaster');
+    Route::get('/master/create', 'KandidatController@createMaster')->name('master.create');
+    Route::get('/master/', 'KandidatController@indexMaster')->name('master.index');
+    Route::get('/master/{id}/edit', 'KandidatController@editMaster')->name('master.edit');
+    Route::post('/master/{id}/edit', 'KandidatController@updateMaster')->name('master.update');
+    Route::post('/storeMaster/', 'KandidatController@storeMaster')->name('master.store');
+    Route::get('/master/{id}/delete', 'KandidatController@destroyMaster')->name('master.destroy');
 
-    Route::post('/master/masovnaUplata', 'KandidatController@masovnaUplataMaster');
-    Route::post('/master/masovniUpis', 'KandidatController@masovniUpisMaster');
+    Route::post('/master/masovnaUplata', 'KandidatController@masovnaUplataMaster')->name('master.masovnaUplata');
+    Route::post('/master/masovniUpis', 'KandidatController@masovniUpisMaster')->name('master.masovniUpis');
 
-    Route::get('/kandidat/{id}/upis', 'KandidatController@upisKandidata');
+    Route::get('/kandidat/{id}/upis', 'KandidatController@upisKandidata')->name('kandidat.upis');
 
     Route::get('/student/{id}/upis', 'StudentController@upisStudenta');
 
@@ -64,7 +64,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/student/masovnaUplata', 'StudentController@masovnaUplata');
     Route::post('/student/masovniUpis', 'StudentController@masovniUpis');
 
-    Route::get('/student/index/{tipStudijaId}/', 'StudentController@index');
+    Route::get('/student/index/{tipStudijaId}/', 'StudentController@index')->name('student.index');
     // zamrznuti studenti
     Route::get('/student/zamrznuti', 'StudentController@zamrznutiStudenti');
     // diplomirani studenti
@@ -402,7 +402,7 @@ Route::post('/testPost', 'KandidatController@testPost');
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('/regk/{id}', 'KandidatController@registracijaKandidata');
+Route::get('/regk/{id}', 'KandidatController@registracijaKandidata')->name('kandidat.registracija');
 
 // Nove rute za module
 Route::get('/prisustvo', 'PrisustvoController@index')->name('prisustvo.index');

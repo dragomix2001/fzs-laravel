@@ -6,6 +6,7 @@ use App\DTOs\DiplomaAddData;
 use App\DTOs\DiplomskiAddData;
 use App\DTOs\NastavniPlanData;
 use App\DTOs\ZapisnikStampaData;
+use App\Exports\SpisakKandidataExport;
 use App\Models\Kandidat;
 use App\Services\DiplomaService;
 use App\Services\DiplomskiRadService;
@@ -149,19 +150,9 @@ class IzvestajiController extends Controller
 
     public function excelStampa(Request $request)
     {
-        $godina = $request->godina;
-        $statusi = ['1', '2', '4', '5', '7'];
-
-        $kandidat = \DB::table('kandidat')
-            ->join('studijski_program', 'kandidat.studijskiProgram_id', '=', 'studijski_program.id')
-            ->whereIn('kandidat.statusUpisa_id', $statusi)->where(['kandidat.skolskaGodinaUpisa_id' => $godina])->
-            select('kandidat.ime', 'kandidat.prezimeKandidata', 'kandidat.brojIndeksa', 'studijski_program.naziv as program')
-                ->orderByRaw('SUBSTR(kandidat.brojIndeksa, 5)')->orderBy('kandidat.brojIndeksa')->get();
-
-        Excel::create('Spisak', function ($excel) use ($kandidat) { // @phpstan-ignore staticMethod.notFound
-            $excel->sheet('sheet1', function ($sheet) use ($kandidat) {
-                $sheet->fromArray($kandidat);
-            });
-        })->export('xls');
+        return Excel::download(
+            new SpisakKandidataExport((int) $request->godina),
+            'Spisak.xlsx'
+        );
     }
 }

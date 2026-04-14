@@ -95,7 +95,7 @@ class KandidatController extends Controller
             $data = KandidatPage2Data::fromRequest($request);
             $this->kandidatService->storeKandidatPage2($data);
 
-            return redirect('/kandidat/');
+            return redirect()->route('kandidat.index');
         }
     }
 
@@ -126,20 +126,20 @@ class KandidatController extends Controller
         if ($saved) {
             Session::flash('flash-success', 'update');
             if (! empty($request->submitstay)) {
-                return redirect("/kandidat/{$kandidat->id}/edit");
+                return redirect()->route('kandidat.edit', $kandidat->id);
             }
             if ($kandidat->statusUpisa_id == 1) {
-                return redirect("/student/index/1?godina={$kandidat->godinaStudija_id}&studijskiProgramId={$kandidat->studijskiProgram_id}");
+                return redirect()->route('student.index', ['tipStudijaId' => 1, 'godina' => $kandidat->godinaStudija_id, 'studijskiProgramId' => $kandidat->studijskiProgram_id]);
             }
 
-            return redirect('/kandidat?studijskiProgramId='.$kandidat->studijskiProgram_id);
+            return redirect()->route('kandidat.index', ['studijskiProgramId' => $kandidat->studijskiProgram_id]);
         } else {
             Session::flash('flash-error', 'update');
             if ($kandidat->statusUpisa_id == 1) {
-                return redirect("/student/index/1?godina={$kandidat->godinaStudija_id}&studijskiProgramId={$kandidat->studijskiProgram_id}");
+                return redirect()->route('student.index', ['tipStudijaId' => 1, 'godina' => $kandidat->godinaStudija_id, 'studijskiProgramId' => $kandidat->studijskiProgram_id]);
             }
 
-            return redirect('/kandidat?studijskiProgramId=1'.$kandidat->studijskiProgram_id);
+            return redirect()->route('kandidat.index', ['studijskiProgramId' => $kandidat->studijskiProgram_id]);
         }
     }
 
@@ -177,7 +177,7 @@ class KandidatController extends Controller
 
         $this->kandidatService->storeSport($id, $request->all());
 
-        return redirect("/kandidat/{$id}/sportskoangazovanje")
+        return redirect()->route('kandidat.sport', $id)
             ->with('sport', $sportovi)
             ->with('kandidat', $kandidat)
             ->with('sportskoAngazovanje', $sportskoAngazovanje)
@@ -201,7 +201,7 @@ class KandidatController extends Controller
         $data = MasterKandidatData::fromRequest($request);
         $kandidat = $this->kandidatService->storeMasterKandidat($data);
 
-        return redirect('/master?studijskiProgramId='.$kandidat->studijskiProgram_id);
+        return redirect()->route('master.index', ['studijskiProgramId' => $kandidat->studijskiProgram_id]);
     }
 
     public function editMaster($id)
@@ -223,20 +223,20 @@ class KandidatController extends Controller
         if ($saved) {
             Session::flash('flash-success', 'update');
             if (! empty($request->submitstay)) {
-                return redirect("/master/{$kandidat->id}/edit");
+                return redirect()->route('master.edit', $kandidat->id);
             }
             if ($kandidat->statusUpisa_id == 1) {
-                return redirect("/student/index/2?studijskiProgramId={$kandidat->studijskiProgram_id}");
+                return redirect()->route('student.index', ['tipStudijaId' => 2, 'studijskiProgramId' => $kandidat->studijskiProgram_id]);
             }
 
-            return redirect("/master?studijskiProgramId={$kandidat->studijskiProgram_id}");
+            return redirect()->route('master.index', ['studijskiProgramId' => $kandidat->studijskiProgram_id]);
         } else {
             Session::flash('flash-error', 'update');
             if ($kandidat->statusUpisa_id == 1) {
-                return redirect("/student/index/2?studijskiProgramId={$kandidat->studijskiProgram_id}");
+                return redirect()->route('student.index', ['tipStudijaId' => 2, 'studijskiProgramId' => $kandidat->studijskiProgram_id]);
             }
 
-            return redirect("/master?studijskiProgramId={$kandidat->studijskiProgram_id}");
+            return redirect()->route('master.index', ['studijskiProgramId' => $kandidat->studijskiProgram_id]);
         }
     }
 
@@ -286,18 +286,18 @@ class KandidatController extends Controller
         if (! $result['success']) {
             Session::flash('flash-error', 'upis');
             if ($result['tipStudija_id'] == 1) {
-                return redirect('/kandidat/');
+                return redirect()->route('kandidat.index');
             }
 
-            return redirect('/master/');
+            return redirect()->route('master.index');
         }
 
         Session::flash('flash-success', 'upis');
 
         if ($result['tipStudija_id'] == 1) {
-            return redirect('/kandidat/');
+            return redirect()->route('kandidat.index');
         } elseif ($result['tipStudija_id'] == 2) {
-            return redirect('/master/');
+            return redirect()->route('master.index');
         }
     }
 
@@ -305,7 +305,7 @@ class KandidatController extends Controller
     {
         $this->enrollmentService->masovnaUplata($request->odabir);
 
-        return redirect('/kandidat/');
+        return redirect()->route('kandidat.index');
     }
 
     public function masovniUpis(Request $request)
@@ -316,27 +316,27 @@ class KandidatController extends Controller
             Session::flash('flash-error', 'upis');
         }
 
-        return redirect('/kandidat/');
+        return redirect()->route('kandidat.index');
     }
 
     public function masovnaUplataMaster(Request $request)
     {
         $this->enrollmentService->masovnaUplataMaster($request->odabir);
 
-        return redirect('/master/');
+        return redirect()->route('master.index');
     }
 
     public function masovniUpisMaster(Request $request)
     {
         $this->enrollmentService->masovniUpisMaster($request->odabir);
 
-        return redirect('/master/');
+        return redirect()->route('master.index');
     }
 
     public function registracijaKandidata($id)
     {
         $this->enrollmentService->registracijaKandidata($id);
 
-        return redirect('/kandidat/');
+        return redirect()->route('kandidat.index');
     }
 }

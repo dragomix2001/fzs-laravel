@@ -9,6 +9,7 @@ use App\Models\ZapisnikOPolaganjuIspita;
 use App\Services\IspitService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -59,6 +60,10 @@ class IspitController extends Controller
             $data = ZapisnikData::fromRequest($request);
             $this->ispitService->storeZapisnik($data);
         } catch (QueryException $ex) {
+            Log::error('Database error in IspitController storeZapisnik: '.$ex->getMessage(), [
+                'sql' => $ex->getSql(),
+                'bindings' => $ex->getBindings(),
+            ]);
             Session::flash('flash-error', 'create');
         }
 
@@ -158,6 +163,10 @@ class IspitController extends Controller
         try {
             $this->ispitService->addStudentToZapisnik((int) $zapisnikId, $request->odabir);
         } catch (QueryException $ex) {
+            Log::error('Database error in IspitController dodajStudenta: '.$ex->getMessage(), [
+                'sql' => $ex->getSql(),
+                'bindings' => $ex->getBindings(),
+            ]);
             Session::flash('flash-error', 'Дошло је до грешке!');
         }
 
