@@ -41,7 +41,7 @@ readonly class KandidatData
         return [
             'imeKandidata' => $this->ime,
             'prezimeKandidata' => $this->prezime,
-            'JMBG' => $this->JMBG,
+            'jmbg' => $this->JMBG,
             'studijskiProgram_id' => $this->studijskiProgramId,
             'tipStudija_id' => $this->tipStudijaId,
             'brojIndeksa' => $this->brojIndeksa,

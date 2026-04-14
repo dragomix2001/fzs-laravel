@@ -85,8 +85,8 @@ Ovaj dokument opisuje preostale arhitektonske i funkcionalnosti poboljšanja za 
 - [x] KandidatController: smanjen sa ~400 na 286 LOC
 
 ### Trenutno stanje nakon svih poboljšanja:
-- **Testovi**: 1378 testova, 3426 asercija, 0 grešaka
-- **Test coverage**: 59.09% linija (3631/6145), 52.73% metoda (493/935)
+- **Testovi**: 1519 testova, 3836 asercija, 0 grešaka
+- **Test coverage**: 71.51% linija (4394/6145) — cilj od 70%+ dostignut
 - **PHPStan**: Level 5, 0 grešaka, prazan baseline
 - **Pint**: pass
 - **CI/CD**: Oba pipeline-a zelena (Laravel CI/CD + CodeQL)
@@ -549,19 +549,27 @@ Trenutno aplikacija koristi **mešavinu**:
 
 ### FAZA 3.5: Povećanje Test Coverage >70%
 
-**Status:** Pending  
+**Status:** ✅ Završeno  
 **Prioritet:** LOW  
 **Procenjeno vreme:** 10-12 sati  
 **Rizik:** NIZAK
 
-#### Opis
-Trenutno stanje:
-- **1378 testova**, 3426 asercija
-- **59.09% line coverage** (3631/6145 linija)
-- **52.73% method coverage** (493/935 metoda)
-- **33.00% class coverage** (67/203 klasa)
-
-Glavni nepokriveni moduli: Chatbot, Prediction, Dashboard, Obavestenja, Raspored, Prisustvo, Aktivnost i retke grane u postojećim kontrolerima.
+#### Rezultat
+- **Pre**: 1378 testova, 3426 asercija, 63.03% line coverage
+- **Posle**: 1519 testova, 3836 asercija, **71.51% line coverage** (4394/6145 linija)
+- **Novi test fajlovi**:
+  - `tests/Unit/Policies/IspitPolicyTest.php` — 21 test (IspitPolicy autorizacija)
+  - `tests/Feature/IzvestajiControllerTest.php` — 19 testova (Excel/PDF izveštaji)
+  - `tests/Feature/ChatbotControllerTest.php` — 12 testova (chatbot API endpoints)
+  - `tests/Unit/Services/IspitPdfServiceTest.php` — 6 testova (PDF generacija)
+  - `tests/Unit/Services/KandidatServiceExtendedTest.php` — 32 testa (storeKandidatPage1/2, storeMasterKandidat)
+  - `tests/Unit/Services/PrijavaServiceTest.php` — 51 test (prijave ispita, diplomski CRUD, zapisnici)
+- **Bug fix**: KandidatData DTO — `'JMBG'` → `'jmbg'` u `toArray()` metodi
+- **Migracija**: Nullable kolone na 3 tabele (kandidat, predmet_program, godina_studija)
+- **Ključna coverage poboljšanja**:
+  - PrijavaService: 63.80% → 99.48% (+35.68%)
+  - KandidatService: 90.71% → 99.17% (+8.46%)
+  - IspitPolicy: 0% → 95.24%
 
 #### Akcija
 
@@ -647,6 +655,6 @@ Trenutno **nema automatizovanih taskova** za:
 
 ---
 
-**Verzija:** 1.1  
-**Datum:** 2026-04-14  
+**Verzija:** 1.2  
+**Datum:** 2026-04-15  
 **Autor:** Senior Architect Audit + AI Assistant
