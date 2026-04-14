@@ -9,6 +9,8 @@ use App\DTOs\KandidatUpdateData;
 use App\DTOs\MasterKandidatData;
 use App\Models\Kandidat;
 use App\Models\PrijavaIspita;
+use App\Models\PrilozenaDokumenta;
+use App\Models\Sport;
 use App\Models\SportskoAngazovanje;
 use App\Models\StudijskiProgram;
 use App\Models\UpisGodine;
@@ -91,6 +93,17 @@ class KandidatService
     }
 
     /**
+     * Get candidate by ID or fail.
+     *
+     * @param  int  $id  Primary key of the candidate
+     * @return Kandidat The candidate instance
+     */
+    public function findByIdOrFail(int $id): Kandidat
+    {
+        return Kandidat::findOrFail($id);
+    }
+
+    /**
      * Get active study program ID for osnovne studije.
      *
      * Uses cache for 1 hour to reduce database queries.
@@ -99,8 +112,19 @@ class KandidatService
      */
     public function getActiveStudijskiProgramOsnovne(): ?int
     {
-        return Cache::remember('active_studijski_program_osnovne', 3600, function () {
-            return StudijskiProgram::where(['tipStudija_id' => 1, 'indikatorAktivan' => 1])->value('id');
+        return $this->getActiveStudijskiProgramId(1);
+    }
+
+    /**
+     * Get active study program ID for the given study type.
+     *
+     * @param  int  $tipStudijaId  Study type ID
+     * @return int|null The active program ID or null if none active
+     */
+    public function getActiveStudijskiProgramId(int $tipStudijaId): ?int
+    {
+        return Cache::remember("active_studijski_program_{$tipStudijaId}", 3600, function () use ($tipStudijaId) {
+            return StudijskiProgram::where(['tipStudija_id' => $tipStudijaId, 'indikatorAktivan' => 1])->value('id');
         });
     }
 
@@ -113,6 +137,20 @@ class KandidatService
     public function getStudijskiProgrami(int $tipStudijaId): mixed
     {
         return $this->dropdownDataService->getStudijskiProgrami($tipStudijaId);
+    }
+
+    /**
+     * Get active study programs for a specific study type.
+     *
+     * @param  int  $tipStudijaId  Study type ID
+     * @return Collection Collection of active study programs
+     */
+    public function getAktivniStudijskiProgrami(int $tipStudijaId): mixed
+    {
+        return StudijskiProgram::where([
+            'tipStudija_id' => $tipStudijaId,
+            'indikatorAktivan' => 1,
+        ])->get();
     }
 
     /**
@@ -137,6 +175,38 @@ class KandidatService
     public function getDropdownDataMaster(): array
     {
         return $this->dropdownDataService->getDropdownDataMaster();
+    }
+
+    /**
+     * Get all reference data needed for kandidat page 2 after page 1 save.
+     *
+     * @param  int  $insertedId  Newly created kandidat ID
+     * @return array Associative array of view data for page 2
+     */
+    public function getPageTwoFormData(int $insertedId): array
+    {
+        return array_merge($this->getDropdownData(), [
+            'insertedId' => $insertedId,
+            'sport' => Sport::all(),
+            'dokumentiPrvaGodina' => PrilozenaDokumenta::where('skolskaGodina_id', '1')->get(),
+            'dokumentiOstaleGodine' => PrilozenaDokumenta::where('skolskaGodina_id', '2')->get(),
+        ]);
+    }
+
+    /**
+     * Get all data needed for the sports engagement page.
+     *
+     * @param  int  $kandidatId  Kandidat ID
+     * @return array Associative array of kandidat, sport options, and existing engagements
+     */
+    public function getSportPageData(int $kandidatId): array
+    {
+        return [
+            'sport' => Sport::all(),
+            'kandidat' => $this->findByIdOrFail($kandidatId),
+            'sportskoAngazovanje' => $this->sportsManagementService->getSportsForKandidat($kandidatId),
+            'id' => $kandidatId,
+        ];
     }
 
     /**

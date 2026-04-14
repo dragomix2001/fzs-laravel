@@ -7,6 +7,10 @@ use App\DTOs\DiplomskiAddData;
 use App\DTOs\NastavniPlanData;
 use App\DTOs\ZapisnikStampaData;
 use App\Exports\SpisakKandidataExport;
+use App\Http\Requests\ReportGodinaRequest;
+use App\Http\Requests\ReportPredmetRequest;
+use App\Http\Requests\ReportProgramGodinaRequest;
+use App\Http\Requests\ReportProgramRequest;
 use App\Models\Kandidat;
 use App\Services\DiplomaService;
 use App\Services\DiplomskiRadService;
@@ -17,55 +21,46 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class IzvestajiController extends Controller
 {
-    protected $studentListService;
-
-    protected $diplomaService;
-
-    protected $diplomskiRadService;
-
-    protected $ispitPdfService;
-
-    public function __construct()
-    {
-        $this->studentListService = new StudentListService;
-        $this->diplomaService = new DiplomaService;
-        $this->diplomskiRadService = new DiplomskiRadService;
-        $this->ispitPdfService = new IspitPdfService;
-    }
+    public function __construct(
+        protected StudentListService $studentListService,
+        protected DiplomaService $diplomaService,
+        protected DiplomskiRadService $diplomskiRadService,
+        protected IspitPdfService $ispitPdfService,
+    ) {}
 
     public function spisakPoSmerovima()
     {
         return $this->studentListService->spisakPoSmerovima();
     }
 
-    public function integralno(Request $request)
+    public function integralno(ReportGodinaRequest $request)
     {
-        return $this->studentListService->integralno($request->godina);
+        return $this->studentListService->integralno($request->integer('godina'));
     }
 
-    public function spisakPoSmerovimaOstali(Request $request)
+    public function spisakPoSmerovimaOstali(ReportGodinaRequest $request)
     {
-        return $this->studentListService->spisakPoSmerovimaOstali($request->godina);
+        return $this->studentListService->spisakPoSmerovimaOstali($request->integer('godina'));
     }
 
-    public function spisakPoSmerovimaAktivni(Request $request)
+    public function spisakPoSmerovimaAktivni(ReportGodinaRequest $request)
     {
-        return $this->studentListService->spisakPoSmerovimaAktivni($request->godina);
+        return $this->studentListService->spisakPoSmerovimaAktivni($request->integer('godina'));
     }
 
-    public function spisakZaSmer(Request $request)
+    public function spisakZaSmer(ReportProgramGodinaRequest $request)
     {
-        return $this->studentListService->spisakZaSmer($request->program, $request->godina);
+        return $this->studentListService->spisakZaSmer($request->integer('program'), $request->integer('godina'));
     }
 
-    public function spisakPoProgramu(Request $request)
+    public function spisakPoProgramu(ReportProgramRequest $request)
     {
-        return $this->studentListService->spisakPoProgramu($request->program);
+        return $this->studentListService->spisakPoProgramu($request->integer('program'));
     }
 
-    public function spisakPoGodini(Request $request)
+    public function spisakPoGodini(ReportGodinaRequest $request)
     {
-        return $this->studentListService->spisakPoGodini($request->godina);
+        return $this->studentListService->spisakPoGodini($request->integer('godina'));
     }
 
     public function spisakPoSlavama()
@@ -98,9 +93,9 @@ class IzvestajiController extends Controller
         return $this->diplomaService->diplomaAdd(DiplomaAddData::fromRequest($request));
     }
 
-    public function spisakPoPredmetima(Request $request)
+    public function spisakPoPredmetima(ReportPredmetRequest $request)
     {
-        return $this->studentListService->spisakPoPredmetima($request->predmet);
+        return $this->studentListService->spisakPoPredmetima($request->integer('predmet'));
     }
 
     public function diplomaStampa(Kandidat $student)
@@ -133,9 +128,9 @@ class IzvestajiController extends Controller
         return $this->ispitPdfService->nastavniPlan(NastavniPlanData::fromRequest($request));
     }
 
-    public function spisakDiplomiranih(Request $request)
+    public function spisakDiplomiranih(ReportGodinaRequest $request)
     {
-        return $this->studentListService->spisakDiplomiranih($request->godina);
+        return $this->studentListService->spisakDiplomiranih($request->integer('godina'));
     }
 
     public function zapisnikStampa(Request $request)
@@ -148,10 +143,10 @@ class IzvestajiController extends Controller
         return $this->diplomskiRadService->zapisnikDiplomski($student);
     }
 
-    public function excelStampa(Request $request)
+    public function excelStampa(ReportGodinaRequest $request)
     {
         return Excel::download(
-            new SpisakKandidataExport((int) $request->godina),
+            new SpisakKandidataExport($request->integer('godina')),
             'Spisak.xlsx'
         );
     }

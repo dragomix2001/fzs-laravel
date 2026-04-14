@@ -6,22 +6,12 @@ use App\DTOs\KandidatPage1Data;
 use App\DTOs\KandidatPage2Data;
 use App\DTOs\KandidatUpdateData;
 use App\DTOs\MasterKandidatData;
+use App\Http\Requests\DodajStudentaRequest;
+use App\Http\Requests\KandidatSportRequest;
 use App\Http\Requests\StoreKandidatRequest;
 use App\Http\Requests\StoreMasterKandidatRequest;
 use App\Http\Requests\UpdateKandidatRequest;
 use App\Http\Requests\UpdateMasterKandidatRequest;
-use App\Models\GodinaStudija;
-use App\Models\Kandidat;
-use App\Models\Opstina;
-use App\Models\OpstiUspeh;
-use App\Models\PrilozenaDokumenta;
-use App\Models\SkolskaGodUpisa;
-use App\Models\Sport;
-use App\Models\SportskoAngazovanje;
-use App\Models\StatusStudiranja;
-use App\Models\StudijskiProgram;
-use App\Models\TipStudija;
-use App\Models\UspehSrednjaSkola;
 use App\Services\KandidatEnrollmentService;
 use App\Services\KandidatService;
 use Illuminate\Http\Request;
@@ -38,18 +28,14 @@ class KandidatController extends Controller
 
     public function index(Request $request)
     {
-        $studijskiProgramId = $this->kandidatService->getActiveStudijskiProgramOsnovne();
-        if (! empty($request->studijskiProgramId)) {
-            $studijskiProgramId = $request->studijskiProgramId;
-        }
+        $studijskiProgramId = $request->integer('studijskiProgramId') ?: $this->kandidatService->getActiveStudijskiProgramOsnovne();
 
         $studijskiProgrami = $this->kandidatService->getStudijskiProgrami(1);
-
-        $query = Kandidat::where(['tipStudija_id' => 1, 'statusUpisa_id' => 3]);
-        if ($studijskiProgramId !== null) {
-            $query->where('studijskiProgram_id', $studijskiProgramId);
-        }
-        $kandidati = $query->get();
+        $kandidati = $this->kandidatService->getAll([
+            'tipStudija_id' => 1,
+            'statusUpisa_id' => 3,
+            'studijskiProgram_id' => $studijskiProgramId,
+        ]);
 
         return view('kandidat.indeks')
             ->with('kandidati', $kandidati)
@@ -58,10 +44,7 @@ class KandidatController extends Controller
 
     public function create()
     {
-        $dropdownData = $this->kandidatService->getDropdownData();
-        $dropdownData['studijskiProgram'] = StudijskiProgram::where('tipStudija_id', '1')->get();
-
-        return view('kandidat.create_part_1', $dropdownData);
+        return view('kandidat.create_part_1', $this->kandidatService->getDropdownData());
     }
 
     public function store(StoreKandidatRequest $request)
@@ -70,25 +53,8 @@ class KandidatController extends Controller
 
             $data = KandidatPage1Data::fromRequest($request);
             $kandidat = $this->kandidatService->storeKandidatPage1($data);
-            $insertedId = $kandidat->id;
 
-            $dokumentiPrvaGodina = PrilozenaDokumenta::where('skolskaGodina_id', '1')->get();
-            $dokumentiOstaleGodine = PrilozenaDokumenta::where('skolskaGodina_id', '2')->get();
-
-            return view('kandidat.create_part_2')
-                ->with('mestoZavrseneSkoleFakulteta', Opstina::all())
-                ->with('opstiUspehSrednjaSkola', OpstiUspeh::all())
-                ->with('uspehSrednjaSkola', UspehSrednjaSkola::all())
-                ->with('prilozeniDokumentPrvaGodina', PrilozenaDokumenta::all())
-                ->with('statusaUpisaKandidata', StatusStudiranja::all())
-                ->with('studijskiProgram', StudijskiProgram::all())
-                ->with('tipStudija', TipStudija::all())
-                ->with('godinaStudija', GodinaStudija::all())
-                ->with('skolskeGodineUpisa', SkolskaGodUpisa::all())
-                ->with('insertedId', $insertedId)
-                ->with('sport', Sport::all())
-                ->with('dokumentiPrvaGodina', $dokumentiPrvaGodina)
-                ->with('dokumentiOstaleGodine', $dokumentiOstaleGodine);
+            return view('kandidat.create_part_2', $this->kandidatService->getPageTwoFormData($kandidat->id));
 
         } elseif ($request->page == 2) {
 
@@ -101,14 +67,14 @@ class KandidatController extends Controller
 
     public function show($id)
     {
-        $kandidat = Kandidat::find($id)->toArray();
+        $kandidat = $this->kandidatService->findByIdOrFail($id)->toArray();
 
         return view('kandidat.details')->with('kandidat', $kandidat);
     }
 
     public function edit($id)
     {
-        $kandidat = Kandidat::find($id);
+        $kandidat = $this->kandidatService->findByIdOrFail($id);
         $editData = $this->kandidatService->getEditDropdownData($id);
 
         return view('kandidat.update', array_merge(['kandidat' => $kandidat], $editData));
@@ -116,8 +82,6 @@ class KandidatController extends Controller
 
     public function update(UpdateKandidatRequest $request, $id)
     {
-        $kandidat = Kandidat::find($id);
-
         $data = KandidatUpdateData::fromRequest($request);
         $kandidat = $this->kandidatService->updateKandidat($id, $data);
 
@@ -158,30 +122,14 @@ class KandidatController extends Controller
 
     public function sport($id)
     {
-        $kandidat = Kandidat::find($id);
-        $sportskoAngazovanje = SportskoAngazovanje::where('kandidat_id', $id)->get();
-        $sport = Sport::all();
-
-        return view('kandidat.sportsko_angazovanje')
-            ->with('sport', $sport)
-            ->with('kandidat', $kandidat)
-            ->with('sportskoAngazovanje', $sportskoAngazovanje)
-            ->with('id', $id);
+        return view('kandidat.sportsko_angazovanje', $this->kandidatService->getSportPageData($id));
     }
 
-    public function sportStore(Request $request, $id)
+    public function sportStore(KandidatSportRequest $request, $id)
     {
-        $kandidat = Kandidat::find($id);
-        $sportskoAngazovanje = SportskoAngazovanje::where('kandidat_id', $id)->get();
-        $sportovi = Sport::all();
+        $this->kandidatService->storeSport($id, $request->validated());
 
-        $this->kandidatService->storeSport($id, $request->all());
-
-        return redirect()->route('kandidat.sport', $id)
-            ->with('sport', $sportovi)
-            ->with('kandidat', $kandidat)
-            ->with('sportskoAngazovanje', $sportskoAngazovanje)
-            ->with('id', $id);
+        return redirect()->route('kandidat.sport', $id);
     }
 
     public function testPost(Request $request)
@@ -189,7 +137,7 @@ class KandidatController extends Controller
         return $request->all();
     }
 
-    public function createMaster(Request $request)
+    public function createMaster()
     {
         $dropdownData = $this->kandidatService->getDropdownDataMaster();
 
@@ -206,7 +154,7 @@ class KandidatController extends Controller
 
     public function editMaster($id)
     {
-        $kandidat = Kandidat::find($id);
+        $kandidat = $this->kandidatService->findByIdOrFail($id);
         $editData = $this->kandidatService->getEditDropdownDataMaster($id);
 
         return view('kandidat.update_master', array_merge(['kandidat' => $kandidat], $editData));
@@ -214,8 +162,6 @@ class KandidatController extends Controller
 
     public function updateMaster(UpdateMasterKandidatRequest $request, $id)
     {
-        $kandidat = Kandidat::find($id);
-
         $data = MasterKandidatData::fromRequest($request);
         $kandidat = $this->kandidatService->updateMasterKandidat($id, $data);
         $saved = ! empty($kandidat->id);
@@ -242,22 +188,20 @@ class KandidatController extends Controller
 
     public function indexMaster(Request $request)
     {
-        $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 2, 'indikatorAktivan' => 1])->first();
+        $studijskiProgramId = $request->integer('studijskiProgramId') ?: $this->kandidatService->getActiveStudijskiProgramId(2);
 
-        if (! $studijskiProgram) {
+        if ($studijskiProgramId === null) {
             return view('kandidat.index_master')
                 ->with('kandidati', collect())
                 ->with('studijskiProgrami', collect());
         }
 
-        $studijskiProgramId = $studijskiProgram->id;
-        if (! empty($request->studijskiProgramId)) {
-            $studijskiProgramId = $request->studijskiProgramId;
-        }
-
-        $studijskiProgrami = StudijskiProgram::where(['tipStudija_id' => 2, 'indikatorAktivan' => 1])->get();
-
-        $kandidati = Kandidat::where(['tipStudija_id' => 2, 'statusUpisa_id' => 3, 'studijskiProgram_id' => $studijskiProgramId])->get();
+        $studijskiProgrami = $this->kandidatService->getAktivniStudijskiProgrami(2);
+        $kandidati = $this->kandidatService->getAll([
+            'tipStudija_id' => 2,
+            'statusUpisa_id' => 3,
+            'studijskiProgram_id' => $studijskiProgramId,
+        ]);
 
         return view('kandidat.index_master')
             ->with('kandidati', $kandidati)
@@ -301,16 +245,16 @@ class KandidatController extends Controller
         }
     }
 
-    public function masovnaUplata(Request $request)
+    public function masovnaUplata(DodajStudentaRequest $request)
     {
-        $this->enrollmentService->masovnaUplata($request->odabir);
+        $this->enrollmentService->masovnaUplata($request->input('odabir'));
 
         return redirect()->route('kandidat.index');
     }
 
-    public function masovniUpis(Request $request)
+    public function masovniUpis(DodajStudentaRequest $request)
     {
-        $success = $this->enrollmentService->masovniUpis($request->odabir);
+        $success = $this->enrollmentService->masovniUpis($request->input('odabir'));
 
         if (! $success) {
             Session::flash('flash-error', 'upis');
@@ -319,16 +263,16 @@ class KandidatController extends Controller
         return redirect()->route('kandidat.index');
     }
 
-    public function masovnaUplataMaster(Request $request)
+    public function masovnaUplataMaster(DodajStudentaRequest $request)
     {
-        $this->enrollmentService->masovnaUplataMaster($request->odabir);
+        $this->enrollmentService->masovnaUplataMaster($request->input('odabir'));
 
         return redirect()->route('master.index');
     }
 
-    public function masovniUpisMaster(Request $request)
+    public function masovniUpisMaster(DodajStudentaRequest $request)
     {
-        $this->enrollmentService->masovniUpisMaster($request->odabir);
+        $this->enrollmentService->masovniUpisMaster($request->input('odabir'));
 
         return redirect()->route('master.index');
     }
