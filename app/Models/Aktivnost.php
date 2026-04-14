@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Aktivnost extends Model
 {
@@ -29,12 +31,12 @@ class Aktivnost extends Model
         'aktivan' => 'boolean',
     ];
 
-    public function predmet()
+    public function predmet(): BelongsTo
     {
         return $this->belongsTo(Predmet::class);
     }
 
-    public function ocenjivanja()
+    public function ocenjivanja(): HasMany
     {
         return $this->hasMany(Ocenjivanje::class);
     }

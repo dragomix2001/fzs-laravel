@@ -98,7 +98,7 @@ class DiplomskiRadService extends BasePdfService
                 true,
                 'UTF-8',
                 false,
-            ], 'tcpdf');
+            ]);
 
             $view = View::make('izvestaji.zapisnikDiplomski')
                 ->with('student', $student)

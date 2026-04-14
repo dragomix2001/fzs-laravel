@@ -13,7 +13,7 @@ class PolozeniIspitiExport implements FromCollection, WithHeadings
         return PolozeniIspiti::with(['kandidat', 'predmet'])
             ->where('indikatorAktivan', 1)
             ->get()
-            ->map(function ($ispit) {
+            ->map(function (PolozeniIspiti $ispit) { // @phpstan-ignore argument.unresolvableType
                 return [
                     'student' => $ispit->kandidat->imeKandidata.' '.$ispit->kandidat->prezimeKandidata,
                     'indeks' => $ispit->kandidat->BrojIndeksa,

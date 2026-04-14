@@ -19,7 +19,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that should not be reported.
      *
-     * @var array
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
         AuthorizationException::class,
@@ -65,11 +65,11 @@ class Handler extends ExceptionHandler
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString(),
                 'user_id' => Auth::check() ? Auth::id() : null,
-                'user_email' => Auth::check() ? Auth::user()->email ?? null : null,
-                'url' => Request::url() ?? null,
-                'method' => Request::method() ?? null,
-                'ip' => Request::ip() ?? null,
-                'user_agent' => Request::userAgent() ?? null,
+                'user_email' => Auth::check() ? Auth::user()->email : null,
+                'url' => Request::url(),
+                'method' => Request::method(),
+                'ip' => Request::ip(),
+                'user_agent' => Request::userAgent(),
             ]);
         }
 

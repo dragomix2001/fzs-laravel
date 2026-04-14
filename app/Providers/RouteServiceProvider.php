@@ -18,8 +18,6 @@ class RouteServiceProvider extends ServiceProvider
 
     /**
      * Define your route model bindings, pattern filters, etc.
-     *
-     * @param  Router  $router
      */
     public function boot(): void
     {

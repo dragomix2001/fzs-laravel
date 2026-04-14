@@ -43,10 +43,10 @@ class BackupDatabase extends Command
             // Build mysqldump command
             $mysqlCmd = sprintf(
                 'mysqldump -h%s -u%s -p%s %s > %s',
-                escapeshellarg(env('DB_HOST')),
-                escapeshellarg(env('DB_USERNAME')),
-                escapeshellarg(env('DB_PASSWORD')),
-                escapeshellarg(env('DB_DATABASE')),
+                escapeshellarg(config('database.connections.mysql.host')),
+                escapeshellarg(config('database.connections.mysql.username')),
+                escapeshellarg(config('database.connections.mysql.password')),
+                escapeshellarg(config('database.connections.mysql.database')),
                 escapeshellarg($filePath)
             );
 

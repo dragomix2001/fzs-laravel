@@ -73,21 +73,21 @@ class QueueHealthCheck extends Command
 
         if ($verbose || $status !== self::SUCCESS) {
             $this->newLine();
-            $this->text('Failed Jobs: <fg=yellow>'.$failedCount.'</>');
+            $this->line('Failed Jobs: <fg=yellow>'.$failedCount.'</>');
 
             if ($failedCount >= $warnThreshold) {
-                $this->warning("  ⚠️  Above warning threshold ({$warnThreshold})");
+                $this->line("<fg=yellow>  ⚠️  Above warning threshold ({$warnThreshold})</>");
             }
             if ($failedCount >= $failThreshold) {
                 $this->error("  ❌  Above failure threshold ({$failThreshold})");
             }
 
             $this->newLine();
-            $this->text("Queue Connection: <fg=cyan>{$connection}</>");
+            $this->line("Queue Connection: <fg=cyan>{$connection}</>");
             $this->newLine();
-            $this->text('Queue Tables: '.($tablesExist ? '<fg=green>OK</>' : '<fg=red>MISSING</>'));
+            $this->line('Queue Tables: '.($tablesExist ? '<fg=green>OK</>' : '<fg=red>MISSING</>'));
             $this->newLine();
-            $this->text('Worker Running: '.($workerRunning ? '<fg=green>YES</>' : '<fg=red>NO</>'));
+            $this->line('Worker Running: '.($workerRunning ? '<fg=green>YES</>' : '<fg=red>NO</>'));
         }
 
         // Log to application log
@@ -105,7 +105,7 @@ class QueueHealthCheck extends Command
 
             return self::FAILURE;
         } elseif ($status === 2) {
-            $this->warning('⚠️  Queue health check WARNING');
+            $this->line('<fg=yellow>⚠️  Queue health check WARNING</>');
 
             return 2; // Using INVALID constant from Symfony Command as WARNING equivalent
         } else {

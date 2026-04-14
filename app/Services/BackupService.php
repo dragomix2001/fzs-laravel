@@ -75,8 +75,8 @@ class BackupService
 
         $zip = new \ZipArchive;
         if ($zip->open($zipFile, \ZipArchive::CREATE) === true) {
-            $zip->addDir($publicPath, 'public');
-            $zip->addDir($storagePath, 'storage');
+            $this->addDirectoryToZip($zip, $publicPath, 'public');
+            $this->addDirectoryToZip($zip, $storagePath, 'storage');
             $zip->close();
         }
 
@@ -113,5 +113,14 @@ class BackupService
         }
 
         return false;
+    }
+
+    protected function addDirectoryToZip(\ZipArchive $zip, string $directory, string $prefix): void
+    {
+        $files = File::allFiles($directory);
+        foreach ($files as $file) {
+            $relativePath = $prefix.'/'.$file->getRelativePathname();
+            $zip->addFile($file->getRealPath(), $relativePath);
+        }
     }
 }

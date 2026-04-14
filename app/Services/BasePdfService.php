@@ -37,6 +37,6 @@ class BasePdfService
             true,
             'UTF-8',
             false,
-        ], 'tcpdf');
+        ]);
     }
 }

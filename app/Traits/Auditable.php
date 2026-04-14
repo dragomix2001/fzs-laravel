@@ -30,7 +30,7 @@ trait Auditable
             $userId = Auth::id();
         }
 
-        $tableName = (new static)->getTable();
+        $tableName = $this->getTable();
 
         AuditLog::create([
             'user_id' => $userId,

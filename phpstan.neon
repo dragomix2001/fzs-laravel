@@ -8,6 +8,9 @@ parameters:
 
     level: 5
 
+    stubFiles:
+        - stubs/tcpdf.stub
+
     excludePaths:
         - app/bridge.php (?)
         - app/Http/Controllers/Auth/AuthController.php
@@ -17,4 +20,9 @@ parameters:
         # Allow dynamic properties on AndroModel subclasses (Phase 3.1 will remove AndroModel)
         -
             identifier: property.notFound
+            reportUnmatched: false
+        # Dead API controller references non-existent DB relations (profesor, ucionica, studenti)
+        -
+            identifier: larastan.relationExistence
+            path: app/Http/Controllers/Api/AktivnostController.php
             reportUnmatched: false

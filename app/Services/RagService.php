@@ -13,7 +13,7 @@ class RagService
     public function __construct()
     {
         $this->faqData = $this->loadFaqData();
-        $this->openAiConfigured = ! empty(env('OPENAI_API_KEY')) && env('OPENAI_API_KEY') !== 'sk-your-openai-api-key-here';
+        $this->openAiConfigured = ! empty(config('openai.api_key')) && config('openai.api_key') !== 'sk-your-openai-api-key-here';
     }
 
     protected function loadFaqData(): array

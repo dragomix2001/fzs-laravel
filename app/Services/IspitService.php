@@ -110,9 +110,9 @@ class IspitService
             ->all();
         $profesorId = array_unique($prijava->pluck('profesor_id')->all());
 
-        $profesori = Profesor::whereIn('id', $profesorId)->get()->isEmpty()
-            ? Profesor::all()
-            : Profesor::whereIn('id', $profesorId)->get();
+        $profesori = Profesor::whereIn('id', $profesorId)->exists()
+            ? Profesor::whereIn('id', $profesorId)->get()
+            : Profesor::all();
 
         $predmeti = Predmet::whereIn('id', $predmetId)->get();
 

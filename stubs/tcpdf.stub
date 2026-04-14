@@ -1,0 +1,27 @@
+<?php
+
+namespace Elibyy\TCPDF;
+
+/**
+ * @method void AddPage(string $orientation = '', mixed $format = '', bool $keepmargins = false, bool $tocpage = false)
+ * @method string Output(string $name = 'doc.pdf', string $dest = 'I')
+ * @method void SetAutoPageBreak(bool $auto, float $margin = 0)
+ * @method void SetFont(string $family, string $style = '', float $size = 0, string $fontfile = '', string $subset = 'default', bool $out = true)
+ * @method void SetTitle(string $title)
+ * @method void WriteHtml(string $html, bool $ln = true, bool $fill = false, bool $reseth = false, bool $cell = false, string $align = '')
+ * @method void WriteHTML(string $html, bool $ln = true, bool $fill = false, bool $reseth = false, bool $cell = false, string $align = '')
+ */
+class TCPDF
+{
+    /**
+     * @param array|mixed $app
+     */
+    public function __construct(mixed $app) {}
+
+    /**
+     * @param string $method
+     * @param array<int, mixed> $args
+     * @return mixed
+     */
+    public function __call(string $method, array $args) {}
+}

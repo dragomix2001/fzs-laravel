@@ -26,7 +26,7 @@ class ChatbotService
 
     public function chat(string $message, array $conversationHistory = []): array
     {
-        $apiKey = env('OPENAI_API_KEY');
+        $apiKey = config('openai.api_key');
         if (empty($apiKey) || $apiKey === 'sk-your-openai-api-key-here') {
             return $this->getMockResponse($message);
         }

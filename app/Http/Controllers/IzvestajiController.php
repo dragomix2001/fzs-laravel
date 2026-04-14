@@ -12,7 +12,7 @@ use App\Services\DiplomskiRadService;
 use App\Services\IspitPdfService;
 use App\Services\StudentListService;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IzvestajiController extends Controller
 {
@@ -158,7 +158,7 @@ class IzvestajiController extends Controller
             select('kandidat.ime', 'kandidat.prezimeKandidata', 'kandidat.brojIndeksa', 'studijski_program.naziv as program')
                 ->orderByRaw('SUBSTR(kandidat.brojIndeksa, 5)')->orderBy('kandidat.brojIndeksa')->get();
 
-        Excel::create('Spisak', function ($excel) use ($kandidat) {
+        Excel::create('Spisak', function ($excel) use ($kandidat) { // @phpstan-ignore staticMethod.notFound
             $excel->sheet('sheet1', function ($sheet) use ($kandidat) {
                 $sheet->fromArray($kandidat);
             });
