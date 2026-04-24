@@ -40,8 +40,7 @@ class DocumentManagementService
         array $dokumentiDruga = [],
         array $documentUploadsPrva = [],
         array $documentUploadsDruga = []
-    ): void
-    {
+    ): void {
         $dokumentiPrva = $this->mergeSelectedWithUploaded($dokumentiPrva, $documentUploadsPrva);
         $dokumentiDruga = $this->mergeSelectedWithUploaded($dokumentiDruga, $documentUploadsDruga);
 
