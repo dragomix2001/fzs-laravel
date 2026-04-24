@@ -14,15 +14,17 @@ class UpdateMasterKandidatRequest extends FormRequest
 
     public function rules(): array
     {
+        $rules = [
+            'dokumentaMasterUpload.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ];
+
         $kandidat = Kandidat::find($this->route('id'));
 
         if ($kandidat && $kandidat->brojIndeksa != $this->input('brojIndeksa')) {
-            return [
-                'brojIndeksa' => 'unique:kandidat',
-            ];
+            $rules['brojIndeksa'] = 'unique:kandidat';
         }
 
-        return [];
+        return $rules;
     }
 
     public function messages(): array

@@ -66,7 +66,7 @@
                     <td>{{$zapisnik->ispitniRok?->naziv ?? '-'}}</td>
                     <td>{{($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '')}}</td>
                     <td>{{\Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')}}</td>
-                    <td>{{$zapisnik->studenti->count()}}</td>
+                    <td>{{$zapisnik->studenti_count}}</td>
                     <td>
                         <a class="btn btn-primary" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед
                             полагања</a>

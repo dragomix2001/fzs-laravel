@@ -296,7 +296,9 @@ class KandidatService
         $this->documentManagementService->attachDocumentsForKandidat(
             $data->kandidatId,
             $data->dokumentiPrva,
-            $data->dokumentiDruga
+            $data->dokumentiDruga,
+            $data->documentUploadsPrva,
+            $data->documentUploadsDruga
         );
 
         $kandidat->brojBodovaTest = $data->brojBodovaTest;
@@ -379,7 +381,9 @@ class KandidatService
         $this->documentManagementService->attachDocumentsForKandidat(
             $id,
             $data->dokumentiPrva,
-            $data->dokumentiDruga
+            $data->dokumentiDruga,
+            $data->documentUploadsPrva,
+            $data->documentUploadsDruga
         );
 
         $kandidat->brojBodovaTest = $data->brojBodovaTest;
@@ -453,6 +457,8 @@ class KandidatService
             $this->documentManagementService->attachDocumentsForKandidat(
                 $insertedId,
                 $data->dokumentaMaster,
+                [],
+                $data->dokumentaMasterUpload,
                 []
             );
         }
@@ -519,6 +525,8 @@ class KandidatService
         $this->documentManagementService->attachDocumentsForKandidat(
             $id,
             $data->dokumentaMaster,
+            [],
+            $data->dokumentaMasterUpload,
             []
         );
 

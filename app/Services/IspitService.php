@@ -45,7 +45,14 @@ class IspitService
      */
     public function getZapisniciForIndex(array $filters): array
     {
-        $query = ZapisnikOPolaganjuIspita::where(['arhiviran' => false]);
+        $query = ZapisnikOPolaganjuIspita::query()
+            ->with([
+                'predmet:id,naziv',
+                'ispitniRok:id,naziv',
+                'profesor:id,ime,prezime',
+            ])
+            ->withCount('studenti')
+            ->where(['arhiviran' => false]);
 
         if (! empty($filters['filter_predmet_id'])) {
             $query = $query->where(['predmet_id' => $filters['filter_predmet_id']]);
@@ -589,7 +596,15 @@ class IspitService
 
     public function getArhiviraniZapisnici(): array
     {
-        $arhiviraniZapisnici = ZapisnikOPolaganjuIspita::where(['arhiviran' => true])->get();
+        $arhiviraniZapisnici = ZapisnikOPolaganjuIspita::query()
+            ->with([
+                'predmet:id,naziv',
+                'ispitniRok:id,naziv',
+                'profesor:id,ime,prezime',
+            ])
+            ->withCount('studenti')
+            ->where(['arhiviran' => true])
+            ->get();
         $aktivniIspitniRok = AktivniIspitniRokovi::where(['indikatorAktivan' => 1])->get();
 
         return compact('arhiviraniZapisnici', 'aktivniIspitniRok');

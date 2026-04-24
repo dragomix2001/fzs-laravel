@@ -58,6 +58,7 @@
                                         <input type="checkbox" name="dokumentaMaster[{{ $i }}]" value="{{$dokument->id}}">
                                         {{ $dokument->naziv }}
                                     </label>
+                                    <input type="file" class="form-control" name="dokumentaMasterUpload[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
                                 </div>
                             @endforeach
                         </div>

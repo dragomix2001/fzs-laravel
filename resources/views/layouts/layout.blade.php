@@ -630,7 +630,10 @@
                                 <i class="fas fa-chevron-down ml-2 text-xs"></i>
                             </button>
                             <div x-show="open" style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt mr-2"></i>Одјава</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fas fa-sign-out-alt mr-2"></i>Одјава</a>
+                                </form>
                             </div>
                         </div>
                     @endif

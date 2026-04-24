@@ -50,6 +50,8 @@ readonly class KandidatUpdateData
         public ?string $upisniRok,
         public ?int $indikatorAktivan,
         public ?string $brojIndeksa,
+        public array $documentUploadsPrva = [],
+        public array $documentUploadsDruga = [],
     ) {}
 
     public static function fromRequest(Request $request): self
@@ -88,6 +90,8 @@ readonly class KandidatUpdateData
             telesnaTezina: self::nullableFloat($request->input('TelesnaTezinaKandidata')),
             dokumentiPrva: self::normalizeArray($request->input('dokumentiPrva', [])),
             dokumentiDruga: self::normalizeArray($request->input('dokumentiDruga', [])),
+            documentUploadsPrva: self::normalizeUploadedDocuments($request->file('documentUploadsPrva', [])),
+            documentUploadsDruga: self::normalizeUploadedDocuments($request->file('documentUploadsDruga', [])),
             brojBodovaTest: self::nullableFloat($request->input('BrojBodovaTest')),
             brojBodovaSkola: self::nullableFloat($request->input('BrojBodovaSkola')),
             ukupniBrojBodova: self::nullableFloat($request->input('ukupniBrojBodova')),
@@ -105,5 +109,24 @@ readonly class KandidatUpdateData
             ['razred' => 3, 'uspeh' => self::nullableInt($request->input('treciRazred')), 'ocena' => self::nullableFloat($request->input('SrednjaOcena3'))],
             ['razred' => 4, 'uspeh' => self::nullableInt($request->input('cetvrtiRazred')), 'ocena' => self::nullableFloat($request->input('SrednjaOcena4'))],
         ];
+    }
+
+    /**
+     * @param  array<int|string, mixed>  $uploads
+     * @return array<int, UploadedFile>
+     */
+    private static function normalizeUploadedDocuments(array $uploads): array
+    {
+        $normalized = [];
+
+        foreach ($uploads as $documentId => $file) {
+            if (! $file instanceof UploadedFile) {
+                continue;
+            }
+
+            $normalized[(int) $documentId] = $file;
+        }
+
+        return $normalized;
     }
 }

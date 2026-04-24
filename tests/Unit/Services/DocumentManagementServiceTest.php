@@ -11,7 +11,9 @@ use App\Models\User;
 use App\Services\DocumentManagementService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class DocumentManagementServiceTest extends TestCase
@@ -23,8 +25,64 @@ class DocumentManagementServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Storage::fake('uploads');
         Model::unguard();
         $this->service = app(DocumentManagementService::class);
+    }
+
+    public function test_attach_documents_stores_uploaded_files_and_metadata(): void
+    {
+        $kandidatId = $this->nextUnusedKandidatId();
+        $documentId = 111;
+        $file = UploadedFile::fake()->create('izvod.pdf', 120, 'application/pdf');
+
+        $this->service->attachDocumentsForKandidat(
+            $kandidatId,
+            [$documentId],
+            [],
+            [$documentId => $file],
+            []
+        );
+
+        $record = KandidatPrilozenaDokumenta::query()
+            ->where('kandidat_id', $kandidatId)
+            ->where('prilozenaDokumenta_id', $documentId)
+            ->first();
+
+        $this->assertNotNull($record);
+        $this->assertNotNull($record->file_path);
+        $this->assertSame('izvod.pdf', $record->file_name);
+        $this->assertSame('application/pdf', $record->mime_type);
+        $this->assertNotNull($record->file_size);
+        Storage::disk('uploads')->assertExists($record->file_path);
+    }
+
+    public function test_delete_documents_for_kandidat_removes_uploaded_files_from_storage(): void
+    {
+        $kandidatId = $this->nextUnusedKandidatId();
+        $documentId = 222;
+        $file = UploadedFile::fake()->create('uverenje.pdf', 90, 'application/pdf');
+
+        $this->service->attachDocumentsForKandidat(
+            $kandidatId,
+            [$documentId],
+            [],
+            [$documentId => $file],
+            []
+        );
+
+        $record = KandidatPrilozenaDokumenta::query()
+            ->where('kandidat_id', $kandidatId)
+            ->where('prilozenaDokumenta_id', $documentId)
+            ->first();
+
+        $this->assertNotNull($record);
+        $this->assertNotNull($record->file_path);
+        Storage::disk('uploads')->assertExists($record->file_path);
+
+        $this->service->deleteDocumentsForKandidat($kandidatId);
+
+        Storage::disk('uploads')->assertMissing($record->file_path);
     }
 
     public function test_attach_documents_with_dokumenti_prva_only(): void

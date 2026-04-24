@@ -4,6 +4,7 @@ namespace App\DTOs;
 
 use App\DTOs\Concerns\NormalizesRequestValues;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
 readonly class KandidatPage2Data
 {
@@ -23,6 +24,8 @@ readonly class KandidatPage2Data
         public ?float $brojBodovaSkola,
         public ?float $ukupniBrojBodova,
         public ?string $upisniRok,
+        public array $documentUploadsPrva = [],
+        public array $documentUploadsDruga = [],
     ) {}
 
     public static function fromRequest(Request $request): self
@@ -37,6 +40,8 @@ readonly class KandidatPage2Data
             telesnaTezina: self::nullableFloat($request->input('TelesnaTezinaKandidata')),
             dokumentiPrva: self::normalizeArray($request->input('dokumentiPrva', [])),
             dokumentiDruga: self::normalizeArray($request->input('dokumentiDruga', [])),
+            documentUploadsPrva: self::normalizeUploadedDocuments($request->file('documentUploadsPrva', [])),
+            documentUploadsDruga: self::normalizeUploadedDocuments($request->file('documentUploadsDruga', [])),
             brojBodovaTest: self::nullableFloat($request->input('BrojBodovaTest')),
             brojBodovaSkola: self::nullableFloat($request->input('BrojBodovaSkola')),
             ukupniBrojBodova: self::nullableFloat($request->input('ukupniBrojBodova')),
@@ -73,5 +78,24 @@ readonly class KandidatPage2Data
         }
 
         return $sports;
+    }
+
+    /**
+     * @param  array<int|string, mixed>  $uploads
+     * @return array<int, UploadedFile>
+     */
+    private static function normalizeUploadedDocuments(array $uploads): array
+    {
+        $normalized = [];
+
+        foreach ($uploads as $documentId => $file) {
+            if (! $file instanceof UploadedFile) {
+                continue;
+            }
+
+            $normalized[(int) $documentId] = $file;
+        }
+
+        return $normalized;
     }
 }

@@ -381,16 +381,18 @@
                                     <h3 class="panel-title">Висина и тежина</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                                        <label for="VisinaKandidata">Висина кандидата (cm)</label>
-                                        <input class="form-control" type="text" name="VisinaKandidata"
-                                               id="VisinaKandidata"
-                                               value="{{ $kandidat->visina }}">
-                                    </div>
-                                    <div class="form-group pull-left" style="width: 48%; margin-left: 2%;">
-                                        <label for="TelesnaTezinaKandidata">Телесна тежина кандидата (kg)</label>
-                                        <input class="form-control" type="text" name="TelesnaTezinaKandidata"
-                                               id="TelesnaTezinaKandidata" value="{{ $kandidat->telesnaTezina }}">
+                                    <div class="row">
+                                        <div class="form-group col-lg-6">
+                                            <label for="VisinaKandidata">Висина кандидата (cm)</label>
+                                            <input class="form-control" type="text" name="VisinaKandidata"
+                                                   id="VisinaKandidata"
+                                                   value="{{ $kandidat->visina }}">
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            <label for="TelesnaTezinaKandidata">Телесна тежина кандидата (kg)</label>
+                                            <input class="form-control" type="text" name="TelesnaTezinaKandidata"
+                                                   id="TelesnaTezinaKandidata" value="{{ $kandidat->telesnaTezina }}">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -409,6 +411,12 @@
                                                         {{ (in_array($dokument->id,$prilozenaDokumenta) ? "checked":"") }}>
                                                 {{ $dokument->naziv }}
                                             </label>
+                                            <input type="file" class="form-control" name="documentUploadsPrva[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
+                                            @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
+                                                <a class="btn btn-link" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
+                                                    {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
+                                                </a>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>
@@ -430,6 +438,12 @@
                                                         {{ (in_array($dokument->id,$prilozenaDokumenta) ? "checked":"") }}>
                                                 {{ $dokument->naziv }}
                                             </label>
+                                            <input type="file" class="form-control" name="documentUploadsDruga[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
+                                            @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
+                                                <a class="btn btn-link" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
+                                                    {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
+                                                </a>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>

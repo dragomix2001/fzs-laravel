@@ -92,7 +92,7 @@
                     <td>{{$zapisnik->ispitniRok?->naziv ?? '-'}}</td>
                     <td>{{($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '')}}</td>
                     <td data-order="{{ \Carbon\Carbon::parse($zapisnik->datum)->timestamp }}">{{\Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')}}</td>
-                    <td>{{$zapisnik->studenti->count()}}</td>
+                    <td>{{$zapisnik->studenti_count}}</td>
                     <td>
                             <div>
                             <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post" style="margin-bottom: 0px">

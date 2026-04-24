@@ -41,7 +41,7 @@ class PrilozenaDokumenta extends Model
             'prilozenaDokumenta_id',
             'kandidat_id'
         )
-            ->withPivot(['id', 'indikatorAktivan', 'review_status', 'reviewer_id', 'notes', 'reviewed_at'])
+            ->withPivot(['id', 'indikatorAktivan', 'file_path', 'file_name', 'mime_type', 'file_size', 'review_status', 'reviewer_id', 'notes', 'reviewed_at'])
             ->withTimestamps();
     }
 

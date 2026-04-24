@@ -19,6 +19,13 @@ class StoreKandidatRequest extends FormRequest
             ];
         }
 
+        if ($this->input('page') == 2) {
+            return [
+                'documentUploadsPrva.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'documentUploadsDruga.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            ];
+        }
+
         return [];
     }
 

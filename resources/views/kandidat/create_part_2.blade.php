@@ -2,7 +2,7 @@
 @section('page_heading','Унос кандидата - друга страна')
 @section('section')
     <div class="col-lg-9">
-        <form role="form" method="post" action="{{ url('/kandidat') }}">
+        <form role="form" method="post" action="{{ url('/kandidat') }}" enctype="multipart/form-data">
             <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}"/>
             <input type="hidden" name="page" id="page" value="2"/>
             <input type="hidden" name="insertedId" id="insertedId" value="{{ $insertedId }}"/>
@@ -184,6 +184,7 @@
                                         <input type="checkbox" name="dokumentiPrva[{{ $i }}]" value="{{$dokument->id}}">
                                         {{ $dokument->naziv }}
                                     </label>
+                                    <input type="file" class="form-control" name="documentUploadsPrva[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
                                 </div>
                             @endforeach
                         </div>
@@ -203,6 +204,7 @@
                                                value="{{$dokument->id}}">
                                         {{ $dokument->naziv }}
                                     </label>
+                                    <input type="file" class="form-control" name="documentUploadsDruga[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
                                 </div>
                             @endforeach
                         </div>

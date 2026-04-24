@@ -124,6 +124,14 @@ class DropdownDataService
         $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 1, 'indikatorAktivan' => 1])->get();
 
         $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->pluck('prilozenaDokumenta_id')->toArray();
+        $prilozenaDokumentaFajlovi = KandidatPrilozenaDokumenta::where('kandidat_id', $id)
+            ->whereNotNull('file_path')
+            ->pluck('file_path', 'prilozenaDokumenta_id')
+            ->toArray();
+        $prilozenaDokumentaNazivi = KandidatPrilozenaDokumenta::where('kandidat_id', $id)
+            ->whereNotNull('file_name')
+            ->pluck('file_name', 'prilozenaDokumenta_id')
+            ->toArray();
 
         // Get grades using GradeManagementService
         $grades = $this->gradeManagementService->getGradesForEdit($id);
@@ -141,6 +149,8 @@ class DropdownDataService
             'statusKandidata' => $statusKandidata,
             'studijskiProgram' => $studijskiProgram,
             'prilozenaDokumenta' => $prilozenaDokumenta,
+            'prilozenaDokumentaFajlovi' => $prilozenaDokumentaFajlovi,
+            'prilozenaDokumentaNazivi' => $prilozenaDokumentaNazivi,
             'prviRazred' => $prviRazred,
             'drugiRazred' => $drugiRazred,
             'treciRazred' => $treciRazred,
@@ -163,10 +173,20 @@ class DropdownDataService
     {
         $statusKandidata = StatusGodine::whereNotIn('id', [4, 5])->get();
         $prilozenaDokumenta = KandidatPrilozenaDokumenta::where('kandidat_id', $id)->pluck('prilozenaDokumenta_id')->toArray();
+        $prilozenaDokumentaFajlovi = KandidatPrilozenaDokumenta::where('kandidat_id', $id)
+            ->whereNotNull('file_path')
+            ->pluck('file_path', 'prilozenaDokumenta_id')
+            ->toArray();
+        $prilozenaDokumentaNazivi = KandidatPrilozenaDokumenta::where('kandidat_id', $id)
+            ->whereNotNull('file_name')
+            ->pluck('file_name', 'prilozenaDokumenta_id')
+            ->toArray();
 
         return array_merge($this->getDropdownDataMaster(), [
             'statusKandidata' => $statusKandidata,
             'prilozenaDokumenta' => $prilozenaDokumenta,
+            'prilozenaDokumentaFajlovi' => $prilozenaDokumentaFajlovi,
+            'prilozenaDokumentaNazivi' => $prilozenaDokumentaNazivi,
         ]);
     }
 }

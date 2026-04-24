@@ -44,7 +44,12 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="/auth/logout">Logout</a></li>
+								<li>
+									<form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+										{{ csrf_field() }}
+										<a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+									</form>
+								</li>
 							</ul>
 						</li>
 					@endif

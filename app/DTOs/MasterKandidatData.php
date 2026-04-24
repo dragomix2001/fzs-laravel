@@ -36,6 +36,7 @@ readonly class MasterKandidatData
         public ?string $godinaZavrsetkaSkole,
         public ?string $drzavaRodjenja,
         public array $dokumentaMaster,
+        public array $dokumentaMasterUpload = [],
     ) {}
 
     public static function fromRequest(Request $request): self
@@ -66,6 +67,26 @@ readonly class MasterKandidatData
             godinaZavrsetkaSkole: self::nullableString($request->input('godinaZavrsetkaSkole')),
             drzavaRodjenja: self::nullableString($request->input('drzavaRodjenja')),
             dokumentaMaster: self::normalizeArray($request->input('dokumentaMaster', [])),
+            dokumentaMasterUpload: self::normalizeUploadedDocuments($request->file('dokumentaMasterUpload', [])),
         );
+    }
+
+    /**
+     * @param  array<int|string, mixed>  $uploads
+     * @return array<int, UploadedFile>
+     */
+    private static function normalizeUploadedDocuments(array $uploads): array
+    {
+        $normalized = [];
+
+        foreach ($uploads as $documentId => $file) {
+            if (! $file instanceof UploadedFile) {
+                continue;
+            }
+
+            $normalized[(int) $documentId] = $file;
+        }
+
+        return $normalized;
     }
 }

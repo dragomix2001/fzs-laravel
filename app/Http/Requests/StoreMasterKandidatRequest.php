@@ -15,6 +15,7 @@ class StoreMasterKandidatRequest extends FormRequest
     {
         return [
             'JMBG' => 'unique:kandidat|required',
+            'dokumentaMasterUpload.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ];
     }
 

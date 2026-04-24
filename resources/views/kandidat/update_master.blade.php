@@ -83,6 +83,12 @@
                                         {{ (in_array($dokument->id,$prilozenaDokumenta) ? "checked":"") }}>
                                 {{ $dokument->naziv }}
                             </label>
+                            <input type="file" class="form-control" name="dokumentaMasterUpload[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
+                            @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
+                                <a class="btn btn-link" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
+                                    {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
+                                </a>
+                            @endif
                         </div>
                     @endforeach
                 </div>
