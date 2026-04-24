@@ -6,6 +6,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 
@@ -76,6 +77,23 @@ class Kandidat extends Model
     public function prijaveIspita(): HasMany
     {
         return $this->hasMany(PrijavaIspita::class);
+    }
+
+    public function kandidatDokumenta(): HasMany
+    {
+        return $this->hasMany(KandidatPrilozenaDokumenta::class, 'kandidat_id');
+    }
+
+    public function prilozenaDokumenta(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            PrilozenaDokumenta::class,
+            'kandidat_prilozena_dokumenta',
+            'kandidat_id',
+            'prilozenaDokumenta_id'
+        )
+            ->withPivot(['id', 'indikatorAktivan', 'review_status', 'reviewer_id', 'notes', 'reviewed_at'])
+            ->withTimestamps();
     }
 
     public function mestoRodjenja(): BelongsTo

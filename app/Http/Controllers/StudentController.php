@@ -84,7 +84,14 @@ class StudentController extends Controller
             return redirect("student/{$id}/upis");
         }
 
-        $this->upisService->upisiStudentaGodinu($id, $request->godina, $request->pokusaj);
+        try {
+            $this->upisService->upisiStudentaGodinu($id, $request->godina, $request->pokusaj);
+        } catch (\RuntimeException $e) {
+            Session::flash('flash-error', 'upis');
+            Session::flash('error', $e->getMessage());
+
+            return redirect("student/{$id}/upis");
+        }
 
         return redirect("student/{$id}/upis");
     }
@@ -130,19 +137,32 @@ class StudentController extends Controller
 
     public function promeniStatus($id, $statusId, $godinaId)
     {
-        $this->upisService->promeniStatus($id, $statusId, $godinaId, $this->status);
+        try {
+            $this->upisService->promeniStatus($id, $statusId, $godinaId, $this->status);
+        } catch (\RuntimeException $e) {
+            Session::flash('flash-error', 'upis');
+            Session::flash('error', $e->getMessage());
+
+            return Redirect::back();
+        }
 
         return Redirect::back();
     }
 
     public function masovniUpis(Request $request)
     {
-        foreach ($request->odabir as $kandidatId) {
+        try {
+            foreach ($request->odabir as $kandidatId) {
+                $kandidat = Kandidat::find($kandidatId);
+                $godina = $kandidat->godinaStudija_id + 1;
 
-            $kandidat = Kandidat::find($kandidatId);
-            $godina = $kandidat->godinaStudija_id + 1;
+                $this->upisService->upisiGodinu($kandidatId, $godina, $kandidat->skolskaGodinaUpisa_id);
+            }
+        } catch (\RuntimeException $e) {
+            Session::flash('flash-error', 'upis');
+            Session::flash('error', $e->getMessage());
 
-            $this->upisService->upisiGodinu($kandidatId, $godina, $kandidat->skolskaGodinaUpisa_id);
+            return redirect('/student/index/1');
         }
 
         return redirect('/student/index/1');
@@ -150,7 +170,15 @@ class StudentController extends Controller
 
     public function upisMasterStudija(Request $request)
     {
-        $result = $this->upisService->upisMasterPostojeciKandidat($request->kandidat_id, $request->StudijskiProgram, $request->SkolskaGodinaUpisa);
+        try {
+            $result = $this->upisService->upisMasterPostojeciKandidat($request->kandidat_id, $request->StudijskiProgram, $request->SkolskaGodinaUpisa);
+        } catch (\RuntimeException $e) {
+            Session::flash('flash-error', 'upis');
+            Session::flash('error', $e->getMessage());
+
+            return Redirect::back();
+        }
+
         if ($result) {
             Session::flash('flash-success', 'upis');
 

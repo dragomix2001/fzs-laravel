@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
+use App\Models\PrilozenaDokumenta;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StatusGodine;
 use App\Models\StatusStudiranja;
@@ -260,6 +261,37 @@ class StudentControllerTest extends TestCase
         $this->assertDatabaseHas('kandidat', [
             'id' => $this->osnovniStudent->id,
             'godinaStudija_id' => 2,
+        ]);
+    }
+
+    public function test_upisi_studenta_is_blocked_when_required_documents_are_not_approved(): void
+    {
+        PrilozenaDokumenta::create([
+            'redniBrojDokumenta' => 999,
+            'naziv' => 'Obavezna diploma',
+            'skolskaGodina_id' => '1',
+        ]);
+
+        UpisGodine::create([
+            'kandidat_id' => $this->osnovniStudent->id,
+            'godina' => 2,
+            'pokusaj' => 1,
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'statusGodine_id' => 3,
+            'skolskaGodina_id' => null,
+            'datumUpisa' => null,
+        ]);
+
+        $response = $this->get('/student/'.$this->osnovniStudent->id.'/upisiStudenta?godina=2&pokusaj=1');
+
+        $response->assertRedirect('/student/'.$this->osnovniStudent->id.'/upis');
+        $response->assertSessionHas('flash-error', 'upis');
+        $response->assertSessionHas('error', 'Упис није могућ док сва обавезна документа не буду одобрена.');
+        $this->assertDatabaseHas('upis_godine', [
+            'kandidat_id' => $this->osnovniStudent->id,
+            'godina' => 2,
+            'statusGodine_id' => 3,
         ]);
     }
 

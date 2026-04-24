@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Config;
 
 class UpisService
 {
+    public function __construct(private readonly DocumentReviewService $documentReviewService) {}
+
     public function registrujKandidata(int $id): void
     {
         $kandidat = Kandidat::find($id);
@@ -131,6 +133,8 @@ class UpisService
             return false;
         }
 
+        $this->ensureKandidatHasCompleteRequiredDocuments($original);
+
         $kandidat = $original->replicate();
         $tipStudija = TipStudija::find($kandidat->tipStudija_id);
         $tipMaster = TipStudija::where('skrNaziv', 'MAS')->first();
@@ -153,6 +157,7 @@ class UpisService
     public function upisiGodinu(int $id, int $godina, int $skolskaGodinaUpisaId): bool
     {
         $kandidat = Kandidat::find($id);
+        $this->ensureKandidatHasCompleteRequiredDocuments($kandidat);
         $upis = UpisGodine::where([
             'kandidat_id' => $id,
             'godina' => $godina,
@@ -186,6 +191,7 @@ class UpisService
     public function upisiStudentaGodinu(int $kandidatId, int $godina, int $pokusaj): void
     {
         $kandidat = Kandidat::find($kandidatId);
+        $this->ensureKandidatHasCompleteRequiredDocuments($kandidat);
 
         if ($godina > 1) {
             $max = UpisGodine::where(['kandidat_id' => $kandidatId, 'godina' => $godina - 1])->max('pokusaj');
@@ -276,6 +282,10 @@ class UpisService
     public function promeniStatus(int $kandidatId, int $statusId, int $godinaId, array $statusi): bool
     {
         $kandidat = Kandidat::find($kandidatId);
+
+        if ($statusId == $statusi['upisan']) {
+            $this->ensureKandidatHasCompleteRequiredDocuments($kandidat);
+        }
 
         if ($statusId == $statusi['zavrsio'] || $statusId == $statusi['odustao'] || $statusId == $statusi['obnovio']) {
             // Samo ažuriraj datum statusa (bez promene statusUpisa_id)
@@ -383,5 +393,16 @@ class UpisService
         $brojIndeksa = $kandidat->tipStudija_id.$noviBrojIndeksa.'/'.substr($skolskaGodina, 0, 4);
         $kandidat->brojIndeksa = $brojIndeksa;
         $kandidat->save();
+    }
+
+    private function ensureKandidatHasCompleteRequiredDocuments(?Kandidat $kandidat): void
+    {
+        if ($kandidat === null) {
+            throw new \RuntimeException('Кандидат није пронађен.');
+        }
+
+        if (! $this->documentReviewService->kandidatHasCompleteRequiredDocuments($kandidat)) {
+            throw new \RuntimeException('Упис није могућ док сва обавезна документа не буду одобрена.');
+        }
     }
 }

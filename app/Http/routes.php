@@ -459,6 +459,12 @@ Route::get('/api/prediction/statistics', 'PredictionController@apiClassStatistic
 
 // User management routes (admin only)
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    Route::get('/kandidat/documents/incomplete', 'DocumentReviewController@index')->name('kandidat.documents.incomplete');
+    Route::get('/kandidat/{kandidat}/documents/review', 'DocumentReviewController@show')->name('kandidat.documents.review');
+    Route::patch('/kandidat/{kandidat}/documents/{attachment}/approve', 'DocumentReviewController@approve')->name('kandidat.documents.approve');
+    Route::patch('/kandidat/{kandidat}/documents/{attachment}/reject', 'DocumentReviewController@reject')->name('kandidat.documents.reject');
+    Route::patch('/kandidat/{kandidat}/documents/{attachment}/needs-revision', 'DocumentReviewController@needsRevision')->name('kandidat.documents.needs-revision');
+
     Route::get('/users', 'UserController@index')->name('user.index');
     Route::get('/users/create', 'UserController@create')->name('user.create');
     Route::post('/users', 'UserController@store')->name('user.store');
