@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Models\AuditLog;
 use App\Models\Kandidat;
 use App\Models\KandidatPrilozenaDokumenta;
 use App\Models\PrilozenaDokumenta;
