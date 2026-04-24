@@ -76,6 +76,11 @@
                             <a class="btn btn-success btn-sm" href="{{"/"}}kandidat/{{ $kandidat->id }}/upis">
                                 Упис кандидата
                             </a>
+                            @if(Auth::check() && Auth::user()->role === 'admin')
+                                <a class="btn btn-info btn-sm" href="{{ route('kandidat.documents.review', $kandidat->id) }}" title="Преглед документације">
+                                    <span class="fa fa-file-alt"></span>
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

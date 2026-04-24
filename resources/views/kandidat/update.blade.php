@@ -509,6 +509,11 @@
                                 <button type="submit" class="btn btn-success btn-lg">Сачувај</button>
                                 <input type="submit" name="submitstay" value="Сачувај и остани"
                                        class="btn btn-success btn-lg">
+                                @if(Auth::check() && Auth::user()->role === 'admin')
+                                    <a href="{{ route('kandidat.documents.review', $kandidat->id) }}" class="btn btn-info btn-lg">
+                                        <i class="fa fa-file-alt"></i> Преглед документације
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>

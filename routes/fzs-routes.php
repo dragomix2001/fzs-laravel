@@ -6,6 +6,23 @@ Route::get('/', 'App\Http\Controllers\HomeController@index');
 
 Route::group(['middleware' => ['web']], function () {
 
+    // Document Review (admin only)
+    Route::get('/kandidat-dokumentacija', 'App\Http\Controllers\DocumentReviewController@index')
+        ->name('kandidat.documents.incomplete')
+        ->middleware('role:admin');
+    Route::get('/kandidat/{kandidat}/dokumentacija', 'App\Http\Controllers\DocumentReviewController@show')
+        ->name('kandidat.documents.review')
+        ->middleware('role:admin');
+    Route::patch('/kandidat/{kandidat}/dokumentacija/{attachment}/approve', 'App\Http\Controllers\DocumentReviewController@approve')
+        ->name('kandidat.documents.approve')
+        ->middleware('role:admin');
+    Route::patch('/kandidat/{kandidat}/dokumentacija/{attachment}/reject', 'App\Http\Controllers\DocumentReviewController@reject')
+        ->name('kandidat.documents.reject')
+        ->middleware('role:admin');
+    Route::patch('/kandidat/{kandidat}/dokumentacija/{attachment}/needs-revision', 'App\Http\Controllers\DocumentReviewController@needsRevision')
+        ->name('kandidat.documents.needs-revision')
+        ->middleware('role:admin');
+
     Route::resource('kandidat', 'App\Http\Controllers\KandidatController');
     Route::get('/kandidat/{id}/sportskoangazovanje', 'App\Http\Controllers\KandidatController@sport');
     Route::post('/kandidat/{id}/sportskoangazovanje', 'App\Http\Controllers\KandidatController@sportStore');

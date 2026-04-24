@@ -467,7 +467,7 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar" :class="{ 'show': sidebarOpen }">
             <ul class="sidebar-menu" id="side-menu">
-                <li class="{{ Request::is('*kandidat*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*kandidat*') || Request::is('*kandidat-dokumentacija*') ? 'active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'kandidatSubmenu')">
                         <i class="fas fa-user"></i>
                         <span>Кандидати</span>
@@ -476,6 +476,9 @@
                     <ul class="submenu" id="kandidatSubmenu">
                         <li><a href="{{ url('kandidat/create') }}">&nbsp;&nbsp;&nbsp;Додавање</a></li>
                         <li><a href="{{ url('kandidat?studijskiProgramId=1') }}">&nbsp;&nbsp;&nbsp;Преглед</a></li>
+                        @if(Auth::check() && Auth::user()->role === 'admin')
+                            <li><a href="{{ route('kandidat.documents.incomplete') }}">&nbsp;&nbsp;&nbsp;Преглед документације</a></li>
+                        @endif
                     </ul>
                 </li>
                 
