@@ -50,11 +50,9 @@ class DocumentReviewService
         ]);
 
         $dokumenta = $kandidat->kandidatDokumenta
-            ->sortBy([
-                fn (KandidatPrilozenaDokumenta $dokument) => $dokument->dokument?->skolskaGodina_id,
-                fn (KandidatPrilozenaDokumenta $dokument) => $dokument->dokument?->redniBrojDokumenta,
-                fn (KandidatPrilozenaDokumenta $dokument) => $dokument->id,
-            ])
+            ->sortBy('id')
+            ->sortBy('dokument.redniBrojDokumenta')
+            ->sortBy('dokument.skolskaGodina_id')
             ->values();
 
         return [
@@ -82,16 +80,16 @@ class DocumentReviewService
         $requiredDocuments = $this->getRequiredDocumentsForKandidat($resolvedKandidat);
         $requiredDocumentIds = $requiredDocuments->pluck('id')->all();
         $requiredAttachments = $resolvedKandidat->kandidatDokumenta
-            ->filter(fn (KandidatPrilozenaDokumenta $attachment) => in_array($attachment->prilozenaDokumenta_id, $requiredDocumentIds, true))
+            ->whereIn('prilozenaDokumenta_id', $requiredDocumentIds)
             ->values();
         $approvedRequiredAttachments = $requiredAttachments
             ->where('review_status', KandidatPrilozenaDokumenta::STATUS_APPROVED)
             ->values();
         $missingDocuments = $requiredDocuments
-            ->filter(fn (PrilozenaDokumenta $document) => ! $requiredAttachments->contains('prilozenaDokumenta_id', $document->id))
+            ->whereNotIn('id', $requiredAttachments->pluck('prilozenaDokumenta_id')->all())
             ->values();
         $reviewBlockedAttachments = $requiredAttachments
-            ->filter(fn (KandidatPrilozenaDokumenta $attachment) => $attachment->review_status !== KandidatPrilozenaDokumenta::STATUS_APPROVED)
+            ->where('review_status', '!=', KandidatPrilozenaDokumenta::STATUS_APPROVED)
             ->values();
         $requiredCount = $requiredDocuments->count();
         $approvedCount = $approvedRequiredAttachments->count();
@@ -136,7 +134,7 @@ class DocumentReviewService
         ?string $notes = null
     ): KandidatPrilozenaDokumenta {
         if ($attachment->kandidat_id !== $kandidat->id) {
-            throw (new ModelNotFoundException())->setModel(KandidatPrilozenaDokumenta::class, [$attachment->id]);
+            throw (new ModelNotFoundException)->setModel(KandidatPrilozenaDokumenta::class, [$attachment->id]);
         }
 
         DB::transaction(function () use ($attachment, $status, $reviewer, $notes): void {
@@ -223,7 +221,7 @@ class DocumentReviewService
             return;
         }
 
-        $documentName = $attachment->dokument?->naziv ?? 'Документ';
+        $documentName = $attachment->dokument->naziv ?? 'Документ';
 
         if ($status === KandidatPrilozenaDokumenta::STATUS_REJECTED) {
             $this->notificationService->notifyUser(
