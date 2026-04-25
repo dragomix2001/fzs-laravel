@@ -3,20 +3,20 @@
 **Last Updated:** 2026-04-25  
 **Current Quality:** 9.0/10  
 **Target Quality:** 10.0/10  
-**Progress:** ~75% complete (priority improvements done + 5/8 KandidatService helper services extracted)
+**Progress:** ~75% complete, but the next step is no longer MassOperations extraction because enrollment batch logic already lives in `KandidatEnrollmentService`
 
 ---
 
 ## Quick Start for Next Session
 
 ### Current State
-- **KandidatService:** 662 lines (originally 1026 lines)
-- **IspitService:** 614 lines (originally 818 lines, IspitPdfService extracted)
+- **KandidatService:** 670 lines (originally 1026 lines)
+- **IspitService:** 629 lines (originally 818 lines, IspitPdfService extracted)
 - **PrijavaController:** 280 lines (originally 731, PrijavaService extracted)
 - **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
 - **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
-- **Additional Services:** PrijavaService (849), IspitPdfService (222), BasePdfService (53), KandidatEnrollmentService
-- **Total Helper Code:** 700 lines (KandidatService helpers only)
+- **Additional Services:** PrijavaService (849), IspitPdfService (222), BasePdfService (53), KandidatEnrollmentService (132)
+- **Total Helper Code:** 718 lines (KandidatService helper services only, excluding KandidatEnrollmentService)
 - **Test Coverage:** 1378 tests, 3426 assertions, 0 errors
 - **PHPStan:** Level 5, 0 errors, empty baseline
 - **FormRequest classes:** 31 total
@@ -24,10 +24,11 @@
 
 ### What's Done (Waves 1 & 2 + Priority Improvements)
 ✅ FileStorageService (Wave 1) - 136 lines, 27 tests  
-✅ GradeManagementService (Wave 1) - 175 lines, 22 tests  
-✅ DropdownDataService (Wave 2) - 172 lines, 14 tests  
+✅ GradeManagementService (Wave 1) - 172 lines, 22 tests  
+✅ DropdownDataService (Wave 2) - 192 lines, 14 tests  
 ✅ SportsManagementService (Wave 2) - 79 lines, 9 tests  
 ✅ DocumentManagementService (Wave 2) - now 138 lines, 15 tests, extended for per-document uploads and metadata  
+✅ KandidatEnrollmentService - 132 lines, enrollment and batch kandidat operations extracted  
 ✅ DocumentReviewService + admin review UI/routes - attachment approval, rejection, revision requests, and completion tracking  
 ✅ PrijavaService (Priority) - 849 lines, extracted from PrijavaController (731→280)  
 ✅ IspitPdfService (Priority) - 222 lines, extracted from IspitService  
@@ -38,10 +39,10 @@
 
 ### Next Target: 9.5/10 Quality
 
-**Wave 3: Mass Operations Extraction**
-- Extract `masovniUpis()`, `masovnaUplata()`, `masovniUpisAsync()`
-- Expected reduction: ~150 lines
-- Target: KandidatService → ~510 lines
+**Wave 3: IspitService Decomposition**
+- Extract zapisnik listing/query building from `IspitService`
+- Separate archive/report concerns from exam orchestration
+- Keep PDF/report generation behind dedicated helper services where it clarifies responsibilities
 - Estimated effort: 15-20 hours
 
 ---
@@ -50,50 +51,43 @@
 
 ### Phase 1: 9.5/10 Quality (Next Session)
 
-#### Task 1: Extract MassOperationsService (~150 lines)
+#### Task 1: Decompose IspitService by Workflow (~120-180 lines extracted)
 
-**Methods to extract:**
+**Methods/areas to extract:**
 ```php
-// From KandidatService.php (lines to find and extract)
-public function masovniUpis($selectedIds, $statusId)
-public function masovnaUplata($selectedIds, $statusId)
-public function masovniUpisAsync($selectedIds, $statusId)
+// From IspitService.php (identify cohesive groups before extraction)
+// - zapisnik list/query assembly
+// - archive list/query assembly
+// - exam result/report orchestration helpers
 ```
 
 **Service Structure:**
 ```php
-class MassOperationsService
+class IspitZapisnikService
 {
-    public function __construct(
-        protected KandidatService $kandidatService,
-        protected UpisService $upisService
-    ) {}
-
-    public function massEnroll(array $kandidatIds, int $statusId): int
-    public function massPayment(array $kandidatIds, int $statusId): int
-    public function massEnrollAsync(array $kandidatIds, int $statusId): void
+   public function getZapisniciForIndex(array $filters = []): Collection
+   public function getArchivedZapisnici(array $filters = []): Collection
 }
 ```
 
 **Expected Impact:**
-- KandidatService: 662 → ~510 lines (23% additional reduction)
-- Total reduction from original: 1026 → 510 lines (50% decrease)
+- IspitService: 629 → ~450-500 lines
+- Clearer split between query/list responsibilities and report/PDF logic
 
 **Test Requirements:**
-- Test mass enroll with 1 kandidat
-- Test mass enroll with 10 kandidats
-- Test mass payment success
-- Test async dispatch (queue verification)
-- Test transaction rollback on failure
+- Test zapisnik index queries
+- Test archived zapisnik queries
+- Test eager-loading/count behavior used by the views
+- Test edge filters and empty results
 - Estimated: 12-15 tests
 
 **Acceptance Criteria:**
-- [ ] MassOperationsService created with 3 public methods
-- [ ] KandidatService reduced to ~510 lines
+- [ ] New Ispit helper service created around a coherent workflow boundary
+- [ ] IspitService reduced materially without moving unrelated logic arbitrarily
 - [ ] Minimum 12 tests with 100% coverage
 - [ ] All 1378+ tests pass
 - [ ] CI/CD passes (Laravel CI/CD + CodeQL)
-- [ ] ADR-001 updated with Wave 3 metrics
+- [ ] ADR-001 updated with the new extraction metrics
 
 ---
 
@@ -119,7 +113,7 @@ class CacheManagementService
 ```
 
 **Expected Impact:**
-- KandidatService: 510 → ~460 lines (10% additional reduction)
+- KandidatService: 670 → ~620 lines (incremental reduction without touching already-extracted enrollment flow)
 
 **Test Requirements:**
 - Test cache hit
@@ -152,8 +146,8 @@ class KandidatValidationService
 ```
 
 **Expected Impact:**
-- KandidatService: 460 → ~380 lines (17% additional reduction)
-- **Total reduction from original: 1026 → 380 lines (63% decrease)**
+- KandidatService: 620 → ~540 lines (another focused reduction after cache extraction)
+- **Total reduction from original: 1026 → ~540 lines (about 47% decrease)**
 
 ---
 
@@ -247,22 +241,22 @@ class KandidatValidationService
 **Before Starting:**
 - [ ] Read `docs/ADR/001-god-services.md` (full context)
 - [ ] Read `docs/ROADMAP/god-services-refactoring.md` (this file)
-- [ ] Review current KandidatService.php (662 lines)
-- [ ] Identify mass operations methods (masovniUpis, masovnaUplata, masovniUpisAsync)
+- [ ] Review current IspitService.php (629 lines)
+- [ ] Identify cohesive zapisnik/archive/query blocks before extracting anything
 
 **Execution Steps:**
-1. [ ] Create `app/Services/MassOperationsService.php`
-2. [ ] Extract 3 mass operation methods
-3. [ ] Update KandidatService constructor to inject MassOperationsService
-4. [ ] Refactor KandidatService to delegate mass operations
-5. [ ] Create `tests/Unit/Services/MassOperationsServiceTest.php` (12-15 tests)
+1. [ ] Create a focused Ispit helper service around zapisnik/archive queries
+2. [ ] Extract only one coherent workflow slice from IspitService
+3. [ ] Refactor IspitService to delegate to the new helper
+4. [ ] Create matching unit tests (12-15 tests)
+5. [ ] Validate affected feature/view behavior
 6. [ ] Run full test suite (verify zero regressions)
 7. [ ] Update ADR-001 with Wave 3 metrics
 8. [ ] Commit, push, verify CI/CD
 
 **Success Criteria:**
-- [ ] KandidatService reduced to ~510 lines
-- [ ] MassOperationsService 100% test coverage
+- [ ] IspitService reduced materially
+- [ ] New helper service has 100% targeted coverage
 - [ ] All 1378+ tests pass
 - [ ] CI/CD green (Laravel + CodeQL)
 - [ ] Code quality: 9.5/10
@@ -305,24 +299,25 @@ class KandidatValidationService
 - `docs/ROADMAP/god-services-refactoring.md` - This file (roadmap)
 
 ### Services (Current State)
-- `app/Services/KandidatService.php` - 662 lines (main target)
-- `app/Services/IspitService.php` - 614 lines (IspitPdfService extracted)
+- `app/Services/KandidatService.php` - 670 lines (orchestration + cache/query cleanup candidate)
+- `app/Services/KandidatEnrollmentService.php` - 132 lines (already extracted enrollment + batch operations)
+- `app/Services/IspitService.php` - 629 lines (main target)
 - `app/Services/PrijavaService.php` - 849 lines (extracted from PrijavaController)
 - `app/Services/StudentListService.php` - 323 lines (DRY refactored)
 - `app/Services/BasePdfService.php` - 53 lines (shared PDF generation)
 - `app/Services/IspitPdfService.php` - 222 lines (extracted from IspitService)
 - `app/Services/UpisService.php` - 387 lines
-- `app/Services/FileStorageService.php` - 136 lines (Wave 1)
-- `app/Services/GradeManagementService.php` - 175 lines (Wave 1)
-- `app/Services/DropdownDataService.php` - 172 lines (Wave 2)
+- `app/Services/FileStorageService.php` - 137 lines (Wave 1)
+- `app/Services/GradeManagementService.php` - 172 lines (Wave 1)
+- `app/Services/DropdownDataService.php` - 192 lines (Wave 2)
 - `app/Services/SportsManagementService.php` - 79 lines (Wave 2)
-- `app/Services/DocumentManagementService.php` - 82 lines (Wave 2)
+- `app/Services/DocumentManagementService.php` - 138 lines (Wave 2, later extended)
 
 ### Tests (Current State)
 - `tests/Unit/Services/FileStorageServiceTest.php` - 27 tests
 - `tests/Unit/Services/GradeManagementServiceTest.php` - 22 tests
 - `tests/Unit/Services/SportsManagementServiceTest.php` - 9 tests
-- `tests/Unit/Services/DocumentManagementServiceTest.php` - 10 tests
+- `tests/Unit/Services/DocumentManagementServiceTest.php` - 15 tests
 - `tests/Unit/Services/DropdownDataServiceTest.php` - 14 tests
 
 ### CI/CD
@@ -351,14 +346,15 @@ gh run list --limit 3
 
 ### Start Wave 3
 ```bash
-# Create service
-touch app/Services/MassOperationsService.php
+# Identify the next cohesive IspitService slice
+grep -n "public function" app/Services/IspitService.php
 
-# Create test
-touch tests/Unit/Services/MassOperationsServiceTest.php
+# Create service + test after choosing the slice
+touch app/Services/IspitZapisnikService.php
+touch tests/Unit/Services/IspitZapisnikServiceTest.php
 
 # Run tests
-vendor/bin/phpunit tests/Unit/Services/MassOperationsServiceTest.php
+vendor/bin/phpunit tests/Unit/Services/IspitZapisnikServiceTest.php
 ```
 
 ### Verify Quality
@@ -382,7 +378,7 @@ vendor/bin/phpunit --testsuite Unit --stop-on-failure
 - [x] 7.5/10 - Wave 1 complete (FileStorage + GradeManagement extracted)
 - [x] 8.0/10 - Wave 2 complete (Dropdown + Sports + Documents extracted)
 - [x] 9.0/10 - Priority improvements (PrijavaController refactor, PHPStan 0, FormRequests, test assertions, DRY StudentListService)
-- [ ] 9.5/10 - Wave 3 target (MassOperations extracted, ~510 lines)
+- [ ] 9.5/10 - Wave 3 target (IspitService workflow extraction)
 - [ ] 10.0/10 - Wave 4+5 target (Cache + Validation extracted, ~380 lines)
 
 ### Coverage Milestones

@@ -2,7 +2,7 @@
 
 **Status:** Accepted (active mitigation)
 
-**Date:** 2024-01-XX
+**Date:** 2026-04-25
 
 **Decision Makers:** Development Team
 
@@ -332,7 +332,7 @@ We've successfully completed the second wave of helper service extractions from 
 
 ### Architecture Improvements
 
-**Service dependency graph:**
+**Historical service dependency graph after Wave 2:**
 ```
 KandidatService (785 lines, core orchestrator)
 ├── UpisService (existing)
@@ -341,10 +341,10 @@ KandidatService (785 lines, core orchestrator)
 ├── DropdownDataService (Wave 2, 172 lines)
 │   └── GradeManagementService (injected dependency)
 ├── SportsManagementService (Wave 2, 79 lines)
-└── DocumentManagementService (Wave 2, 82 lines)
+└── DocumentManagementService (Wave 2, 82 lines at extraction time)
 ```
 
-**Total helper code extracted:** 644 lines (136 + 175 + 172 + 79 + 82)
+**Total helper code extracted at the end of Wave 2:** 644 lines (136 + 175 + 172 + 79 + 82)
 
 **Benefits achieved:**
 1. **Single Responsibility:** Each helper service has one clear purpose
@@ -355,16 +355,16 @@ KandidatService (785 lines, core orchestrator)
 
 ### Next Steps
 
-**Remaining extraction opportunities in KandidatService (785 lines):**
-- **Mass Operations Service:** Extract `masovniUpis()`, `masovnaUplata()`, `masovniUpisAsync()` (~150 lines)
-- **Cache Management Service:** Extract cache operations (~50 lines)
-- **Validation Service:** Extract validation logic (~80 lines)
+This section is now historical only. Mass operations are no longer a hypothetical extraction target: they were extracted later into `KandidatEnrollmentService`.
 
-**Estimated effort to reach 9.0/10:** 15-20 hours (extract Mass Operations Service, reduce to ~600 lines)
+**What actually remains after Wave 2 and later follow-up work:**
+- Further split orchestration and query responsibilities inside `IspitService`
+- Reduce `KandidatService` around cache/query helper behavior rather than enrollment batch logic
+- Watch `PrijavaService` growth and split it only if distinct sub-domains stabilize
 
-**Long-term goal (10.0/10):** KandidatService reduced to 300-400 lines (pure orchestration layer)
+**Long-term goal (10.0/10):** Keep large services as orchestration layers only, with transaction-heavy and IO-heavy blocks extracted behind focused services.
 
-**Current progress:** ~60% complete (5/8 target services extracted).
+**Historical progress at this checkpoint:** ~60% complete (5/8 original helper targets extracted).
 
 ---
 
@@ -461,7 +461,7 @@ Five priority improvements were completed in a single session, bringing overall 
 - **Pint**: pass
 - **CI/CD**: Both pipelines green (Laravel CI/CD + CodeQL Advanced)
 
-### Updated Service Dependency Graph
+### Historical Service Dependency Graph at the 2026-04-14 Checkpoint
 
 ```
 KandidatService (662 lines, core orchestrator)
@@ -471,7 +471,12 @@ KandidatService (662 lines, core orchestrator)
 ├── DropdownDataService (172 lines, Wave 2)
 │   └── GradeManagementService (injected)
 ├── SportsManagementService (79 lines, Wave 2)
-└── DocumentManagementService (82 lines, Wave 2)
+└── DocumentManagementService (82 lines at extraction, later extended)
+
+KandidatEnrollmentService (extracted later)
+├── mass enrollment operations
+├── mass payment operations
+└── kandidat enrollment workflow
 
 IspitService (614 lines)
 └── IspitPdfService (222 lines)
@@ -485,7 +490,44 @@ StudentListService (323 lines)
 
 ### Next Steps
 
-1. Continue KandidatService decomposition — extract MassOperationsService (~150 lines)
-2. IspitService further decomposition — zapisnik orchestration, mass operations
-3. Consider extracting PrijavaService sub-services if it grows further
-4. Increase test coverage toward 70%+ target
+1. Prioritize `IspitService` decomposition — separate zapisnik listing/query logic, report/PDF orchestration, and archive-specific flows
+2. Continue trimming `KandidatService` around cache/program lookup and query aggregation, not mass operations
+3. Consider splitting `PrijavaService` only if stable sub-domains emerge instead of creating arbitrary helper classes
+4. Increase coverage in under-tested services and controllers before starting another broad refactor wave
+
+---
+
+## Update (2026-04-25): Documentation Alignment After Enrollment and Document Workflow Extraction
+
+**Status:** Current Reference
+
+The documentation itself required correction because some roadmap items no longer matched the codebase.
+
+### Measured Current Service Sizes
+
+| Service | Lines | Notes |
+|---|---|---|
+| KandidatService | 670 | Main kandidat orchestration service |
+| KandidatEnrollmentService | 132 | Enrollment and batch kandidat operations already extracted |
+| IspitService | 629 | Main remaining god-service candidate |
+| PrijavaController | 280 | Thin controller |
+| PrijavaService | 849 | Large extracted service, monitor for future split |
+| StudentListService | 323 | Stable after BasePdfService extraction |
+| FileStorageService | 137 | Slightly evolved after initial extraction |
+| GradeManagementService | 172 | Stable helper |
+| DropdownDataService | 192 | Grew with edit/dropdown responsibilities |
+| SportsManagementService | 79 | Stable helper |
+| DocumentManagementService | 138 | Extended for per-document upload metadata |
+
+### What Is Already Done
+
+- Mass operations were already extracted into `KandidatEnrollmentService`
+- Candidate document upload expanded beyond checkbox attachment into per-document file persistence
+- Admin document review flow was added separately via `DocumentReviewService` and related controller/views
+
+### Real Remaining Work
+
+1. Split `IspitService` by behavior, especially zapisnik list/query logic vs report/PDF generation vs archive actions
+2. Extract cache/program lookup concerns from `KandidatService` if they continue to grow
+3. Reassess `PrijavaService` only after identifying natural boundaries, not by forcing another generic “god service” split
+4. Improve coverage in weak areas before starting another wide extraction cycle
