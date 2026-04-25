@@ -524,10 +524,47 @@ The documentation itself required correction because some roadmap items no longe
 - Mass operations were already extracted into `KandidatEnrollmentService`
 - Candidate document upload expanded beyond checkbox attachment into per-document file persistence
 - Admin document review flow was added separately via `DocumentReviewService` and related controller/views
+- `IspitZapisnikService` was extracted for zapisnik listing, create-form lookup data, AJAX subject/student lookup, and archive operations
 
 ### Real Remaining Work
 
-1. Split `IspitService` by behavior, especially zapisnik list/query logic vs report/PDF generation vs archive actions
+1. Continue splitting `IspitService` by behavior, now that zapisnik listing/archive concerns live in `IspitZapisnikService`; the next natural slice is pregled/result orchestration
 2. Extract cache/program lookup concerns from `KandidatService` if they continue to grow
 3. Reassess `PrijavaService` only after identifying natural boundaries, not by forcing another generic “god service” split
 4. Improve coverage in weak areas before starting another wide extraction cycle
+
+---
+
+## Update (2026-04-25): Ispit Zapisnik Query and Archive Extraction
+
+**Status:** Implemented
+
+The first concrete Wave 3 extraction was completed by moving zapisnik listing and archive-oriented responsibilities out of `IspitService`.
+
+### Measured Current Service Sizes
+
+| Service | Lines | Notes |
+|---|---|---|
+| IspitService | 545 | Orchestrator after zapisnik query/archive extraction |
+| IspitZapisnikService | 134 | Listing, create-form lookup, AJAX helpers, archive actions |
+| IspitPdfService | 222 | Existing PDF/report generation helper |
+
+### What Changed in This Extraction
+
+- Extracted `getZapisniciForIndex()` from `IspitService`
+- Extracted `getCreateZapisnikData()` from `IspitService`
+- Extracted `getZapisnikPredmetData()` and `getZapisnikStudenti()` from `IspitService`
+- Extracted `getArhiviraniZapisnici()`, `arhivirajZapisnik()`, and `arhivirajZapisnikeZaRok()` from `IspitService`
+- Refactored `IspitService` to delegate these responsibilities while preserving its public API for controllers
+
+### Validation
+
+- Added `IspitZapisnikServiceTest` with 10 focused tests
+- Re-ran affected suites: `IspitZapisnikServiceTest`, `IspitServiceTest`, and `IspitControllerTest`
+- Result: 51 tests, 125 assertions, green locally (with 1 existing PHPUnit deprecation notice)
+
+### Real Remaining Work After This Extraction
+
+1. Extract pregled/result update logic from `IspitService`, especially `getZapisnikPregled()` and result-saving orchestration
+2. Revisit whether `addStudentToZapisnik()` should remain in the orchestrator or move into a dedicated zapisnik-membership flow service
+3. Keep `IspitPdfService` separate and avoid folding report/PDF concerns back into query services

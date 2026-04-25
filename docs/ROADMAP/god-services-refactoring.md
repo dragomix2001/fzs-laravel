@@ -3,7 +3,7 @@
 **Last Updated:** 2026-04-25  
 **Current Quality:** 9.0/10  
 **Target Quality:** 10.0/10  
-**Progress:** ~75% complete, but the next step is no longer MassOperations extraction because enrollment batch logic already lives in `KandidatEnrollmentService`
+**Progress:** ~80% complete; the first Wave 3 `IspitService` extraction is done and the next slice is pregled/result orchestration
 
 ---
 
@@ -11,11 +11,11 @@
 
 ### Current State
 - **KandidatService:** 670 lines (originally 1026 lines)
-- **IspitService:** 629 lines (originally 818 lines, IspitPdfService extracted)
+- **IspitService:** 545 lines (originally 818 lines, after `IspitPdfService` and `IspitZapisnikService` extractions)
 - **PrijavaController:** 280 lines (originally 731, PrijavaService extracted)
 - **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
 - **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
-- **Additional Services:** PrijavaService (849), IspitPdfService (222), BasePdfService (53), KandidatEnrollmentService (132)
+- **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitZapisnikService (134), BasePdfService (53), KandidatEnrollmentService (132)
 - **Total Helper Code:** 718 lines (KandidatService helper services only, excluding KandidatEnrollmentService)
 - **Test Coverage:** 1378 tests, 3426 assertions, 0 errors
 - **PHPStan:** Level 5, 0 errors, empty baseline
@@ -32,6 +32,7 @@
 ✅ DocumentReviewService + admin review UI/routes - attachment approval, rejection, revision requests, and completion tracking  
 ✅ PrijavaService (Priority) - 849 lines, extracted from PrijavaController (731→280)  
 ✅ IspitPdfService (Priority) - 222 lines, extracted from IspitService  
+✅ IspitZapisnikService (Wave 3 slice 1) - 134 lines, extracted for zapisnik listing/create/archive flows with 10 focused tests  
 ✅ BasePdfService DRY refactor - 53 lines, StudentListService 408→323  
 ✅ PHPStan baseline eliminated - 40→0 errors  
 ✅ 9 new FormRequest classes added (22→31 total)  
@@ -40,8 +41,8 @@
 ### Next Target: 9.5/10 Quality
 
 **Wave 3: IspitService Decomposition**
-- Extract zapisnik listing/query building from `IspitService`
-- Separate archive/report concerns from exam orchestration
+- Extract pregled/result orchestration from `IspitService`
+- Decide whether student membership changes stay in the orchestrator or move into a dedicated flow service
 - Keep PDF/report generation behind dedicated helper services where it clarifies responsibilities
 - Estimated effort: 15-20 hours
 
@@ -51,39 +52,42 @@
 
 ### Phase 1: 9.5/10 Quality (Next Session)
 
-#### Task 1: Decompose IspitService by Workflow (~120-180 lines extracted)
+#### Task 1: Continue IspitService Decomposition (~100-150 lines extracted)
 
 **Methods/areas to extract:**
 ```php
-// From IspitService.php (identify cohesive groups before extraction)
-// - zapisnik list/query assembly
-// - archive list/query assembly
-// - exam result/report orchestration helpers
+// Wave 3 slice 1 is already done in IspitZapisnikService.
+// Next candidates inside IspitService.php:
+// - getZapisnikPregled()
+// - savePolozeniIspiti()
+// - updateZapisnikDetails()
+// - add/remove student membership orchestration
 ```
 
 **Service Structure:**
 ```php
-class IspitZapisnikService
+class IspitResultService
 {
-   public function getZapisniciForIndex(array $filters = []): Collection
-   public function getArchivedZapisnici(array $filters = []): Collection
+   public function getZapisnikPregled(int $zapisnikId): array
+   public function savePolozeniIspiti(array $ispitIds, array $ocenePismeni, array $oceneUsmeni, array $konacneOcene, array $brojBodova, array $statusIspita): int
 }
 ```
 
 **Expected Impact:**
-- IspitService: 629 → ~450-500 lines
+- IspitService: 545 → ~420-460 lines
 - Clearer split between query/list responsibilities and report/PDF logic
 
 **Test Requirements:**
-- Test zapisnik index queries
-- Test archived zapisnik queries
-- Test eager-loading/count behavior used by the views
-- Test edge filters and empty results
+- Test pregled data assembly for mixed study-program records
+- Test result persistence for multiple students
+- Test edge cases around missing predmet-program matches
+- Test detail update flow that remains with the result/pregled slice
 - Estimated: 12-15 tests
 
 **Acceptance Criteria:**
-- [ ] New Ispit helper service created around a coherent workflow boundary
-- [ ] IspitService reduced materially without moving unrelated logic arbitrarily
+- [x] `IspitZapisnikService` extracted for listing/create/archive concerns
+- [ ] Next Ispit helper service extracted around pregled/result workflow
+- [ ] IspitService reduced materially again without moving unrelated logic arbitrarily
 - [ ] Minimum 12 tests with 100% coverage
 - [ ] All 1378+ tests pass
 - [ ] CI/CD passes (Laravel CI/CD + CodeQL)
@@ -241,21 +245,21 @@ class KandidatValidationService
 **Before Starting:**
 - [ ] Read `docs/ADR/001-god-services.md` (full context)
 - [ ] Read `docs/ROADMAP/god-services-refactoring.md` (this file)
-- [ ] Review current IspitService.php (629 lines)
-- [ ] Identify cohesive zapisnik/archive/query blocks before extracting anything
+- [ ] Review current IspitService.php (545 lines)
+- [ ] Identify the next cohesive pregled/result slice before extracting anything
 
 **Execution Steps:**
-1. [ ] Create a focused Ispit helper service around zapisnik/archive queries
+1. [ ] Create a focused Ispit helper service around pregled/result orchestration
 2. [ ] Extract only one coherent workflow slice from IspitService
 3. [ ] Refactor IspitService to delegate to the new helper
-4. [ ] Create matching unit tests (12-15 tests)
+4. [ ] Create matching tests (12-15 tests)
 5. [ ] Validate affected feature/view behavior
 6. [ ] Run full test suite (verify zero regressions)
 7. [ ] Update ADR-001 with Wave 3 metrics
 8. [ ] Commit, push, verify CI/CD
 
 **Success Criteria:**
-- [ ] IspitService reduced materially
+- [ ] IspitService reduced from 545 closer to ~430 lines
 - [ ] New helper service has 100% targeted coverage
 - [ ] All 1378+ tests pass
 - [ ] CI/CD green (Laravel + CodeQL)
@@ -301,7 +305,8 @@ class KandidatValidationService
 ### Services (Current State)
 - `app/Services/KandidatService.php` - 670 lines (orchestration + cache/query cleanup candidate)
 - `app/Services/KandidatEnrollmentService.php` - 132 lines (already extracted enrollment + batch operations)
-- `app/Services/IspitService.php` - 629 lines (main target)
+- `app/Services/IspitService.php` - 545 lines (main remaining Ispit orchestrator)
+- `app/Services/IspitZapisnikService.php` - 134 lines (listing, create-form, AJAX lookup, archive extraction)
 - `app/Services/PrijavaService.php` - 849 lines (extracted from PrijavaController)
 - `app/Services/StudentListService.php` - 323 lines (DRY refactored)
 - `app/Services/BasePdfService.php` - 53 lines (shared PDF generation)
@@ -314,6 +319,7 @@ class KandidatValidationService
 - `app/Services/DocumentManagementService.php` - 138 lines (Wave 2, later extended)
 
 ### Tests (Current State)
+- `tests/Feature/IspitZapisnikServiceTest.php` - 10 tests
 - `tests/Unit/Services/FileStorageServiceTest.php` - 27 tests
 - `tests/Unit/Services/GradeManagementServiceTest.php` - 22 tests
 - `tests/Unit/Services/SportsManagementServiceTest.php` - 9 tests
@@ -346,15 +352,15 @@ gh run list --limit 3
 
 ### Start Wave 3
 ```bash
-# Identify the next cohesive IspitService slice
+# Identify the next cohesive IspitService slice after IspitZapisnikService
 grep -n "public function" app/Services/IspitService.php
 
 # Create service + test after choosing the slice
-touch app/Services/IspitZapisnikService.php
-touch tests/Unit/Services/IspitZapisnikServiceTest.php
+touch app/Services/IspitResultService.php
+touch tests/Feature/IspitResultServiceTest.php
 
 # Run tests
-vendor/bin/phpunit tests/Unit/Services/IspitZapisnikServiceTest.php
+vendor/bin/phpunit tests/Feature/IspitResultServiceTest.php tests/Feature/IspitServiceTest.php tests/Feature/IspitControllerTest.php
 ```
 
 ### Verify Quality

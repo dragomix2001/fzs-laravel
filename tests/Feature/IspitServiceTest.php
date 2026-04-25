@@ -22,6 +22,7 @@ use App\Models\ZapisnikOPolaganjuIspita;
 use App\Services\IspitPdfService;
 use App\Services\IspitService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
@@ -132,12 +133,14 @@ class IspitServiceTest extends TestCase
 
     public function test_get_zapisnici_for_index_returns_all_non_archived_by_default(): void
     {
+        $initialCount = ZapisnikOPolaganjuIspita::where('arhiviran', false)->count();
+
         ZapisnikOPolaganjuIspita::factory()->count(3)->create(['arhiviran' => false]);
         ZapisnikOPolaganjuIspita::factory()->count(2)->create(['arhiviran' => true]);
 
         $result = $this->ispitService->getZapisniciForIndex([]);
 
-        $this->assertCount(3, $result['zapisnici']);
+        $this->assertCount($initialCount + 3, $result['zapisnici']);
         $this->assertArrayHasKey('predmeti', $result);
         $this->assertArrayHasKey('profesori', $result);
         $this->assertArrayHasKey('aktivniIspitniRok', $result);
@@ -194,6 +197,10 @@ class IspitServiceTest extends TestCase
 
     public function test_get_create_zapisnik_data_returns_null_when_no_aktivni_rokovi(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        AktivniIspitniRokovi::query()->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
         $result = $this->ispitService->getCreateZapisnikData();
 
         $this->assertNull($result['aktivniIspitniRok']);
@@ -201,13 +208,15 @@ class IspitServiceTest extends TestCase
 
     public function test_get_arhivirani_zapisnici_returns_only_archived(): void
     {
+        $initialCount = ZapisnikOPolaganjuIspita::where('arhiviran', true)->count();
+
         ZapisnikOPolaganjuIspita::factory()->count(2)->create(['arhiviran' => true]);
         ZapisnikOPolaganjuIspita::factory()->count(3)->create(['arhiviran' => false]);
 
         $result = $this->ispitService->getArhiviraniZapisnici();
 
         $this->assertArrayHasKey('arhiviraniZapisnici', $result);
-        $this->assertCount(2, $result['arhiviraniZapisnici']);
+        $this->assertCount($initialCount + 2, $result['arhiviraniZapisnici']);
     }
 
     public function test_get_zapisnik_predmet_data_returns_predmeti_and_profesori(): void
