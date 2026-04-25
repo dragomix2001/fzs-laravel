@@ -245,17 +245,25 @@ We've successfully completed the second wave of helper service extractions from 
 
 **Test coverage:** 9 tests, 29 assertions
 
-#### 5. DocumentManagementService (82 lines)
-**Purpose:** Centralize candidate document attachment (KandidatPrilozenaDokumenta) management.
+#### 5. DocumentManagementService (initial extraction: 82 lines, current implementation: 138 lines)
+**Purpose:** Centralize candidate document attachment (KandidatPrilozenaDokumenta) management, including per-document file upload and attachment metadata persistence.
 
 **Extracted methods:**
-- `attachDocumentsForKandidat($kandidatId, array $dokumentiPrva, array $dokumentiDruga)` - Attach documents to kandidat
+- `attachDocumentsForKandidat($kandidatId, array $dokumentiPrva, array $dokumentiDruga, array $documentUploadsPrva = [], array $documentUploadsDruga = [])` - Attach documents to kandidat and persist uploaded files per attachment
 - `getAttachedDocumentIds($kandidatId)` - Get attached document IDs for edit form
-- `deleteDocumentsForKandidat($kandidatId)` - Delete all documents when kandidat is deleted
+- `deleteDocumentsForKandidat($kandidatId)` - Delete all documents and uploaded files when kandidat is deleted
 
-**Dependencies:** None (standalone service)
+**Current responsibilities beyond the original extraction:**
+- Merge checkbox selections with uploaded files so a file upload implicitly selects the document
+- Store uploaded files under the `uploads` disk in `documents/{kandidatId}`
+- Persist file metadata (`file_path`, `file_name`, `mime_type`, `file_size`) on the attachment row
+- Clean up stored files when candidate attachments are removed
 
-**Test coverage:** 10 tests, 29 assertions
+**Dependencies:** `Storage` facade and `UploadedFile` handling
+
+**Test coverage:** 15 tests covering attachment creation, file persistence, file cleanup, review defaults, model relations, and review status scopes
+
+**Related follow-up workflow:** Admin-facing document review is now handled by `DocumentReviewService` and `DocumentReviewController`, while `DocumentManagementService` remains responsible for storage and attachment lifecycle.
 
 ### Impact on KandidatService (Wave 2)
 

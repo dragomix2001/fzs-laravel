@@ -5,7 +5,7 @@ Complete business domain reference for FZS Laravel application.
 ## Core Entities
 
 ### Kandidat (Student Applicant)
-Student candidate applying to the faculty. Contains personal info, high school grades, sports engagement, and submitted documents.
+Student candidate applying to the faculty. Contains personal info, high school grades, sports engagement, submitted documents, and document review state.
 
 **Key fields:**
 - imeKandidata, prezimeKandidata, jmbg
@@ -76,6 +76,12 @@ Documents submitted by candidates during application.
 **Types:**
 - skolskaGodina_id = 1: Prva godina (diploma, birth certificate, etc.)
 - skolskaGodina_id = 2: Ostale godine (additional documents)
+- skolskaGodina_id = 3: Master studies required documents
+
+**Attachment metadata (KandidatPrilozenaDokumenta):**
+- file_path, file_name, mime_type, file_size
+- review_status: pending, approved, rejected, needs_revision
+- reviewer_id, reviewed_at, notes
 
 ---
 
@@ -112,7 +118,7 @@ Exam session periods.
 **Step 2: Grades & Documents**
 - High school grades (4 years)
 - Sports engagement (optional)
-- Document submission
+- Document selection and per-document file upload
 - Scoring calculation
 
 **Controller:** KandidatController::store()
@@ -133,7 +139,26 @@ Candidates ranked by ukupniBrojBodova for enrollment decisions.
 
 ---
 
-### 3. Enrollment
+### 3. Document Review
+
+Admin reviews uploaded candidate documents and updates attachment review status:
+- pending → approved
+- pending → rejected
+- pending → needs_revision
+
+The system tracks:
+- missing required documents
+- required documents blocked by review status
+- completion percentage for required documentation
+
+When all required documents are approved, the candidate can continue enrollment workflow and receives a completion notification.
+
+**Controller:** DocumentReviewController
+**Service:** DocumentReviewService
+
+---
+
+### 4. Enrollment
 
 Admin reviews applications and updates statusUpisa_id:
 - Prijavljen → Upisan (accepted)
@@ -148,7 +173,7 @@ Enrolled students get brojIndeksa (student index number).
 - **indikatorAktivan**: Soft delete flag (1 = active, 0 = inactive)
 - **DB transactions**: Used in KandidatService, IspitService for data consistency
 - **Cache**: Active studijski program cached for 1 hour
-- **Storage disk 'uploads'**: File storage for images/PDFs (images/, pdf/ directories)
+- **Storage disk 'uploads'**: File storage for images, PDFs, and candidate documents (`images/`, `pdf/`, `documents/{kandidatId}/`)
 
 ---
 
@@ -163,6 +188,11 @@ Kandidat
 ├── hasMany: UspehSrednjaSkola (4 records — one per razred)
 ├── hasMany: SportskoAngazovanje
 └── hasMany: KandidatPrilozenaDokumenta
+
+KandidatPrilozenaDokumenta
+├── belongsTo: Kandidat
+├── belongsTo: PrilozenaDokumenta
+└── belongsTo: User (reviewer)
 
 Ispit
 ├── belongsTo: IspitniRok

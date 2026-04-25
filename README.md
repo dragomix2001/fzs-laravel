@@ -9,6 +9,7 @@ Laravel-based student information system for Faculty of Sports and Physical Educ
 This application manages the complete lifecycle of student candidates:
 - **Kandidat (Applicant)**: Student candidates applying to the faculty
 - **Prijava (Application)**: Two-step application process
+- **Dokumentacija kandidata**: Per-document upload with admin review, approval, rejection, and revision requests
 - **Ispit (Exam)**: Entrance exams and course exams
 - **Upis (Enrollment)**: Student enrollment by academic year
 - **Bodovanje (Scoring)**: Combined scoring from exam + grades + sports
@@ -40,7 +41,8 @@ See [docs/ADR/](docs/ADR/) for architectural decision records.
 
 ## Технички стек
 
-- **Backend**: Laravel 10.x
+- **Backend**: Laravel 13.x
+- **PHP**: 8.3+
 - **Frontend**: Bootstrap 5, jQuery, Tailwind CSS
 - **Database**: MySQL 8.0
 - **Authentication**: Laravel built-in auth
@@ -66,12 +68,12 @@ php artisan migrate
 php artisan db:seed
 ```
 
-## Тест корисник
+## Тест корисници
 
-| Параметар | Вредност |
-|-----------|----------|
-| Email | fzs@fzs.rs |
-| Лозинка | fzs123 |
+| Улога | Email | Лозинка |
+|------|-------|---------|
+| Admin | admin.test@fzs.rs | AdminTest123 |
+| Admin | fzs@fzs.rs | fzs123 |
 
 ## Код форматирање
 
@@ -130,9 +132,19 @@ php artisan serve
 - `/dashboard` - Контролна табла
 - `/student/*` - Студентске руте
 - `/kandidat/*` - Кандидати
+- `/kandidat-dokumentacija` - Admin преглед кандидата са непотпуном документацијом
+- `/kandidat/{kandidat}/dokumentacija` - Admin review по кандидату
 - `/ispit/*` - Ispiti
 - `/predmet/*` - Predmeti
 - `/profesor/*` - Profesori
+
+## Документација кандидата
+
+- Кандидат при upload-у може да приложи фајл по појединачном документу
+- Метаподаци о фајлу се чувају у `kandidat_prilozena_dokumenta` (`file_path`, `file_name`, `mime_type`, `file_size`)
+- Сваки приложени документ добија review статус: `pending`, `approved`, `rejected`, `needs_revision`
+- Admin workflow је доступан кроз мени `Кандидати -> Преглед документације`
+- При одобравању свих обавезних докумената кандидат добија нотификацију да је документација комплетна
 
 ## Безбедност
 

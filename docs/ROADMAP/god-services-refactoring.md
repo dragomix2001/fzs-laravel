@@ -1,6 +1,6 @@
 # God Services Refactoring Roadmap
 
-**Last Updated:** 2026-04-14  
+**Last Updated:** 2026-04-25  
 **Current Quality:** 9.0/10  
 **Target Quality:** 10.0/10  
 **Progress:** ~75% complete (priority improvements done + 5/8 KandidatService helper services extracted)
@@ -16,17 +16,19 @@
 - **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
 - **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
 - **Additional Services:** PrijavaService (849), IspitPdfService (222), BasePdfService (53), KandidatEnrollmentService
-- **Total Helper Code:** 644 lines (KandidatService helpers only)
+- **Total Helper Code:** 700 lines (KandidatService helpers only)
 - **Test Coverage:** 1378 tests, 3426 assertions, 0 errors
 - **PHPStan:** Level 5, 0 errors, empty baseline
 - **FormRequest classes:** 31 total
+- **Document workflow:** Per-document uploads are live, and admin review routes/views are active in the application
 
 ### What's Done (Waves 1 & 2 + Priority Improvements)
 ✅ FileStorageService (Wave 1) - 136 lines, 27 tests  
 ✅ GradeManagementService (Wave 1) - 175 lines, 22 tests  
 ✅ DropdownDataService (Wave 2) - 172 lines, 14 tests  
 ✅ SportsManagementService (Wave 2) - 79 lines, 9 tests  
-✅ DocumentManagementService (Wave 2) - 82 lines, 10 tests  
+✅ DocumentManagementService (Wave 2) - now 138 lines, 15 tests, extended for per-document uploads and metadata  
+✅ DocumentReviewService + admin review UI/routes - attachment approval, rejection, revision requests, and completion tracking  
 ✅ PrijavaService (Priority) - 849 lines, extracted from PrijavaController (731→280)  
 ✅ IspitPdfService (Priority) - 222 lines, extracted from IspitService  
 ✅ BasePdfService DRY refactor - 53 lines, StudentListService 408→323  
