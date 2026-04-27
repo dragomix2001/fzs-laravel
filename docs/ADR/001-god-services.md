@@ -606,3 +606,48 @@ The second concrete Wave 3 extraction was completed by moving pregled/result/det
 1. Decide whether `addStudentToZapisnik()` and `removeStudentFromZapisnik()` should remain in `IspitService` or move into a dedicated membership flow service
 2. Keep `IspitPdfService` separate and avoid folding report/PDF concerns back into query services
 3. Continue reducing `KandidatService` around cache/program lookup and validation helpers instead of reopening already-extracted enrollment work
+
+---
+
+## Update (2026-04-27): Ispit Membership Extraction — Wave 3 Complete
+
+**Status:** Implemented
+
+The third and final Wave 3 extraction moves student add/remove membership operations from `IspitService` into `IspitMembershipService`.
+
+### Measured Current Service Sizes
+
+| Service | Lines | Notes |
+|---|---|---|
+| IspitService | 372 | Orchestrator; delegates to membership, result, zapisnik, and PDF helpers |
+| IspitMembershipService | 146 | Student add/remove within existing zapisnici |
+| IspitResultService | 216 | Pregled assembly, result persistence, zapisnik detail updates |
+| IspitZapisnikService | 135 | Listing, create-form lookup, AJAX helpers, archive actions |
+| IspitPdfService | 222 | PDF/report generation helper |
+
+### What Changed in This Extraction
+
+- Extracted `addStudentToZapisnik()` from `IspitService`
+- Extracted `removeStudentFromZapisnik()` from `IspitService`
+- `IspitService` delegates both methods; public API for controllers is unchanged
+- `IspitService` reduced from 460 → 372 lines (-88 lines)
+- `IspitService` was originally 818 lines; total reduction: **446 lines (-54.5%)**
+
+### Validation
+
+- Added `IspitMembershipServiceTest` with 9 focused tests covering:
+  - Add creates ZapisnikStudent, PolozeniIspiti, and PrijavaIspita
+  - Add links new study program to zapisnik
+  - Add skips already-enrolled student (no duplicate)
+  - Add skips student with no matching PredmetProgram
+  - Add does not duplicate an already-linked study program
+  - Add of two students from same program links program only once
+  - Remove deletes student and polozeni ispit records
+  - Remove returns false when other students remain
+  - Remove deletes zapisnik and returns true when last student is removed
+- Re-ran: `IspitMembershipServiceTest`, `IspitServiceTest`: all 40 tests green
+
+### Real Remaining Work
+
+1. Wave 3 (`IspitService` decomposition) is complete
+2. Next focus: Phase 2 — `CacheManagementService` from `KandidatService`

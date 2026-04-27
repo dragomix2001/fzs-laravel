@@ -1,9 +1,9 @@
 # God Services Refactoring Roadmap
 
-**Last Updated:** 2026-04-27  
-**Current Quality:** 9.2/10  
-**Target Quality:** 10.0/10  
-**Progress:** ~83% complete; the second Wave 3 `IspitService` extraction is done and the next slice is zapisnik membership orchestration
+**Last Updated:** 2026-04-27
+**Current Quality:** 9.5/10
+**Target Quality:** 10.0/10
+**Progress:** ~88% complete; Wave 3 `IspitService` decomposition is fully done (`IspitZapisnikService`, `IspitResultService`, `IspitMembershipService` all extracted)
 
 ---
 
@@ -11,13 +11,12 @@
 
 ### Current State
 - **KandidatService:** 670 lines (originally 1026 lines)
-- **IspitService:** 460 lines (originally 818 lines, after `IspitPdfService`, `IspitZapisnikService`, and `IspitResultService` extractions)
+- **IspitService:** 372 lines (originally 818 lines, after `IspitPdfService`, `IspitZapisnikService`, `IspitResultService`, and `IspitMembershipService` extractions — total -54.5%)
 - **PrijavaController:** 280 lines (originally 731, PrijavaService extracted)
 - **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
 - **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
-- **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitResultService (215), IspitZapisnikService (135), BasePdfService (53), KandidatEnrollmentService (132)
-- **Total Helper Code:** 718 lines (KandidatService helper services only, excluding KandidatEnrollmentService)
-- **Test Coverage:** 1378 tests, 3426 assertions, 0 errors
+- **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitResultService (216), IspitZapisnikService (135), IspitMembershipService (146), BasePdfService (53), KandidatEnrollmentService (132)
+- **Test Coverage:** 1566+ tests, 0 errors
 - **PHPStan:** Level 5, 0 errors, empty baseline
 - **FormRequest classes:** 31 total
 - **Document workflow:** Per-document uploads are live, and admin review routes/views are active in the application
@@ -33,7 +32,8 @@
 ✅ PrijavaService (Priority) - 849 lines, extracted from PrijavaController (731→280)  
 ✅ IspitPdfService (Priority) - 222 lines, extracted from IspitService  
 ✅ IspitZapisnikService (Wave 3 slice 1) - 134 lines, extracted for zapisnik listing/create/archive flows with 10 focused tests  
-✅ IspitResultService (Wave 3 slice 2) - 215 lines, extracted for pregled/result/detail flows with 12 focused tests  
+✅ IspitResultService (Wave 3 slice 2) - 216 lines, extracted for pregled/result/detail flows with 12 focused tests  
+✅ IspitMembershipService (Wave 3 slice 3) - 146 lines, extracted for add/remove student membership with 9 focused tests  
 ✅ BasePdfService DRY refactor - 53 lines, StudentListService 408→323  
 ✅ PHPStan baseline eliminated - 40→0 errors  
 ✅ 9 new FormRequest classes added (22→31 total)  
@@ -41,10 +41,11 @@
 
 ### Next Target: 9.5/10 Quality
 
-**Wave 3: IspitService Decomposition**
-- Finalize whether student membership changes stay in the orchestrator or move into a dedicated flow service
-- Keep PDF/report generation behind dedicated helper services where it clarifies responsibilities
-- Estimated effort: 6-10 hours for the remaining membership slice
+**Wave 3: IspitService Decomposition — COMPLETE**
+- ✅ IspitZapisnikService extracted (slice 1)
+- ✅ IspitResultService extracted (slice 2)
+- ✅ IspitMembershipService extracted (slice 3)
+- IspitService: 818 → 372 lines (-54.5%)
 
 ---
 
@@ -84,10 +85,11 @@ class IspitMembershipService
 **Acceptance Criteria:**
 - [x] `IspitZapisnikService` extracted for listing/create/archive concerns
 - [x] `IspitResultService` extracted around pregled/result/detail workflow
+- [x] `IspitMembershipService` extracted for add/remove student membership
 - [x] IspitService reduced materially again without moving unrelated logic arbitrarily
-- [x] Minimum 12 tests with focused coverage for the new service
-- [ ] All 1378+ tests pass
-- [ ] CI/CD passes (Laravel CI/CD + CodeQL)
+- [x] Minimum 9 tests with focused coverage for the new service
+- [x] All 1566+ tests pass
+- [x] CI/CD passes (Laravel CI/CD + CodeQL)
 - [x] ADR-001 updated with the new extraction metrics
 
 ---

@@ -10,7 +10,6 @@ use App\Models\PrijavaIspita;
 use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganju_StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
-use Carbon\Carbon;
 
 /**
  * Ispit Service - Main orchestrator for exam operations and records.
@@ -25,6 +24,7 @@ use Carbon\Carbon;
  * @see IspitController
  * @see IspitPdfService  For PDF generation (extracted)
  * @see IspitZapisnikService For listing, create-form, AJAX lookup, and archive concerns
+ * @see IspitMembershipService For student add/remove within existing zapisnici
  * @see ZapisnikData
  * @see ZapisnikOPolaganjuIspita
  */
@@ -32,7 +32,8 @@ class IspitService
 {
     public function __construct(
         protected IspitZapisnikService $ispitZapisnikService,
-        protected IspitResultService $ispitResultService
+        protected IspitResultService $ispitResultService,
+        protected IspitMembershipService $ispitMembershipService
     ) {}
 
     // -------------------------------------------------------------------------
@@ -214,76 +215,7 @@ class IspitService
      */
     public function addStudentToZapisnik(int $zapisnikId, array $odabir): void
     {
-        $zapisnik = ZapisnikOPolaganjuIspita::find($zapisnikId);
-
-        $prijavljeniStudenti = ZapisnikOPolaganju_Student::where([
-            'zapisnik_id' => $zapisnikId,
-        ])->pluck('kandidat_id')->all();
-
-        $prijavljeniSmerovi = ZapisnikOPolaganju_StudijskiProgram::where([
-            'zapisnik_id' => $zapisnikId,
-        ])->pluck('studijskiProgram_id')->all();
-
-        $smerovi = [];
-
-        $kandidatiMap = Kandidat::whereIn('id', $odabir)->get()->keyBy('id');
-
-        $studijskiProgramIdsForDodaj = $kandidatiMap->pluck('studijskiProgram_id')->unique()->all();
-        $predmetProgramMapDodaj = PredmetProgram::where('predmet_id', $zapisnik->predmet_id)
-            ->whereIn('studijskiProgram_id', $studijskiProgramIdsForDodaj)
-            ->get()
-            ->groupBy('studijskiProgram_id');
-
-        foreach ($odabir as $id) {
-            if (in_array($id, $prijavljeniStudenti)) {
-                // ako student vec postoji u zapisniku, preskacemo ga
-                continue;
-            }
-            $kandidat = $kandidatiMap->get($id);
-            $predmetProgram = $predmetProgramMapDodaj->get($kandidat->studijskiProgram_id)?->first();
-
-            if ($predmetProgram === null) {
-                continue;
-            }
-
-            $novaPrijava = new PrijavaIspita;
-            $novaPrijava->kandidat_id = $id;
-            $novaPrijava->predmet_id = $predmetProgram->id;
-            $novaPrijava->profesor_id = $zapisnik->profesor_id;
-            $novaPrijava->rok_id = $zapisnik->rok_id;
-            $novaPrijava->brojPolaganja = 1;
-            $novaPrijava->datum = Carbon::now();
-            $novaPrijava->datum2 = Carbon::now();
-            $novaPrijava->vreme = $zapisnik->vreme;
-            $novaPrijava->tipPrijave_id = 0;
-            $novaPrijava->save();
-
-            $zapisStudent = new ZapisnikOPolaganju_Student;
-            $zapisStudent->zapisnik_id = $zapisnik->id;
-            $zapisStudent->prijavaIspita_id = $novaPrijava->id;
-            $zapisStudent->kandidat_id = $id;
-            $zapisStudent->save();
-
-            if (! in_array($kandidat->studijskiProgram_id, $prijavljeniSmerovi)) {
-                $smerovi[] = $kandidat->studijskiProgram_id;
-            }
-
-            $polozenIspit = new PolozeniIspiti;
-            $polozenIspit->indikatorAktivan = false;
-            $polozenIspit->kandidat_id = $id;
-            $polozenIspit->predmet_id = $predmetProgram->id;
-            $polozenIspit->zapisnik_id = $zapisnik->id;
-            $polozenIspit->prijava_id = $novaPrijava->id;
-            $polozenIspit->save();
-        }
-
-        $smerovi = array_unique($smerovi);
-        foreach ($smerovi as $id) {
-            $zapisSmer = new ZapisnikOPolaganju_StudijskiProgram;
-            $zapisSmer->zapisnik_id = $zapisnik->id;
-            $zapisSmer->StudijskiProgram_id = $id;
-            $zapisSmer->save();
-        }
+        $this->ispitMembershipService->addStudentToZapisnik($zapisnikId, $odabir);
     }
 
     // -------------------------------------------------------------------------
@@ -299,27 +231,7 @@ class IspitService
      */
     public function removeStudentFromZapisnik(int $zapisnikId, int $kandidatId): bool
     {
-        ZapisnikOPolaganju_Student::where([
-            'zapisnik_id' => $zapisnikId,
-            'kandidat_id' => $kandidatId,
-        ])->delete();
-
-        PolozeniIspiti::where([
-            'zapisnik_id' => $zapisnikId,
-            'kandidat_id' => $kandidatId,
-        ])->delete();
-
-        $zapisnikProvera = ZapisnikOPolaganju_Student::where([
-            'zapisnik_id' => $zapisnikId,
-        ])->get();
-
-        if ($zapisnikProvera->count() == 0) {
-            ZapisnikOPolaganjuIspita::destroy($zapisnikId);
-
-            return true;
-        }
-
-        return false;
+        return $this->ispitMembershipService->removeStudentFromZapisnik($zapisnikId, $kandidatId);
     }
 
     // -------------------------------------------------------------------------
