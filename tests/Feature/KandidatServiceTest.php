@@ -419,7 +419,7 @@ class KandidatServiceTest extends TestCase
             'indikatorAktivan' => 1,
         ]);
 
-        Cache::forget('active_studijski_program_osnovne');
+        Cache::forget('active_studijski_program_1');
 
         $result = $this->kandidatService->getActiveStudijskiProgramOsnovne();
 
@@ -432,7 +432,7 @@ class KandidatServiceTest extends TestCase
         // Ensure no programs exist for tipStudija_id=1
         StudijskiProgram::where('tipStudija_id', 1)->update(['indikatorAktivan' => 0]);
 
-        Cache::forget('active_studijski_program_osnovne');
+        Cache::forget('active_studijski_program_1');
 
         $result = $this->kandidatService->getActiveStudijskiProgramOsnovne();
 

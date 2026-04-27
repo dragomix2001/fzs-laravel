@@ -1,22 +1,22 @@
 # God Services Refactoring Roadmap
 
 **Last Updated:** 2026-04-27
-**Current Quality:** 9.5/10
+**Current Quality:** 9.6/10
 **Target Quality:** 10.0/10
-**Progress:** ~88% complete; Wave 3 `IspitService` decomposition is fully done (`IspitZapisnikService`, `IspitResultService`, `IspitMembershipService` all extracted)
+**Progress:** ~92% complete; Wave 3 is complete and Phase 2 cache extraction is now implemented
 
 ---
 
 ## Quick Start for Next Session
 
 ### Current State
-- **KandidatService:** 670 lines (originally 1026 lines)
+- **KandidatService:** 668 lines (originally 1026 lines)
 - **IspitService:** 372 lines (originally 818 lines, after `IspitPdfService`, `IspitZapisnikService`, `IspitResultService`, and `IspitMembershipService` extractions — total -54.5%)
 - **PrijavaController:** 280 lines (originally 731, PrijavaService extracted)
 - **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
 - **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
-- **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitResultService (216), IspitZapisnikService (135), IspitMembershipService (146), BasePdfService (53), KandidatEnrollmentService (132)
-- **Test Coverage:** 1566+ tests, 0 errors
+- **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitResultService (216), IspitZapisnikService (135), IspitMembershipService (146), CacheManagementService (48), BasePdfService (53), KandidatEnrollmentService (132)
+- **Test Coverage:** 1571 tests, 0 errors
 - **PHPStan:** Level 5, 0 errors, empty baseline
 - **FormRequest classes:** 31 total
 - **Document workflow:** Per-document uploads are live, and admin review routes/views are active in the application
@@ -34,12 +34,13 @@
 ✅ IspitZapisnikService (Wave 3 slice 1) - 134 lines, extracted for zapisnik listing/create/archive flows with 10 focused tests  
 ✅ IspitResultService (Wave 3 slice 2) - 216 lines, extracted for pregled/result/detail flows with 12 focused tests  
 ✅ IspitMembershipService (Wave 3 slice 3) - 146 lines, extracted for add/remove student membership with 9 focused tests  
+✅ CacheManagementService (Phase 2) - 48 lines, extracted for active study-program cache read/clear/refresh with 4 focused tests  
 ✅ BasePdfService DRY refactor - 53 lines, StudentListService 408→323  
 ✅ PHPStan baseline eliminated - 40→0 errors  
 ✅ 9 new FormRequest classes added (22→31 total)  
 ✅ 23 smoke tests replaced with real assertions (+22 assertions)
 
-### Next Target: 9.5/10 Quality
+### Next Target: 10.0/10 Quality
 
 **Wave 3: IspitService Decomposition — COMPLETE**
 - ✅ IspitZapisnikService extracted (slice 1)
@@ -51,79 +52,36 @@
 
 ## Detailed Roadmap
 
-### Phase 1: 9.5/10 Quality (Next Session)
+### Phase 1: 9.5/10 Quality (Completed)
 
-#### Task 1: Finish IspitService Decomposition (~60-100 lines remaining)
+#### Task 1: Finish IspitService Decomposition
 
-**Methods/areas to extract:**
-```php
-// Wave 3 slice 1 is done in IspitZapisnikService.
-// Wave 3 slice 2 is done in IspitResultService.
-// Remaining candidate inside IspitService.php:
-// - add/remove student membership orchestration
-```
+**Status:** Completed
 
-**Service Structure:**
-```php
-class IspitMembershipService
-{
-   public function addStudentToZapisnik(int $zapisnikId, array $odabir): void
-   public function removeStudentFromZapisnik(int $zapisnikId, int $kandidatId): bool
-}
-```
-
-**Expected Impact:**
-- IspitService: 460 → ~360-400 lines
-- Clearer split between result orchestration and membership mutation flows
-
-**Test Requirements:**
-- Test duplicate-student skip logic
-- Test mixed study-program add flow and PrijavaIspita creation
-- Test deletion behavior when the last student is removed
-- Estimated: 6-8 tests
-
-**Acceptance Criteria:**
-- [x] `IspitZapisnikService` extracted for listing/create/archive concerns
-- [x] `IspitResultService` extracted around pregled/result/detail workflow
-- [x] `IspitMembershipService` extracted for add/remove student membership
-- [x] IspitService reduced materially again without moving unrelated logic arbitrarily
-- [x] Minimum 9 tests with focused coverage for the new service
-- [x] All 1566+ tests pass
-- [x] CI/CD passes (Laravel CI/CD + CodeQL)
-- [x] ADR-001 updated with the new extraction metrics
+**Result:**
+- `IspitMembershipService` extracted
+- `IspitService` reduced to 372 lines
+- Focused tests added and passing
+- CI/CD green (`Laravel CI/CD` + `CodeQL`)
 
 ---
 
-### Phase 2: 9.5/10 Quality
+### Phase 2: 9.6/10 Quality (Completed)
 
-#### Task 2: Extract CacheManagementService (~50 lines)
+#### Task 2: Extract CacheManagementService
 
-**Methods to extract:**
-```php
-// Cache operations scattered in KandidatService
-Cache::forget('active_programs')
-Cache::remember('active_programs', ...)
-```
+**Status:** Completed
 
-**Service Structure:**
-```php
-class CacheManagementService
-{
-    public function clearActiveProgramsCache(): void
-    public function getActiveProgramsFromCache(): Collection
-    public function refreshActiveProgramsCache(): void
-}
-```
+**What was extracted:**
+- `getActiveStudijskiProgramFromCache(int $tipStudijaId): ?int`
+- `clearActiveStudijskiProgramCache(int $tipStudijaId): void`
+- `refreshActiveStudijskiProgramCache(int $tipStudijaId): ?int`
 
-**Expected Impact:**
-- KandidatService: 670 → ~620 lines (incremental reduction without touching already-extracted enrollment flow)
-
-**Test Requirements:**
-- Test cache hit
-- Test cache miss
-- Test cache clear
-- Test cache refresh
-- Estimated: 6-8 tests
+**Result:**
+- `KandidatService` now delegates active study-program cache concerns to `CacheManagementService`
+- `KandidatService` reduced from 670 → 668 lines
+- Added `CacheManagementServiceTest` with 4 focused tests (cache hit, cache reuse, cache clear, cache refresh)
+- Full suite green locally: 1571 tests, 3969 assertions, 0 errors
 
 ---
 
@@ -157,10 +115,8 @@ class KandidatValidationService
 ## Test Coverage Improvement Roadmap
 
 ### Current Coverage Status
-- **Overall Project Coverage:** 58.94% (4143/7029 elements)
-- **Helper Services Coverage:** 100% (all 5 services fully tested)
-- **KandidatService Coverage:** ~60% (partial coverage)
-- **IspitService Coverage:** ~40% (low coverage)
+- **Overall Project Coverage:** Last percentage snapshot in this document is historical and should be refreshed from the latest CI coverage artifact before planning by percentage.
+- **Current verified baseline:** Full suite is green locally (1571 tests, 3969 assertions, 0 errors).
 
 ### Coverage Target: 70% → 80% → 90%
 
@@ -239,32 +195,28 @@ class KandidatValidationService
 
 ## Session Checklists
 
-### Next Session: Wave 3 (9.5 Quality Target)
+### Next Session: Phase 3 (10.0 Quality Target)
 
 **Before Starting:**
 - [ ] Read `docs/ADR/001-god-services.md` (full context)
 - [ ] Read `docs/ROADMAP/god-services-refactoring.md` (this file)
-- [ ] Review current IspitService.php (545 lines)
-- [ ] Identify the next cohesive pregled/result slice before extracting anything
+- [ ] Review current `KandidatService.php` validation responsibilities
 
 **Execution Steps:**
-1. [ ] Create a focused Ispit helper service around pregled/result orchestration
-2. [ ] Extract only one coherent workflow slice from IspitService
-3. [ ] Refactor IspitService to delegate to the new helper
-4. [ ] Create matching tests (12-15 tests)
-5. [ ] Validate affected feature/view behavior
-6. [ ] Run full test suite (verify zero regressions)
-7. [ ] Update ADR-001 with Wave 3 metrics
-8. [ ] Commit, push, verify CI/CD
+1. [ ] Create `KandidatValidationService`
+2. [ ] Delegate validation logic from `KandidatService`
+3. [ ] Add focused tests for basic/master/grade validation paths
+4. [ ] Run `pint`, `phpstan`, and full test suite
+5. [ ] Update ADR/ROADMAP metrics
+6. [ ] Commit, push, verify CI/CD
 
 **Success Criteria:**
-- [ ] IspitService reduced from 545 closer to ~430 lines
-- [ ] New helper service has 100% targeted coverage
-- [ ] All 1378+ tests pass
-- [ ] CI/CD green (Laravel + CodeQL)
-- [ ] Code quality: 9.5/10
+- [ ] `KandidatService` reduced materially (~70-90 lines target)
+- [ ] Validation behavior covered by tests
+- [ ] Full suite green
+- [ ] CI/CD green
 
-**Estimated Time:** 4-5 hours
+**Estimated Time:** 4-6 hours
 
 ---
 
@@ -302,9 +254,11 @@ class KandidatValidationService
 - `docs/ROADMAP/god-services-refactoring.md` - This file (roadmap)
 
 ### Services (Current State)
-- `app/Services/KandidatService.php` - 670 lines (orchestration + cache/query cleanup candidate)
+- `app/Services/KandidatService.php` - 668 lines (orchestration + validation cleanup candidate)
 - `app/Services/KandidatEnrollmentService.php` - 132 lines (already extracted enrollment + batch operations)
-- `app/Services/IspitService.php` - 545 lines (main remaining Ispit orchestrator)
+- `app/Services/CacheManagementService.php` - 48 lines (active study-program cache read/clear/refresh)
+- `app/Services/IspitService.php` - 372 lines (orchestrator after full Wave 3 extraction)
+- `app/Services/IspitMembershipService.php` - 146 lines (zapisnik membership add/remove)
 - `app/Services/IspitZapisnikService.php` - 134 lines (listing, create-form, AJAX lookup, archive extraction)
 - `app/Services/PrijavaService.php` - 849 lines (extracted from PrijavaController)
 - `app/Services/StudentListService.php` - 323 lines (DRY refactored)
@@ -319,7 +273,9 @@ class KandidatValidationService
 
 ### Tests (Current State)
 - `tests/Feature/IspitZapisnikServiceTest.php` - 10 tests
+- `tests/Feature/IspitMembershipServiceTest.php` - 9 tests
 - `tests/Unit/Services/FileStorageServiceTest.php` - 27 tests
+- `tests/Unit/Services/CacheManagementServiceTest.php` - 4 tests
 - `tests/Unit/Services/GradeManagementServiceTest.php` - 22 tests
 - `tests/Unit/Services/SportsManagementServiceTest.php` - 9 tests
 - `tests/Unit/Services/DocumentManagementServiceTest.php` - 15 tests
@@ -349,17 +305,17 @@ vendor/bin/phpunit --coverage-text
 gh run list --limit 3
 ```
 
-### Start Wave 3
+### Start Phase 3
 ```bash
-# Identify the next cohesive IspitService slice after IspitZapisnikService
-grep -n "public function" app/Services/IspitService.php
+# Find validation responsibilities in KandidatService
+grep -n "validate\|Validator\|FormRequest" app/Services/KandidatService.php
 
-# Create service + test after choosing the slice
-touch app/Services/IspitResultService.php
-touch tests/Feature/IspitResultServiceTest.php
+# Create service + test skeletons
+touch app/Services/KandidatValidationService.php
+touch tests/Unit/Services/KandidatValidationServiceTest.php
 
 # Run tests
-vendor/bin/phpunit tests/Feature/IspitResultServiceTest.php tests/Feature/IspitServiceTest.php tests/Feature/IspitControllerTest.php
+vendor/bin/phpunit tests/Unit/Services/KandidatValidationServiceTest.php tests/Feature/KandidatServiceTest.php
 ```
 
 ### Verify Quality
@@ -371,7 +327,7 @@ vendor/bin/pint --test
 vendor/bin/phpstan analyse
 
 # Full test suite
-vendor/bin/phpunit --testsuite Unit --stop-on-failure
+vendor/bin/phpunit --stop-on-error
 ```
 
 ---
@@ -383,13 +339,13 @@ vendor/bin/phpunit --testsuite Unit --stop-on-failure
 - [x] 7.5/10 - Wave 1 complete (FileStorage + GradeManagement extracted)
 - [x] 8.0/10 - Wave 2 complete (Dropdown + Sports + Documents extracted)
 - [x] 9.0/10 - Priority improvements (PrijavaController refactor, PHPStan 0, FormRequests, test assertions, DRY StudentListService)
-- [ ] 9.5/10 - Wave 3 target (IspitService workflow extraction)
-- [ ] 10.0/10 - Wave 4+5 target (Cache + Validation extracted, ~380 lines)
+- [x] 9.5/10 - Wave 3 target (IspitService workflow extraction)
+- [ ] 10.0/10 - Wave 4+5 target (Validation extraction + coverage hardening)
 
 ### Coverage Milestones
-- [x] 58.94% - Current coverage (2025-04-06)
+- [x] 58.94% - Last measured snapshot (2025-04-06)
 - [ ] 70% - Phase 1 target (BackupService + UpisService + Controllers)
-- [ ] 80% - Phase 2 target (KandidatService edge cases + IspitService extraction)
+- [ ] 80% - Phase 2 target (KandidatService edge cases + high-risk workflow tests)
 - [ ] 90% - Phase 3 target (Models + Integration tests + Edge cases)
 
 ---
@@ -413,7 +369,6 @@ vendor/bin/phpunit --testsuite Unit --stop-on-failure
 ### Repository Info
 - **URL:** https://github.com/dragomix2001/fzs-laravel.git
 - **Branch:** master
-- **Password:** nautilus142
 - **Workflow:** All work in WSL Linux, not Windows
 
 ---

@@ -650,4 +650,48 @@ The third and final Wave 3 extraction moves student add/remove membership operat
 ### Real Remaining Work
 
 1. Wave 3 (`IspitService` decomposition) is complete
-2. Next focus: Phase 2 — `CacheManagementService` from `KandidatService`
+2. Phase 2 (`CacheManagementService`) is complete
+3. Next focus: Phase 3 — `KandidatValidationService` extraction and coverage hardening
+
+---
+
+## Update (2026-04-27): Kandidat Cache Management Extraction (Phase 2)
+
+**Status:** Implemented
+
+The planned cache/program lookup extraction was completed by moving active study-program cache concerns from `KandidatService` into `CacheManagementService`.
+
+### Measured Current Service Sizes
+
+| Service | Lines | Notes |
+|---|---|---|
+| KandidatService | 668 | Orchestrator after cache extraction; validation remains the next cohesive slice |
+| CacheManagementService | 48 | Active study-program cache get/clear/refresh |
+| IspitService | 372 | Wave 3 complete orchestrator |
+| IspitMembershipService | 146 | Membership mutation helper |
+
+### What Changed in This Extraction
+
+- Extracted active study-program cache logic from `KandidatService::getActiveStudijskiProgramId()`
+- Added `CacheManagementService` methods:
+  - `getActiveStudijskiProgramFromCache(int $tipStudijaId): ?int`
+  - `clearActiveStudijskiProgramCache(int $tipStudijaId): void`
+  - `refreshActiveStudijskiProgramCache(int $tipStudijaId): ?int`
+- `KandidatService` now delegates cache retrieval via constructor-injected `CacheManagementService`
+- Kept `KandidatService` public API stable for controllers
+
+### Validation
+
+- Added `CacheManagementServiceTest` with 4 focused tests:
+  - Cache hit returns active program id
+  - Second read uses cached value
+  - Cache clear removes key
+  - Cache refresh reloads latest active value
+- Re-ran affected suites: `CacheManagementServiceTest`, `KandidatServiceExtendedTest`, `KandidatServiceTest`
+- Full regression run: 1571 tests, 3969 assertions, 0 errors locally (with existing deprecations/notices)
+
+### Real Remaining Work
+
+1. Extract validation concerns from `KandidatService` into `KandidatValidationService`
+2. Increase confidence in high-risk paths with targeted edge-case and rollback tests
+3. Refresh and track percentage coverage from latest CI artifact before setting numeric targets

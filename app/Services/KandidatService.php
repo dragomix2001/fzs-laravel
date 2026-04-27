@@ -17,7 +17,6 @@ use App\Models\UpisGodine;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -44,7 +43,8 @@ class KandidatService
         protected GradeManagementService $gradeManagementService,
         protected DropdownDataService $dropdownDataService,
         protected SportsManagementService $sportsManagementService,
-        protected DocumentManagementService $documentManagementService
+        protected DocumentManagementService $documentManagementService,
+        protected CacheManagementService $cacheManagementService
     ) {}
 
     private function asCarbon(?\DateTimeInterface $value): ?Carbon
@@ -123,9 +123,7 @@ class KandidatService
      */
     public function getActiveStudijskiProgramId(int $tipStudijaId): ?int
     {
-        return Cache::remember("active_studijski_program_{$tipStudijaId}", 3600, function () use ($tipStudijaId) {
-            return StudijskiProgram::where(['tipStudija_id' => $tipStudijaId, 'indikatorAktivan' => 1])->value('id');
-        });
+        return $this->cacheManagementService->getActiveStudijskiProgramFromCache($tipStudijaId);
     }
 
     /**
