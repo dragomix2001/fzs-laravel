@@ -18,6 +18,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
+use Mockery;
 use Tests\TestCase;
 
 class KandidatServiceTest extends TestCase
@@ -629,6 +630,42 @@ class KandidatServiceTest extends TestCase
 
         $this->assertTrue($result);
         $this->assertDatabaseMissing('kandidat', ['id' => $kandidat->id]);
+    }
+
+    public function test_delete_kandidat_rolls_back_when_dependency_throws(): void
+    {
+        $kandidat = $this->createKandidat(['slika' => null]);
+
+        DB::table('upis_godine')->insert([
+            'kandidat_id' => $kandidat->id,
+            'godina' => 1,
+            'pokusaj' => 1,
+            'tipStudija_id' => $kandidat->tipStudija_id,
+            'statusGodine_id' => 1,
+            'studijskiProgram_id' => $kandidat->studijskiProgram_id,
+            'datumUpisa' => now()->toDateString(),
+            'datumPromene' => now()->toDateString(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $fileStorageMock = Mockery::mock(FileStorageService::class);
+        $fileStorageMock->shouldReceive('deleteImageForKandidat')
+            ->once()
+            ->andThrow(new \RuntimeException('Delete image failed'));
+        app()->instance(FileStorageService::class, $fileStorageMock);
+
+        $service = app(KandidatService::class);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Delete image failed');
+
+        try {
+            $service->deleteKandidat($kandidat->id);
+        } finally {
+            $this->assertDatabaseHas('kandidat', ['id' => $kandidat->id]);
+            $this->assertDatabaseHas('upis_godine', ['kandidat_id' => $kandidat->id]);
+        }
     }
 
     // =========================================================================

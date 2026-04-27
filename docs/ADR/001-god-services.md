@@ -688,10 +688,10 @@ The planned cache/program lookup extraction was completed by moving active study
   - Cache clear removes key
   - Cache refresh reloads latest active value
 - Re-ran affected suites: `CacheManagementServiceTest`, `KandidatServiceExtendedTest`, `KandidatServiceTest`
-- Full regression run: 1571 tests, 3969 assertions, 0 errors locally (with existing deprecations/notices)
+- Full regression run: 1572 tests, 3974 assertions, 0 errors locally (with existing deprecations/notices)
 
 ### Real Remaining Work
 
 1. Extract validation concerns from `KandidatService` into `KandidatValidationService`
-2. Increase confidence in high-risk paths with targeted edge-case and rollback tests
+2. Increase confidence in high-risk paths with targeted edge-case and rollback tests (started: `deleteKandidat` transaction rollback path is now covered)
 3. Refresh and track percentage coverage from latest CI artifact before setting numeric targets

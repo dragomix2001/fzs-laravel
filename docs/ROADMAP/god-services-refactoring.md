@@ -16,7 +16,7 @@
 - **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
 - **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
 - **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitResultService (216), IspitZapisnikService (135), IspitMembershipService (146), CacheManagementService (48), BasePdfService (53), KandidatEnrollmentService (132)
-- **Test Coverage:** 1571 tests, 0 errors
+- **Test Coverage:** 1572 tests, 0 errors
 - **PHPStan:** Level 5, 0 errors, empty baseline
 - **FormRequest classes:** 31 total
 - **Document workflow:** Per-document uploads are live, and admin review routes/views are active in the application
@@ -81,7 +81,7 @@
 - `KandidatService` now delegates active study-program cache concerns to `CacheManagementService`
 - `KandidatService` reduced from 670 → 668 lines
 - Added `CacheManagementServiceTest` with 4 focused tests (cache hit, cache reuse, cache clear, cache refresh)
-- Full suite green locally: 1571 tests, 3969 assertions, 0 errors
+- Full suite green locally: 1572 tests, 3974 assertions, 0 errors
 
 ---
 
@@ -116,7 +116,7 @@ class KandidatValidationService
 
 ### Current Coverage Status
 - **Overall Project Coverage:** Last percentage snapshot in this document is historical and should be refreshed from the latest CI coverage artifact before planning by percentage.
-- **Current verified baseline:** Full suite is green locally (1571 tests, 3969 assertions, 0 errors).
+- **Current verified baseline:** Full suite is green locally (1572 tests, 3974 assertions, 0 errors).
 
 ### Coverage Target: 70% → 80% → 90%
 
@@ -213,6 +213,7 @@ class KandidatValidationService
 **Success Criteria:**
 - [ ] `KandidatService` reduced materially (~70-90 lines target)
 - [ ] Validation behavior covered by tests
+- [x] At least one high-risk rollback path covered by focused tests (`deleteKandidat` transaction failure path)
 - [ ] Full suite green
 - [ ] CI/CD green
 
