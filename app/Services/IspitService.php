@@ -7,7 +7,6 @@ use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
 use App\Models\PredmetProgram;
 use App\Models\PrijavaIspita;
-use App\Models\StatusIspita;
 use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganju_StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
@@ -31,7 +30,10 @@ use Carbon\Carbon;
  */
 class IspitService
 {
-    public function __construct(protected IspitZapisnikService $ispitZapisnikService) {}
+    public function __construct(
+        protected IspitZapisnikService $ispitZapisnikService,
+        protected IspitResultService $ispitResultService
+    ) {}
 
     // -------------------------------------------------------------------------
     // Index / listing
@@ -170,80 +172,7 @@ class IspitService
 
     public function getZapisnikPregled(int $zapisnikId): array
     {
-        $zapisnik = ZapisnikOPolaganjuIspita::find($zapisnikId);
-        $zapisnikStudent = ZapisnikOPolaganju_Student::where(['zapisnik_id' => $zapisnikId])->pluck('kandidat_id')->all();
-        $studenti = Kandidat::whereIn('id', $zapisnikStudent)->get();
-        $studentiMap = $studenti->keyBy('id');
-
-        // Pre-fetch all relevant PredmetProgram records for these kandidati in one query
-        $tipStudijaIds = $studentiMap->pluck('tipStudija_id')->unique()->all();
-        $studijskiProgramIdsForMap = $studentiMap->pluck('studijskiProgram_id')->unique()->all();
-        $predmetProgramLookup = PredmetProgram::where('predmet_id', $zapisnik->predmet_id)
-            ->whereIn('tipStudija_id', $tipStudijaIds)
-            ->whereIn('studijskiProgram_id', $studijskiProgramIdsForMap)
-            ->get()
-            ->keyBy(function ($item) {
-                return $item->tipStudija_id.'_'.$item->studijskiProgram_id;
-            });
-
-        $prijavaIds = [];
-        foreach ($zapisnikStudent as $id) {
-            $kandidat = $studentiMap->get($id);
-            if ($kandidat === null) {
-                continue;
-            }
-
-            $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
-            if ($predmetProgram === null) {
-                continue;
-            }
-
-            $pom = PrijavaIspita::where(['predmet_id' => $predmetProgram->id, 'rok_id' => $zapisnik->rok_id, 'kandidat_id' => $id])->first();
-            if ($pom != null) {
-                $prijavaIds[$id] = $pom->id;
-            }
-        }
-
-        $polozeniIspitIds = [];
-        foreach ($zapisnikStudent as $id) {
-            $kandidat = $studentiMap->get($id);
-            if ($kandidat === null) {
-                continue;
-            }
-            $predmetProgram = $predmetProgramLookup->get($kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id);
-            if ($predmetProgram === null) {
-                continue;
-            }
-            $pom = PolozeniIspiti::where(['zapisnik_id' => $zapisnik->id, 'predmet_id' => $predmetProgram->id, 'kandidat_id' => $id])->first();
-            if ($pom != null) {
-                $polozeniIspitIds[$id] = $pom->id;
-            }
-        }
-
-        // Determine predmetProgram from the last valid kandidat for the final query below
-        $lastKandidat = $studentiMap->last();
-        $studijskiProgrami = ZapisnikOPolaganju_StudijskiProgram::where(['zapisnik_id' => $zapisnikId])->get();
-        $statusIspita = StatusIspita::all();
-        $polozeniIspiti = PolozeniIspiti::where(['zapisnik_id' => $zapisnikId])->get();
-
-        $polozeniIspiti = $polozeniIspiti->sortBy(function ($name) use ($studentiMap) {
-            $kandidat = $studentiMap->get($name['kandidat_id']);
-
-            return $kandidat ? $kandidat->brojIndeksa : '';
-        });
-
-        $kandidati = collect();
-        if ($lastKandidat !== null) {
-            $predmetProgram = $predmetProgramLookup->get($lastKandidat->tipStudija_id.'_'.$lastKandidat->studijskiProgram_id);
-            if ($predmetProgram !== null) {
-                $kandidati = Kandidat::where([
-                    'tipStudija_id' => $predmetProgram->tipStudija_id,
-                    'studijskiProgram_id' => $predmetProgram->studijskiProgram_id,
-                ])->get();
-            }
-        }
-
-        return compact('zapisnik', 'studenti', 'studijskiProgrami', 'statusIspita', 'polozeniIspiti', 'polozeniIspitIds', 'prijavaIds', 'kandidati');
+        return $this->ispitResultService->getZapisnikPregled($zapisnikId);
     }
 
     // -------------------------------------------------------------------------
@@ -263,21 +192,14 @@ class IspitService
      */
     public function savePolozeniIspiti(array $ispitIds, array $ocenePismeni, array $oceneUsmeni, array $konacneOcene, array $brojBodova, array $statusIspita): int
     {
-        $zapisnikId = 0;
-        foreach ($ispitIds as $index => $ispit) {
-            $polozeniIspit = PolozeniIspiti::find($ispit);
-            $polozeniIspit->ocenaPismeni = $ocenePismeni[$index] ?? null;
-            $polozeniIspit->ocenaUsmeni = $oceneUsmeni[$index] ?? null;
-            $polozeniIspit->konacnaOcena = $konacneOcene[$index] ?? null;
-            $polozeniIspit->brojBodova = $brojBodova[$index] ?? null;
-            $polozeniIspit->statusIspita = $statusIspita[$index] ?? null;
-            $polozeniIspit->indikatorAktivan = true;
-            $polozeniIspit->save();
-
-            $zapisnikId = $polozeniIspit->zapisnik_id;
-        }
-
-        return $zapisnikId;
+        return $this->ispitResultService->savePolozeniIspiti(
+            $ispitIds,
+            $ocenePismeni,
+            $oceneUsmeni,
+            $konacneOcene,
+            $brojBodova,
+            $statusIspita
+        );
     }
 
     // -------------------------------------------------------------------------
@@ -514,12 +436,7 @@ class IspitService
 
     public function updateZapisnikDetails(int $zapisnikId, array $data): void
     {
-        $zapisnik = ZapisnikOPolaganjuIspita::find($zapisnikId);
-        $zapisnik->vreme = $data['vreme'];
-        $zapisnik->ucionica = $data['ucionica'];
-        $zapisnik->datum = $data['datum'];
-        $zapisnik->datum2 = $data['datum2'];
-        $zapisnik->save();
+        $this->ispitResultService->updateZapisnikDetails($zapisnikId, $data);
     }
 
     // -------------------------------------------------------------------------

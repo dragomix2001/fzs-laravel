@@ -568,3 +568,41 @@ The first concrete Wave 3 extraction was completed by moving zapisnik listing an
 1. Extract pregled/result update logic from `IspitService`, especially `getZapisnikPregled()` and result-saving orchestration
 2. Revisit whether `addStudentToZapisnik()` should remain in the orchestrator or move into a dedicated zapisnik-membership flow service
 3. Keep `IspitPdfService` separate and avoid folding report/PDF concerns back into query services
+
+---
+
+## Update (2026-04-27): Ispit Result and Pregled Extraction
+
+**Status:** Implemented
+
+The second concrete Wave 3 extraction was completed by moving pregled/result/detail responsibilities out of `IspitService` into a dedicated helper.
+
+### Measured Current Service Sizes
+
+| Service | Lines | Notes |
+|---|---|---|
+| IspitService | 460 | Orchestrator after zapisnik query/archive and result/pregled extraction |
+| IspitResultService | 215 | Pregled assembly, result persistence, zapisnik detail updates |
+| IspitZapisnikService | 135 | Listing, create-form lookup, AJAX helpers, archive actions |
+| IspitPdfService | 222 | Existing PDF/report generation helper |
+
+### What Changed in This Extraction
+
+- Extracted `getZapisnikPregled()` from `IspitService`
+- Extracted `savePolozeniIspiti()` from `IspitService`
+- Extracted `updateZapisnikDetails()` from `IspitService`
+- Refactored `IspitService` to delegate these responsibilities while preserving its public API for controllers
+- Replaced the old “last kandidat decides available candidates” pregled behavior with a stable query across all study-program pairs linked to the zapisnik
+- Reduced repeated per-student queries by batching `PrijavaIspita` and `PolozeniIspiti` lookups during pregled assembly
+
+### Validation
+
+- Added `IspitResultServiceTest` with 12 focused tests
+- Re-ran affected suites: `IspitResultServiceTest`, `IspitServiceTest`, and `GradeSubmissionTest`
+- Result: 48 tests, 109 assertions, green locally (with 1 existing PHPUnit deprecation notice)
+
+### Real Remaining Work After This Extraction
+
+1. Decide whether `addStudentToZapisnik()` and `removeStudentFromZapisnik()` should remain in `IspitService` or move into a dedicated membership flow service
+2. Keep `IspitPdfService` separate and avoid folding report/PDF concerns back into query services
+3. Continue reducing `KandidatService` around cache/program lookup and validation helpers instead of reopening already-extracted enrollment work

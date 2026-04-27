@@ -1,9 +1,9 @@
 # God Services Refactoring Roadmap
 
-**Last Updated:** 2026-04-25  
-**Current Quality:** 9.0/10  
+**Last Updated:** 2026-04-27  
+**Current Quality:** 9.2/10  
 **Target Quality:** 10.0/10  
-**Progress:** ~80% complete; the first Wave 3 `IspitService` extraction is done and the next slice is pregled/result orchestration
+**Progress:** ~83% complete; the second Wave 3 `IspitService` extraction is done and the next slice is zapisnik membership orchestration
 
 ---
 
@@ -11,11 +11,11 @@
 
 ### Current State
 - **KandidatService:** 670 lines (originally 1026 lines)
-- **IspitService:** 545 lines (originally 818 lines, after `IspitPdfService` and `IspitZapisnikService` extractions)
+- **IspitService:** 460 lines (originally 818 lines, after `IspitPdfService`, `IspitZapisnikService`, and `IspitResultService` extractions)
 - **PrijavaController:** 280 lines (originally 731, PrijavaService extracted)
 - **StudentListService:** 323 lines (originally 408, DRY refactor with BasePdfService)
 - **Extracted Services (5 from KandidatService):** FileStorage, GradeManagement, DropdownData, SportsManagement, DocumentManagement
-- **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitZapisnikService (134), BasePdfService (53), KandidatEnrollmentService (132)
+- **Additional Services:** PrijavaService (849), IspitPdfService (222), IspitResultService (215), IspitZapisnikService (135), BasePdfService (53), KandidatEnrollmentService (132)
 - **Total Helper Code:** 718 lines (KandidatService helper services only, excluding KandidatEnrollmentService)
 - **Test Coverage:** 1378 tests, 3426 assertions, 0 errors
 - **PHPStan:** Level 5, 0 errors, empty baseline
@@ -33,6 +33,7 @@
 ✅ PrijavaService (Priority) - 849 lines, extracted from PrijavaController (731→280)  
 ✅ IspitPdfService (Priority) - 222 lines, extracted from IspitService  
 ✅ IspitZapisnikService (Wave 3 slice 1) - 134 lines, extracted for zapisnik listing/create/archive flows with 10 focused tests  
+✅ IspitResultService (Wave 3 slice 2) - 215 lines, extracted for pregled/result/detail flows with 12 focused tests  
 ✅ BasePdfService DRY refactor - 53 lines, StudentListService 408→323  
 ✅ PHPStan baseline eliminated - 40→0 errors  
 ✅ 9 new FormRequest classes added (22→31 total)  
@@ -41,10 +42,9 @@
 ### Next Target: 9.5/10 Quality
 
 **Wave 3: IspitService Decomposition**
-- Extract pregled/result orchestration from `IspitService`
-- Decide whether student membership changes stay in the orchestrator or move into a dedicated flow service
+- Finalize whether student membership changes stay in the orchestrator or move into a dedicated flow service
 - Keep PDF/report generation behind dedicated helper services where it clarifies responsibilities
-- Estimated effort: 15-20 hours
+- Estimated effort: 6-10 hours for the remaining membership slice
 
 ---
 
@@ -52,46 +52,43 @@
 
 ### Phase 1: 9.5/10 Quality (Next Session)
 
-#### Task 1: Continue IspitService Decomposition (~100-150 lines extracted)
+#### Task 1: Finish IspitService Decomposition (~60-100 lines remaining)
 
 **Methods/areas to extract:**
 ```php
-// Wave 3 slice 1 is already done in IspitZapisnikService.
-// Next candidates inside IspitService.php:
-// - getZapisnikPregled()
-// - savePolozeniIspiti()
-// - updateZapisnikDetails()
+// Wave 3 slice 1 is done in IspitZapisnikService.
+// Wave 3 slice 2 is done in IspitResultService.
+// Remaining candidate inside IspitService.php:
 // - add/remove student membership orchestration
 ```
 
 **Service Structure:**
 ```php
-class IspitResultService
+class IspitMembershipService
 {
-   public function getZapisnikPregled(int $zapisnikId): array
-   public function savePolozeniIspiti(array $ispitIds, array $ocenePismeni, array $oceneUsmeni, array $konacneOcene, array $brojBodova, array $statusIspita): int
+   public function addStudentToZapisnik(int $zapisnikId, array $odabir): void
+   public function removeStudentFromZapisnik(int $zapisnikId, int $kandidatId): bool
 }
 ```
 
 **Expected Impact:**
-- IspitService: 545 → ~420-460 lines
-- Clearer split between query/list responsibilities and report/PDF logic
+- IspitService: 460 → ~360-400 lines
+- Clearer split between result orchestration and membership mutation flows
 
 **Test Requirements:**
-- Test pregled data assembly for mixed study-program records
-- Test result persistence for multiple students
-- Test edge cases around missing predmet-program matches
-- Test detail update flow that remains with the result/pregled slice
-- Estimated: 12-15 tests
+- Test duplicate-student skip logic
+- Test mixed study-program add flow and PrijavaIspita creation
+- Test deletion behavior when the last student is removed
+- Estimated: 6-8 tests
 
 **Acceptance Criteria:**
 - [x] `IspitZapisnikService` extracted for listing/create/archive concerns
-- [ ] Next Ispit helper service extracted around pregled/result workflow
-- [ ] IspitService reduced materially again without moving unrelated logic arbitrarily
-- [ ] Minimum 12 tests with 100% coverage
+- [x] `IspitResultService` extracted around pregled/result/detail workflow
+- [x] IspitService reduced materially again without moving unrelated logic arbitrarily
+- [x] Minimum 12 tests with focused coverage for the new service
 - [ ] All 1378+ tests pass
 - [ ] CI/CD passes (Laravel CI/CD + CodeQL)
-- [ ] ADR-001 updated with the new extraction metrics
+- [x] ADR-001 updated with the new extraction metrics
 
 ---
 

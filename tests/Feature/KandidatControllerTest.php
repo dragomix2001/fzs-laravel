@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
+use App\Models\KandidatPrilozenaDokumenta;
 use App\Models\KrsnaSlava;
 use App\Models\Opstina;
 use App\Models\PrilozenaDokumenta;
@@ -150,6 +151,8 @@ class KandidatControllerTest extends TestCase
             'indikatorAktivan' => 1,
         ]);
 
+        $this->attachApprovedRequiredDocument($this->kandidat);
+
         $this->masterKandidat = Kandidat::factory()->create([
             'tipStudija_id' => $this->masterStudije->id,
             'studijskiProgram_id' => $this->masterProgram->id,
@@ -165,6 +168,22 @@ class KandidatControllerTest extends TestCase
         ]);
 
         $this->actingAs($this->user);
+    }
+
+    private function attachApprovedRequiredDocument(Kandidat $kandidat): void
+    {
+        $dokument = PrilozenaDokumenta::query()
+            ->where('skolskaGodina_id', '1')
+            ->orderBy('redniBrojDokumenta')
+            ->firstOrFail();
+
+        KandidatPrilozenaDokumenta::create([
+            'kandidat_id' => $kandidat->id,
+            'prilozenaDokumenta_id' => $dokument->id,
+            'indikatorAktivan' => 1,
+            'review_status' => KandidatPrilozenaDokumenta::STATUS_APPROVED,
+            'reviewer_id' => $this->user->id,
+        ]);
     }
 
     public function test_index_returns_filtered_osnovne_candidates_view(): void
