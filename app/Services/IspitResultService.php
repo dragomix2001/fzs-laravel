@@ -36,7 +36,7 @@ class IspitResultService
             ->where('zapisnik_id', $zapisnikId)
             ->get()
             ->sortBy(function (PolozeniIspiti $ispit) {
-                return $ispit->kandidat?->brojIndeksa ?? '';
+                return $ispit->kandidat->brojIndeksa ?? '';
             })
             ->values();
 
