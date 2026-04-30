@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateDiplomskiOdbranaRequest;
 use App\Http\Requests\UpdateDiplomskiPolaganjeRequest;
 use App\Http\Requests\UpdateDiplomskiTemaRequest;
 use App\Models\PrijavaIspita;
+use App\Services\DiplomskiPrijavaService;
 use App\Services\PrijavaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -18,7 +19,10 @@ use Illuminate\Support\Facades\Session;
 
 class PrijavaController extends Controller
 {
-    public function __construct(protected PrijavaService $prijavaService) {}
+    public function __construct(
+        protected PrijavaService $prijavaService,
+        protected DiplomskiPrijavaService $diplomskiPrijavaService,
+    ) {}
 
     // region PRIJAVA ISPITA - PREDMET
 
@@ -138,24 +142,24 @@ class PrijavaController extends Controller
 
     public function diplomskiTema($kandidat)
     {
-        return view('prijava.diplomskiTema', $this->prijavaService->getDiplomskiTemaData((int) $kandidat));
+        return view('prijava.diplomskiTema', $this->diplomskiPrijavaService->getDiplomskiTemaData((int) $kandidat));
     }
 
     public function storeDiplomskiTema(StoreDiplomskiTemaRequest $request)
     {
-        $prijavaTeme = $this->prijavaService->storeDiplomskiTema($request->all());
+        $prijavaTeme = $this->diplomskiPrijavaService->storeDiplomskiTema($request->all());
 
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
     public function editdiplomskiTema($kandidat)
     {
-        return view('prijava.editDiplomskiTema', $this->prijavaService->getEditDiplomskiTemaData((int) $kandidat));
+        return view('prijava.editDiplomskiTema', $this->diplomskiPrijavaService->getEditDiplomskiTemaData((int) $kandidat));
     }
 
     public function updateDiplomskiTema(UpdateDiplomskiTemaRequest $request)
     {
-        $this->prijavaService->updateDiplomskiTema(
+        $this->diplomskiPrijavaService->updateDiplomskiTema(
             (int) $request->diplomskiTema_id,
             $request->all(),
             isset($request->indikatorOdobreno)
@@ -166,7 +170,7 @@ class PrijavaController extends Controller
 
     public function deleteDiplomskiTema($kandidat)
     {
-        $kandidat = $this->prijavaService->deleteDiplomskiTema((int) $kandidat);
+        $kandidat = $this->diplomskiPrijavaService->deleteDiplomskiTema((int) $kandidat);
 
         return redirect('/prijava/zaStudenta/'.$kandidat->id);
     }
@@ -177,7 +181,7 @@ class PrijavaController extends Controller
 
     public function diplomskiOdbrana($kandidat)
     {
-        $data = $this->prijavaService->getDiplomskiOdbranaData((int) $kandidat);
+        $data = $this->diplomskiPrijavaService->getDiplomskiOdbranaData((int) $kandidat);
 
         if ($data['diplomskiRadTema'] === null) {
             return 'Не постоји пријава теме дипломског рада!';
@@ -188,19 +192,19 @@ class PrijavaController extends Controller
 
     public function storeDiplomskiOdbrana(StoreDiplomskiOdbranaRequest $request)
     {
-        $this->prijavaService->storeDiplomskiOdbrana($request->all());
+        $this->diplomskiPrijavaService->storeDiplomskiOdbrana($request->all());
 
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
     public function editDiplomskiOdbrana($kandidat)
     {
-        return view('prijava.odbrana.editDiplomskiOdbrana', $this->prijavaService->getEditDiplomskiOdbranaData((int) $kandidat));
+        return view('prijava.odbrana.editDiplomskiOdbrana', $this->diplomskiPrijavaService->getEditDiplomskiOdbranaData((int) $kandidat));
     }
 
     public function updateDiplomskiOdbrana(UpdateDiplomskiOdbranaRequest $request)
     {
-        $this->prijavaService->updateDiplomskiOdbrana(
+        $this->diplomskiPrijavaService->updateDiplomskiOdbrana(
             (int) $request->diplomskiRadOdbrana_id,
             $request->all(),
             isset($request->indikatorOdobreno)
@@ -211,7 +215,7 @@ class PrijavaController extends Controller
 
     public function deleteDiplomskiOdbrana($kandidat)
     {
-        $kandidat = $this->prijavaService->deleteDiplomskiOdbrana((int) $kandidat);
+        $kandidat = $this->diplomskiPrijavaService->deleteDiplomskiOdbrana((int) $kandidat);
 
         return redirect('/prijava/zaStudenta/'.$kandidat->id);
     }
@@ -222,31 +226,31 @@ class PrijavaController extends Controller
 
     public function diplomskiPolaganje($kandidat)
     {
-        return view('prijava.polaganje.diplomskiPolaganje', $this->prijavaService->getDiplomskiPolaganjeData((int) $kandidat));
+        return view('prijava.polaganje.diplomskiPolaganje', $this->diplomskiPrijavaService->getDiplomskiPolaganjeData((int) $kandidat));
     }
 
     public function storeDiplomskiPolaganje(StoreDiplomskiPolaganjeRequest $request)
     {
-        $this->prijavaService->storeDiplomskiPolaganje($request->all());
+        $this->diplomskiPrijavaService->storeDiplomskiPolaganje($request->all());
 
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
     public function editDiplomskiPolaganje($kandidat)
     {
-        return view('prijava.polaganje.editDiplomskiPolaganje', $this->prijavaService->getEditDiplomskiPolaganjeData((int) $kandidat));
+        return view('prijava.polaganje.editDiplomskiPolaganje', $this->diplomskiPrijavaService->getEditDiplomskiPolaganjeData((int) $kandidat));
     }
 
     public function updateDiplomskiPolaganje(UpdateDiplomskiPolaganjeRequest $request)
     {
-        $this->prijavaService->updateDiplomskiPolaganje((int) $request->polaganje_id, $request->all());
+        $this->diplomskiPrijavaService->updateDiplomskiPolaganje((int) $request->polaganje_id, $request->all());
 
         return redirect('/prijava/zaStudenta/'.$request->kandidat_id);
     }
 
     public function deleteDiplomskiPolaganje($kandidat)
     {
-        $kandidat = $this->prijavaService->deleteDiplomskiPolaganje((int) $kandidat);
+        $kandidat = $this->diplomskiPrijavaService->deleteDiplomskiPolaganje((int) $kandidat);
 
         return redirect('/prijava/zaStudenta/'.$kandidat->id);
     }
