@@ -52,12 +52,15 @@ class IzvestajiControllerTest extends TestCase
         $status = StatusStudiranja::factory()->create();
         $skolskaGod = SkolskaGodUpisa::factory()->create();
 
-        return Kandidat::factory()->create([
+        /** @var Kandidat $kandidat */
+        $kandidat = Kandidat::factory()->create([
             'tipStudija_id' => $tipStudija->id,
             'studijskiProgram_id' => $program->id,
             'statusUpisa_id' => $status->id,
             'skolskaGodinaUpisa_id' => $skolskaGod->id,
         ]);
+
+        return $kandidat;
     }
 
     public function test_spisak_po_smerovima_delegates_to_service(): void
@@ -238,7 +241,7 @@ class IzvestajiControllerTest extends TestCase
         $this->mock(DiplomskiRadService::class, function ($mock) {
             $mock->shouldReceive('diplomskiUnos')
                 ->once()
-                ->andReturn(new Response('OK'));
+                ->andReturn(view('welcome'));
         });
 
         $response = $this->actingAs($this->adminUser())->get("izvestaji/diplomskiUnos/{$student->id}");
@@ -252,7 +255,7 @@ class IzvestajiControllerTest extends TestCase
         $this->mock(DiplomskiRadService::class, function ($mock) {
             $mock->shouldReceive('komisijaStampa')
                 ->once()
-                ->andReturn(new Response('OK'));
+                ->andReturn(null);
         });
 
         $response = $this->actingAs($this->adminUser())->get("izvestaji/komisijaStampa/{$student->id}");
@@ -294,7 +297,7 @@ class IzvestajiControllerTest extends TestCase
         $this->mock(DiplomskiRadService::class, function ($mock) {
             $mock->shouldReceive('zapisnikDiplomski')
                 ->once()
-                ->andReturn(new Response('OK'));
+                ->andReturn(null);
         });
 
         $response = $this->actingAs($this->adminUser())->get("izvestaji/zapisnikDiplomski/{$student->id}");

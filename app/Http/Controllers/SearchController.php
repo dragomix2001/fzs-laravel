@@ -24,48 +24,63 @@ class SearchController extends Controller
 
     public function searchResult(Request $request)
     {
+        $validated = $request->validate([
+            'pretraga' => ['nullable', 'string', 'max:100'],
+            'pretraga_predmet' => ['nullable', 'string', 'max:100'],
+            'studijski_program_id' => ['nullable', 'integer', 'exists:studijski_program,id'],
+            'godina_studija_id' => ['nullable', 'integer', 'exists:godina_studija,id'],
+            'status_upisa_id' => ['nullable', 'integer', 'exists:status_studiranja,id'],
+            'skolska_godina_id' => ['nullable', 'integer', 'exists:skolska_god_upisa,id'],
+        ]);
+
         $studijskiProgrami = StudijskiProgram::all();
         $godineStudija = GodinaStudija::all();
         $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
         $statusi = StatusGodine::all();
 
-        // Student search
-        $query = Kandidat::query();
+        // Student search — only run query if at least one filter is provided
+        $studenti = collect();
+        $hasFilter = array_filter($validated);
 
-        // Text search
-        if ($request->pretraga) {
-            $query->where(function ($q) use ($request) {
-                $q->where('imeKandidata', 'LIKE', '%'.$request->pretraga.'%')
-                    ->orWhere('prezimeKandidata', 'LIKE', '%'.$request->pretraga.'%')
-                    ->orWhere('brojIndeksa', 'LIKE', '%'.$request->pretraga.'%')
-                    ->orWhere('jmbg', 'LIKE', '%'.$request->pretraga.'%');
-            });
+        if ($hasFilter) {
+            $query = Kandidat::query();
+
+            if (! empty($validated['pretraga'])) {
+                $term = $validated['pretraga'];
+                $query->where(function ($q) use ($term) {
+                    $q->where('imeKandidata', 'LIKE', '%'.$term.'%')
+                        ->orWhere('prezimeKandidata', 'LIKE', '%'.$term.'%')
+                        ->orWhere('brojIndeksa', 'LIKE', '%'.$term.'%')
+                        ->orWhere('jmbg', 'LIKE', '%'.$term.'%');
+                });
+            }
+
+            if (! empty($validated['studijski_program_id'])) {
+                $query->where('studijskiProgram_id', $validated['studijski_program_id']);
+            }
+
+            if (! empty($validated['godina_studija_id'])) {
+                $query->where('godinaStudija_id', $validated['godina_studija_id']);
+            }
+
+            if (! empty($validated['status_upisa_id'])) {
+                $query->where('statusUpisa_id', $validated['status_upisa_id']);
+            }
+
+            if (! empty($validated['skolska_godina_id'])) {
+                $query->where('skolskaGodinaUpisa_id', $validated['skolska_godina_id']);
+            }
+
+            $studenti = $query->orderBy('prezimeKandidata')->orderBy('imeKandidata')->limit(500)->get();
         }
-
-        // Filters
-        if ($request->studijski_program_id) {
-            $query->where('studijskiProgram_id', $request->studijski_program_id);
-        }
-
-        if ($request->godina_studija_id) {
-            $query->where('godinaStudija_id', $request->godina_studija_id);
-        }
-
-        if ($request->status_upisa_id) {
-            $query->where('statusUpisa_id', $request->status_upisa_id);
-        }
-
-        if ($request->skolska_godina_id) {
-            $query->where('skolskaGodinaUpisa_id', $request->skolska_godina_id);
-        }
-
-        $studenti = $query->get();
 
         // Predmet search
         $predmeti = [];
-        if ($request->pretraga_predmet) {
-            $predmeti = Predmet::where('naziv', 'LIKE', '%'.$request->pretraga_predmet.'%')
-                ->orWhere('sifraPredmeta', 'LIKE', '%'.$request->pretraga_predmet.'%')
+        if (! empty($validated['pretraga_predmet'])) {
+            $term = $validated['pretraga_predmet'];
+            $predmeti = Predmet::where('naziv', 'LIKE', '%'.$term.'%')
+                ->orWhere('sifraPredmeta', 'LIKE', '%'.$term.'%')
+                ->limit(200)
                 ->get();
         }
 
