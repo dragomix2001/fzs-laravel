@@ -96,11 +96,20 @@ Ovaj dokument opisuje preostale arhitektonske i funkcionalnosti poboljšanja za 
 
 ---
 
-## 🚧 Preostalo
+## ✅ Završeno — Arhitektonska Faza (April 2026)
+
+### P6: Ekstrakcija DiplomskiPrijavaService
+- [x] `DiplomskiPrijavaService` kreiran sa 15 metoda (tema, odbrana, polaganje)
+- [x] `PrijavaService` smanjen sa 849 na ~540 LOC
+- [x] `PrijavaController` ažuriran sa novim service injektovanjem
+- [x] 23 feature testa u `DiplomskiPrijavaServiceTest.php` (svi prolaze)
+- [x] PHPStan 0 grešaka, Pint clean, CI zeleno
+
+## ✅ Završeno — Infrastrukturna Faza
 
 ### FAZA 2.5: Dodavanje Foreign Key Constraints
 
-**Status:** Pending  
+**Status:** ✅ Završeno  
 **Prioritet:** MEDIUM  
 **Procenjeno vreme:** 3-4 sata  
 **Rizik:** SREDNJI (može zahtevati čišćenje podataka)
@@ -327,12 +336,17 @@ php artisan migrate
 
 ### FAZA 2.6: Kreiranje Queued Job Klasa
 
-**Status:** Pending  
+**Status:** ✅ Završeno  
 **Prioritet:** MEDIUM  
-**Procenjeno vreme:** 2-3 sata  
-**Rizik:** NIZAK (ne utiče na postojeću funkcionalnost)
+**Rizik:** NIZAK
 
-#### Opis
+#### Implementirano
+- `BroadcastNotificationJob` — dispatchovan iz `NotificationService`
+- `MassEnrollmentJob` — dispatchovan iz `KandidatEnrollmentService`
+- `GenerateZapisnikPdfJob` — dispatchovan iz `IspitPdfService`
+- Supervisor config dokumentovan za production deploy
+
+#### Originalni Opis
 Trenutno sve operacije rade **sinhrono**, što blokira HTTP zahteve za:
 - Slanje notifikacija (može biti 100+ korisnika)
 - Generisanje PDF dokumenata (sporo)
@@ -435,14 +449,13 @@ stopwaitsecs=3600
 
 ---
 
-## FAZA 3: Modernizacija (LOW Priority)
+## FAZA 3: Modernizacija
 
 ### FAZA 3.1: Uklanjanje AndroModel
 
-**Status:** Pending  
+**Status:** ✅ Završeno  
 **Prioritet:** LOW  
-**Procenjeno vreme:** 6-8 sati  
-**Rizik:** VISOK (može otkriti skrivene bugove)
+**Rizik:** VISOK
 
 #### Opis
 57 modela trenutno nasleđuje `AndroModel` koji automatski instancira `null` relacije:
@@ -475,10 +488,13 @@ $kandidat->studijskiProgram; // Vraća NULL ako relacija nije eager-loaded
 
 ### FAZA 3.2: Uvođenje DTOs (Data Transfer Objects)
 
-**Status:** Pending  
+**Status:** ✅ Završeno (delimično)  
 **Prioritet:** LOW  
-**Procenjeno vreme:** 4-5 sati  
 **Rizik:** NIZAK
+
+#### Implementirano
+- 10 DTO klasa u `app/DTOs/` (KandidatData, ZapisnikData, PrijavaIspitaData, itd.)
+- `fromRequest()` pattern korišćen u KandidatController, IspitController
 
 #### Opis
 Trenutno service layer prima/vraća asocijativne nizove ili Request objekte direktno. DTOs bi uveli type safety i jasnu strukturu podataka.
@@ -498,10 +514,14 @@ $kandidat = $this->kandidatService->storeKandidat($data);
 
 ### FAZA 3.3: Dodavanje Policy Klasa
 
-**Status:** Pending  
+**Status:** ✅ Završeno  
 **Prioritet:** LOW  
-**Procenjeno vreme:** 3-4 sata  
 **Rizik:** NIZAK
+
+#### Implementirano
+- `KandidatPolicy`, `IspitPolicy`, `PrijavaIspitaPolicy`, `PolozeniIspitiPolicy`
+- Sve registrovane u `AuthServiceProvider`
+- `$this->authorize()` korišćen u `IspitController` i `PrijavaController`
 
 #### Opis
 Trenutno samo `KandidatPolicy` postoji za 57 modela. Authorization logika je rasuta po kontrolerima.
@@ -517,6 +537,8 @@ Trenutno samo `KandidatPolicy` postoji za 57 modela. Authorization logika je ras
 - **Testabilnost**: Lako testirati authorization pravila
 
 ---
+
+## 🚧 Preostalo
 
 ### FAZA 3.4: Konsolidacija Frontend Stack-a
 
