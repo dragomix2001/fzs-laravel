@@ -626,7 +626,7 @@ php -d pcov.enabled=1 -d pcov.directory=app vendor/bin/phpunit --coverage-text
 
 ### FAZA 3.6: Scheduled Tasks (Backup, Monitoring, Cleanup)
 
-**Status:** Pending  
+**Status:** ✅ Završeno  
 **Prioritet:** LOW  
 **Procenjeno vreme:** 2-3 sata  
 **Rizik:** NIZAK
