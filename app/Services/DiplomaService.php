@@ -46,11 +46,11 @@ class DiplomaService extends BasePdfService
     {
         $diploma = new Diploma;
         $diploma->kandidat_id = $data->kandidatId;
-        $diploma->brojDipломе = $data->brojDiplome;
+        $diploma->brojDiplome = $data->brojDiplome;
         $diploma->datumOdbrane = $data->datumOdbrane;
         $diploma->nazivStudijskogPrograma = $data->nazivStudijskogPrograma;
-        $diploma->brojPočetnogLista = $data->brojPocetnogLista;
-        $diploma->brojЗаписника = $data->brojZapisnika;
+        $diploma->brojPocetnogLista = $data->brojPocetnogLista;
+        $diploma->brojZapisnika = $data->brojZapisnika;
         $diploma->datum = $data->datum;
         $diploma->pristupniRad = $data->pristupniRad;
         $diploma->tema = $data->tema;
