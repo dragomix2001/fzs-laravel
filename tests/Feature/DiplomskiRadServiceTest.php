@@ -256,6 +256,16 @@ class DiplomskiRadServiceTest extends TestCase
         $this->assertInstanceOf(RedirectResponse::class, $response);
     }
 
+    public function test_zapisnik_diplomski_returns_redirect_when_diplomski_not_found()
+    {
+        $student = Kandidat::factory()->create();
+        DiplomskiPolaganje::factory()->create(['kandidat_id' => $student->id]);
+
+        $response = $this->service->zapisnikDiplomski($student);
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+    }
+
     public function test_zapisnik_diplomski_succeeds_when_polaganje_exists()
     {
         $student = Kandidat::factory()->create();

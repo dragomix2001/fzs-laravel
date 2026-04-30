@@ -9,14 +9,18 @@ use App\Models\DiplomskiRad;
 use App\Models\Kandidat;
 use App\Models\Profesor;
 use App\Models\ProfesorPredmet;
-use Elibyy\TCPDF\TCPDF;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View as IlluminateView;
 use View;
 
 class DiplomskiRadService extends BasePdfService
 {
-    public function diplomskiUnos(Kandidat $student)
+    public function diplomskiUnos(Kandidat $student): IlluminateView
     {
+        /** @var Collection<int, Profesor> $profesor */
         $profesor = Profesor::all();
 
         return view('izvestaji.diplomskiUnos')
@@ -24,38 +28,40 @@ class DiplomskiRadService extends BasePdfService
             ->with('profesor', $profesor);
     }
 
-    public function diplomskiAdd(DiplomskiAddData $data)
+    public function diplomskiAdd(DiplomskiAddData $data): RedirectResponse
     {
         $kandidat = Kandidat::findOrFail($data->kandidatId);
 
-        $diplomski = new DiplomskiRad;
-        $diplomski->kandidat_id = $data->kandidatId;
-        $diplomski->predmet_id = $data->predmetId;
-        $diplomski->naziv = $data->naziv;
-        $diplomski->mentor_id = $data->mentorId;
-        $diplomski->predsednik_id = $data->predsednikId;
-        $diplomski->clan_id = $data->clanId;
-        $diplomski->ocenaOpis = $data->ocenaOpis;
-        $diplomski->ocenaBroj = $data->ocenaBroj;
-        $diplomski->datumPrijave = $data->datumPrijave;
-        $diplomski->datumOdbrane = $data->datumOdbrane;
-        $diplomski->save();
+        DB::transaction(function () use ($data, $kandidat): void {
+            $diplomski = new DiplomskiRad;
+            $diplomski->kandidat_id = $data->kandidatId;
+            $diplomski->predmet_id = $data->predmetId;
+            $diplomski->naziv = $data->naziv;
+            $diplomski->mentor_id = $data->mentorId;
+            $diplomski->predsednik_id = $data->predsednikId;
+            $diplomski->clan_id = $data->clanId;
+            $diplomski->ocenaOpis = $data->ocenaOpis;
+            $diplomski->ocenaBroj = $data->ocenaBroj;
+            $diplomski->datumPrijave = $data->datumPrijave;
+            $diplomski->datumOdbrane = $data->datumOdbrane;
+            $diplomski->save();
 
-        $prijava = new DiplomskiPrijavaTeme;
-        $prijava->tipStudija_id = $kandidat->tipStudija_id;
-        $prijava->studijskiProgram_id = $kandidat->studijskiProgram_id;
-        $prijava->kandidat_id = $data->kandidatId;
-        $prijava->predmet_id = $data->predmetId;
-        $prijava->nazivTeme = $data->naziv;
-        $prijava->profesor_id = $data->mentorId;
-        $prijava->datum = $data->datumPrijave;
-        $prijava->indikatorOdobreno = false;
-        $prijava->save();
+            $prijava = new DiplomskiPrijavaTeme;
+            $prijava->tipStudija_id = $kandidat->tipStudija_id;
+            $prijava->studijskiProgram_id = $kandidat->studijskiProgram_id;
+            $prijava->kandidat_id = $data->kandidatId;
+            $prijava->predmet_id = $data->predmetId;
+            $prijava->nazivTeme = $data->naziv;
+            $prijava->profesor_id = $data->mentorId;
+            $prijava->datum = $data->datumPrijave;
+            $prijava->indikatorOdobreno = false;
+            $prijava->save();
+        });
 
         return redirect('/student');
     }
 
-    public function komisijaStampa(Kandidat $student)
+    public function komisijaStampa(Kandidat $student): ?RedirectResponse
     {
         $diplomski = DiplomskiRad::where('kandidat_id', $student->id)->first();
 
@@ -77,9 +83,11 @@ class DiplomskiRadService extends BasePdfService
         $pdf->SetFont('freeserif', '', 12);
         $pdf->WriteHtml($contents, true);
         $pdf->Output('Komisija.pdf');
+
+        return null;
     }
 
-    public function zapisnikDiplomski(Kandidat $student)
+    public function zapisnikDiplomski(Kandidat $student): ?RedirectResponse
     {
         try {
             $diplomskiPolaganje = DiplomskiPolaganje::where('kandidat_id', $student->id)->first();
@@ -90,15 +98,11 @@ class DiplomskiRadService extends BasePdfService
 
             $diplomski = DiplomskiRad::where('kandidat_id', $student->id)->first();
 
-            $pdf_settings = \Config::get('tcpdf');
-            $pdf = new TCPDF([
-                $pdf_settings['page_orientation'],
-                $pdf_settings['page_units'],
-                $pdf_settings['page_format'],
-                true,
-                'UTF-8',
-                false,
-            ]);
+            if (! $diplomski) {
+                return redirect()->back()->with('error', 'Дипломски рад није пронађен');
+            }
+
+            $pdf = $this->createPdf();
 
             $view = View::make('izvestaji.zapisnikDiplomski')
                 ->with('student', $student)
@@ -112,6 +116,8 @@ class DiplomskiRadService extends BasePdfService
             $pdf->SetFont('freeserif', '', 10);
             $pdf->WriteHtml($contents);
             $pdf->Output('ZapisnikDiplomski.pdf');
+
+            return null;
         } catch (QueryException $e) {
             report($e);
             throw new \RuntimeException('Грешка при генерисању записника дипломског: '.$e->getMessage(), 0, $e);
