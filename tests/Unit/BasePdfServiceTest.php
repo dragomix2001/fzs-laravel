@@ -4,10 +4,10 @@ namespace Tests\Unit;
 
 use App\Services\BasePdfService;
 use Elibyy\TCPDF\TCPDF;
-use Mockery;
-use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\View;
+use Mockery;
 use PDF;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class BasePdfServiceTest extends TestCase

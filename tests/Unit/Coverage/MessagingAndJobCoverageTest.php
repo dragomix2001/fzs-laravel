@@ -7,6 +7,7 @@ namespace Tests\Unit\Coverage;
 use App\Events\IspitPrijavljen;
 use App\Events\KandidatCreated;
 use App\Events\NewNotification;
+use App\Http\Middleware\RoleMiddleware;
 use App\Jobs\BroadcastNotificationJob;
 use App\Jobs\GenerateZapisnikPdfJob;
 use App\Jobs\Job;
@@ -112,7 +113,7 @@ class MessagingAndJobCoverageTest extends TestCase
     #[Test]
     public function role_middleware_covers_all_branches(): void
     {
-        $middleware = new \App\Http\Middleware\RoleMiddleware;
+        $middleware = new RoleMiddleware;
         $next = static fn (): Response => new Response('ok', 200);
 
         $anonRequest = Request::create('/test', 'GET');

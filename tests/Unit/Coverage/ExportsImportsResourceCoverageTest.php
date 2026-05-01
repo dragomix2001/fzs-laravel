@@ -9,6 +9,8 @@ use App\Exports\StudentiExport;
 use App\Http\Resources\KandidatResource;
 use App\Imports\KandidatiImport;
 use App\Models\Kandidat;
+use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
@@ -18,11 +20,11 @@ use Tests\TestCase;
  */
 class ExportsImportsResourceCoverageTest extends TestCase
 {
-    use \Illuminate\Foundation\Testing\DatabaseTransactions;
+    use DatabaseTransactions;
 
     public function test_kandidati_export_headings(): void
     {
-        $export = new KandidatiExport();
+        $export = new KandidatiExport;
         $headings = $export->headings();
         $this->assertIsArray($headings);
         $this->assertNotEmpty($headings);
@@ -30,11 +32,11 @@ class ExportsImportsResourceCoverageTest extends TestCase
 
     public function test_kandidati_export_collection(): void
     {
-        $export = new KandidatiExport();
+        $export = new KandidatiExport;
         try {
             $collection = $export->collection();
             $this->assertNotNull($collection);
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             // Export may reference columns that don't exist in test DB – method is still covered
             $this->addToAssertionCount(1);
         }
@@ -42,7 +44,7 @@ class ExportsImportsResourceCoverageTest extends TestCase
 
     public function test_polozeni_ispiti_export_headings(): void
     {
-        $export = new PolozeniIspitiExport();
+        $export = new PolozeniIspitiExport;
         $headings = $export->headings();
         $this->assertIsArray($headings);
         $this->assertNotEmpty($headings);
@@ -50,10 +52,10 @@ class ExportsImportsResourceCoverageTest extends TestCase
 
     public function test_polozeni_ispiti_export_collection(): void
     {
-        $export = new PolozeniIspitiExport();
+        $export = new PolozeniIspitiExport;
         // No records – returns empty mapped collection
         $collection = $export->collection();
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
     }
 
     public function test_spisak_kandidata_export_headings(): void
@@ -70,7 +72,7 @@ class ExportsImportsResourceCoverageTest extends TestCase
         try {
             $collection = $export->collection();
             $this->assertNotNull($collection);
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             // Export may reference columns that don't exist in test DB – method is still covered
             $this->addToAssertionCount(1);
         }
@@ -96,7 +98,7 @@ class ExportsImportsResourceCoverageTest extends TestCase
     {
         Kandidat::unguard();
         try {
-            $import = new KandidatiImport();
+            $import = new KandidatiImport;
             $row = [
                 'ime' => 'Marko',
                 'prezime' => 'Markovic',
@@ -121,7 +123,7 @@ class ExportsImportsResourceCoverageTest extends TestCase
 
     public function test_kandidat_resource_to_array(): void
     {
-        $kandidat = (new Kandidat())->forceFill([
+        $kandidat = (new Kandidat)->forceFill([
             'imeKandidata' => 'Ana',
             'prezimeKandidata' => 'Anic',
             'email' => 'ana@test.com',

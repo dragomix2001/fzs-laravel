@@ -24,14 +24,14 @@ class FormRequestCoverageTest extends TestCase
 {
     public function test_import_file_request(): void
     {
-        $req = new ImportFileRequest();
+        $req = new ImportFileRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
     }
 
     public function test_store_kandidat_request(): void
     {
-        $req = new StoreKandidatRequest();
+        $req = new StoreKandidatRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -39,7 +39,7 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_store_master_kandidat_request(): void
     {
-        $req = new StoreMasterKandidatRequest();
+        $req = new StoreMasterKandidatRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -47,7 +47,7 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_store_prijava_ispita_predmet_many_request(): void
     {
-        $req = new StorePrijavaIspitaPredmetManyRequest();
+        $req = new StorePrijavaIspitaPredmetManyRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -55,21 +55,21 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_store_student_request(): void
     {
-        $req = new StoreStudentRequest();
+        $req = new StoreStudentRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
     }
 
     public function test_store_zapisnik_request(): void
     {
-        $req = new StoreZapisnikRequest();
+        $req = new StoreZapisnikRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
     }
 
     public function test_update_diplomski_odbrana_request(): void
     {
-        $req = new UpdateDiplomskiOdbranaRequest();
+        $req = new UpdateDiplomskiOdbranaRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -77,7 +77,7 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_update_diplomski_polaganje_request(): void
     {
-        $req = new UpdateDiplomskiPolaganjeRequest();
+        $req = new UpdateDiplomskiPolaganjeRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -85,7 +85,7 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_update_diplomski_tema_request(): void
     {
-        $req = new UpdateDiplomskiTemaRequest();
+        $req = new UpdateDiplomskiTemaRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -93,7 +93,7 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_update_kandidat_request(): void
     {
-        $req = new UpdateKandidatRequest();
+        $req = new UpdateKandidatRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -101,7 +101,7 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_update_master_kandidat_request(): void
     {
-        $req = new UpdateMasterKandidatRequest();
+        $req = new UpdateMasterKandidatRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
@@ -109,14 +109,14 @@ class FormRequestCoverageTest extends TestCase
 
     public function test_api_store_kandidat_request(): void
     {
-        $req = new ApiStoreKandidatRequest();
+        $req = new ApiStoreKandidatRequest;
         $this->assertIsBool($req->authorize()); // returns false when no user (null !== null is false)
         $this->assertIsArray($req->rules());
     }
 
     public function test_api_update_kandidat_request(): void
     {
-        $req = new ApiUpdateKandidatRequest();
+        $req = new ApiUpdateKandidatRequest;
         $this->assertIsBool($req->authorize());
         $this->assertIsArray($req->rules());
     }
