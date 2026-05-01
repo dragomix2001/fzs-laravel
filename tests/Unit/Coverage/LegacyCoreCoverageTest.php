@@ -10,6 +10,8 @@ use App\Http\Middleware\TrustHosts;
 use App\Providers\BroadcastServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\TestCase;
 
 class LegacyCoreCoverageTest extends TestCase
@@ -20,7 +22,7 @@ class LegacyCoreCoverageTest extends TestCase
         $command = new Inspire;
         $command->setLaravel($this->app);
 
-        $result = $command->run(new \Symfony\Component\Console\Input\ArrayInput([]), new \Symfony\Component\Console\Output\BufferedOutput);
+        $result = $command->run(new ArrayInput([]), new BufferedOutput);
 
         $this->assertSame(0, $result);
     }
