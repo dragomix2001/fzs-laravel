@@ -50,12 +50,14 @@ class RasporedControllerTest extends TestCase
             'indikatorAktivan' => 1,
         ]);
 
-        $tipStudija = TipStudija::factory()->create([
-            'id' => 1,
-            'naziv' => 'Osnovne akademske studije',
-            'skrNaziv' => 'OAS',
-            'indikatorAktivan' => 1,
-        ]);
+        $tipStudija = TipStudija::query()->firstOrCreate(
+            ['id' => 1],
+            [
+                'naziv' => 'Osnovne akademske studije',
+                'skrNaziv' => 'OAS',
+                'indikatorAktivan' => 1,
+            ]
+        );
 
         $this->studijskiProgram = StudijskiProgram::factory()->create([
             'naziv' => 'Fizioterapija',
@@ -140,6 +142,27 @@ class RasporedControllerTest extends TestCase
         $response->assertJsonPath('data.0.id', $match->id);
         $response->assertJsonPath('data.0.profesor.id', $this->profesor->id);
         $response->assertJsonPath('data.0.predmet.naziv', 'Anatomija');
+    }
+
+    public function test_index_filters_by_predmet_id(): void
+    {
+        $otherPredmet = Predmet::factory()->create([
+            'naziv' => 'Fiziologija',
+        ]);
+
+        $match = $this->createRaspored([
+            'predmet_id' => $this->predmet->id,
+        ]);
+
+        $this->createRaspored([
+            'predmet_id' => $otherPredmet->id,
+        ]);
+
+        $response = $this->getJson('/api/v1/raspored?predmet_id='.$this->predmet->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(1, 'data');
+        $response->assertJsonPath('data.0.id', $match->id);
     }
 
     public function test_today_returns_only_current_day_active_schedule(): void

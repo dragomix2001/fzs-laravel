@@ -900,4 +900,59 @@ class PrijavaServiceTest extends TestCase
 
         $this->assertCount(1, $result['duplicateArray']);
     }
+
+    public function test_store_prijava_ispita_predmet_many_skips_when_no_program_match_exists(): void
+    {
+        $data = $this->createKandidatWithProgram();
+        $data['kandidat']->update(['statusUpisa_id' => 1]);
+        $rok = AktivniIspitniRokovi::factory()->create();
+        $profesor = Profesor::factory()->create();
+        TipPrijave::factory()->create();
+
+        $drugiPredmet = Predmet::factory()->create();
+
+        $result = $this->service->storePrijavaIspitaPredmetMany([
+            'odabir' => [$data['kandidat']->id],
+            'predmet_id' => $drugiPredmet->id,
+            'rok_id' => $rok->id,
+            'profesor_id' => $profesor->id,
+            'datum' => now()->toDateString(),
+            'datum2' => null,
+            'tipPrijave_id' => 1,
+            'withZapisnik' => false,
+        ]);
+
+        $this->assertCount(0, $result['errorArray']);
+        $this->assertCount(0, $result['duplicateArray']);
+    }
+
+    public function test_store_prijava_ispita_predmet_many_puts_candidate_into_error_array_when_save_fails(): void
+    {
+        $data = $this->createKandidatWithProgram();
+        $data['kandidat']->update(['statusUpisa_id' => 1]);
+        $rok = AktivniIspitniRokovi::factory()->create();
+        $profesor = Profesor::factory()->create();
+        TipPrijave::factory()->create();
+
+        $dispatcher = PrijavaIspita::getEventDispatcher();
+        PrijavaIspita::saving(static fn () => false);
+
+        try {
+            $result = $this->service->storePrijavaIspitaPredmetMany([
+                'odabir' => [$data['kandidat']->id],
+                'predmet_id' => $data['predmet']->id,
+                'rok_id' => $rok->id,
+                'profesor_id' => $profesor->id,
+                'datum' => now()->toDateString(),
+                'datum2' => null,
+                'tipPrijave_id' => 1,
+                'withZapisnik' => false,
+            ]);
+        } finally {
+            PrijavaIspita::flushEventListeners();
+            PrijavaIspita::setEventDispatcher($dispatcher);
+        }
+
+        $this->assertCount(1, $result['errorArray']);
+    }
 }

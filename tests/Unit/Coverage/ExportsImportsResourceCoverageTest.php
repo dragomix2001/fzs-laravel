@@ -9,10 +9,14 @@ use App\Exports\StudentiExport;
 use App\Http\Resources\KandidatResource;
 use App\Imports\KandidatiImport;
 use App\Models\Kandidat;
+use App\Models\PolozeniIspiti;
+use App\Models\PredmetProgram;
+use App\Models\SkolskaGodUpisa;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
@@ -52,10 +56,37 @@ class ExportsImportsResourceCoverageTest extends TestCase
 
     public function test_polozeni_ispiti_export_collection(): void
     {
+        $kandidat = Kandidat::factory()->create([
+            'imeKandidata' => 'Pera',
+            'prezimeKandidata' => 'Peric',
+            'brojIndeksa' => 'RA-1/2024',
+        ]);
+        $predmetProgram = PredmetProgram::factory()->create();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+        PolozeniIspiti::create([
+            'prijava_id' => 1,
+            'zapisnik_id' => 1,
+            'kandidat_id' => $kandidat->id,
+            'predmet_id' => $predmetProgram->id,
+            'ocenaPismeni' => 8,
+            'ocenaUsmeni' => 9,
+            'konacnaOcena' => 9,
+            'brojBodova' => 90,
+            'statusIspita' => 1,
+            'odluka_id' => 1,
+            'indikatorAktivan' => 1,
+        ]);
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
         $export = new PolozeniIspitiExport;
-        // No records – returns empty mapped collection
         $collection = $export->collection();
+
         $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertCount(1, $collection);
+        $this->assertSame(9, $collection->first()['ocena']);
     }
 
     public function test_spisak_kandidata_export_headings(): void
@@ -124,20 +155,28 @@ class ExportsImportsResourceCoverageTest extends TestCase
     public function test_kandidat_resource_to_array(): void
     {
         $kandidat = (new Kandidat)->forceFill([
+            'id' => 1,
             'imeKandidata' => 'Ana',
             'prezimeKandidata' => 'Anic',
+            'brojIndeksa' => 'RA-2/2024',
             'email' => 'ana@test.com',
-            'kontaktTelefon' => '0601111111',
+            'telefon' => '0601111111',
             'datumRodjenja' => '1995-05-05',
             'jmbg' => '0505995710111',
-            'adresaStanovanja' => 'Adresa 1',
+            'adresa' => 'Adresa 1',
             'statusUpisa_id' => 1,
         ]);
+        $kandidat->setRelation('program', (object) ['id' => 5, 'naziv' => 'Test Program']);
+        $kandidat->setRelation('godinaUpisa', (new SkolskaGodUpisa)->forceFill(['id' => 7, 'naziv' => '2024/2025']));
+
         $resource = new KandidatResource($kandidat);
         $request = Request::create('/');
         $array = $resource->toArray($request);
+
         $this->assertIsArray($array);
         $this->assertArrayHasKey('ime', $array);
         $this->assertSame('Ana', $array['ime']);
+        $this->assertSame('Test Program', $array['studijski_program']['naziv']);
+        $this->assertSame('2024/2025', $array['godina_upisa']['naziv']);
     }
 }

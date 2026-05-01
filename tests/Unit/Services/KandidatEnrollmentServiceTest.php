@@ -35,19 +35,15 @@ class KandidatEnrollmentServiceTest extends TestCase
         parent::setUp();
 
         // Insert required FK rows via raw queries to bypass Eloquent guards
-        if (! DB::table('tip_studija')->find(1)) {
-            DB::table('tip_studija')->insert([
-                ['id' => 1, 'naziv' => 'Osnovne akademske studije', 'skrNaziv' => 'OAS', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 2, 'naziv' => 'Master akademske studije', 'skrNaziv' => 'MAS', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 3, 'naziv' => 'Doktorske akademske studije', 'skrNaziv' => 'DAS', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ]);
-        }
-        if (! DB::table('status_studiranja')->find(1)) {
-            DB::table('status_studiranja')->insert([
-                ['id' => 1, 'naziv' => 'upis u toku', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 2, 'naziv' => 'upis završen', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ]);
-        }
+        DB::table('tip_studija')->insertOrIgnore([
+            ['id' => 1, 'naziv' => 'Osnovne akademske studije', 'skrNaziv' => 'OAS', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'naziv' => 'Master akademske studije', 'skrNaziv' => 'MAS', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'naziv' => 'Doktorske akademske studije', 'skrNaziv' => 'DAS', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
+        ]);
+        DB::table('status_studiranja')->insertOrIgnore([
+            ['id' => 1, 'naziv' => 'upis u toku', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'naziv' => 'upis završen', 'indikatorAktivan' => 1, 'created_at' => now(), 'updated_at' => now()],
+        ]);
 
         $this->upisService = Mockery::mock(UpisService::class);
         $this->service = new KandidatEnrollmentService($this->upisService);
@@ -204,6 +200,21 @@ class KandidatEnrollmentServiceTest extends TestCase
     }
 
     #[Test]
+    public function upis_kandidata_tip_studija_2_returns_failure_when_upis_fails(): void
+    {
+        $kandidat = $this->makeKandidat(2);
+
+        $this->upisService->shouldReceive('registrujKandidata')->once()->with($kandidat->id);
+        $this->upisService->shouldReceive('upisiGodinu')->once()->andReturn(false);
+        $this->upisService->shouldReceive('generisiBrojIndeksa')->never();
+
+        $result = $this->service->upisKandidata($kandidat->id);
+
+        $this->assertFalse($result['success']);
+        $this->assertEquals(2, $result['tipStudija_id']);
+    }
+
+    #[Test]
     public function upis_kandidata_tip_studija_3_calls_generisi_broj_indeksa(): void
     {
         $kandidat = $this->makeKandidat(3);
@@ -215,6 +226,21 @@ class KandidatEnrollmentServiceTest extends TestCase
         $result = $this->service->upisKandidata($kandidat->id);
 
         $this->assertTrue($result['success']);
+        $this->assertEquals(3, $result['tipStudija_id']);
+    }
+
+    #[Test]
+    public function upis_kandidata_tip_studija_3_returns_failure_when_upis_fails(): void
+    {
+        $kandidat = $this->makeKandidat(3);
+
+        $this->upisService->shouldReceive('registrujKandidata')->once()->with($kandidat->id);
+        $this->upisService->shouldReceive('upisiGodinu')->once()->andReturn(false);
+        $this->upisService->shouldReceive('generisiBrojIndeksa')->never();
+
+        $result = $this->service->upisKandidata($kandidat->id);
+
+        $this->assertFalse($result['success']);
         $this->assertEquals(3, $result['tipStudija_id']);
     }
 

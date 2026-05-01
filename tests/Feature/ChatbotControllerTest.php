@@ -87,6 +87,27 @@ class ChatbotControllerTest extends TestCase
         ]);
     }
 
+    public function test_chat_returns_null_usage_when_service_does_not_provide_it(): void
+    {
+        $this->mock(ChatbotService::class, function ($mock) {
+            $mock->shouldReceive('chat')
+                ->once()
+                ->andReturn([
+                    'success' => true,
+                    'message' => 'Response without usage',
+                ]);
+        });
+
+        $user = $this->authenticatedUser();
+
+        $response = $this->actingAs($user)->postJson(route('chatbot.chat'), [
+            'message' => 'Test',
+        ]);
+
+        $response->assertOk();
+        $response->assertJsonPath('usage', null);
+    }
+
     public function test_chat_stores_conversation_history_in_session(): void
     {
         $this->mock(ChatbotService::class, function ($mock) {
@@ -263,6 +284,29 @@ class ChatbotControllerTest extends TestCase
 
         $this->actingAs($user)->postJson(route('chatbot.chat'), [
             'message' => 'New message',
+        ]);
+
+        $history = Session::get('chatbot_history');
+        $this->assertLessThanOrEqual(10, count($history));
+    }
+
+    public function test_quick_question_trims_history_to_last_10_messages(): void
+    {
+        Session::put('chatbot_history', array_fill(0, 10, ['role' => 'user', 'content' => 'old']));
+
+        $this->mock(ChatbotService::class, function ($mock) {
+            $mock->shouldReceive('chat')
+                ->once()
+                ->andReturn([
+                    'success' => true,
+                    'message' => 'Trimmed response',
+                ]);
+        });
+
+        $user = $this->authenticatedUser();
+
+        $this->actingAs($user)->postJson(route('chatbot.quick'), [
+            'question' => 'Question',
         ]);
 
         $history = Session::get('chatbot_history');

@@ -65,12 +65,14 @@ class ProfesorControllerTest extends TestCase
             'indikatorAktivan' => 1,
         ]);
 
-        $this->tipStudija = TipStudija::factory()->create([
-            'id' => 1,
-            'naziv' => 'Osnovne akademske studije',
-            'skrNaziv' => 'OAS',
-            'indikatorAktivan' => 1,
-        ]);
+        $this->tipStudija = TipStudija::query()->firstOrCreate(
+            ['id' => 1],
+            [
+                'naziv' => 'Osnovne akademske studije',
+                'skrNaziv' => 'OAS',
+                'indikatorAktivan' => 1,
+            ]
+        );
 
         $this->program = StudijskiProgram::factory()->create([
             'tipStudija_id' => $this->tipStudija->id,
@@ -226,6 +228,27 @@ class ProfesorControllerTest extends TestCase
             'kabinet' => 'B2',
             'mail' => 'marko.markovic@test.com',
             'indikatorAktivan' => 0,
+        ]);
+    }
+
+    public function test_update_sets_active_flag_when_checkbox_value_is_on(): void
+    {
+        $response = $this->patch('/profesor/'.$this->profesor->id, [
+            'jmbg' => '8888888888888',
+            'ime' => 'Aktivni',
+            'prezime' => 'Profesor',
+            'telefon' => '060000000',
+            'zvanje' => 'Profesor',
+            'kabinet' => 'C3',
+            'mail' => 'aktivni.profesor@test.com',
+            'status_id' => $this->statusProfesora->id,
+            'indikatorAktivan' => 'on',
+        ]);
+
+        $response->assertRedirect('/profesor');
+        $this->assertDatabaseHas('profesor', [
+            'id' => $this->profesor->id,
+            'indikatorAktivan' => 1,
         ]);
     }
 

@@ -15,6 +15,8 @@ use App\Http\Requests\UpdateDiplomskiPolaganjeRequest;
 use App\Http\Requests\UpdateDiplomskiTemaRequest;
 use App\Http\Requests\UpdateKandidatRequest;
 use App\Http\Requests\UpdateMasterKandidatRequest;
+use App\Models\Kandidat;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
@@ -22,6 +24,8 @@ use Tests\TestCase;
  */
 class FormRequestCoverageTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function test_import_file_request(): void
     {
         $req = new ImportFileRequest;
@@ -35,6 +39,27 @@ class FormRequestCoverageTest extends TestCase
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
+    }
+
+    public function test_store_kandidat_request_page_one_rules(): void
+    {
+        $req = new StoreKandidatRequest;
+        $req->merge(['page' => 1]);
+
+        $rules = $req->rules();
+
+        $this->assertArrayHasKey('JMBG', $rules);
+    }
+
+    public function test_store_kandidat_request_page_two_rules(): void
+    {
+        $req = new StoreKandidatRequest;
+        $req->merge(['page' => 2]);
+
+        $rules = $req->rules();
+
+        $this->assertArrayHasKey('documentUploadsPrva.*', $rules);
+        $this->assertArrayHasKey('documentUploadsDruga.*', $rules);
     }
 
     public function test_store_master_kandidat_request(): void
@@ -65,6 +90,7 @@ class FormRequestCoverageTest extends TestCase
         $req = new StoreZapisnikRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
+        $this->assertIsArray($req->messages());
     }
 
     public function test_update_diplomski_odbrana_request(): void
@@ -99,12 +125,58 @@ class FormRequestCoverageTest extends TestCase
         $this->assertIsArray($req->messages());
     }
 
+    public function test_update_kandidat_request_adds_unique_rule_when_index_changes(): void
+    {
+        $kandidat = Kandidat::factory()->create([
+            'brojIndeksa' => 'OLD-001/2024',
+        ]);
+
+        $req = new UpdateKandidatRequest;
+        $req->setRouteResolver(static fn () => new class($kandidat->id)
+        {
+            public function __construct(private int $id) {}
+
+            public function parameter(string $key): ?int
+            {
+                return $key === 'id' ? $this->id : null;
+            }
+        });
+        $req->merge(['brojIndeksa' => 'NEW-001/2024']);
+
+        $rules = $req->rules();
+
+        $this->assertArrayHasKey('brojIndeksa', $rules);
+    }
+
     public function test_update_master_kandidat_request(): void
     {
         $req = new UpdateMasterKandidatRequest;
         $this->assertTrue($req->authorize());
         $this->assertIsArray($req->rules());
         $this->assertIsArray($req->messages());
+    }
+
+    public function test_update_master_kandidat_request_adds_unique_rule_when_index_changes(): void
+    {
+        $kandidat = Kandidat::factory()->create([
+            'brojIndeksa' => 'OLD-M-001/2024',
+        ]);
+
+        $req = new UpdateMasterKandidatRequest;
+        $req->setRouteResolver(static fn () => new class($kandidat->id)
+        {
+            public function __construct(private int $id) {}
+
+            public function parameter(string $key): ?int
+            {
+                return $key === 'id' ? $this->id : null;
+            }
+        });
+        $req->merge(['brojIndeksa' => 'NEW-M-001/2024']);
+
+        $rules = $req->rules();
+
+        $this->assertArrayHasKey('brojIndeksa', $rules);
     }
 
     public function test_api_store_kandidat_request(): void

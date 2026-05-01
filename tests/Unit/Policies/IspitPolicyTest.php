@@ -170,6 +170,22 @@ class IspitPolicyTest extends TestCase
         $this->assertFalse($this->policy->update($user, $zapisnik));
     }
 
+    public function test_update_denies_non_admin_non_professor_role(): void
+    {
+        $user = $this->makeUser('assistant');
+        $zapisnik = $this->makeZapisnik(1);
+
+        $this->assertFalse($this->policy->update($user, $zapisnik));
+    }
+
+    public function test_update_denies_professor_without_profesor_record(): void
+    {
+        $user = $this->makeUser('professor');
+        $zapisnik = $this->makeZapisnik(1);
+
+        $this->assertFalse($this->policy->update($user, $zapisnik));
+    }
+
     // =========================================================================
     // delete
     // =========================================================================
@@ -226,6 +242,14 @@ class IspitPolicyTest extends TestCase
 
         $user = $this->makeUser('professor', $profesor->mail);
         $zapisnik = $this->makeZapisnik($profesor->id + 100);
+
+        $this->assertFalse($this->policy->arhiviraj($user, $zapisnik));
+    }
+
+    public function test_arhiviraj_denies_professor_without_profesor_record(): void
+    {
+        $user = $this->makeUser('professor');
+        $zapisnik = $this->makeZapisnik(1);
 
         $this->assertFalse($this->policy->arhiviraj($user, $zapisnik));
     }

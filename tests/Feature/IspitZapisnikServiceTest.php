@@ -157,6 +157,18 @@ class IspitZapisnikServiceTest extends TestCase
         $this->assertEquals(1, $result['profesori']->count());
     }
 
+    public function test_get_zapisnik_predmet_data_falls_back_to_all_profesori_when_none_match(): void
+    {
+        $fixtures = $this->buildZapisnikFixtures();
+        Profesor::factory()->create();
+
+        PrijavaIspita::where('id', $fixtures['prijava']->id)->update(['profesor_id' => null]);
+
+        $result = $this->ispitZapisnikService->getZapisnikPredmetData($fixtures['rok']->id);
+
+        $this->assertGreaterThanOrEqual(1, $result['profesori']->count());
+    }
+
     public function test_get_zapisnik_studenti_returns_empty_message_when_no_students(): void
     {
         $predmet = Predmet::factory()->create();

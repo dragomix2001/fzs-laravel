@@ -37,12 +37,14 @@ class PredictionControllerTest extends TestCase
 
         $this->seedLegacyLookups();
 
-        $tipStudija = TipStudija::factory()->create([
-            'id' => 1,
-            'naziv' => 'Osnovne akademske studije',
-            'skrNaziv' => 'OAS',
-            'indikatorAktivan' => 1,
-        ]);
+        $tipStudija = TipStudija::query()->firstOrCreate(
+            ['id' => 1],
+            [
+                'naziv' => 'Osnovne akademske studije',
+                'skrNaziv' => 'OAS',
+                'indikatorAktivan' => 1,
+            ]
+        );
 
         $program = StudijskiProgram::factory()->create([
             'tipStudija_id' => $tipStudija->id,
@@ -100,6 +102,65 @@ class PredictionControllerTest extends TestCase
         $response->assertSessionHas('error', 'Prediction unavailable');
     }
 
+    public function test_index_returns_prediction_view_with_students(): void
+    {
+        $this->mockPredictionService();
+
+        $response = $this->get('/prediction');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('prediction.index');
+        $response->assertViewHas('students');
+    }
+
+    public function test_student_prediction_returns_view_when_service_succeeds(): void
+    {
+        $payload = [
+            'student' => [
+                'ime' => 'Student',
+                'prezime' => 'Test',
+            ],
+            'risk_level' => [
+                'color' => 'success',
+                'label' => 'Nizak rizik',
+                'score' => 15,
+                'factors' => [],
+            ],
+            'prediction' => [
+                'graduation_probability' => 85,
+                'estimated_remaining_semesters' => 3,
+                'success_factors' => ['Kontinuitet'],
+            ],
+            'statistics' => [
+                'pass_rate' => 80,
+                'passed_exams' => 8,
+                'total_exams' => 10,
+                'failed_exams' => 2,
+                'average_grade' => 8.5,
+                'recent_pass_rate' => 75,
+            ],
+            'recommendations' => [
+                [
+                    'priority' => 'low',
+                    'action' => 'Nastaviti tempom',
+                    'reason' => 'Rezultati su stabilni',
+                ],
+            ],
+        ];
+
+        $this->mockPredictionService()
+            ->shouldReceive('predictStudentSuccess')
+            ->once()
+            ->with($this->student->id)
+            ->andReturn($payload);
+
+        $response = $this->get('/prediction/student/'.$this->student->id);
+
+        $response->assertStatus(200);
+        $response->assertViewIs('prediction.student');
+        $response->assertViewHas('prediction', $payload);
+    }
+
     public function test_class_statistics_redirects_back_with_error_when_service_fails(): void
     {
         $this->mockPredictionService()
@@ -111,6 +172,40 @@ class PredictionControllerTest extends TestCase
 
         $response->assertRedirect('/prediction');
         $response->assertSessionHas('error', 'Statistics unavailable');
+    }
+
+    public function test_class_statistics_returns_view_when_service_succeeds(): void
+    {
+        $payload = [
+            'total_students' => 1,
+            'overall_pass_rate' => 100.0,
+            'exam_statistics' => [
+                'total_passed' => 5,
+                'average_grade' => 9.4,
+                'grade_distribution' => [
+                    'excellent' => 3,
+                    'very_good' => 1,
+                    'good' => 1,
+                    'sufficient' => 0,
+                ],
+            ],
+            'risk_distribution' => [
+                'high' => 0,
+                'medium' => 0,
+                'low' => 1,
+            ],
+        ];
+
+        $this->mockPredictionService()
+            ->shouldReceive('getClassStatistics')
+            ->once()
+            ->andReturn($payload);
+
+        $response = $this->get('/prediction/statistics');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('prediction.statistics');
+        $response->assertViewHas('statistics', $payload);
     }
 
     public function test_api_prediction_returns_not_found_when_service_reports_error(): void
@@ -159,6 +254,28 @@ class PredictionControllerTest extends TestCase
         Sanctum::actingAs($this->user);
 
         $response = $this->getJson('/api/v1/prediction/statistics');
+
+        $response->assertStatus(200);
+        $response->assertExactJson($payload);
+    }
+
+    public function test_web_api_student_prediction_endpoint_returns_payload(): void
+    {
+        $payload = [
+            'student' => [
+                'id' => $this->student->id,
+                'ime' => 'Prediction',
+                'prezime' => 'Student',
+            ],
+        ];
+
+        $this->mockPredictionService()
+            ->shouldReceive('predictStudentSuccess')
+            ->once()
+            ->with($this->student->id)
+            ->andReturn($payload);
+
+        $response = $this->getJson('/api/prediction/student/'.$this->student->id);
 
         $response->assertStatus(200);
         $response->assertExactJson($payload);
