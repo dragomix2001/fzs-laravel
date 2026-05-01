@@ -5,7 +5,9 @@ namespace Tests;
 use Database\Seeders\StatusGodineTableSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -17,25 +19,20 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        // Buffer output to suppress PDF and other binary data during tests
-        ob_start();
-
-        // DatabaseTransactions tests need tables to exist (they just wrap in a transaction).
-        // RefreshDatabase tests handle their own migrations via the trait.
-        // Only tests with NO database trait need manual migration here.
+        // Ensure DB-backed tests that do not use RefreshDatabase always run
+        // against a fully migrated, seeded schema.
         if (! $this->usesRefreshDatabase() && ! self::$databasePrepared) {
-            Artisan::call('migrate', ['--seed' => true]);
+            Artisan::call('migrate:fresh', [
+                '--seed' => true,
+                '--force' => true,
+            ]);
             self::$databasePrepared = true;
         }
 
-        $this->seed(StatusGodineTableSeeder::class);
-    }
-
-    protected function tearDown(): void
-    {
-        // Clear output buffer to discard any buffered output (PDFs, etc.)
-        ob_end_clean();
-        parent::tearDown();
+        // Keep FK prerequisites stable for tests/factories that assume status_godine id=1 exists.
+        if (Schema::hasTable('status_godine') && ! DB::table('status_godine')->where('id', 1)->exists()) {
+            $this->seed(StatusGodineTableSeeder::class);
+        }
     }
 
     private function usesRefreshDatabase(): bool

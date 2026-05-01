@@ -664,356 +664,61 @@ class PrijavaServiceTest extends TestCase
     }
 
     // =========================================================================
-    // Diplomski Tema CRUD
+    // Diplomski status on student overview (current service API)
     // =========================================================================
 
-    public function test_get_diplomski_tema_data_returns_correct_keys(): void
-    {
-        $data = $this->createKandidatWithProgram();
-
-        $result = $this->service->getDiplomskiTemaData($data['kandidat']->id);
-
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('kandidat', $result);
-        $this->assertArrayHasKey('profesor', $result);
-        $this->assertArrayHasKey('predmeti', $result);
-    }
-
-    public function test_store_diplomski_tema_creates_record(): void
+    public function test_get_sve_prijave_za_studenta_returns_existing_diplomski_records(): void
     {
         $data = $this->createKandidatWithProgram();
         $profesor = Profesor::factory()->create();
+        $rok = AktivniIspitniRokovi::factory()->create();
 
-        $tema = $this->service->storeDiplomskiTema([
+        $tema = DiplomskiPrijavaTeme::create([
             'kandidat_id' => $data['kandidat']->id,
             'tipStudija_id' => $data['tipStudija']->id,
             'studijskiProgram_id' => $data['program']->id,
             'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Analiza sportskih performansi',
+            'nazivTeme' => 'Tema status pregled',
             'datum' => '2024-07-01',
             'profesor_id' => $profesor->id,
-            'indikatorOdobreno' => 0,
+            'indikatorOdobreno' => 1,
         ]);
 
-        $this->assertInstanceOf(DiplomskiPrijavaTeme::class, $tema);
-        $this->assertTrue($tema->exists);
-        $this->assertDatabaseHas('diplomski_prijava_teme', [
-            'kandidat_id' => $data['kandidat']->id,
-            'nazivTeme' => 'Analiza sportskih performansi',
-        ]);
-    }
-
-    public function test_get_edit_diplomski_tema_data_returns_correct_keys(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-
-        DiplomskiPrijavaTeme::create([
+        $odbrana = DiplomskiPrijavaOdbrane::create([
             'kandidat_id' => $data['kandidat']->id,
             'tipStudija_id' => $data['tipStudija']->id,
             'studijskiProgram_id' => $data['program']->id,
             'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Test tema',
-            'datum' => '2024-07-01',
-            'profesor_id' => $profesor->id,
-            'indikatorOdobreno' => 0,
+            'nazivTeme' => 'Odbrana status pregled',
+            'datumPrijave' => '2024-08-01',
+            'datumOdbrane' => '2024-09-01',
+            'indikatorOdobreno' => 1,
+            'temu_odobrio_profesor_id' => $profesor->id,
+            'odbranu_odobrio_profesor_id' => $profesor->id,
         ]);
 
-        $result = $this->service->getEditDiplomskiTemaData($data['kandidat']->id);
+        $polaganje = DiplomskiPolaganje::create([
+            'kandidat_id' => $data['kandidat']->id,
+            'tipStudija_id' => $data['tipStudija']->id,
+            'studijskiProgram_id' => $data['program']->id,
+            'predmet_id' => $data['predmetProgram']->id,
+            'nazivTeme' => 'Polaganje status pregled',
+            'datum' => '2024-10-01',
+            'vreme' => '10:00',
+            'profesor_id' => $profesor->id,
+            'profesor_id_predsednik' => $profesor->id,
+            'profesor_id_clan' => $profesor->id,
+            'rok_id' => $rok->id,
+        ]);
 
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('kandidat', $result);
-        $this->assertArrayHasKey('profesor', $result);
-        $this->assertArrayHasKey('predmeti', $result);
-        $this->assertArrayHasKey('diplomskiRadTema', $result);
+        $result = $this->service->getSvePrijaveZaStudenta($data['kandidat']->id);
+
         $this->assertNotNull($result['diplomskiRadTema']);
-    }
-
-    public function test_update_diplomski_tema_updates_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-
-        $tema = DiplomskiPrijavaTeme::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Stara tema',
-            'datum' => '2024-07-01',
-            'profesor_id' => $profesor->id,
-            'indikatorOdobreno' => 0,
-        ]);
-
-        $updated = $this->service->updateDiplomskiTema($tema->id, [
-            'nazivTeme' => 'Nova tema',
-        ], true);
-
-        $this->assertEquals('Nova tema', $updated->nazivTeme);
-        $this->assertEquals(1, $updated->indikatorOdobreno);
-    }
-
-    public function test_delete_diplomski_tema_removes_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-
-        $tema = DiplomskiPrijavaTeme::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Tema za brisanje',
-            'datum' => '2024-07-01',
-            'profesor_id' => $profesor->id,
-            'indikatorOdobreno' => 0,
-        ]);
-
-        $kandidat = $this->service->deleteDiplomskiTema($data['kandidat']->id);
-
-        $this->assertInstanceOf(Kandidat::class, $kandidat);
-        $this->assertNull(DiplomskiPrijavaTeme::find($tema->id));
-    }
-
-    // =========================================================================
-    // Diplomski Odbrana CRUD
-    // =========================================================================
-
-    public function test_get_diplomski_odbrana_data_returns_correct_keys(): void
-    {
-        $data = $this->createKandidatWithProgram();
-
-        $result = $this->service->getDiplomskiOdbranaData($data['kandidat']->id);
-
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('kandidat', $result);
-        $this->assertArrayHasKey('profesor', $result);
-        $this->assertArrayHasKey('predmeti', $result);
-        $this->assertArrayHasKey('diplomskiRadTema', $result);
-    }
-
-    public function test_store_diplomski_odbrana_creates_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-
-        $odbrana = $this->service->storeDiplomskiOdbrana([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Odbrana tema',
-            'datumPrijave' => '2024-08-01',
-            'datumOdbrane' => '2024-09-01',
-            'indikatorOdobreno' => 0,
-            'temu_odobrio_profesor_id' => $profesor->id,
-            'odbranu_odobrio_profesor_id' => $profesor->id,
-        ]);
-
-        $this->assertInstanceOf(DiplomskiPrijavaOdbrane::class, $odbrana);
-        $this->assertTrue($odbrana->exists);
-    }
-
-    public function test_get_edit_diplomski_odbrana_data_returns_correct_keys(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-
-        DiplomskiPrijavaOdbrane::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Test',
-            'datumPrijave' => '2024-08-01',
-            'datumOdbrane' => '2024-09-01',
-            'indikatorOdobreno' => 0,
-            'temu_odobrio_profesor_id' => $profesor->id,
-            'odbranu_odobrio_profesor_id' => $profesor->id,
-        ]);
-
-        $result = $this->service->getEditDiplomskiOdbranaData($data['kandidat']->id);
-
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('diplomskiRadTema', $result);
-        $this->assertArrayHasKey('diplomskiRadOdbrana', $result);
         $this->assertNotNull($result['diplomskiRadOdbrana']);
-    }
-
-    public function test_update_diplomski_odbrana_updates_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-
-        $odbrana = DiplomskiPrijavaOdbrane::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Stara odbrana',
-            'datumPrijave' => '2024-08-01',
-            'datumOdbrane' => '2024-09-01',
-            'indikatorOdobreno' => 0,
-            'temu_odobrio_profesor_id' => $profesor->id,
-            'odbranu_odobrio_profesor_id' => $profesor->id,
-        ]);
-
-        $updated = $this->service->updateDiplomskiOdbrana($odbrana->id, [
-            'nazivTeme' => 'Nova odbrana',
-        ], true);
-
-        $this->assertEquals('Nova odbrana', $updated->nazivTeme);
-        $this->assertEquals(1, $updated->indikatorOdobreno);
-    }
-
-    public function test_delete_diplomski_odbrana_removes_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-
-        $odbrana = DiplomskiPrijavaOdbrane::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Za brisanje',
-            'datumPrijave' => '2024-08-01',
-            'datumOdbrane' => '2024-09-01',
-            'indikatorOdobreno' => 0,
-            'temu_odobrio_profesor_id' => $profesor->id,
-            'odbranu_odobrio_profesor_id' => $profesor->id,
-        ]);
-
-        $kandidat = $this->service->deleteDiplomskiOdbrana($data['kandidat']->id);
-
-        $this->assertInstanceOf(Kandidat::class, $kandidat);
-        $this->assertNull(DiplomskiPrijavaOdbrane::find($odbrana->id));
-    }
-
-    // =========================================================================
-    // Diplomski Polaganje CRUD
-    // =========================================================================
-
-    public function test_get_diplomski_polaganje_data_returns_correct_keys(): void
-    {
-        $data = $this->createKandidatWithProgram();
-
-        $result = $this->service->getDiplomskiPolaganjeData($data['kandidat']->id);
-
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('kandidat', $result);
-        $this->assertArrayHasKey('profesor', $result);
-        $this->assertArrayHasKey('predmeti', $result);
-        $this->assertArrayHasKey('diplomskiRadTema', $result);
-        $this->assertArrayHasKey('ispitniRok', $result);
-    }
-
-    public function test_store_diplomski_polaganje_creates_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-        $rok = AktivniIspitniRokovi::factory()->create();
-
-        $polaganje = $this->service->storeDiplomskiPolaganje([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Polaganje tema',
-            'datum' => '2024-10-01',
-            'vreme' => '10:00',
-            'profesor_id' => $profesor->id,
-            'profesor_id_predsednik' => $profesor->id,
-            'profesor_id_clan' => $profesor->id,
-            'rok_id' => $rok->id,
-        ]);
-
-        $this->assertInstanceOf(DiplomskiPolaganje::class, $polaganje);
-        $this->assertTrue($polaganje->exists);
-    }
-
-    public function test_get_edit_diplomski_polaganje_data_returns_correct_keys(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-        $rok = AktivniIspitniRokovi::factory()->create();
-
-        DiplomskiPolaganje::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Test polaganje',
-            'datum' => '2024-10-01',
-            'vreme' => '10:00',
-            'profesor_id' => $profesor->id,
-            'profesor_id_predsednik' => $profesor->id,
-            'profesor_id_clan' => $profesor->id,
-            'rok_id' => $rok->id,
-        ]);
-
-        $result = $this->service->getEditDiplomskiPolaganjeData($data['kandidat']->id);
-
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('diplomskiRadTema', $result);
-        $this->assertArrayHasKey('diplomskiRadPolaganje', $result);
-        $this->assertArrayHasKey('ispitniRok', $result);
         $this->assertNotNull($result['diplomskiRadPolaganje']);
-    }
-
-    public function test_update_diplomski_polaganje_updates_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-        $rok = AktivniIspitniRokovi::factory()->create();
-
-        $polaganje = DiplomskiPolaganje::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Staro polaganje',
-            'datum' => '2024-10-01',
-            'vreme' => '10:00',
-            'profesor_id' => $profesor->id,
-            'profesor_id_predsednik' => $profesor->id,
-            'profesor_id_clan' => $profesor->id,
-            'rok_id' => $rok->id,
-        ]);
-
-        $updated = $this->service->updateDiplomskiPolaganje($polaganje->id, [
-            'nazivTeme' => 'Novo polaganje',
-            'ocena' => 9,
-        ]);
-
-        $this->assertEquals('Novo polaganje', $updated->nazivTeme);
-        $this->assertEquals(9, $updated->ocena);
-    }
-
-    public function test_delete_diplomski_polaganje_removes_record(): void
-    {
-        $data = $this->createKandidatWithProgram();
-        $profesor = Profesor::factory()->create();
-        $rok = AktivniIspitniRokovi::factory()->create();
-
-        $polaganje = DiplomskiPolaganje::create([
-            'kandidat_id' => $data['kandidat']->id,
-            'tipStudija_id' => $data['tipStudija']->id,
-            'studijskiProgram_id' => $data['program']->id,
-            'predmet_id' => $data['predmetProgram']->id,
-            'nazivTeme' => 'Za brisanje',
-            'datum' => '2024-10-01',
-            'vreme' => '10:00',
-            'profesor_id' => $profesor->id,
-            'profesor_id_predsednik' => $profesor->id,
-            'profesor_id_clan' => $profesor->id,
-            'rok_id' => $rok->id,
-        ]);
-
-        $kandidat = $this->service->deleteDiplomskiPolaganje($data['kandidat']->id);
-
-        $this->assertInstanceOf(Kandidat::class, $kandidat);
-        $this->assertNull(DiplomskiPolaganje::find($polaganje->id));
+        $this->assertEquals($tema->id, $result['diplomskiRadTema']->id);
+        $this->assertEquals($odbrana->id, $result['diplomskiRadOdbrana']->id);
+        $this->assertEquals($polaganje->id, $result['diplomskiRadPolaganje']->id);
     }
 
     // =========================================================================
