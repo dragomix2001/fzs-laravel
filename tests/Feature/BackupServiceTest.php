@@ -363,4 +363,168 @@ class BackupServiceTest extends TestCase
         // Assert
         $this->assertFalse($result);
     }
+
+    public function test_backup_database_local_host_creates_sql_file_and_uses_password_flag(): void
+    {
+        $service = new class extends BackupService
+        {
+            public function callBackupDatabase(string $path, string $filename): string
+            {
+                return $this->backupDatabase($path, $filename);
+            }
+        };
+
+        $tempDir = storage_path('app/backups/test-local-'.uniqid());
+        if (! is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+
+        $binDir = storage_path('app/backups/bin-local-'.uniqid());
+        mkdir($binDir, 0755, true);
+
+        $argsFile = $tempDir.'/mysqldump_args.txt';
+        $scriptPath = $binDir.'/mysqldump';
+        file_put_contents($scriptPath, "#!/usr/bin/env bash\nprintf '%s\n' \"$@\" > \"\$MYSQDUMP_ARGS_FILE\"\necho '-- dump'\n");
+        chmod($scriptPath, 0755);
+
+        $oldPath = getenv('PATH') ?: '';
+        putenv('PATH='.$binDir.':'.$oldPath);
+        putenv('MYSQDUMP_ARGS_FILE='.$argsFile);
+
+        config()->set('database.connections.mysql.host', '127.0.0.1');
+        config()->set('database.connections.mysql.username', 'root');
+        config()->set('database.connections.mysql.password', 'secret');
+        config()->set('database.connections.mysql.database', 'fzs_testing');
+
+        try {
+            $sqlFile = $service->callBackupDatabase($tempDir, 'legacy_local');
+
+            $this->assertFileExists($sqlFile);
+            $this->assertStringContainsString('-- dump', (string) file_get_contents($sqlFile));
+            $args = (string) file_get_contents($argsFile);
+            $this->assertStringContainsString('-uroot', $args);
+            $this->assertStringContainsString('-psecret', $args);
+            $this->assertStringContainsString('fzs_testing', $args);
+        } finally {
+            putenv('PATH='.$oldPath);
+            putenv('MYSQDUMP_ARGS_FILE');
+            @unlink($argsFile);
+            @unlink($sqlFile ?? '');
+            @rmdir($binDir);
+            @rmdir($tempDir);
+        }
+    }
+
+    public function test_backup_database_remote_host_uses_h_flag_without_password(): void
+    {
+        $service = new class extends BackupService
+        {
+            public function callBackupDatabase(string $path, string $filename): string
+            {
+                return $this->backupDatabase($path, $filename);
+            }
+        };
+
+        $tempDir = storage_path('app/backups/test-remote-'.uniqid());
+        if (! is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+
+        $binDir = storage_path('app/backups/bin-remote-'.uniqid());
+        mkdir($binDir, 0755, true);
+
+        $argsFile = $tempDir.'/mysqldump_args.txt';
+        $scriptPath = $binDir.'/mysqldump';
+        file_put_contents($scriptPath, "#!/usr/bin/env bash\nprintf '%s\n' \"$@\" > \"\$MYSQDUMP_ARGS_FILE\"\necho '-- dump'\n");
+        chmod($scriptPath, 0755);
+
+        $oldPath = getenv('PATH') ?: '';
+        putenv('PATH='.$binDir.':'.$oldPath);
+        putenv('MYSQDUMP_ARGS_FILE='.$argsFile);
+
+        config()->set('database.connections.mysql.host', 'db.internal');
+        config()->set('database.connections.mysql.username', 'root');
+        config()->set('database.connections.mysql.password', '');
+        config()->set('database.connections.mysql.database', 'fzs_testing');
+
+        try {
+            $sqlFile = $service->callBackupDatabase($tempDir, 'legacy_remote');
+
+            $this->assertFileExists($sqlFile);
+            $args = (string) file_get_contents($argsFile);
+            $this->assertStringContainsString('-hdb.internal', $args);
+            $this->assertStringContainsString('-uroot', $args);
+            $this->assertStringNotContainsString('-p', $args);
+        } finally {
+            putenv('PATH='.$oldPath);
+            putenv('MYSQDUMP_ARGS_FILE');
+            @unlink($argsFile);
+            @unlink($sqlFile ?? '');
+            @rmdir($binDir);
+            @rmdir($tempDir);
+        }
+    }
+
+    public function test_backup_files_creates_zip_with_public_and_storage_prefixes(): void
+    {
+        $service = new class extends BackupService
+        {
+            public function callBackupFiles(string $path, string $filename): string
+            {
+                return $this->backupFiles($path, $filename);
+            }
+        };
+
+        $publicProbe = public_path('legacy-coverage-public-'.uniqid().'.txt');
+        $storageProbe = storage_path('app/legacy-coverage-storage-'.uniqid().'.txt');
+        file_put_contents($publicProbe, 'public-probe');
+        file_put_contents($storageProbe, 'storage-probe');
+
+        $backupPath = storage_path('app/backups');
+        if (! is_dir($backupPath)) {
+            mkdir($backupPath, 0755, true);
+        }
+
+        try {
+            $zipPath = $service->callBackupFiles($backupPath, 'legacy_zip_'.uniqid());
+            $this->assertFileExists($zipPath);
+
+            $zip = new \ZipArchive;
+            $openResult = $zip->open($zipPath);
+            $this->assertSame(true, $openResult);
+            $this->assertNotFalse($zip->locateName('public/'.basename($publicProbe)));
+            $this->assertNotFalse($zip->locateName('storage/'.basename($storageProbe)));
+            $zip->close();
+        } finally {
+            @unlink($publicProbe);
+            @unlink($storageProbe);
+            @unlink($zipPath ?? '');
+        }
+    }
+
+    public function test_list_backups_maps_and_sorts_files_by_modified_desc(): void
+    {
+        $service = new BackupService;
+
+        $older = Mockery::mock();
+        $older->shouldReceive('getFilename')->andReturn('older.sql');
+        $older->shouldReceive('getSize')->andReturn(10);
+        $older->shouldReceive('getMTime')->andReturn(1700000000);
+
+        $newer = Mockery::mock();
+        $newer->shouldReceive('getFilename')->andReturn('newer.sql');
+        $newer->shouldReceive('getSize')->andReturn(20);
+        $newer->shouldReceive('getMTime')->andReturn(1800000000);
+
+        File::shouldReceive('exists')->once()->andReturn(true);
+        File::shouldReceive('files')->once()->andReturn([$older, $newer]);
+
+        $result = $service->listBackups();
+
+        $this->assertCount(2, $result);
+        $this->assertSame('newer.sql', $result[0]['name']);
+        $this->assertSame('older.sql', $result[1]['name']);
+        $this->assertSame(20, $result[0]['size']);
+        $this->assertArrayHasKey('modified', $result[0]);
+    }
 }
