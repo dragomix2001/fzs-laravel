@@ -399,4 +399,117 @@ class DiplomskiPrijavaServiceTest extends TestCase
         $this->assertInstanceOf(Kandidat::class, $result);
         $this->assertEquals($this->student->id, $result->id);
     }
+
+    // =========================================================================
+    // getEditDiplomskiOdbranaData
+    // =========================================================================
+
+    public function test_get_edit_diplomski_odbrana_data_returns_required_keys(): void
+    {
+        $result = $this->service->getEditDiplomskiOdbranaData($this->student->id);
+
+        $this->assertArrayHasKey('kandidat', $result);
+        $this->assertArrayHasKey('profesor', $result);
+        $this->assertArrayHasKey('predmeti', $result);
+        $this->assertArrayHasKey('diplomskiRadTema', $result);
+        $this->assertArrayHasKey('diplomskiRadOdbrana', $result);
+    }
+
+    public function test_get_edit_diplomski_odbrana_data_odbrana_is_null_when_missing(): void
+    {
+        $result = $this->service->getEditDiplomskiOdbranaData($this->student->id);
+
+        $this->assertNull($result['diplomskiRadOdbrana']);
+    }
+
+    public function test_get_edit_diplomski_odbrana_data_odbrana_populated_when_exists(): void
+    {
+        $odbrana = DiplomskiPrijavaOdbrane::create([
+            'kandidat_id' => $this->student->id,
+            'tipStudija_id' => $this->student->tipStudija_id,
+            'studijskiProgram_id' => $this->student->studijskiProgram_id,
+            'predmet_id' => $this->predmetProgram->id,
+            'nazivTeme' => 'Test tema',
+            'datumPrijave' => '2024-05-01',
+            'datumOdbrane' => '2024-06-01',
+            'indikatorOdobreno' => false,
+            'temu_odobrio_profesor_id' => $this->profesor->id,
+            'odbranu_odobrio_profesor_id' => $this->profesor->id,
+        ]);
+
+        $result = $this->service->getEditDiplomskiOdbranaData($this->student->id);
+
+        $this->assertNotNull($result['diplomskiRadOdbrana']);
+        $this->assertEquals($odbrana->id, $result['diplomskiRadOdbrana']->id);
+    }
+
+    // =========================================================================
+    // updateDiplomskiOdbrana
+    // =========================================================================
+
+    public function test_update_diplomski_odbrana_persists_changes(): void
+    {
+        $odbrana = DiplomskiPrijavaOdbrane::create([
+            'kandidat_id' => $this->student->id,
+            'tipStudija_id' => $this->student->tipStudija_id,
+            'studijskiProgram_id' => $this->student->studijskiProgram_id,
+            'predmet_id' => $this->predmetProgram->id,
+            'nazivTeme' => 'Test tema',
+            'datumPrijave' => '2024-05-01',
+            'datumOdbrane' => '2024-06-01',
+            'indikatorOdobreno' => false,
+            'temu_odobrio_profesor_id' => $this->profesor->id,
+            'odbranu_odobrio_profesor_id' => $this->profesor->id,
+        ]);
+
+        $this->service->updateDiplomskiOdbrana($odbrana->id, ['nazivTeme' => 'Updated tema'], true);
+
+        $this->assertDatabaseHas('diplomski_prijava_odbrane', [
+            'id' => $odbrana->id,
+            'nazivTeme' => 'Updated tema',
+        ]);
+    }
+
+    public function test_update_diplomski_odbrana_sets_indikator_odobren(): void
+    {
+        $odbrana = DiplomskiPrijavaOdbrane::create([
+            'kandidat_id' => $this->student->id,
+            'tipStudija_id' => $this->student->tipStudija_id,
+            'studijskiProgram_id' => $this->student->studijskiProgram_id,
+            'predmet_id' => $this->predmetProgram->id,
+            'nazivTeme' => 'Test tema',
+            'datumPrijave' => '2024-05-01',
+            'datumOdbrane' => '2024-06-01',
+            'indikatorOdobreno' => false,
+            'temu_odobrio_profesor_id' => $this->profesor->id,
+            'odbranu_odobrio_profesor_id' => $this->profesor->id,
+        ]);
+
+        $result = $this->service->updateDiplomskiOdbrana($odbrana->id, [], true);
+
+        $this->assertTrue((bool) $result->indikatorOdobreno);
+    }
+
+    // =========================================================================
+    // getEditDiplomskiPolaganjeData
+    // =========================================================================
+
+    public function test_get_edit_diplomski_polaganje_data_returns_required_keys(): void
+    {
+        $result = $this->service->getEditDiplomskiPolaganjeData($this->student->id);
+
+        $this->assertArrayHasKey('kandidat', $result);
+        $this->assertArrayHasKey('profesor', $result);
+        $this->assertArrayHasKey('predmeti', $result);
+        $this->assertArrayHasKey('diplomskiRadTema', $result);
+        $this->assertArrayHasKey('diplomskiRadPolaganje', $result);
+        $this->assertArrayHasKey('ispitniRok', $result);
+    }
+
+    public function test_get_edit_diplomski_polaganje_data_polaganje_null_when_missing(): void
+    {
+        $result = $this->service->getEditDiplomskiPolaganjeData($this->student->id);
+
+        $this->assertNull($result['diplomskiRadPolaganje']);
+    }
 }

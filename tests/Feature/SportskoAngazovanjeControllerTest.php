@@ -420,4 +420,16 @@ class SportskoAngazovanjeControllerTest extends TestCase
         $this->assertNotEmpty($sport->naziv);
         $this->assertNotNull($sport->indikatorAktivan);
     }
+
+    public function test_index_returns_view_with_kandidat_and_sports(): void
+    {
+        $kandidat = Kandidat::factory()->create();
+
+        $controller = app(\App\Http\Controllers\SportskoAngazovanjeController::class);
+        $response = $controller->index($kandidat);
+
+        $this->assertSame('sifarnici.sportskoAngazovanje ', $response->name());
+        $this->assertSame($kandidat->id, $response->getData()['kandidat']->id);
+        $this->assertArrayHasKey('sport', $response->getData());
+    }
 }

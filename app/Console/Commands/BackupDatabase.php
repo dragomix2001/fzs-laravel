@@ -40,13 +40,22 @@ class BackupDatabase extends Command
             $filename = "backup_{$timestamp}.sql";
             $filePath = "{$backupDir}/{$filename}";
 
-            // Build mysqldump command
+            // Build mysqldump command; avoid interactive password prompt when password is empty.
+            $host = config('database.connections.mysql.host');
+            $username = config('database.connections.mysql.username');
+            $password = config('database.connections.mysql.password');
+            $database = config('database.connections.mysql.database');
+
+            $passwordArg = $password !== null && $password !== ''
+                ? ' -p'.escapeshellarg($password)
+                : '';
+
             $mysqlCmd = sprintf(
-                'mysqldump -h%s -u%s -p%s %s > %s',
-                escapeshellarg(config('database.connections.mysql.host')),
-                escapeshellarg(config('database.connections.mysql.username')),
-                escapeshellarg(config('database.connections.mysql.password')),
-                escapeshellarg(config('database.connections.mysql.database')),
+                'mysqldump -h%s -u%s%s %s > %s',
+                escapeshellarg($host),
+                escapeshellarg($username),
+                $passwordArg,
+                escapeshellarg($database),
                 escapeshellarg($filePath)
             );
 
