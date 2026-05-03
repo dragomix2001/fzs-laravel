@@ -28,7 +28,7 @@ class ApiAktivnostControllerTest extends TestCase
 
     public function test_index_endpoint_with_datum_filter(): void
     {
-        $response = $this->getJson('/api/v1/aktivnost?datum=' . now()->toDateString());
+        $response = $this->getJson('/api/v1/aktivnost?datum='.now()->toDateString());
         $this->assertContains($response->getStatusCode(), [200, 500]);
     }
 
@@ -40,7 +40,7 @@ class ApiAktivnostControllerTest extends TestCase
 
     public function test_my_activities_returns_404_when_student_not_found(): void
     {
-        $user = User::factory()->create(['email' => 'noone_' . uniqid() . '@test.example']);
+        $user = User::factory()->create(['email' => 'noone_'.uniqid().'@test.example']);
 
         $controller = new AktivnostController;
         $request = Request::create('/api/v1/aktivnost/moje', 'GET');

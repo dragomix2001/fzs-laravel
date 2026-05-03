@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\SportskoAngazovanjeController;
 use App\Models\Kandidat;
 use App\Models\Sport;
 use App\Models\SportskoAngazovanje;
@@ -425,7 +426,7 @@ class SportskoAngazovanjeControllerTest extends TestCase
     {
         $kandidat = Kandidat::factory()->create();
 
-        $controller = app(\App\Http\Controllers\SportskoAngazovanjeController::class);
+        $controller = app(SportskoAngazovanjeController::class);
         $response = $controller->index($kandidat);
 
         $this->assertSame('sifarnici.sportskoAngazovanje ', $response->name());

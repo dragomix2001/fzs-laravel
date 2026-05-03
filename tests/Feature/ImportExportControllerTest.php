@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Http\Controllers\ImportExportController;
+use App\Http\Requests\ImportFileRequest;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 
@@ -81,8 +83,8 @@ class ImportExportControllerTest extends TestCase
             ->andThrow(new \Exception('Import failed'));
 
         // Create a subclass to bypass FormRequest type hint
-        $request = new \App\Http\Requests\ImportFileRequest;
-        \Illuminate\Support\Facades\App::instance(\App\Http\Requests\ImportFileRequest::class, $request);
+        $request = new ImportFileRequest;
+        App::instance(ImportFileRequest::class, $request);
 
         // The import method wraps in try-catch - test via controller directly
         // We mock Excel import to throw to cover the catch block
@@ -90,7 +92,7 @@ class ImportExportControllerTest extends TestCase
 
         try {
             // Directly create an ImportFileRequest instance using app container
-            $fakeRequest = $this->app->make(\App\Http\Requests\ImportFileRequest::class);
+            $fakeRequest = $this->app->make(ImportFileRequest::class);
             $response = $controller->import($fakeRequest);
             $this->assertNotNull($response);
         } catch (\Throwable $e) {

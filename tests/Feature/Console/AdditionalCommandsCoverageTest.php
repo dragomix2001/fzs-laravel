@@ -7,7 +7,7 @@ namespace Tests\Feature\Console;
 use App\Models\ZapisnikOPolaganjuIspita;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Console\Input\ArrayInput;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\TestCase;
 
@@ -67,7 +67,7 @@ class AdditionalCommandsCoverageTest extends TestCase
         // Insert an old notification directly
         $oldDate = now()->subDays(100)->format('Y-m-d H:i:s');
         DB::table('notifications')->insert([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\\Notifications\\TestNotification',
             'notifiable_type' => 'App\\Models\\User',
             'notifiable_id' => 1,

@@ -8,6 +8,7 @@ use App\Console\Commands\QueueHealthCheck;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\TestCase;
@@ -54,7 +55,7 @@ class SystemCommandsCoverageTest extends TestCase
 
         for ($i = 0; $i < 3; $i++) {
             DB::table('failed_jobs')->insert([
-                'uuid' => (string) \Illuminate\Support\Str::uuid(),
+                'uuid' => (string) Str::uuid(),
                 'connection' => 'database',
                 'queue' => 'default',
                 'payload' => '{}',
@@ -80,7 +81,7 @@ class SystemCommandsCoverageTest extends TestCase
 
         for ($i = 0; $i < 5; $i++) {
             DB::table('failed_jobs')->insert([
-                'uuid' => (string) \Illuminate\Support\Str::uuid(),
+                'uuid' => (string) Str::uuid(),
                 'connection' => 'database',
                 'queue' => 'default',
                 'payload' => '{}',
