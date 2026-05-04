@@ -14,9 +14,11 @@ use App\Models\StatusGodine;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Services\DiplomskiRadService;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\RedirectResponse;
 use Tests\TestCase;
+use View;
 
 class DiplomskiRadServiceTest extends TestCase
 {
@@ -55,21 +57,23 @@ class DiplomskiRadServiceTest extends TestCase
     public function test_diplomski_unos_returns_empty_profesor_list_when_none_exist()
     {
         $student = Kandidat::factory()->create();
+        $baselineCount = Profesor::count();
 
         $result = $this->service->diplomskiUnos($student);
 
         $this->assertIsObject($result);
-        $this->assertCount(0, $result->getData()['profesor']);
+        $this->assertCount($baselineCount, $result->getData()['profesor']);
     }
 
     public function test_diplomski_unos_passes_all_profesori_regardless_of_count()
     {
         $student = Kandidat::factory()->create();
+        $baselineCount = Profesor::count();
         Profesor::factory()->count(10)->create();
 
         $result = $this->service->diplomskiUnos($student);
 
-        $this->assertCount(10, $result->getData()['profesor']);
+        $this->assertCount($baselineCount + 10, $result->getData()['profesor']);
     }
 
     // =========================================================================
@@ -273,6 +277,181 @@ class DiplomskiRadServiceTest extends TestCase
 
         $polaganje = DiplomskiPolaganje::where('kandidat_id', $student->id)->first();
         $this->assertNotNull($polaganje);
+    }
+
+    public function test_komisija_stampa_returns_null_when_pdf_is_generated()
+    {
+        $student = Kandidat::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
+        DiplomskiRad::factory()->create([
+            'kandidat_id' => $student->id,
+            'predmet_id' => $predmetProgram->id,
+        ]);
+
+        $fakeView = new class
+        {
+            public function with($key, $value)
+            {
+                return $this;
+            }
+
+            public function render()
+            {
+                return '<html>komisija</html>';
+            }
+        };
+
+        View::shouldReceive('make')
+            ->once()
+            ->with('izvestaji.komisijaStampa')
+            ->andReturn($fakeView);
+
+        $fakePdf = new class
+        {
+            public array $calls = [];
+
+            public function SetTitle($title)
+            {
+                $this->calls[] = ['SetTitle', $title];
+            }
+
+            public function AddPage()
+            {
+                $this->calls[] = ['AddPage'];
+            }
+
+            public function SetFont($family, $style, $size)
+            {
+                $this->calls[] = ['SetFont', $family, $style, $size];
+            }
+
+            public function WriteHtml($contents, $arg = null)
+            {
+                $this->calls[] = ['WriteHtml', $contents, $arg];
+            }
+
+            public function Output($filename)
+            {
+                $this->calls[] = ['Output', $filename];
+            }
+        };
+
+        $service = new class($fakePdf) extends DiplomskiRadService
+        {
+            public function __construct(private object $pdf) {}
+
+            protected function createPdf()
+            {
+                return $this->pdf;
+            }
+        };
+
+        $response = $service->komisijaStampa($student);
+
+        $this->assertNull($response);
+        $this->assertContains(['Output', 'Komisija.pdf'], $fakePdf->calls);
+    }
+
+    public function test_zapisnik_diplomski_returns_null_when_pdf_is_generated()
+    {
+        $student = Kandidat::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
+
+        DiplomskiPolaganje::factory()->create(['kandidat_id' => $student->id]);
+        DiplomskiRad::factory()->create([
+            'kandidat_id' => $student->id,
+            'predmet_id' => $predmetProgram->id,
+        ]);
+
+        $fakeView = new class
+        {
+            public function with($key, $value)
+            {
+                return $this;
+            }
+
+            public function render()
+            {
+                return '<html>zapisnik</html>';
+            }
+        };
+
+        View::shouldReceive('make')
+            ->once()
+            ->with('izvestaji.zapisnikDiplomski')
+            ->andReturn($fakeView);
+
+        $fakePdf = new class
+        {
+            public array $calls = [];
+
+            public function SetAutoPageBreak($enabled, $margin)
+            {
+                $this->calls[] = ['SetAutoPageBreak', $enabled, $margin];
+            }
+
+            public function SetTitle($title)
+            {
+                $this->calls[] = ['SetTitle', $title];
+            }
+
+            public function AddPage()
+            {
+                $this->calls[] = ['AddPage'];
+            }
+
+            public function SetFont($family, $style, $size)
+            {
+                $this->calls[] = ['SetFont', $family, $style, $size];
+            }
+
+            public function WriteHtml($contents)
+            {
+                $this->calls[] = ['WriteHtml', $contents];
+            }
+
+            public function Output($filename)
+            {
+                $this->calls[] = ['Output', $filename];
+            }
+        };
+
+        $service = new class($fakePdf) extends DiplomskiRadService
+        {
+            public function __construct(private object $pdf) {}
+
+            protected function createPdf()
+            {
+                return $this->pdf;
+            }
+        };
+
+        $response = $service->zapisnikDiplomski($student);
+
+        $this->assertNull($response);
+        $this->assertContains(['Output', 'ZapisnikDiplomski.pdf'], $fakePdf->calls);
+    }
+
+    public function test_zapisnik_diplomski_wraps_query_exception_in_runtime_exception()
+    {
+        $student = Kandidat::factory()->create();
+        $predmetProgram = PredmetProgram::factory()->create();
+
+        DiplomskiPolaganje::factory()->create(['kandidat_id' => $student->id]);
+        DiplomskiRad::factory()->create([
+            'kandidat_id' => $student->id,
+            'predmet_id' => $predmetProgram->id,
+        ]);
+
+        View::shouldReceive('make')
+            ->once()
+            ->with('izvestaji.zapisnikDiplomski')
+            ->andThrow(new QueryException('mysql', 'select 1', [], new \Exception('forced failure')));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Грешка при генерисању записника дипломског');
+
+        $this->service->zapisnikDiplomski($student);
     }
 
     // =========================================================================
