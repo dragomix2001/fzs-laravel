@@ -2,16 +2,14 @@
 
 namespace App\Exports;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Enumerable;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class SpisakKandidataExport implements FromCollection, WithHeadings
 {
-    public function __construct(
-        protected int $godina,
-    ) {}
+    public function __construct(protected int $godina) {}
 
     public function collection(): Enumerable
     {
