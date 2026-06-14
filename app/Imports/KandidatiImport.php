@@ -3,12 +3,13 @@
 namespace App\Imports;
 
 use App\Models\Kandidat;
+use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class KandidatiImport implements ToModel, WithHeadingRow
 {
-    public function model(array $row)
+    public function model(array $row): Model|array|null
     {
         return new Kandidat([
             'imeKandidata' => $row['ime'] ?? $row['imekandidata'] ?? null,

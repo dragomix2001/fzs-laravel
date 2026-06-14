@@ -3,12 +3,13 @@
 namespace App\Exports;
 
 use App\Models\PolozeniIspiti;
+use Illuminate\Support\Enumerable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class PolozeniIspitiExport implements FromCollection, WithHeadings
 {
-    public function collection()
+    public function collection(): Enumerable
     {
         return PolozeniIspiti::with(['kandidat', 'predmet'])
             ->where('indikatorAktivan', 1)

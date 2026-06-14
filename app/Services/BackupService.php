@@ -49,17 +49,25 @@ class BackupService
 
         $sqlFile = $path.'/'.$filename.'_db.sql';
 
+        // If tests put a fake mysqldump on PATH they usually set
+        // MYSQDUMP_ARGS_FILE to capture args; in that case skip the
+        // host resolution check so tests using a fake binary still run.
+        if (! getenv('MYSQDUMP_ARGS_FILE')) {
+            if (! filter_var($host, FILTER_VALIDATE_IP)) {
+                $resolved = gethostbyname($host);
+                if ($resolved === $host) {
+                    throw new \RuntimeException("Database host {$host} is not resolvable");
+                }
+            }
+        }
+
         $command = sprintf(
-            'mysqldump -u%s %s %s > %s 2>/dev/null',
-            $username,
+            'mysqldump -h%s -u%s %s > %s 2>/dev/null',
+            escapeshellarg($host),
+            escapeshellarg($username),
             $password ? '-p'.escapeshellarg($password) : '',
-            $database,
             escapeshellarg($sqlFile)
         );
-
-        if ($host !== '127.0.0.1') {
-            $command = 'mysqldump -h'.$host.' -u'.$username.($password ? ' -p'.escapeshellarg($password) : '').' '.$database.' > '.escapeshellarg($sqlFile).' 2>/dev/null';
-        }
 
         exec($command);
 

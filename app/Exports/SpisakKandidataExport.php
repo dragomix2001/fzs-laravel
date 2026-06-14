@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Enumerable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -12,7 +13,7 @@ class SpisakKandidataExport implements FromCollection, WithHeadings
         protected int $godina,
     ) {}
 
-    public function collection()
+    public function collection(): Enumerable
     {
         $statusi = ['1', '2', '4', '5', '7'];
 

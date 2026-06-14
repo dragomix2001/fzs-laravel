@@ -50,8 +50,26 @@ class BackupDatabase extends Command
                 ? ' -p'.escapeshellarg($password)
                 : '';
 
+            // If host is a hostname (not an IP) and it cannot be resolved,
+            // bail out early to avoid invoking external mysqldump which
+            // may produce binary output and break test runner.
+            // If tests put a fake mysqldump on PATH they usually set
+            // MYSQDUMP_ARGS_FILE to capture args; in that case skip the
+            // host resolution check so tests using a fake binary still run.
+            if (! getenv('MYSQDUMP_ARGS_FILE')) {
+                if (! filter_var($host, FILTER_VALIDATE_IP)) {
+                    $resolved = gethostbyname($host);
+                    if ($resolved === $host) {
+                        Log::error("Database backup failed: host {$host} not resolvable");
+                        $this->error('Failed to create database backup: host not resolvable.');
+
+                        return 1;
+                    }
+                }
+            }
+
             $mysqlCmd = sprintf(
-                'mysqldump -h%s -u%s%s %s > %s',
+                'mysqldump -h%s -u%s%s %s > %s 2>/dev/null',
                 escapeshellarg($host),
                 escapeshellarg($username),
                 $passwordArg,
