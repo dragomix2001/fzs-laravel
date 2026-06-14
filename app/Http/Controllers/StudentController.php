@@ -66,8 +66,8 @@ class StudentController extends Controller
         $studijskiProgram = StudijskiProgram::where(['tipStudija_id' => 2])->get();
         $skolskaGodinaUpisa = SkolskaGodUpisa::all();
         $osnovneStudije = UpisGodine::where(['kandidat_id' => $id, 'tipStudija_id' => 1])
-            ->orderBy('godina', 'ASC')
-            ->orderBy('pokusaj', 'ASC')
+            ->orderBy('godina', 'asc')
+            ->orderBy('pokusaj', 'asc')
             ->get();
         $masterStudije = UpisGodine::where(['kandidat_id' => $id, 'tipStudija_id' => 2])->get();
 
