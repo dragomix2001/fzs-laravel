@@ -55,7 +55,7 @@ class NotificationService
             ->all();
 
         foreach ($studentEmails as $email) {
-            Mail::to($email)->send(new ObavestenjeMail($naslov, $sadrzaj, $tip));
+            Mail::to($email)->queue(new ObavestenjeMail($naslov, $sadrzaj, $tip));
         }
     }
 }
