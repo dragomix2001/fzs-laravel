@@ -14,6 +14,7 @@ class ChatbotController extends Controller
     public function __construct(ChatbotService $chatbotService)
     {
         $this->middleware('auth');
+        $this->middleware('throttle:20,1')->only(['chat', 'quickQuestion']);
         $this->chatbotService = $chatbotService;
     }
 
