@@ -1,65 +1,53 @@
 @extends('layouts.layout')
 @section('page_heading','Додај испите')
 @section('section')
-    <div class="col-lg-10">
-        <div class="row">
-            <a class="btn btn-primary" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
+    <div class="w-full lg:w-10/12">
+        <div class="mb-4">
+            <a class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
         </div>
-        <br>
         <div>
             <h4>Подаци о студенту &nbsp;
-                <a class="btn btn-warning"
+                <a class="inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600"
                    href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
-                    <div title="Измена">
-                        <span class="fa fa-edit"></span>
-                    </div>
+                    <span class="fa fa-edit" title="Измена"></span>
                 </a>
             </h4>
-            <ul class="list-group">
-                <li class="list-group-item">Број Индекса:
-                    <strong>
-                        {{ $kandidat->brojIndeksa }}
-                    </strong>
+            <ul class="divide-y divide-secondary-200 border border-secondary-200 rounded-lg overflow-hidden mt-2">
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">Број Индекса:
+                    <strong>{{ $kandidat->brojIndeksa }}</strong>
                 </li>
-                <li class="list-group-item">Име (име родитеља) презиме:
-                    <strong>
-                        {{ $kandidat->imeKandidata . " (" . $kandidat->imePrezimeJednogRoditelja . ") " . $kandidat->prezimeKandidata }}
-                    </strong>
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">Име (име родитеља) презиме:
+                    <strong>{{ $kandidat->imeKandidata . " (" . $kandidat->imePrezimeJednogRoditelja . ") " . $kandidat->prezimeKandidata }}</strong>
                 </li>
-                <li class="list-group-item">ЈМБГ:
-                    <strong>
-                        {{ $kandidat->jmbg }}
-                    </strong>
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">ЈМБГ:
+                    <strong>{{ $kandidat->jmbg }}</strong>
                 </li>
                 @if(!empty($kandidat->datumRodjenja))
-                    <li class="list-group-item">Датум рођења:
-                        <strong>
-                            {{ $kandidat->datumRodjenja->format('d.m.Y') }}
-                        </strong>
+                    <li class="px-4 py-3 bg-white text-sm text-secondary-700">Датум рођења:
+                        <strong>{{ $kandidat->datumRodjenja->format('d.m.Y') }}</strong>
                     </li>
                 @endif
             </ul>
         </div>
-        <div class="row">
-            <div class="form-group col-lg-4">
-                <label for="addIspitList">Испити</label>
-                <select class="form-control auto-combobox" id="addIspitList" name="addIspitList">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+            <div class="md:col-span-4">
+                <label for="addIspitList" class="block text-sm font-medium text-secondary-700 mb-1">Испити</label>
+                <select class="auto-combobox block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" id="addIspitList" name="addIspitList">
                     <option value=""></option>
                     @foreach($ispiti as $index => $ispit)
                         <option value="{{$ispit->id}}">{{$ispit->predmet?->naziv ?? '-'}}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="form-group col-lg-1">
-                <label for="addIspitButton">&nbsp;</label>
+            <div class="md:col-span-1 flex items-end">
                 <input type="button" value="Додај" name="button" id="addIspitButton"
-                       class="btn btn-success">
+                       class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 cursor-pointer">
             </div>
-            <div class="col-lg-10">
+            <div class="md:col-span-10 mt-4">
                 <form action="{{"/"}}prijava/dodajPolozeneIspite" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="kandidat_id" value="{{$kandidat->id}}">
-                    <table id="tabela" class="table">
+                    <x-table id="tabela">
                         <thead>
                         <tr>
                             <th></th>
@@ -70,37 +58,37 @@
                         <tbody id="addIspitTableBody">
 
                         </tbody>
-                    </table>
-                    <input type="submit" class="btn btn-success" value="Сачувај испите">
+                    </x-table>
+                    <div class="mt-4">
+                        <x-button variant="success">Сачувај испите</x-button>
+                    </div>
                 </form>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-10">
-                <table class="table">
-                    <thead>
+        <div class="mt-4">
+            <x-table>
+                <thead>
+                <tr>
+                    <th>Назив</th>
+                    <th>Оцена</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($polozeniIspiti as $ispit)
                     <tr>
-                        <th>Назив</th>
-                        <th>Оцена</th>
-                        <th></th>
+                        <td>{{$ispit->predmet?->predmet?->naziv ?? '-'}}</td>
+                        <td>{{$ispit->konacnaOcena}}</td>
+                        <td>
+                            <a class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700" href="{{"/"}}deletePrivremeniIspit/{{$ispit->id}}"
+                               onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
+                                <span title="Брисање"><i class="fa fa-trash"></i></span>
+                            </a>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($polozeniIspiti as $ispit)
-                        <tr>
-                            <td>{{$ispit->predmet?->predmet?->naziv ?? '-'}}</td>
-                            <td>{{$ispit->konacnaOcena}}</td>
-                            <td>
-                                <a class="btn btn-danger" href="{{"/"}}deletePrivremeniIspit/{{$ispit->id}}"
-                                   onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
-                                    <div title="Брисање"><i class="fa fa-trash"></i></div>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                @endforeach
+                </tbody>
+            </x-table>
         </div>
     </div>
     <script>

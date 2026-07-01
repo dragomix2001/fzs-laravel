@@ -1,68 +1,50 @@
 @extends('layouts.layout')
 @section('page_heading',"Измена године")
 @section('section')
-    <div class="col-lg-10">
+    <div class="w-full lg:w-10/12">
         <form action="{{"/"}}student/{{ $upisGodine->id }}/izmenaGodine" method="post">
             {{ csrf_field() }}
-            <div class="row">
-                <input type="hidden" name="id" id="id" value="{{ $upisGodine->id }}">
-                <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $upisGodine->kandidat_id }}">
-                <input type="hidden" name="godina" id="godina" value="{{ $upisGodine->godina }}">
-                <input type="hidden" name="pokusaj" id="pokusaj" value="{{ $upisGodine->pokusaj }}">
+            <input type="hidden" name="id" id="id" value="{{ $upisGodine->id }}">
+            <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $upisGodine->kandidat_id }}">
+            <input type="hidden" name="godina" id="godina" value="{{ $upisGodine->godina }}">
+            <input type="hidden" name="pokusaj" id="pokusaj" value="{{ $upisGodine->pokusaj }}">
 
-                <div class="form-group col-lg-6">
-                    <label for="godina">Година</label>
-                    <input class="form-control" type="text" name="godina" id="godina"
-                           value="{{ $upisGodine->godina }}" disabled/>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="godina" class="block text-sm font-medium text-secondary-700 mb-1">Година</label>
+                    <input class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-secondary-100 cursor-not-allowed" type="text" name="godina" id="godina" value="{{ $upisGodine->godina }}" disabled/>
                 </div>
-                <div class="form-group col-lg-6">
-                    <label for="pokusaj">Покушај</label>
-                    <input class="form-control" type="text" name="pokusaj" id="pokusaj"
-                           value="{{ $upisGodine->pokusaj }}" disabled/>
+                <div>
+                    <label for="pokusaj" class="block text-sm font-medium text-secondary-700 mb-1">Покушај</label>
+                    <input class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-secondary-100 cursor-not-allowed" type="text" name="pokusaj" id="pokusaj" value="{{ $upisGodine->pokusaj }}" disabled/>
                 </div>
-                <div class="form-group col-lg-7">
-                    <label for="statusGodine_id">Статус године</label>
-                    <select class="form-control" id="statusGodine_id" name="statusGodine_id">
-                        @foreach($statusGodine as $item)
-                            <option value="{{ $item->id }}" {{ ($upisGodine->statusGodine_id == $item->id ? "selected":"") }}>
-                                {{ $item->naziv }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="md:col-span-2">
+                    <x-form-select label="Статус године" name="statusGodine_id"
+                                   :options="$statusGodine->pluck('naziv','id')->toArray()"
+                                   :selected="$upisGodine->statusGodine_id" />
                 </div>
-                <div class="form-group col-lg-7">
-                    <label for="skolskaGodina_id">Школска година</label>
-                    <select class="form-control" id="skolskaGodina_id" name="skolskaGodina_id">
-                        @foreach($skolskaGodina as $item)
-                            <option value="{{ $item->id }}" {{ ($upisGodine->skolskaGodina_id == $item->id ? "selected":"") }}>
-                                {{ $item->naziv }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="md:col-span-2">
+                    <x-form-select label="Школска година" name="skolskaGodina_id"
+                                   :options="$skolskaGodina->pluck('naziv','id')->toArray()"
+                                   :selected="$upisGodine->skolskaGodina_id" />
                 </div>
-                <div class="form-group col-lg-6">
-                    <label for="datumUpisa_format">Датум уписа</label>
-                    <input class="form-control dateMask" type="text" name="datumUpisa_format"
-                           id="datumUpisa_format"
-                           value="
-                           @if(!empty($upisGodine->datumUpisa))
-                                {{ $upisGodine->datumUpisa->format('d.m.Y.') }}
-                           @endif"/>
+                <div>
+                    <label for="datumUpisa_format" class="block text-sm font-medium text-secondary-700 mb-1">Датум уписа</label>
+                    <input class="dateMask block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="text" name="datumUpisa_format" id="datumUpisa_format"
+                           value="@if(!empty($upisGodine->datumUpisa)){{ $upisGodine->datumUpisa->format('d.m.Y.') }}@endif"/>
                 </div>
-                <div class="form-group col-lg-6">
-                    <label for="datumPromene_format">Датум промене</label>
-                    <input class="form-control dateMask" type="text" name="datumPromene_format"
-                           id="datumPromene_format"
-                           value="
-                           @if(!empty($upisGodine->datumPromene))
-                                {{ $upisGodine->datumPromene->format('d.m.Y.') }}
-                           @endif"/>
+                <div>
+                    <label for="datumPromene_format" class="block text-sm font-medium text-secondary-700 mb-1">Датум промене</label>
+                    <input class="dateMask block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="text" name="datumPromene_format" id="datumPromene_format"
+                           value="@if(!empty($upisGodine->datumPromene)){{ $upisGodine->datumPromene->format('d.m.Y.') }}@endif"/>
                 </div>
                 <input type="hidden" name="datumUpisa" id="datumUpisa" value="{{$upisGodine->datumUpisa}}">
                 <input type="hidden" name="datumPromene" id="datumPromene" value="{{$upisGodine->datumPromene}}">
             </div>
 
-            <input type="submit" class="btn btn-success" value="Измени">
+            <div class="mt-6">
+                <x-button variant="success">Измени</x-button>
+            </div>
         </form>
     </div>
     <script>
@@ -73,30 +55,12 @@
             altFormat: "yy-mm-dd"
         });
 
-//        formatStatus.on('input', function () {
-//            if (typeof formatStatus.val() === "undefined") {
-//                var date = null;
-//            }else{
-//                var date = moment(formatStatus.val(), "dd.mm.yy");
-//            }
-//            $("#datumUpisa").val(date.format('YYYY-MM-DD'));
-//        });
-
         var formatPromena = $("#datumPromene_format");
         formatPromena.datepicker({
             dateFormat: 'dd.mm.yy.',
             altField: "#datumPromene",
             altFormat: "yy-mm-dd"
         });
-
-//        formatPromena.on('input', function () {
-//            if (typeof formatPromena.val() === "undefined") {
-//                var date = null;
-//            }else {
-//                var date = moment(formatPromena.val(), "dd.mm.yy");
-//            }
-//            $("#datumPromene").val(date.format('YYYY-MM-DD'));
-//        });
     </script>
     <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection
