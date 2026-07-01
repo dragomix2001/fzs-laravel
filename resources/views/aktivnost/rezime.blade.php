@@ -2,15 +2,15 @@
 @section('page_heading','Резиме активности')
 @section('section')
 
-<div class="col-sm-12 col-lg-10">
+<div class="w-full lg:w-10/12">
     <h2>Резиме активности: {{ $predmet->naziv ?? '' }}</h2>
 
-    <a href="{{ route('aktivnost.index') }}" class="btn btn-secondary mb-3">Назад на листу</a>
+    <a href="{{ route('aktivnost.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 mb-4">Назад на листу</a>
 
     @if(isset($aktivnosti) && count($aktivnosti) > 0)
     <div class="mb-4">
         <h4>Листа активности за предмет:</h4>
-        <ul>
+        <ul class="list-disc pl-5">
             @foreach($aktivnosti as $aktiv)
                 <li>{{ $aktiv->naziv }} (Максимално бодова: {{ $aktiv->max_bodova }})</li>
             @endforeach
@@ -18,7 +18,7 @@
     </div>
     @endif
 
-    <table class="table table-bordered mt-3">
+    <x-table class="mt-3">
         <thead>
             <tr>
                 <th>Број индекса</th>
@@ -38,9 +38,9 @@
                     <td>{{ $rez['max'] }}</td>
                     <td>
                         @if($rez['procenat'] >= 51)
-                            <span class="text-success"><strong>{{ $rez['procenat'] }}%</strong></span>
+                            <span class="text-green-600 font-bold">{{ $rez['procenat'] }}%</span>
                         @else
-                            <span class="text-danger"><strong>{{ $rez['procenat'] }}%</strong></span>
+                            <span class="text-red-600 font-bold">{{ $rez['procenat'] }}%</span>
                         @endif
                     </td>
                 </tr>
@@ -51,6 +51,6 @@
                 </tr>
             @endif
         </tbody>
-    </table>
+    </x-table>
 </div>
 @endsection

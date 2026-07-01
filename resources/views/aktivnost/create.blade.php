@@ -2,51 +2,32 @@
 @section('page_heading','Нова активност')
 @section('section')
 
-<div class="col-sm-12 col-lg-10">
+<div class="w-full lg:w-10/12">
     <h2>Додавање нове активности</h2>
 
     <form action="{{ route('aktivnost.store') }}" method="POST">
         @csrf
-        <div class="form-group mb-3">
-            <label for="predmet_id">Предмет</label>
-            <select name="predmet_id" id="predmet_id" class="form-control" required>
-                <option value="">-- Изаберите предмет --</option>
-                @foreach($predmeti as $predmet)
-                    <option value="{{ $predmet->id }}">{{ $predmet->naziv }}</option>
-                @endforeach
-            </select>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <x-form-select label="Предмет" name="predmet_id" required
+                           :options="collect(['' => '-- Изаберите предмет --'] + $predmeti->pluck('naziv','id')->toArray())->toArray()" />
+
+            <x-form-input label="Назив активности" name="naziv" type="text" required />
+
+            <x-form-select label="Тип активности" name="tip" required
+                           :options="['' => '-- Изаберите тип --', 'kolokvijum' => 'Колоквијум', 'seminarski' => 'Семинарски рад', 'prisustvo' => 'Присуство', 'aktivnost' => 'Активност на часу', 'ostalo' => 'Остало']" />
+
+            <div>
+                <label for="max_bodova" class="block text-sm font-medium text-secondary-700 mb-1">Максимално бодова <span class="text-danger-600">*</span></label>
+                <input type="number" name="max_bodova" id="max_bodova" required min="1" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+            </div>
+
+            <x-form-input label="Датум" name="datum" type="date" required />
         </div>
 
-        <div class="form-group mb-3">
-            <label for="naziv">Назив активности</label>
-            <input type="text" name="naziv" id="naziv" class="form-control" required>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="tip">Тип активности</label>
-            <select name="tip" id="tip" class="form-control" required>
-                <option value="">-- Изаберите тип --</option>
-                <option value="kolokvijum">Колоквијум</option>
-                <option value="seminarski">Семинарски рад</option>
-                <option value="prisustvo">Присуство</option>
-                <option value="aktivnost">Активност на часу</option>
-                <option value="ostalo">Остало</option>
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="max_bodova">Максимално бодова</label>
-            <input type="number" name="max_bodova" id="max_bodova" class="form-control" required min="1">
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="datum">Датум</label>
-            <input type="date" name="datum" id="datum" class="form-control" required>
-        </div>
-
-        <div class="form-group mt-4">
-            <button type="submit" class="btn btn-success">Сачувај</button>
-            <a href="{{ route('aktivnost.index') }}" class="btn btn-secondary">Одустани</a>
+        <div class="mt-6 flex gap-2">
+            <x-button variant="success">Сачувај</x-button>
+            <a href="{{ route('aktivnost.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Одустани</a>
         </div>
     </form>
 </div>

@@ -2,16 +2,16 @@
 @section('page_heading','Оцењивање')
 @section('section')
 
-<div class="col-sm-12 col-lg-10">
+<div class="w-full lg:w-10/12">
     <h2>Оцењивање: {{ $aktivnost->naziv }}</h2>
-    
-    <div class="alert alert-info">
+
+    <x-card variant="info" class="mb-4">
         <strong>Максимално бодова:</strong> {{ $aktivnost->max_bodova }}
-    </div>
+    </x-card>
 
     <form action="{{ route('aktivnost.saveOcenjivanje', $aktivnost->id) }}" method="POST">
         @csrf
-        <table class="table table-bordered">
+        <x-table>
             <thead>
                 <tr>
                     <th>Број индекса</th>
@@ -25,22 +25,22 @@
                     <td>{{ $student->brojIndeksa }}</td>
                     <td>{{ $student->ime }} {{ $student->prezime }}</td>
                     <td>
-                        <input type="number" 
-                               name="bodovi[{{ $student->id }}]" 
-                               value="{{ $ocene[$student->id] ?? '' }}" 
-                               class="form-control" 
-                               min="0" 
-                               max="{{ $aktivnost->max_bodova }}" 
+                        <input type="number"
+                               name="bodovi[{{ $student->id }}]"
+                               value="{{ $ocene[$student->id] ?? '' }}"
+                               class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                               min="0"
+                               max="{{ $aktivnost->max_bodova }}"
                                step="0.01">
                     </td>
                 </tr>
                 @endforeach
             </tbody>
-        </table>
+        </x-table>
 
-        <div class="mt-4 mb-5">
-            <button type="submit" class="btn btn-success">Сачувај оцене</button>
-            <a href="{{ route('aktivnost.index') }}" class="btn btn-secondary">Одустани</a>
+        <div class="mt-6 flex gap-2">
+            <x-button variant="success">Сачувај оцене</x-button>
+            <a href="{{ route('aktivnost.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Одустани</a>
         </div>
     </form>
 </div>

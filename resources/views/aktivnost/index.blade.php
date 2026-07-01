@@ -2,13 +2,15 @@
 @section('page_heading','Континуирано оцењивање')
 @section('section')
 
-<div class="col-sm-12 col-lg-10">
-<h2>Континуирано оцењивање</h2>
-    
-    <a href="{{ route('aktivnost.create') }}" class="btn btn-success mb-3">Нова активност</a>
-    <a href="{{ route('aktivnost.rezime') }}" class="btn btn-info mb-3">Преглед свих активности</a>
+<div class="w-full lg:w-10/12">
+    <h2>Континуирано оцењивање</h2>
 
-    <table class="table table-bordered">
+    <div class="flex gap-2 mb-4">
+        <a href="{{ route('aktivnost.create') }}" class="inline-flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm font-medium">Нова активност</a>
+        <a href="{{ route('aktivnost.rezime') }}" class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">Преглед свих активности</a>
+    </div>
+
+    <x-table>
         <thead>
             <tr>
                 <th>Предмет</th>
@@ -28,12 +30,14 @@
                 <td>{{ $aktivnost->max_bodova }}</td>
                 <td>{{ $aktivnost->datum }}</td>
                 <td>
-                    <a href="{{ route('aktivnost.show', $aktivnost->id) }}" class="btn btn-sm btn-primary">Прикажи</a>
-                    <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="btn btn-sm btn-warning">Оцени</a>
+                    <div class="inline-flex gap-1">
+                        <a href="{{ route('aktivnost.show', $aktivnost->id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Прикажи</a>
+                        <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600">Оцени</a>
+                    </div>
                 </td>
             </tr>
             @endforeach
         </tbody>
-    </table>
+    </x-table>
 </div>
 @endsection

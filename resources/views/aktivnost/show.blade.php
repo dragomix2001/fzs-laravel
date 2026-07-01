@@ -2,23 +2,25 @@
 @section('page_heading','Детаљи активности')
 @section('section')
 
-<div class="col-sm-12 col-lg-10">
+<div class="w-full lg:w-10/12">
     <h2>{{ $aktivnost->naziv }}</h2>
 
-    <div class="mb-4">
+    <div class="mb-4 space-y-1">
         <p><strong>Предмет:</strong> {{ $aktivnost->predmet->naziv ?? '' }}</p>
         <p><strong>Тип:</strong> {{ ucfirst($aktivnost->tip) }}</p>
         <p><strong>Максимално бодова:</strong> {{ $aktivnost->max_bodova }}</p>
         <p><strong>Датум:</strong> {{ \Carbon\Carbon::parse($aktivnost->datum)->format('d.m.Y.') }}</p>
     </div>
 
-    <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="btn btn-warning mb-3">Оцени студенте</a>
-    <a href="{{ route('aktivnost.index') }}" class="btn btn-secondary mb-3">Назад на листу</a>
+    <div class="flex gap-2 mb-4">
+        <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 text-white rounded text-sm font-medium hover:bg-yellow-600">Оцени студенте</a>
+        <a href="{{ route('aktivnost.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Назад на листу</a>
+    </div>
 
-    <h4 class="mt-4">Оцене студената</h4>
-    
+    <h4 class="text-md font-semibold mt-4">Оцене студената</h4>
+
     @if(count($ocene) > 0)
-    <table class="table table-bordered mt-3">
+    <x-table class="mt-3">
         <thead>
             <tr>
                 <th>Студент</th>
@@ -37,9 +39,9 @@
             </tr>
             @endforeach
         </tbody>
-    </table>
+    </x-table>
     @else
-    <div class="alert alert-info mt-3">Тренутно нема унетих оцена за ову активност.</div>
+    <x-card variant="info" class="mt-3">Тренутно нема унетих оцена за ову активност.</x-card>
     @endif
 </div>
 @endsection
