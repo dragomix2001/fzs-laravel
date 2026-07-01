@@ -1,252 +1,143 @@
 @extends('layouts.layout')
-@section('page_heading',$kandidat->upisan == 0 ? 'Измена података кандидата за мастер студије' : "Измена података активног студента мастер студија")
+@section('page_heading', $kandidat->upisan == 0 ? 'Измена података кандидата за мастер студије' : 'Измена података активног студента мастер студија')
 @section('section')
-    <div class="col-lg-10">
-        {{--GRESKE--}}
+    <div class="max-w-5xl mx-auto space-y-6">
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
-                <h4>Грешка!</h4>
-                <ul>
+            <x-alert type="danger" title="Грешка!">
+                <ul class="list-disc list-inside">
                     @foreach (Session::get('errors')->all() as $error)
                         <li>{!! $error !!}</li>
                     @endforeach
                 </ul>
-            </div>
+            </x-alert>
         @endif
 
-        <form role="form" method="post" action="{{"/"}}master/{{ $kandidat->id }}/edit"
-              enctype="multipart/form-data">
-            {{ csrf_field() }}
+        <form role="form" method="post" action="{{"/"}}master/{{ $kandidat->id }}/edit" enctype="multipart/form-data" class="space-y-6">
+            @csrf
 
-            {{--STUDIJSKI PROGRAM--}}
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Документа</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="form-group col-lg-10">
-                            <label for="TipStudija">Тип студија</label>
-                            <select class="form-control" id="TipStudija" name="TipStudija">
-                                @foreach($tipStudija as $item)
-                                    <option value="{{ $item->id }}" {{ ($kandidat->tipStudija_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-10">
-                            <label for="StudijskiProgram">Студијски програм</label>
-                            <select class="form-control" id="StudijskiProgram" name="StudijskiProgram">
-                                @foreach($studijskiProgram as $item)
-                                    <option value="{{ $item->id }}" {{ ($kandidat->studijskiProgram_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-10">
-                            <label for="SkolskeGodineUpisa">Школска година:</label>
-                            <select class="form-control" id="SkolskeGodineUpisa" name="SkolskeGodineUpisa">
-                                @foreach($skolskeGodineUpisa as $item)
-                                    <option value="{{ $item->id }}" {{ ($kandidat->skolskaGodinaUpisa_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            <x-card>
+                <x-slot:header>Документа</x-slot:header>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-select name="TipStudija" label="Тип студија"
+                            :options="$tipStudija->pluck('naziv', 'id')->toArray()" :selected="$kandidat->tipStudija_id" />
+                        <x-form-select name="StudijskiProgram" label="Студијски програм"
+                            :options="$studijskiProgram->pluck('naziv', 'id')->toArray()" :selected="$kandidat->studijskiProgram_id" />
                     </div>
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="statusUpisa_id">Статус</label>
-                            <select class="form-control" id="statusUpisa_id"
-                                    name="statusUpisa_id">
-                                @foreach($statusKandidata as $item)
-                                    <option value="{{ $item->id }}" {{ ($kandidat->statusUpisa_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="datumStatusa">Датум статуса</label>
-                            <input class="form-control dateMask" type="text" name="datumStatusa"
-                                   id="datumStatusa"
-                                   value="{{ !empty($kandidat->datumStatusa) ?
-                                           $kandidat->datumStatusa->format('d.m.Y.') : "" }}">
-                        </div>
+                    <x-form-select name="SkolskeGodineUpisa" label="Школска година"
+                        :options="$skolskeGodineUpisa->pluck('naziv', 'id')->toArray()" :selected="$kandidat->skolskaGodinaUpisa_id" />
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-select name="statusUpisa_id" label="Статус"
+                            :options="$statusKandidata->pluck('naziv', 'id')->toArray()" :selected="$kandidat->statusUpisa_id" />
+                        <x-form-input name="datumStatusa" label="Датум статуса" class="dateMask"
+                            value="{{ !empty($kandidat->datumStatusa) ? $kandidat->datumStatusa->format('d.m.Y.') : '' }}" />
                     </div>
-                    {{--<div class="form-group">--}}
-                        {{--<label for="uplata">--}}
-                            {{--<input type="checkbox" id="uplata"--}}
-                                   {{--name="uplata" {{ $kandidat->uplata ? "checked":"" }}>--}}
-                            {{--Уплата (да ли је кандидат платио школарину)</label>--}}
-                    {{--</div>--}}
-                    <p><strong>Уз пријаву прилажем:</strong></p>
+
+                    <p class="text-sm font-medium text-secondary-700">Уз пријаву прилажем:</p>
                     @foreach($dokumentaMaster as $i=>$dokument)
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="dokumentaMaster[{{ $i }}]"
-                                       value="{{$dokument->id}}"
-                                        {{ (in_array($dokument->id,$prilozenaDokumenta) ? "checked":"") }}>
-                                {{ $dokument->naziv }}
-                            </label>
-                            <input type="file" class="form-control" name="dokumentaMasterUpload[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
+                    <div class="flex items-start gap-3">
+                        <input type="checkbox" name="dokumentaMaster[{{ $i }}]" value="{{$dokument->id}}"
+                               {{ (in_array($dokument->id, $prilozenaDokumenta) ? "checked":"") }}
+                               class="mt-1 rounded border-secondary-300 text-primary-600 focus:ring-primary-500">
+                        <div class="flex-1">
+                            <label class="text-sm text-secondary-700">{{ $dokument->naziv }}</label>
+                            <input type="file" class="block w-full text-sm text-secondary-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 mt-1" name="dokumentaMasterUpload[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
                             @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
-                                <a class="btn btn-link" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
+                                <a class="inline-flex items-center text-sm text-primary-600 hover:text-primary-800 mt-1" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
                                     {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
                                 </a>
                             @endif
                         </div>
+                    </div>
                     @endforeach
                 </div>
-            </div>
+            </x-card>
 
-            {{--OSNOVNI PODACI--}}
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Основни подаци</h3>
-                </div>
-                <div class="panel-body">
-                    {{--@if($kandidat->statusUpisa_id == 1)--}}
-                        <div class="form-group">
-                            <label for="brojIndeksa">Број Индекса</label>
-                            <input class="form-control" type="text" name="brojIndeksa" id="brojIndeksa"
-                                   value="{{ $kandidat->brojIndeksa }}">
+            <x-card>
+                <x-slot:header>Основни подаци</x-slot:header>
+                <div class="space-y-4">
+                    <x-form-input name="brojIndeksa" label="Број индекса" value="{{ $kandidat->brojIndeksa }}" />
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <img src="{{"/"}}uploads/images/{{$kandidat->slika}}"
+                                 class="mx-auto rounded-lg shadow-sm ring-1 ring-black/5 max-h-[300px]">
                         </div>
-                    {{--@endif--}}
-                    <div class="row">
-                        <div class="col-lg-4 text-center">
-                            <img src="{{"/"}}uploads/images/{{$kandidat->slika}}" class="img-thumbnail"
-                                 style="max-height: 300px">
-                        </div>
-                        <div class="row col-lg-8">
-                            <div class="form-group col-lg-12">
-                                <label for="ImeKandidata">Име кандидата</label>
-                                <input class="form-control" type="text" name="ImeKandidata" id="ImeKandidata"
-                                       value="{{ $kandidat->imeKandidata }}">
-                            </div>
-                            <div class="form-group col-lg-12">
-                                <label for="PrezimeKandidata">Презиме кандидата</label>
-                                <input class="form-control" type="text" name="PrezimeKandidata"
-                                       id="PrezimeKandidata"
-                                       value="{{ $kandidat->prezimeKandidata }}">
-                            </div>
-                            <div class="form-group col-lg-12">
-                                <label for="imageUpload">Нова слика</label>
-                                <input type="file" name="imageUpload" id="imageUpload">
+                        <div class="lg:col-span-2 space-y-4">
+                            <x-form-input name="ImeKandidata" label="Име кандидата" value="{{ $kandidat->imeKandidata }}" />
+                            <x-form-input name="PrezimeKandidata" label="Презиме кандидата" value="{{ $kandidat->prezimeKandidata }}" />
+                            <div>
+                                <label class="block text-sm font-medium text-secondary-700 mb-1">Нова слика</label>
+                                <input type="file" name="imageUpload" id="imageUpload"
+                                       class="block w-full text-sm text-secondary-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="form-group col-lg-9">
-                            <label for="AdresaStanovanja">Адреса становања</label>
-                            <input class="form-control" type="text" name="AdresaStanovanja"
-                                   id="AdresaStanovanja" value="{{ $kandidat->adresaStanovanja }}">
-                        </div>
-                        <div class="form-group col-lg-8">
-                            <label for="JMBG">ЈМБГ</label>
-                            <input class="form-control" type="text" name="JMBG" id="JMBG"
-                                   value="{{ $kandidat->jmbg }}">
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="mestoRodjenja">Место рођења</label>
+
+                    <hr class="border-secondary-200">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="JMBG" label="ЈМБГ" value="{{ $kandidat->jmbg }}" />
+                        <div>
+                            <label for="mestoRodjenja" class="block text-sm font-medium text-secondary-700 mb-1">Место рођења</label>
                             <input type="text" name="mestoRodjenja" id="mestoRodjenja" list="mestaList"
-                                   class="form-control"
-                                   value="{{ $kandidat->mestoRodjenja }}">
+                                   value="{{ $kandidat->mestoRodjenja }}"
+                                   class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                             <datalist id="mestaList">
                                 @foreach($mestoRodjenja as $item)
                                     <option value="{{$item->naziv}}">
                                 @endforeach
                             </datalist>
                         </div>
-                        <div class="form-group col-lg-6">
-                            <label for="drzavaRodjenja">Држава рођења</label>
-                            <input class="form-control" type="text" name="drzavaRodjenja"
-                                   id="drzavaRodjenja"
-                                   value="{{ $kandidat->drzavaRodjenja }}">
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="KontaktTelefon">Контакт телефон</label>
-                            <input class="form-control" type="text" name="KontaktTelefon" id="KontaktTelefon"
-                                   value="{{ $kandidat->kontaktTelefon }}">
-                        </div>
-                        <div class="form-group col-lg-8">
-                            <label for="Email">Email</label>
-                            <input class="form-control" type="text" name="Email" id="Email"
-                                   value="{{ $kandidat->email }}">
-                        </div>
+                        <x-form-input name="drzavaRodjenja" label="Држава рођења" value="{{ $kandidat->drzavaRodjenja }}" />
+                        <x-form-input name="KontaktTelefon" label="Контакт телефон" value="{{ $kandidat->kontaktTelefon }}" />
+                        <x-form-input name="Email" label="Email" type="email" value="{{ $kandidat->email }}" />
                     </div>
 
+                    <x-form-input name="AdresaStanovanja" label="Адреса становања" value="{{ $kandidat->adresaStanovanja }}" />
 
-                    <div class="clearfix"></div>
-                    <hr>
+                    <hr class="border-secondary-200">
 
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="NazivSkoleFakulteta">Назив школе или факултета</label>
-                            <input class="form-control" type="text" name="NazivSkoleFakulteta"
-                                   id="NazivSkoleFakulteta"
-                                   value="{{ $kandidat->srednjeSkoleFakulteti }}">
-
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="SmerZavrseneSkoleFakulteta">Смер завршене школе или факултета</label>
-                            <input class="form-control" type="text" name="SmerZavrseneSkoleFakulteta"
-                                   id="SmerZavrseneSkoleFakulteta"
-                                   value="{{ $kandidat->smerZavrseneSkoleFakulteta }}">
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="mestoZavrseneSkoleFakulteta">Место завршене школе или факултета</label>
-                            <input type="text" class="form-control" id="mestoZavrseneSkoleFakulteta"
-                                   name="mestoZavrseneSkoleFakulteta" list="mestaList"
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="NazivSkoleFakulteta" label="Назив школе или факултета" value="{{ $kandidat->srednjeSkoleFakulteti }}" />
+                        <x-form-input name="SmerZavrseneSkoleFakulteta" label="Смер завршене школе или факултета" value="{{ $kandidat->smerZavrseneSkoleFakulteta }}" />
+                        <div>
+                            <label for="mestoZavrseneSkoleFakulteta" class="block text-sm font-medium text-secondary-700 mb-1">Место завршене школе или факултета</label>
+                            <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                                   id="mestoZavrseneSkoleFakulteta" name="mestoZavrseneSkoleFakulteta" list="mestaList"
                                    value="{{ $kandidat->mestoZavrseneSkoleFakulteta }}">
                         </div>
-                        <div class="form-group col-lg-6">
-                            <label for="drzavaZavrseneSkole">Држава завршене школе или факултета</label>
-                            <input class="form-control" type="text" name="drzavaZavrseneSkole" id="drzavaZavrseneSkole"
-                                   value="{{ $kandidat->drzavaZavrseneSkole }}">
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="godinaZavrsetkaSkole">Година завршетка школе или факултета</label>
-                            <input class="form-control" type="text" name="godinaZavrsetkaSkole"
-                                   id="godinaZavrsetkaSkole"
-                                   value="{{ $kandidat->godinaZavrsetkaSkole }}">
-                        </div>
+                        <x-form-input name="drzavaZavrseneSkole" label="Држава завршене школе или факултета" value="{{ $kandidat->drzavaZavrseneSkole }}" />
+                        <x-form-input name="godinaZavrsetkaSkole" label="Година завршетка школе или факултета" value="{{ $kandidat->godinaZavrsetkaSkole }}" />
                     </div>
 
-                    <div class="clearfix"></div>
-                    <hr>
+                    <hr class="border-secondary-200">
 
-
-                    <div class="row">
-                        <div class="form-group col-lg-7">
-                            <label for="ProsecnaOcena">Просечна оцена</label>
-                            <input class="form-control" type="text" name="ProsecnaOcena"
-                                   id="ProsecnaOcena" value="{{ $kandidat->prosecnaOcena }}">
-                        </div>
-
-                        <div class="form-group col-lg-7">
-                            <label for="UpisniRok">Уписни рок</label>
-                            <input class="form-control" type="text" name="UpisniRok"
-                                   id="UpisniRok" value="{{ $kandidat->upisniRok }}">
-                        </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="ProsecnaOcena" label="Просечна оцена" value="{{ $kandidat->prosecnaOcena }}" />
+                        <x-form-input name="UpisniRok" label="Уписни рок" value="{{ $kandidat->upisniRok }}" />
                     </div>
 
-                    <div class="clearfix"></div>
-                    <hr>
-
-                    <div class="form-group text-center">
-                        <button type="submit" name="Submit" class="btn btn-primary btn-lg">Сачувај</button>
-                        <input type="submit" name="submitstay" value="Сачувај и остани" class="btn btn-primary btn-lg">
+                    <div class="flex justify-center gap-3 pt-4">
+                        <x-button type="submit" name="Submit" size="lg">Сачувај</x-button>
+                        <x-button type="submit" name="submitstay" value="Сачувај и остани" variant="secondary" size="lg">Сачувај и остани</x-button>
                     </div>
                 </div>
-            </div>
+            </x-card>
         </form>
     </div>
+
+    @push('scripts')
     <script>
-        $(document).ready(function () {
-            $(window).keydown(function (event) {
-                if (event.keyCode == 13) {
-                    event.preventDefault();
-                    return false;
-                }
-            });
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                return false;
+            }
         });
     </script>
-    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    <script src="{{"/"}}js/dateMask.js"></script>
+    <script src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    @endpush
 @endsection

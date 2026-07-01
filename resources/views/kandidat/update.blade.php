@@ -1,528 +1,289 @@
 @extends('layouts.layout')
-@section('page_heading',$kandidat->upisan == 0 ? "Измена података постојећег кандидата" : "Измена података активног студента")
+@section('page_heading', $kandidat->upisan == 0 ? 'Измена података постојећег кандидата' : 'Измена података активног студента')
 @section('section')
     <form role="form" method="post" action="{{ url('/kandidat/' . $kandidat->id) }}" enctype="multipart/form-data">
-        <div class="col-sm-12 col-lg-12">
-            <div class="row">
-                <div class="col-sm-12 col-lg-6">
+        @csrf
+        <input type="hidden" name="_method" value="put"/>
 
-                    {{--GRESKE--}}
-                    @if (Session::get('errors'))
-                        <div class="alert alert-dismissable alert-danger">
-                            <h4>Грешка!</h4>
-                            <ul>
-                                @foreach (Session::get('errors')->all() as $error)
-                                    <li>{!! $error !!}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+        <div class="space-y-6">
+            @if (Session::get('errors'))
+                <x-alert type="danger" title="Грешка!">
+                    <ul class="list-disc list-inside">
+                        @foreach (Session::get('errors')->all() as $error)
+                            <li>{!! $error !!}</li>
+                        @endforeach
+                    </ul>
+                </x-alert>
+            @endif
 
-                    {{ csrf_field() }}
-                    <input type="hidden" name="_method" id="_method" value="put"/>
-
-                    {{--STUDIJSKI PROGRAM--}}
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Студијски програм</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label for="TipStudija">Тип студија</label>
-                                <select class="form-control" id="TipStudija" name="TipStudija">
-                                    @foreach($tipStudija as $item)
-                                        <option value="{{ $item->id }}" {{ ($kandidat->tipStudija_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="StudijskiProgram">Студијски програм</label>
-                                <select class="form-control" id="StudijskiProgram" name="StudijskiProgram">
-                                    @foreach($studijskiProgram as $item)
-                                        <option value="{{ $item->id }}" {{ ($kandidat->studijskiProgram_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="SkolskeGodineUpisa">Школска година:</label>
-                                <select class="form-control" id="SkolskeGodineUpisa" name="SkolskeGodineUpisa">
-                                    @foreach($skolskeGodineUpisa as $item)
-                                        <option value="{{ $item->id }}" {{ ($kandidat->skolskaGodinaUpisa_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                    <label for="statusUpisa_id">Статус</label>
-                                    <select class="form-control" id="statusUpisa_id"
-                                            name="statusUpisa_id">
-                                        @foreach($statusKandidata as $item)
-                                            <option value="{{ $item->id }}" {{ ($kandidat->statusUpisa_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-lg-6">
-                                    <label for="datumStatusa">Датум статуса</label>
-                                    <input class="form-control dateMask" type="text" name="datumStatusa"
-                                           id="datumStatusa"
-                                           value="{{ !empty($kandidat->datumStatusa) ?
-                                           $kandidat->datumStatusa->format('d.m.Y.') : "" }}">
-                                </div>
-                                {{--@if($kandidat->upisan == 0)--}}
-                                    {{--<div class="form-group col-lg-6">--}}
-                                        {{--<label for="uplata">--}}
-                                            {{--<input type="checkbox" id="uplata"--}}
-                                                   {{--name="uplata" {{ $kandidat->uplata ? "checked":"" }}>--}}
-                                            {{--Уплата (да ли је кандидат платио школарину)</label>--}}
-                                    {{--</div>--}}
-                                {{--@endif--}}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {{-- LEFT COLUMN --}}
+                <div class="space-y-6">
+                    <x-card>
+                        <x-slot:header>Студијски програм</x-slot:header>
+                        <div class="space-y-4">
+                            <x-form-select name="TipStudija" label="Тип студија"
+                                :options="$tipStudija->pluck('naziv', 'id')->toArray()" :selected="$kandidat->tipStudija_id" />
+                            <x-form-select name="StudijskiProgram" label="Студијски програм"
+                                :options="$studijskiProgram->pluck('naziv', 'id')->toArray()" :selected="$kandidat->studijskiProgram_id" />
+                            <x-form-select name="SkolskeGodineUpisa" label="Школска година"
+                                :options="$skolskeGodineUpisa->pluck('naziv', 'id')->toArray()" :selected="$kandidat->skolskaGodinaUpisa_id" />
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <x-form-select name="statusUpisa_id" label="Статус"
+                                    :options="$statusKandidata->pluck('naziv', 'id')->toArray()" :selected="$kandidat->statusUpisa_id" />
+                                <x-form-input name="datumStatusa" label="Датум статуса" class="dateMask"
+                                    value="{{ !empty($kandidat->datumStatusa) ? $kandidat->datumStatusa->format('d.m.Y.') : '' }}" />
                             </div>
                         </div>
-                    </div>
+                    </x-card>
 
-                    {{--OSNOVNI PODACI--}}
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Основни подаци</h3>
-                        </div>
-                        <div class="panel-body">
-                            {{--@if($kandidat->statusUpisa_id == 1)--}}
-                                <div class="form-group">
-                                    <label for="brojIndeksa">Број Индекса</label>
-                                    <input class="form-control" type="text" name="brojIndeksa" id="brojIndeksa"
-                                           value="{{ $kandidat->brojIndeksa }}">
+                    <x-card>
+                        <x-slot:header>Основни подаци</x-slot:header>
+                        <div class="space-y-4">
+                            <x-form-input name="brojIndeksa" label="Број индекса" value="{{ $kandidat->brojIndeksa }}" />
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="text-center">
+                                    <img src="{{"/"}}uploads/images/{{$kandidat->slika}}"
+                                         class="mx-auto rounded-lg shadow-sm ring-1 ring-black/5 max-h-[300px]">
                                 </div>
-                            {{--@endif--}}
-                            <div class="row">
-                                <div class="col-lg-6 text-center">
-                                    <img src="{{"/"}}uploads/images/{{$kandidat->slika}}" class="img-thumbnail"
-                                         style="max-height: 300px">
-                                </div>
-                                <div class="row col-lg-6">
-                                    <div class="form-group col-lg-12">
-                                        <label for="ImeKandidata">Име кандидата</label>
-                                        <input class="form-control" type="text" name="ImeKandidata" id="ImeKandidata"
-                                               value="{{ $kandidat->imeKandidata }}">
-                                    </div>
-                                    <div class="form-group col-lg-12">
-                                        <label for="PrezimeKandidata">Презиме кандидата</label>
-                                        <input class="form-control" type="text" name="PrezimeKandidata"
-                                               id="PrezimeKandidata"
-                                               value="{{ $kandidat->prezimeKandidata }}">
-                                    </div>
-                                    <div class="form-group col-lg-12">
-                                        <label for="imageUpload">Нова слика</label>
-                                        <input type="file" accept="image/*" name="imageUpload" id="imageUpload">
+                                <div class="sm:col-span-2 space-y-4">
+                                    <x-form-input name="ImeKandidata" label="Име кандидата" value="{{ $kandidat->imeKandidata }}" />
+                                    <x-form-input name="PrezimeKandidata" label="Презиме кандидата" value="{{ $kandidat->prezimeKandidata }}" />
+                                    <div>
+                                        <label class="block text-sm font-medium text-secondary-700 mb-1">Нова слика</label>
+                                        <input type="file" accept="image/*" name="imageUpload" id="imageUpload"
+                                               class="block w-full text-sm text-secondary-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-lg-10">
-                                    <label for="JMBG">ЈМБГ</label>
-                                    <input class="form-control" type="text" name="JMBG" id="JMBG"
-                                           value="{{ $kandidat->jmbg }}">
-                                </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <x-form-input name="JMBG" label="ЈМБГ" value="{{ $kandidat->jmbg }}" />
+                                <x-form-input name="DatumRodjenja" label="Датум рођења" class="dateMask"
+                                    value="{{ date('d.m.Y.', strtotime($kandidat->datumRodjenja)) }}" />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                    <label for="DatumRodjenja">Датум рођења</label>
-                                    <input class="form-control dateMask" type="text" name="DatumRodjenja" id="DatumRodjenja"
-                                           value="{{ date('d.m.Y.',strtotime($kandidat->datumRodjenja)) }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                    <label for="mestoRodjenja">Место рођења</label>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="mestoRodjenja" class="block text-sm font-medium text-secondary-700 mb-1">Место рођења</label>
                                     <input type="text" name="mestoRodjenja" id="mestoRodjenja" list="mestaList"
-                                           class="form-control"
-                                           value="{{ $kandidat->mestoRodjenja }}">
+                                           value="{{ $kandidat->mestoRodjenja }}"
+                                           class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                                     <datalist id="mestaList">
                                         @foreach($mestoRodjenja as $item)
                                             <option value="{{$item->naziv}}">
                                         @endforeach
                                     </datalist>
                                 </div>
-                                <div class="form-group col-lg-6">
-                                    <label for="drzavaRodjenja">Држава рођења</label>
-                                    <input class="form-control" type="text" name="drzavaRodjenja" id="drzavaRodjenja"
-                                           value="{{ $kandidat->drzavaRodjenja }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-10">
-                                    <label for="KrsnaSlava">Крсна слава</label>
-                                    <select class="form-control auto-combobox" id="KrsnaSlava" name="KrsnaSlava">
-                                        <option value=""></option>
-                                        @foreach($krsnaSlava as $item)
-                                            <option value="{{ $item->id }}" {{ ($kandidat->krsnaSlava_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group  col-lg-6">
-                                    <label for="KontaktTelefon">Контакт телефон</label>
-                                    <input class="form-control" type="text" name="KontaktTelefon" id="KontaktTelefon"
-                                           value="{{ $kandidat->kontaktTelefon }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-12">
-                                    <label for="AdresaStanovanja">Адреса становања</label>
-                                    <input class="form-control" type="text" name="AdresaStanovanja"
-                                           id="AdresaStanovanja"
-                                           value="{{ $kandidat->adresaStanovanja }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-9">
-                                    <label for="Email">Email</label>
-                                    <input class="form-control" type="text" name="Email" id="Email"
-                                           value="{{ $kandidat->email }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-8">
-                                    <label for="ImePrezimeJednogRoditelja">Име једног родитеља</label>
-                                    <input class="form-control" type="text" name="ImePrezimeJednogRoditelja"
-                                           id="ImePrezimeJednogRoditelja"
-                                           value="{{ $kandidat->imePrezimeJednogRoditelja }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-8">
-                                    <label for="KontaktTelefonRoditelja">Контакт телефон родитеља</label>
-                                    <input class="form-control" type="text" name="KontaktTelefonRoditelja"
-                                           id="KontaktTelefonRoditelja"
-                                           value="{{ $kandidat->kontaktTelefonRoditelja }}">
-                                </div>
+                                <x-form-input name="drzavaRodjenja" label="Држава рођења" value="{{ $kandidat->drzavaRodjenja }}" />
                             </div>
 
-                            <div class="clearfix"></div>
-                            <hr>
-                            <div class="row">
-                                <div class="form-group col-lg-10">
-                                    <label for="NazivSkoleFakulteta">Назив школе или факултета</label>
-                                    <input class="form-control" type="text" name="NazivSkoleFakulteta"
-                                           id="NazivSkoleFakulteta"
-                                           value="{{ $kandidat->srednjeSkoleFakulteti }}">
-                                </div>
-                                <div class="form-group col-lg-10">
-                                    <label for="SmerZavrseneSkoleFakulteta">Смер завршене школе или факултета</label>
-                                    <input class="form-control" type="text" name="SmerZavrseneSkoleFakulteta"
-                                           id="SmerZavrseneSkoleFakulteta"
-                                           value="{{ $kandidat->smerZavrseneSkoleFakulteta }}">
-                                </div>
+                            <x-form-select name="KrsnaSlava" label="Крсна слава"
+                                :options="$krsnaSlava->pluck('naziv', 'id')->toArray()"
+                                :selected="$kandidat->krsnaSlava_id" placeholder="" />
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <x-form-input name="KontaktTelefon" label="Контакт телефон" value="{{ $kandidat->kontaktTelefon }}" />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-lg-10">
-                                    <label for="mestoZavrseneSkoleFakulteta">Место завршене школе или факултета</label>
-                                    <input type="text" class="form-control" id="mestoZavrseneSkoleFakulteta"
-                                           name="mestoZavrseneSkoleFakulteta" list="mestaList"
+
+                            <x-form-input name="AdresaStanovanja" label="Адреса становања" value="{{ $kandidat->adresaStanovanja }}" />
+                            <x-form-input name="Email" label="Email" type="email" value="{{ $kandidat->email }}" />
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <x-form-input name="ImePrezimeJednogRoditelja" label="Име родитеља" value="{{ $kandidat->imePrezimeJednogRoditelja }}" />
+                                <x-form-input name="KontaktTelefonRoditelja" label="Контакт телефон родитеља" value="{{ $kandidat->kontaktTelefonRoditelja }}" />
+                            </div>
+
+                            <hr class="border-secondary-200">
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <x-form-input name="NazivSkoleFakulteta" label="Назив школе или факултета" value="{{ $kandidat->srednjeSkoleFakulteti }}" />
+                                <x-form-input name="SmerZavrseneSkoleFakulteta" label="Смер" value="{{ $kandidat->smerZavrseneSkoleFakulteta }}" />
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="mestoZavrseneSkoleFakulteta" class="block text-sm font-medium text-secondary-700 mb-1">Место завршене школе или факултета</label>
+                                    <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                                           id="mestoZavrseneSkoleFakulteta" name="mestoZavrseneSkoleFakulteta" list="mestaList"
                                            value="{{ $kandidat->mestoZavrseneSkoleFakulteta }}">
                                 </div>
-                                <div class="form-group col-lg-10">
-                                    <label for="drzavaZavrseneSkole">Држава завршене школе или факултета</label>
-                                    <input class="form-control" type="text" name="drzavaZavrseneSkole"
-                                           id="drzavaZavrseneSkole"
-                                           value="{{ $kandidat->drzavaZavrseneSkole }}">
-                                </div>
-                                <div class="form-group col-lg-10">
-                                    <label for="godinaZavrsetkaSkole">Година завршетка школе или факултета</label>
-                                    <input class="form-control" type="text" name="godinaZavrsetkaSkole"
-                                           id="godinaZavrsetkaSkole"
-                                           value="{{ $kandidat->godinaZavrsetkaSkole }}">
-                                </div>
-                                <div class="form-group col-lg-10">
-                                    <label for="GodinaStudija">Година студија</label>
-                                    <select class="form-control" id="GodinaStudija" name="GodinaStudija">
-                                        @foreach($godinaStudija as $item)
-                                            <option value="{{ $item->id }}" {{ ($kandidat->godinaStudija_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                <x-form-input name="drzavaZavrseneSkole" label="Држава завршене школе" value="{{ $kandidat->drzavaZavrseneSkole }}" />
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <x-form-input name="godinaZavrsetkaSkole" label="Година завршетка" value="{{ $kandidat->godinaZavrsetkaSkole }}" />
+                                <x-form-select name="GodinaStudija" label="Година студија"
+                                    :options="$godinaStudija->pluck('naziv', 'id')->toArray()" :selected="$kandidat->godinaStudija_id" />
                             </div>
                         </div>
-                    </div>
+                    </x-card>
                 </div>
 
-                <div class="col-sm-12 col-lg-6">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-warning">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Само за прву годину</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label for="prviRazred">1. разред</label>
-                                            <select class="form-control" id="prviRazred" name="prviRazred"
-                                                    tabindex="-1">
-                                                @foreach($opstiUspehSrednjaSkola as $item)
-                                                    <option value="{{$item->id}}" {{ ($prviRazred->opstiUspeh_id == $item->id ? "selected":"") }}>{{$item->naziv}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="SrednjaOcena1">Средња оцена</label>
-                                            <input class="form-control" type="text" name="SrednjaOcena1"
-                                                   id="SrednjaOcena1"
-                                                   value="{{ number_format((float)$prviRazred->srednja_ocena, 2, '.', '') }}">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label for="drugiRazred">2. разред</label>
-                                            <select class="form-control" id="drugiRazred" name="drugiRazred"
-                                                    tabindex="-1">
-                                                @foreach($opstiUspehSrednjaSkola as $item)
-                                                    <option value="{{ $item->id }}" {{ ($drugiRazred->opstiUspeh_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="SrednjaOcena2">Средња оцена</label>
-                                            <input class="form-control" type="text" name="SrednjaOcena2"
-                                                   id="SrednjaOcena2"
-                                                   value="{{ number_format((float)$drugiRazred->srednja_ocena, 2, '.', '') }}">
-                                        </div>
-                                    </div>
+                {{-- RIGHT COLUMN --}}
+                <div class="space-y-6">
+                    <x-card>
+                        <x-slot:header>Само за прву годину</x-slot:header>
+                        <div class="space-y-4">
+                            @foreach([['key'=>'prvi','num'=>'1'], ['key'=>'drugi','num'=>'2'], ['key'=>'treci','num'=>'3'], ['key'=>'cetvrti','num'=>'4']] as $razred)
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <x-form-select name="{{ $razred['key'] }}Razred" label="{{ $razred['num'] }}. разред"
+                                    :options="$opstiUspehSrednjaSkola->pluck('naziv', 'id')->toArray()"
+                                    :selected="${$razred['key'] . 'Razred'}->opstiUspeh_id ?? ''" />
+                                <x-form-input name="SrednjaOcena{{ $razred['num'] }}" label="Средња оцена"
+                                    value="{{ number_format((float)${$razred['key'] . 'Razred'}->srednja_ocena ?? 0, 2, '.', '') }}" />
+                            </div>
+                            @endforeach
 
-                                    <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label for="treciRazred">3. разред</label>
-                                            <select class="form-control" id="treciRazred" name="treciRazred"
-                                                    tabindex="-1">
-                                                @foreach($opstiUspehSrednjaSkola as $item)
-                                                    <option value="{{ $item->id }}" {{ ($treciRazred->opstiUspeh_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="SrednjaOcena3">Средња оцена</label>
-                                            <input class="form-control" type="text" name="SrednjaOcena3"
-                                                   id="SrednjaOcena3"
-                                                   value="{{ number_format((float)$treciRazred->srednja_ocena, 2, '.', '') }}">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label for="cetvrtiRazred">4. разред</label>
-                                            <select class="form-control" id="cetvrtiRazred" name="cetvrtiRazred"
-                                                    tabindex="-1">
-                                                @foreach($opstiUspehSrednjaSkola as $item)
-                                                    <option value="{{ $item->id }}" {{ ($cetvrtiRazred->opstiUspeh_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="SrednjaOcena4">Средња оцена</label>
-                                            <input class="form-control" type="text" name="SrednjaOcena4"
-                                                   id="SrednjaOcena4"
-                                                   value="{{ number_format((float)$cetvrtiRazred->srednja_ocena, 2, '.', '') }}">
-                                        </div>
-                                    </div>
+                            <hr class="border-secondary-200">
 
-                                    <div class="clearfix"></div>
-                                    <hr>
-
-                                    <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label for="OpstiUspehSrednjaSkola">Општи успех средња школа</label>
-                                            <select class="form-control" id="OpstiUspehSrednjaSkola"
-                                                    name="OpstiUspehSrednjaSkola"
-                                                    tabindex="-1">
-                                                @foreach($opstiUspehSrednjaSkola as $item)
-                                                    <option value="{{ $item->id }}" {{ ($kandidat->opstiUspehSrednjaSkola_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="SrednjaOcenaSrednjaSkola">Средња оцена средња школа</label>
-                                            <input class="form-control" type="text" name="SrednjaOcenaSrednjaSkola"
-                                                   id="SrednjaOcenaSrednjaSkola"
-                                                   value="{{ number_format((float)$kandidat->srednjaOcenaSrednjaSkola, 2, '.', '')}}">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <x-form-select name="OpstiUspehSrednjaSkola" label="Општи успех средња школа"
+                                    :options="$opstiUspehSrednjaSkola->pluck('naziv', 'id')->toArray()"
+                                    :selected="$kandidat->opstiUspehSrednjaSkola_id ?? ''" />
+                                <x-form-input name="SrednjaOcenaSrednjaSkola" label="Средња оцена средња школа"
+                                    value="{{ number_format((float)$kandidat->srednjaOcenaSrednjaSkola, 2, '.', '') }}" />
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Спортско ангаажовање</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <table class="table table-condensed">
-                                        <thead>
-                                        <tr>
-                                            <th>Спорт</th>
-                                            <th><a class="btn btn-primary"
-                                                   href="{{"/"}}kandidat/{{ $kandidat->id }}/sportskoangazovanje">Додај</a>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($sportskoAngazovanjeKandidata as $angazovanje)
-                                            <tr>
-                                                <td>{{ $sport->find($angazovanje->sport_id)->naziv  }}</td>
-                                                <td></td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Висина и тежина</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label for="VisinaKandidata">Висина кандидата (cm)</label>
-                                            <input class="form-control" type="text" name="VisinaKandidata"
-                                                   id="VisinaKandidata"
-                                                   value="{{ $kandidat->visina }}">
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="TelesnaTezinaKandidata">Телесна тежина кандидата (kg)</label>
-                                            <input class="form-control" type="text" name="TelesnaTezinaKandidata"
-                                                   id="TelesnaTezinaKandidata" value="{{ $kandidat->telesnaTezina }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">ДОКУМЕНТА - за упис на I ГОДИНУ СТУДИЈА</h3>
-                                </div>
-                                <div class="panel-body">
-                                    @foreach($dokumentiPrvaGodina as $i=>$dokument)
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="dokumentiPrva[{{ $i }}]"
-                                                       value="{{$dokument->id}}"
-                                                        {{ (in_array($dokument->id,$prilozenaDokumenta) ? "checked":"") }}>
-                                                {{ $dokument->naziv }}
-                                            </label>
-                                            <input type="file" class="form-control" name="documentUploadsPrva[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
-                                            @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
-                                                <a class="btn btn-link" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
-                                                    {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
-                                                </a>
-                                            @endif
-                                        </div>
+                    </x-card>
+
+                    <x-card>
+                        <x-slot:header>Спортско ангажовање</x-slot:header>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-secondary-200">
+                                <thead class="bg-secondary-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-secondary-500 uppercase">Спорт</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-secondary-500 uppercase w-24"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-secondary-200">
+                                    @foreach($sportskoAngazovanjeKandidata as $angazovanje)
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm text-secondary-900">{{ $sport->find($angazovanje->sport_id)->naziv ?? '' }}</td>
+                                        <td class="px-4 py-3">
+                                            <a href="{{"/"}}kandidat/{{ $kandidat->id }}/sportskoangazovanje" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-primary-700 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors">
+                                                Додај
+                                            </a>
+                                        </td>
+                                    </tr>
                                     @endforeach
-                                </div>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">ДОКУМЕНТА - за упис на II, III и IV ГОДИНУ СТУДИЈА и
-                                        прелазак
-                                        са другог факултета</h3>
-                                </div>
-                                <div class="panel-body">
-                                    @foreach($dokumentiOstaleGodine as $i=>$dokument)
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="dokumentiDruga[{{ $i }}]"
-                                                       value="{{$dokument->id}}"
-                                                        {{ (in_array($dokument->id,$prilozenaDokumenta) ? "checked":"") }}>
-                                                {{ $dokument->naziv }}
-                                            </label>
-                                            <input type="file" class="form-control" name="documentUploadsDruga[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
-                                            @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
-                                                <a class="btn btn-link" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
-                                                    {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
-                                                </a>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
+                    </x-card>
 
-                        <div class="col-lg-12">
-                            <div class="panel panel-info pull-left" style="width: 100%;">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Остало</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="form-group col-lg-12">
-                                            <label for="BrojBodovaTest">Број бодова тест</label>
-                                            <input class="form-control" type="text" name="BrojBodovaTest"
-                                                   id="BrojBodovaTest" value="{{ $kandidat->brojBodovaTest }}">
-                                        </div>
-                                        <div class="form-group col-lg-12">
-                                            <label for="BrojBodovaSkola">Број бодова школа</label>
-                                            <input class="form-control" type="text" name="BrojBodovaSkola"
-                                                   id="BrojBodovaSkola" value="{{ $kandidat->brojBodovaSkola }}">
-                                        </div>
-                                        <div class="form-group col-lg-12">
-                                            <label for="ukupniBrojBodova">Укупни број бодова</label>
-                                            <input class="form-control" type="text" name="ukupniBrojBodova"
-                                                   id="ukupniBrojBodova" value="{{ $kandidat->ukupniBrojBodova }}">
-                                        </div>
-                                        <div class="form-group col-lg-12">
-                                            <label for="UpisniRok">Уписни рок</label>
-                                            <input class="form-control" type="text" name="UpisniRok" id="UpisniRok"
-                                                   value="{{ $kandidat->upisniRok }}">
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label for="pdfUpload">Додај дипломски рад</label>
-                                            <input type="file" accept="application/pdf" name="pdfUpload" id="pdfUpload">
-                                        </div>
-                                        @if(!empty($kandidat->diplomski))
-                                            <div class="form-group col-lg-6">
-                                                <label for="pdfUpload">Дипломски рад</label>
-                                                <a class="btn btn-info" href="/uploads/pdf/{{$kandidat->diplomski}}">
-                                                    <span class="fa fa-graduation-cap"></span>
-                                                    Дипломски рад
-                                                </a>
-                                            </div>
+                    <x-card>
+                        <x-slot:header>Висина и тежина</x-slot:header>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <x-form-input name="VisinaKandidata" label="Висина кандидата (cm)" value="{{ $kandidat->visina }}" />
+                            <x-form-input name="TelesnaTezinaKandidata" label="Телесна тежина (kg)" value="{{ $kandidat->telesnaTezina }}" />
+                        </div>
+                    </x-card>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <x-card>
+                            <x-slot:header>ДОКУМЕНТА - I година студија</x-slot:header>
+                            <div class="space-y-3">
+                                @foreach($dokumentiPrvaGodina as $i=>$dokument)
+                                <div class="flex items-start gap-3">
+                                    <input type="checkbox" name="dokumentiPrva[{{ $i }}]" value="{{$dokument->id}}"
+                                           {{ (in_array($dokument->id, $prilozenaDokumenta) ? "checked":"") }}
+                                           class="mt-1 rounded border-secondary-300 text-primary-600 focus:ring-primary-500">
+                                    <div class="flex-1">
+                                        <label class="text-sm text-secondary-700">{{ $dokument->naziv }}</label>
+                                        <input type="file" class="block w-full text-sm text-secondary-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 mt-1" name="documentUploadsPrva[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
+                                        @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
+                                            <a class="inline-flex items-center text-sm text-primary-600 hover:text-primary-800 mt-1" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
+                                                {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
+                        </x-card>
 
-                        </div>
+                        <x-card>
+                            <x-slot:header>ДОКУМЕНТА - II, III и IV година</x-slot:header>
+                            <div class="space-y-3">
+                                @foreach($dokumentiOstaleGodine as $i=>$dokument)
+                                <div class="flex items-start gap-3">
+                                    <input type="checkbox" name="dokumentiDruga[{{ $i }}]" value="{{$dokument->id}}"
+                                           {{ (in_array($dokument->id, $prilozenaDokumenta) ? "checked":"") }}
+                                           class="mt-1 rounded border-secondary-300 text-primary-600 focus:ring-primary-500">
+                                    <div class="flex-1">
+                                        <label class="text-sm text-secondary-700">{{ $dokument->naziv }}</label>
+                                        <input type="file" class="block w-full text-sm text-secondary-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 mt-1" name="documentUploadsDruga[{{ $dokument->id }}]" accept=".pdf,.jpg,.jpeg,.png">
+                                        @if(!empty($prilozenaDokumentaFajlovi[$dokument->id]))
+                                            <a class="inline-flex items-center text-sm text-primary-600 hover:text-primary-800 mt-1" target="_blank" href="{{ '/' . ltrim('uploads/' . $prilozenaDokumentaFajlovi[$dokument->id], '/') }}">
+                                                {{ $prilozenaDokumentaNazivi[$dokument->id] ?? 'Погледај документ' }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </x-card>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-lg-12" style="margin-bottom: 5%">
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Сачувај</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group text-center">
-                                <button type="submit" class="btn btn-success btn-lg">Сачувај</button>
-                                <input type="submit" name="submitstay" value="Сачувај и остани"
-                                       class="btn btn-success btn-lg">
-                                @if(Auth::check() && Auth::user()->role === 'admin')
-                                    <a href="{{ route('kandidat.documents.review', $kandidat->id) }}" class="btn btn-info btn-lg">
-                                        <i class="fa fa-file-alt"></i> Преглед документације
+
+                    <x-card>
+                        <x-slot:header>Остало</x-slot:header>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <x-form-input name="BrojBodovaTest" label="Број бодова тест" value="{{ $kandidat->brojBodovaTest }}" />
+                                <x-form-input name="BrojBodovaSkola" label="Број бодова школа" value="{{ $kandidat->brojBodovaSkola }}" />
+                                <x-form-input name="ukupniBrojBodova" label="Укупни број бодова" value="{{ $kandidat->ukupniBrojBodova }}" />
+                            </div>
+                            <x-form-input name="UpisniRok" label="Уписни рок" value="{{ $kandidat->upisniRok }}" />
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-secondary-700 mb-1">Додај дипломски рад</label>
+                                    <input type="file" accept="application/pdf" name="pdfUpload" id="pdfUpload"
+                                           class="block w-full text-sm text-secondary-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
+                                </div>
+                                @if(!empty($kandidat->diplomski))
+                                <div>
+                                    <label class="block text-sm font-medium text-secondary-700 mb-1">Дипломски рад</label>
+                                    <a href="/uploads/pdf/{{$kandidat->diplomski}}" target="_blank"
+                                       class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342" />
+                                        </svg>
+                                        Дипломски рад
                                     </a>
+                                </div>
                                 @endif
                             </div>
                         </div>
-                    </div>
+                    </x-card>
                 </div>
             </div>
+
+            {{-- SAVE SECTION --}}
+            <x-card>
+                <x-slot:header>Сачувај</x-slot:header>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <x-button type="submit" variant="success" size="lg">Сачувај</x-button>
+                    <x-button type="submit" name="submitstay" value="Сачувај и остани" variant="success" size="lg">Сачувај и остани</x-button>
+                    @if(Auth::check() && Auth::user()->role === 'admin')
+                        <a href="{{ route('kandidat.documents.review', $kandidat->id) }}" class="inline-flex items-center px-6 py-3 font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors">
+                            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+                            Преглед документације
+                        </a>
+                    @endif
+                </div>
+            </x-card>
         </div>
     </form>
-    <script type="text/javascript" src="{{"/"}}js/kandidat-create-part-1.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/kandidat-create-part-2.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+
+    @push('scripts')
+    <script src="{{"/"}}js/kandidat-create-part-1.js"></script>
+    <script src="{{"/"}}js/kandidat-create-part-2.js"></script>
+    <script src="{{"/"}}js/dateMask.js"></script>
+    <script src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    @endpush
 @endsection

@@ -1,229 +1,88 @@
 @extends('layouts.layout')
 @section('page_heading','Unos kandidata')
 @section('section')
-    <div class="col-sm-12">
-        <div class="row">
-            <div class="col-lg-6">
-                <form role="form" method="post" action="{{ url('kandidat/create') }}">
-                    <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
+    <div class="max-w-4xl mx-auto space-y-6">
+        <form role="form" method="post" action="{{ url('kandidat/create') }}" class="space-y-6">
+            @csrf
 
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Osnovni podaci</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                                <label for="ImeKandidata">Ime Kandidata</label>
-                                <input class="form-control" type="text" name="ImeKandidata" id="ImeKandidata">
-                            </div>
-                            <div class="form-group pull-left" style="width: 48%; margin-left: 2%;">
-                                <label for="PrezimeKandidata">Prezime Kandidata</label>
-                                <input class="form-control" type="text" name="PrezimeKandidata" id="PrezimeKandidata">
-                            </div>
-                            <div class="form-group">
-                                <label for="JMBG">JMBG</label>
-                                <input class="form-control" type="text" name="JMBG" id="JMBG" style="max-width: 60%">
-                            </div>
-                            <div class="form-group">
-                                <label for="DatumRodjenja">Datum Rodjenja</label>
-                                <input class="form-control" type="date" name="DatumRodjenja" id="DatumRodjenja" style="max-width: 60%">
-                            </div>
-                            <div class="form-group">
-                                <label for="MestoRodjenja">MestoRodjenja:</label>
-                                <select class="form-control" id="MestoRodjenja" name="MestoRodjenja" style="max-width: 60%">
-                                    @foreach($mestoRodjenja as $item)
-                                        <option value="{{$item->id}}">{{$item->NazivMesta}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="KrsnaSlava">KrsnaSlava:</label>
-                                <select class="form-control" id="KrsnaSlava" name="KrsnaSlava" style="max-width: 50%">
-                                    @foreach($krsnaSlava as $item)
-                                        <option value="{{$item->id}}">{{$item->NazivSlave}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="KontaktTelefon">Kontakt Telefon</label>
-                                <input class="form-control" type="text" name="KontaktTelefon" id="KontaktTelefon" style="max-width: 40%">
-                            </div>
-                            <div class="form-group">
-                                <label for="AdresaStanovanja">AdresaStanovanja</label>
-                                <input class="form-control" type="text" name="AdresaStanovanja" id="AdresaStanovanja" style="max-width: 80%">
-                            </div>
-                            <div class="form-group">
-                                <label for="Email">Email</label>
-                                <input class="form-control" type="text" name="Email" id="Email" style="max-width: 60%">
-                            </div>
-                            <div class="form-group">
-                                <label for="ImePrezimeJednogRoditelja">ImePrezimeJednogRoditelja</label>
-                                <input class="form-control" type="text" name="ImePrezimeJednogRoditelja"
-                                       id="ImePrezimeJednogRoditelja" style="max-width: 80%">
-                            </div>
-                            <div class="form-group">
-                                <label for="KontaktTelefonRoditelja">KontaktTelefonRoditelja</label>
-                                <input class="form-control" type="text" name="KontaktTelefonRoditelja"
-                                       id="KontaktTelefonRoditelja" style="max-width: 40%">
-                            </div>
-                            <div class="form-group">
-                                <label for="NazivSkoleFakulteta">NazivSkoleFakulteta:</label>
-                                <select class="form-control" id="NazivSkoleFakulteta" name="NazivSkoleFakulteta" style="max-width: 80%">
-                                    @foreach($nazivSkoleFakulteta as $item)
-                                        <option value="{{$item->id}}">{{$item->NazivSkoleFakulteta}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="MestoZavrseneSkoleFakulteta">MestoZavrseneSkoleFakulteta:</label>
-                                <select class="form-control" id="MestoZavrseneSkoleFakulteta"
-                                        name="MestoZavrseneSkoleFakulteta" style="max-width: 60%">
-                                    @foreach($mestoZavrseneSkoleFakulteta as $item)
-                                        <option value="{{$item->id}}">{{$item->NazivMesta}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="SmerZavrseneSkoleFakulteta">SmerZavrseneSkoleFakulteta</label>
-                                <input class="form-control" type="text" name="SmerZavrseneSkoleFakulteta"
-                                       id="SmerZavrseneSkoleFakulteta" style="max-width: 80%">
-                            </div>
-                        </div>
+            <x-card>
+                <x-slot:header>Основни подаци</x-slot:header>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="ImeKandidata" label="Ime Kandidata" required />
+                        <x-form-input name="PrezimeKandidata" label="Prezime Kandidata" required />
                     </div>
+                    <x-form-input name="JMBG" label="JMBG" class="max-w-md" />
+                    <x-form-input name="DatumRodjenja" label="Datum Rodjenja" type="date" class="max-w-md" />
+                    <x-form-select name="MestoRodjenja" label="MestoRodjenja" :options="$mestoRodjenja->pluck('NazivMesta', 'id')->toArray()" class="max-w-md" />
+                    <x-form-select name="KrsnaSlava" label="KrsnaSlava" :options="$krsnaSlava->pluck('NazivSlave', 'id')->toArray()" class="max-w-md" />
+                    <x-form-input name="KontaktTelefon" label="Kontakt Telefon" class="max-w-sm" />
+                    <x-form-input name="AdresaStanovanja" label="AdresaStanovanja" class="max-w-lg" />
+                    <x-form-input name="Email" label="Email" type="email" class="max-w-md" />
+                    <x-form-input name="ImePrezimeJednogRoditelja" label="ImePrezimeJednogRoditelja" class="max-w-lg" />
+                    <x-form-input name="KontaktTelefonRoditelja" label="KontaktTelefonRoditelja" class="max-w-sm" />
+                    <x-form-select name="NazivSkoleFakulteta" label="NazivSkoleFakulteta"
+                        :options="$nazivSkoleFakulteta->pluck('NazivSkoleFakulteta', 'id')->toArray()" class="max-w-lg" />
+                    <x-form-select name="MestoZavrseneSkoleFakulteta" label="MestoZavrseneSkoleFakulteta"
+                        :options="$mestoZavrseneSkoleFakulteta->pluck('NazivMesta', 'id')->toArray()" class="max-w-md" />
+                    <x-form-input name="SmerZavrseneSkoleFakulteta" label="SmerZavrseneSkoleFakulteta" class="max-w-lg" />
+                </div>
+            </x-card>
 
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Samo za prvu godinu</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label for="UspehSrednjaSkola">UspehSrednjaSkola:</label>
-                                <select class="form-control" id="UspehSrednjaSkola" name="UspehSrednjaSkola">
-                                    @foreach($uspehSrednjaSkola as $item)
-                                        <option value="{{$item->id}}">{{$item->Naziv}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="OpstiUspehSrednjaSkola">OpstiUspehSrednjaSkola:</label>
-                                <select class="form-control" id="OpstiUspehSrednjaSkola" name="OpstiUspehSrednjaSkola">
-                                    @foreach($opstiUspehSrednjaSkola as $item)
-                                        <option value="{{$item->id}}">{{$item->Naziv}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="SrednjaOcenaSrednjaSkola">SrednjaOcenaSrednjaSkola</label>
-                                <input class="form-control" type="text" name="SrednjaOcenaSrednjaSkola"
-                                       id="SrednjaOcenaSrednjaSkola">
-                            </div>
-                        </div>
+            <x-card>
+                <x-slot:header>Samo za prvu godinu</x-slot:header>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-select name="UspehSrednjaSkola" label="UspehSrednjaSkola"
+                            :options="$uspehSrednjaSkola->pluck('Naziv', 'id')->toArray()" />
+                        <x-form-select name="OpstiUspehSrednjaSkola" label="OpstiUspehSrednjaSkola"
+                            :options="$opstiUspehSrednjaSkola->pluck('Naziv', 'id')->toArray()" />
                     </div>
+                    <x-form-input name="SrednjaOcenaSrednjaSkola" label="SrednjaOcenaSrednjaSkola" />
+                </div>
+            </x-card>
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Sportsko angazovanje</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label for="SportskoAngazovanje">SportskoAngazovanje:</label>
-                                <select class="form-control" id="SportskoAngazovanje" name="SportskoAngazovanje">
-                                    @foreach($sportskoAngazovanje as $item)
-                                        <option value="{{$item->id}}">{{$item->NazivKluba}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="TelesnaTezinaKandidata">TelesnaTezinaKandidata</label>
-                                <input class="form-control" type="text" name="TelesnaTezinaKandidata"
-                                       id="TelesnaTezinaKandidata">
-                            </div>
-                            <div class="form-group">
-                                <label for="VisinaKandidata">VisinaKandidata</label>
-                                <input class="form-control" type="text" name="VisinaKandidata" id="VisinaKandidata">
-                            </div>
-                        </div>
+            <x-card>
+                <x-slot:header>Sportsko angazovanje</x-slot:header>
+                <div class="space-y-4">
+                    <x-form-select name="SportskoAngazovanje" label="SportskoAngazovanje"
+                        :options="$sportskoAngazovanje->pluck('NazivKluba', 'id')->toArray()" />
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="TelesnaTezinaKandidata" label="TelesnaTezinaKandidata" />
+                        <x-form-input name="VisinaKandidata" label="VisinaKandidata" />
                     </div>
+                </div>
+            </x-card>
 
+            <x-card>
+                <x-slot:header>Upis</x-slot:header>
+                <div class="space-y-4">
+                    <x-form-select name="PrilozeniDokumentPrvaGodina" label="PrilozeniDokumentPrvaGodina"
+                        :options="$prilozeniDokumentPrvaGodina->pluck('NazivDokumenta', 'id')->toArray()" />
+                    <x-form-select name="StatusaUpisaKandidata" label="StatusaUpisaKandidata"
+                        :options="$statusaUpisaKandidata->pluck('NazivStatusaStudiranja', 'id')->toArray()" />
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="BrojBodovaTest" label="BrojBodovaTest" />
+                        <x-form-input name="BrojBodovaSkola" label="BrojBodovaSkola" />
+                    </div>
+                    <x-form-input name="UpisniRok" label="UpisniRok" />
+                    <x-form-select name="SkolskeGodineUpisa" label="SkolskeGodineUpisa"
+                        :options="$skolskeGodineUpisa->pluck('NazivSkolskeGodineUpisa', 'id')->toArray()" />
+                    <x-form-input name="IndikatorAktivan" label="IndikatorAktivan" />
+                    <x-form-select name="StudijskiProgram" label="StudijskiProgram"
+                        :options="$studijskiProgram->pluck('NazivStudijskogPrograma', 'id')->toArray()" />
+                    <x-form-select name="TipStudija" label="TipStudija"
+                        :options="$tipStudija->pluck('Naziv', 'id')->toArray()" />
+                    <x-form-select name="GodinaStudija" label="GodinaStudija"
+                        :options="$godinaStudija->pluck('Naziv', 'id')->toArray()" />
+                    <x-form-select name="MestoZavrseneSkoleFakulteta" label="MestoZavrseneSkoleFakulteta"
+                        :options="$mestoZavrseneSkoleFakulteta->pluck('NazivMesta', 'id')->toArray()" />
+                </div>
+            </x-card>
 
-
-                    <div class="form-group">
-                        <label for="PrilozeniDokumentPrvaGodina">PrilozeniDokumentPrvaGodina:</label>
-                        <select class="form-control" id="PrilozeniDokumentPrvaGodina"
-                                name="PrilozeniDokumentPrvaGodina">
-                            @foreach($prilozeniDokumentPrvaGodina as $item)
-                                <option value="{{$item->id}}">{{$item->NazivDokumenta}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="StatusaUpisaKandidata">StatusaUpisaKandidata:</label>
-                        <select class="form-control" id="StatusaUpisaKandidata" name="StatusaUpisaKandidata">
-                            @foreach($statusaUpisaKandidata as $item)
-                                <option value="{{$item->id}}">{{$item->NazivStatusaStudiranja}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="BrojBodovaTest">BrojBodovaTest</label>
-                        <input class="form-control" type="text" name="BrojBodovaTest" id="BrojBodovaTest">
-                    </div>
-                    <div class="form-group">
-                        <label for="BrojBodovaSkola">BrojBodovaSkola</label>
-                        <input class="form-control" type="text" name="BrojBodovaSkola" id="BrojBodovaSkola">
-                    </div>
-                    <div class="form-group">
-                        <label for="UpisniRok">UpisniRok</label>
-                        <input class="form-control" type="text" name="UpisniRok" id="UpisniRok">
-                    </div>
-                    <div class="form-group">
-                        <label for="SkolskeGodineUpisa">SkolskeGodineUpisa:</label>
-                        <select class="form-control" id="SkolskeGodineUpisa" name="SkolskeGodineUpisa">
-                            @foreach($skolskeGodineUpisa as $item)
-                                <option value="{{$item->id}}">{{$item->NazivSkolskeGodineUpisa}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="IndikatorAktivan">IndikatorAktivan</label>
-                        <input class="form-control" type="text" name="IndikatorAktivan" id="IndikatorAktivan">
-                    </div>
-                    <div class="form-group">
-                        <label for="StudijskiProgram">StudijskiProgram:</label>
-                        <select class="form-control" id="StudijskiProgram" name="StudijskiProgram">
-                            @foreach($studijskiProgram as $item)
-                                <option value="{{$item->id}}">{{$item->NazivStudijskogPrograma}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="TipStudija">TipStudija:</label>
-                        <select class="form-control" id="TipStudija" name="TipStudija">
-                            @foreach($tipStudija as $item)
-                                <option value="{{$item->id}}">{{$item->Naziv}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="GodinaStudija">GodinaStudija:</label>
-                        <select class="form-control" id="GodinaStudija" name="GodinaStudija">
-                            @foreach($godinaStudija as $item)
-                                <option value="{{$item->id}}">{{$item->Naziv}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="MestoZavrseneSkoleFakulteta">MestoZavrseneSkoleFakulteta:</label>
-                        <select class="form-control" id="MestoZavrseneSkoleFakulteta"
-                                name="MestoZavrseneSkoleFakulteta">
-                            @foreach($mestoZavrseneSkoleFakulteta as $item)
-                                <option value="{{$item->id}}">{{$item->NazivMesta}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+            <div class="flex justify-end">
+                <x-button type="submit">Submit</x-button>
             </div>
-        </div>
+        </form>
     </div>
 @endsection

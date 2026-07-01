@@ -1,219 +1,114 @@
 @extends('layouts.layout')
 @section('page_heading','Унос кандидата - прва страна')
 @section('section')
-    <div class="col-lg-9">
-        {{--GRESKE--}}
+    <div class="max-w-4xl mx-auto space-y-6">
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
-                <h4>Грешка!</h4>
-                <ul>
+            <x-alert type="danger" title="Грешка!">
+                <ul class="list-disc list-inside">
                     @foreach (Session::get('errors')->all() as $error)
                         <li>{!! $error !!}</li>
                     @endforeach
                 </ul>
-            </div>
+            </x-alert>
         @endif
 
-        <form role="form" method="post" action="{{ url('/kandidat') }}" enctype="multipart/form-data">
-            {{ csrf_field() }}
-            <input type="hidden" name="page" id="page" value="1"/>
+        <form role="form" method="post" action="{{ url('/kandidat') }}" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+            <input type="hidden" name="page" value="1"/>
 
-            {{--STUDIJSKI PROGRAM--}}
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Студијски програм</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="form-group col-lg-7">
-                            <label for="StudijskiProgram">Студијски програм:</label>
-                            <select class="form-control" id="StudijskiProgram" name="StudijskiProgram">
-                                @foreach($studijskiProgram as $item)
-                                    <option value="{{$item->id}}">{{$item->naziv}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4 col-lg-offset-1">
-                            <label for="SkolskeGodineUpisa">Школска година:</label>
-                            <select class="form-control" id="SkolskeGodineUpisa" name="SkolskeGodineUpisa">
-                                @foreach($skolskeGodineUpisa as $item)
-                                    <option value="{{$item->id}}">{{$item->naziv}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            <x-card>
+                <x-slot:header>Студијски програм</x-slot:header>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-select name="StudijskiProgram" label="Студијски програм"
+                            :options="$studijskiProgram->pluck('naziv', 'id')->toArray()" required />
+                        <x-form-select name="SkolskeGodineUpisa" label="Школска година"
+                            :options="$skolskeGodineUpisa->pluck('naziv', 'id')->toArray()" required />
                     </div>
-                    {{--<div class="row">--}}
-                        {{--<div class="form-group col-lg-12">--}}
-                            {{--<label for="uplata">--}}
-                                {{--<input type="checkbox" id="uplata" name="uplata">--}}
-                                {{--Уплата (да ли је кандидат платио школарину)</label>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
                 </div>
-            </div>
+            </x-card>
 
-            {{--OSNOVNI PODACI--}}
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Основни подаци</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="ImeKandidata">Име кандидата</label>
-                            <input class="form-control" type="text" name="ImeKandidata" id="ImeKandidata"
-                                   value="{{ old('ImeKandidata') }}">
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="PrezimeKandidata">Презиме кандидата</label>
-                            <input class="form-control" type="text" name="PrezimeKandidata"
-                                   id="PrezimeKandidata" value="{{ old('PrezimeKandidata') }}">
-                        </div>
+            <x-card>
+                <x-slot:header>Основни подаци</x-slot:header>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="ImeKandidata" label="Име кандидата" required value="{{ old('ImeKandidata') }}" />
+                        <x-form-input name="PrezimeKandidata" label="Презиме кандидата" required value="{{ old('PrezimeKandidata') }}" />
                     </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="imageUpload">Слика</label>
-                            <input type="file" accept="image/*" name="imageUpload" id="imageUpload">
-                        </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary-700 mb-1">Слика</label>
+                        <input type="file" accept="image/*" name="imageUpload" id="imageUpload"
+                               class="block w-full text-sm text-secondary-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
                     </div>
-                    <div class="row">
-                        <div class="form-group col-lg-7">
-                            <label for="JMBG">ЈМБГ</label>
-                            <input class="form-control" type="text" name="JMBG" id="JMBG"
-                                   value="{{ old('JMBG') }}">
-                        </div>
-                        <div class="form-group col-lg-5">
-                            <label for="DatumRodjenja">Датум рођења</label>
-                            <input class="form-control dateMask" type="text" name="DatumRodjenja" id="DatumRodjenja"
-                                   value="{{ old('DatumRodjenja') }}">
-                        </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="JMBG" label="ЈМБГ" value="{{ old('JMBG') }}" />
+                        <x-form-input name="DatumRodjenja" label="Датум рођења" class="dateMask" value="{{ old('DatumRodjenja') }}" />
                     </div>
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="mestoRodjenja">Место рођења</label>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="mestoRodjenja" class="block text-sm font-medium text-secondary-700 mb-1">Место рођења</label>
                             <input type="text" name="mestoRodjenja" id="mestoRodjenja" list="mestaList"
-                                   class="form-control"
-                                   value="{{ old('mestoRodjenja') }}">
+                                   value="{{ old('mestoRodjenja') }}"
+                                   class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                             <datalist id="mestaList">
                                 @foreach($mestoRodjenja as $item)
                                     <option value="{{$item->naziv}}">
                                 @endforeach
                             </datalist>
                         </div>
-                        <div class="form-group col-lg-6">
-                            <label for="drzavaRodjenja">Држава рођења</label>
-                            <input class="form-control" type="text" name="drzavaRodjenja" id="drzavaRodjenja"
-                                   value="{{ old('drzavaRodjenja') }}">
-                        </div>
+                        <x-form-input name="drzavaRodjenja" label="Држава рођења" value="{{ old('drzavaRodjenja') }}" />
                     </div>
 
-                    <div class="row">
-                        <div class="form-group col-lg-8">
-                            <label for="KrsnaSlava">Крсна слава</label>
-                            <select class="form-control auto-combobox" id="KrsnaSlava" name="KrsnaSlava">
-                                <option value=""></option>
-                                @foreach($krsnaSlava as $item)
-                                    <option value="{{$item->id}}">{{$item->naziv}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <x-form-select name="KrsnaSlava" label="Крсна слава" :options="$krsnaSlava->pluck('naziv', 'id')->toArray()" placeholder="" class="auto-combobox" />
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="KontaktTelefon" label="Контакт телефон" value="{{ old('KontaktTelefon') }}" />
                     </div>
 
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="KontaktTelefon">Контакт телефон</label>
-                            <input class="form-control" type="text" name="KontaktTelefon" id="KontaktTelefon"
-                                   value="{{ old('KontaktTelefon') }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-10">
-                            <label for="AdresaStanovanja">Адреса становања</label>
-                            <input class="form-control" type="text" name="AdresaStanovanja"
-                                   id="AdresaStanovanja"
-                                   value="{{ old('AdresaStanovanja') }}">
-                        </div>
+                    <x-form-input name="AdresaStanovanja" label="Адреса становања" value="{{ old('AdresaStanovanja') }}" class="max-w-lg" />
+                    <x-form-input name="Email" label="Email" type="email" value="{{ old('Email') }}" class="max-w-md" />
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="ImePrezimeJednogRoditelja" label="Име једног родитеља" value="{{ old('ImePrezimeJednogRoditelja') }}" />
+                        <x-form-input name="KontaktTelefonRoditelja" label="Контакт телефон родитеља" value="{{ old('KontaktTelefonRoditelja') }}" />
                     </div>
 
-                    <div class="row">
-                        <div class="form-group col-lg-8">
-                            <label for="Email">Email</label>
-                            <input class="form-control" type="text" name="Email" id="Email"
-                                   value="{{ old('Email') }}">
-                        </div>
+                    <hr class="border-secondary-200">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="NazivSkoleFakulteta" label="Назив школе или факултета" value="{{ old('NazivSkoleFakulteta') }}" />
+                        <x-form-input name="SmerZavrseneSkoleFakulteta" label="Смер завршене школе или факултета" value="{{ old('SmerZavrseneSkoleFakulteta') }}" />
                     </div>
 
-                    <div class="row">
-                        <div class="form-group col-lg-8">
-                            <label for="ImePrezimeJednogRoditelja">Име једног родитеља</label>
-                            <input class="form-control" type="text" name="ImePrezimeJednogRoditelja"
-                                   id="ImePrezimeJednogRoditelja"
-                                   value="{{ old('ImePrezimeJednogRoditelja') }}">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="mestoZavrseneSkoleFakulteta" class="block text-sm font-medium text-secondary-700 mb-1">Место завршене школе или факултета</label>
+                            <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                                   id="mestoZavrseneSkoleFakulteta" name="mestoZavrseneSkoleFakulteta" list="mestaList">
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label for="KontaktTelefonRoditelja">Контакт телефон родитеља</label>
-                            <input class="form-control" type="text" name="KontaktTelefonRoditelja"
-                                   id="KontaktTelefonRoditelja" value="{{ old('KontaktTelefonRoditelja') }}">
-                        </div>
+                        <x-form-input name="drzavaZavrseneSkole" label="Држава завршене школе или факултета" />
                     </div>
 
-                    <div class="clearfix"></div>
-                    <hr>
-
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="NazivSkoleFakulteta">Назив школе или факултета</label>
-                            <input class="form-control" type="text" name="NazivSkoleFakulteta"
-                                   id="NazivSkoleFakulteta" value="{{ old('NazivSkoleFakulteta') }}">
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="SmerZavrseneSkoleFakulteta">Смер завршене школе или факултета</label>
-                            <input class="form-control" type="text" name="SmerZavrseneSkoleFakulteta"
-                                   id="SmerZavrseneSkoleFakulteta"
-                                   value="{{ old('SmerZavrseneSkoleFakulteta') }}">
-                        </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <x-form-input name="godinaZavrsetkaSkole" label="Година завршетка школе или факултета" />
+                        <x-form-select name="GodinaStudija" label="Година студија (на коју се кандидат уписује)"
+                            :options="$godinaStudija->pluck('naziv', 'id')->toArray()" />
                     </div>
 
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="mestoZavrseneSkoleFakulteta">Место завршене школе или факултета</label>
-                            <input type="text" class="form-control" id="mestoZavrseneSkoleFakulteta"
-                                   name="mestoZavrseneSkoleFakulteta" list="mestaList">
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="drzavaZavrseneSkole">Држава завршене школе или факултета</label>
-                            <input class="form-control" type="text" name="drzavaZavrseneSkole" id="drzavaZavrseneSkole"
-                                   value="{{ old('drzavaZavrseneSkole') }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="godinaZavrsetkaSkole">Година завршетка школе или факултета</label>
-                            <input class="form-control" type="text" name="godinaZavrsetkaSkole"
-                                   id="godinaZavrsetkaSkole"
-                                   value="{{ old('godinaZavrsetkaSkole') }}">
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="GodinaStudija">Година студија (на коју се кандидат уписује)</label>
-                            <select class="form-control" id="GodinaStudija" name="GodinaStudija">
-                                @foreach($godinaStudija as $item)
-                                    <option value="{{$item->id}}">{{$item->naziv}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="clearfix"></div>
-                    <hr>
-
-                    <div class="form-group text-center">
-                        <button type="submit" name="submit" value="submit" class="btn btn-primary btn-lg">Даље</button>
+                    <div class="flex justify-center pt-4">
+                        <x-button type="submit" name="submit" value="submit" size="lg">Даље</x-button>
                     </div>
                 </div>
-            </div>
+            </x-card>
         </form>
     </div>
-    <script type="text/javascript" src="{{"/"}}js/kandidat-create-part-1.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+
+    @push('scripts')
+    <script src="{{"/"}}js/kandidat-create-part-1.js"></script>
+    <script src="{{"/"}}js/dateMask.js"></script>
+    <script src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    @endpush
 @endsection
