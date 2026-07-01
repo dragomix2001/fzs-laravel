@@ -20,3 +20,9 @@ yarn-error.log
 /.vscode
 .tmp-ci-*/
 clover*.xml
+
+# Playwright
+test-results/
+playwright-report/
+coverage.xml
+.env.docker-backup
