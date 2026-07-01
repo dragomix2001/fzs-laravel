@@ -79,6 +79,13 @@ test.describe('Baseline Screenshots - Core Pages', () => {
     await page.waitForTimeout(2000);
     await expect(page).toHaveScreenshot('10-student-list.png', { fullPage: true });
   });
+
+  test('11 - Prijava Subject List', async ({ authenticatedPage: page }) => {
+    await page.goto('/predmeti/');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(2000);
+    await expect(page).toHaveScreenshot('11-prijava-subject-list.png', { fullPage: true });
+  });
 });
 
 test.describe('Baseline Screenshots - Mobile', () => {
@@ -96,5 +103,12 @@ test.describe('Baseline Screenshots - Mobile', () => {
     await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(2000);
     await expect(page).toHaveScreenshot('M02-kandidat-mobile.png', { fullPage: true });
+  });
+
+  test('M03 - Prijava Subject List Mobile', async ({ authenticatedPage: page }) => {
+    await page.goto('/predmeti/');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(2000);
+    await expect(page).toHaveScreenshot('M03-prijava-subject-list-mobile.png', { fullPage: true });
   });
 });

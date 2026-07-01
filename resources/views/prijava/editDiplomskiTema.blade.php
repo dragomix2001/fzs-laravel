@@ -1,163 +1,113 @@
 @extends('layouts.layout')
 @section('page_heading','Измена теме дипломског рада')
 @section('section')
-    <div class="col-lg-10">
-        {{--GRESKE--}}
+    <div class="w-full lg:w-10/12">
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
-                <h4>Грешка!</h4>
+            <x-alert type="danger" :dismissible="true">
+                <x-slot:title>Грешка!</x-slot:title>
                 <ul>
                     @foreach (Session::get('errors')->all() as $error)
                         <li>{!! $error !!}</li>
                     @endforeach
                 </ul>
-            </div>
+            </x-alert>
         @endif
         @if (Session::get('flash-error'))
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Грешка!</strong>
+            <x-alert type="danger" :dismissible="true">
+                <x-slot:title>Грешка!</x-slot:title>
                 @if(Session::get('flash-error') === 'create')
                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
                 @endif
-            </div>
+            </x-alert>
         @endif
-        <a class="btn btn-primary" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
-        <br>
-        <br>
-
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Измена теме дипломског рада</h3>
-            </div>
-            <div class="panel-body">
-                <form role="form" method="post" action="{{ url('/prijava/updateDiplomskiTema') }}">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
-                    <input type="hidden" name="diplomskiTema_id" id="diplomskiTema_id"
-                           value="{{ $diplomskiRadTema?->id }}">
-                    <input type="hidden" name="tipStudija_id" id="tipStudija_id"
-                           value="{{ $kandidat->tipStudija_id }}">
-                    <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id"
-                           value="{{ $kandidat->studijskiProgram_id }}">
-
-                    <div class="row">
-                        <div class="form-group col-lg-2">
-                            <label for="brojIndeksa">Број Индекса</label>
-                            <input type="text" value="{{$kandidat->brojIndeksa}}" class="form-control" disabled/>
-                        </div>
-
-                        <div class="form-group col-lg-8">
-                            <label for="imeKandidata">Име</label>
-                            <input id="imeKandidata" class="form-control" type="text" name="imeKandidata"
-                                   value="{{ $kandidat->imeKandidata . " " . $kandidat->imeRoditelja . " " . $kandidat->prezimeKandidata }}"
-                                   disabled/>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-lg-5">
-                            <label for="jmbg">ЈМБГ</label>
-                            <input id="jmbg" class="form-control" type="text" name="jmbg"
-                                   value="{{ $kandidat->jmbg }}" disabled/>
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label for="StudijskiProgram">Студијски програм</label>
-                            <input id="StudijskiProgram" type="text" value="{{ $kandidat->program?->naziv ?? '' }}"
-                                   class="form-control" disabled/>
-                        </div>
-                    </div>
-
-                    <div class="clearfix"></div>
-                    <hr>
-
-                    <div class="row">
-                        <div class="form-group col-lg-8">
-                            <label for="predmet_id">Дипломски рад из предмета</label>
-                            <select class="form-control auto-combobox" id="predmet_id" name="predmet_id">
-                                @foreach($predmeti as $item)
-                                    <option value="{{ $item->id }}" {{ ($diplomskiRadTema->predmet_id == $item->id ? "selected":"") }}>{{ $item->predmet?->naziv ?? '-' }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-10">
-                            <label for="nazivTeme">Назив теме:</label>
-                            <input id="nazivTeme" name="nazivTeme" type="text" class="form-control"
-                                   value="{{$diplomskiRadTema->nazivTeme}}">
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="formatDatum">Датум</label>
-                            <input id="formatDatum" class="form-control dateMask" type="text" name="formatDatum"
-                                   value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('d.m.Y.') }}"/>
-                        </div>
-
-                        <input type="hidden" name="datum" id="datum"
-                               value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('Y-m-d') }}">
-
-                    </div>
-
-                    <div class="clearfix"></div>
-                    <hr>
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="indikatorOdobreno"
-                                           value="1" {{ ($diplomskiRadTema->indikatorOdobreno == 1 ? "checked":"") }}>
-                                    <b>Тема одобрена</b>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-8">
-                            <label for="profesor_id">Тему одобрио:</label>
-                            <select class="form-control auto-combobox" id="profesor_id" name="profesor_id">
-                                @foreach($profesor as $tip)
-                                    <option value="{{$tip->id}}" {{ ($diplomskiRadTema->profesor_id == $tip->id ? "selected":"") }}>{{$tip->zvanje . " " .$tip->ime . " " . $tip->prezime}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group text-center">
-                        <button type="submit" name="Submit" class="btn btn-success btn-lg"><span
-                                    class="fa fa-save"></span> Сачувај
-                        </button>
-                    </div>
-
-                </form>
-            </div>
+        <div class="mb-4">
+            <a href="/prijava/zaStudenta/{{ $kandidat->id }}">
+                <x-button variant="primary">&lt;&lt; Назад на студента</x-button>
+            </a>
         </div>
+
+        <x-card>
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Измена теме дипломског рада</h3>
+            </x-slot:header>
+            <form role="form" method="post" action="{{ url('/prijava/updateDiplomskiTema') }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
+                <input type="hidden" name="diplomskiTema_id" id="diplomskiTema_id" value="{{ $diplomskiRadTema?->id }}">
+                <input type="hidden" name="tipStudija_id" id="tipStudija_id" value="{{ $kandidat->tipStudija_id }}">
+                <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id" value="{{ $kandidat->studijskiProgram_id }}">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <x-form-input name="brojIndeksa" label="Број Индекса" :value="$kandidat->brojIndeksa" disabled />
+                    <div class="sm:col-span-2">
+                        <x-form-input name="imeKandidata" label="Име"
+                                      value="{{ $kandidat->imeKandidata . ' ' . $kandidat->imeRoditelja . ' ' . $kandidat->prezimeKandidata }}" disabled />
+                    </div>
+                    <x-form-input name="jmbg" label="ЈМБГ" :value="$kandidat->jmbg" disabled />
+                    <div class="sm:col-span-2">
+                        <x-form-input name="StudijskiProgram" label="Студијски програм"
+                                      :value="$kandidat->program?->naziv ?? ''" disabled />
+                    </div>
+                </div>
+
+                <hr class="my-6 border-gray-200">
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="lg:col-span-2">
+                        <x-form-select name="predmet_id" label="Дипломски рад из предмета"
+                                       :options="$predmeti->mapWithKeys(fn($i) => [$i->id => $i->predmet?->naziv ?? '-'])->toArray()"
+                                       :selected="$diplomskiRadTema->predmet_id" />
+                    </div>
+                    <div class="lg:col-span-2">
+                        <x-form-input name="nazivTeme" label="Назив теме:" :value="$diplomskiRadTema->nazivTeme" />
+                    </div>
+                    <x-form-input name="formatDatum" label="Датум"
+                                  value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('d.m.Y.') }}"
+                                  class="dateMask" />
+                    <input type="hidden" name="datum" id="datum"
+                           value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadTema->datum)->format('Y-m-d') }}">
+                </div>
+
+                <hr class="my-6 border-gray-200">
+
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <input type="checkbox" name="indikatorOdobreno" value="1" id="indikatorOdobreno"
+                               class="mt-1 rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50"
+                               {{ $diplomskiRadTema->indikatorOdobreno == 1 ? 'checked' : '' }}>
+                        <label for="indikatorOdobreno" class="font-semibold text-gray-700">Тема одобрена</label>
+                    </div>
+                    <div class="lg:w-8/12">
+                        <x-form-select name="profesor_id" label="Тему одобрио:"
+                                       :options="$profesor->mapWithKeys(fn($t) => [$t->id => $t->zvanje . ' ' . $t->ime . ' ' . $t->prezime])->toArray()"
+                                       :selected="$diplomskiRadTema->profesor_id" />
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <x-button variant="success" size="lg">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Сачувај
+                    </x-button>
+                </div>
+            </form>
+        </x-card>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
     <script>
-        $(function () {
-            var formatDatum = $("#formatDatum");
-            formatDatum.datepicker({
-                dateFormat: 'dd.mm.yy.',
-                altField: "#datum",
-                altFormat: "yy-mm-dd"
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            var formatDatum = document.getElementById('formatDatum');
+            if (formatDatum) {
+                formatDatum.addEventListener('input', function () {
+                    var date = moment(formatDatum.value, "DD.MM.YYYY");
+                    document.getElementById('datum').value = date.isValid() ? date.format('YYYY-MM-DD') : '';
+                });
+            }
 
-            formatDatum.on('input', function () {
-                var date = moment(formatDatum.val(), "dd.mm.yy");
-                $("#datum").val(date.format('YYYY-MM-DD'));
-            });
-
-
-            $(window).keydown(function (event) {
-                if (event.keyCode == 13) {
+            document.addEventListener('keydown', function (event) {
+                if (event.keyCode === 13 && event.target.tagName !== 'TEXTAREA') {
                     event.preventDefault();
                     return false;
                 }

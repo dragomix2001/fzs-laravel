@@ -1,88 +1,105 @@
 @extends('layouts.layout')
 @section('page_heading','Испити')
 @section('section')
-    <div class="col-lg-12">
+    <div class="w-full">
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
-                <h4>Грешка!</h4>
+            <x-alert type="danger" :dismissible="true">
+                <x-slot:title>Грешка!</x-slot:title>
                 <ul>
                     @foreach (Session::get('errors')->all() as $error)
                         <li>{!! $error !!}</li>
                     @endforeach
                 </ul>
-            </div>
+            </x-alert>
         @endif
-        <div>
-            <h4>Подаци о студенту</h4>
-            <ul class="list-group">
-                <li class="list-group-item">Број Индекса:
-                    <strong>
-                        {{ $kandidat->brojIndeksa }}
-                    </strong>
-                </li>
-                <li class="list-group-item">Име (име родитеља) презиме:
-                    <strong>
-                        {{ $kandidat->imeKandidata . " (" . $kandidat->imePrezimeJednogRoditelja . ") " . $kandidat->prezimeKandidata }}
-                    </strong>
-                </li>
-                <li class="list-group-item">ЈМБГ:
-                    <strong>
-                        {{ $kandidat->jmbg }}
-                    </strong>
-                </li>
-                @if(!empty($kandidat->datumRodjenja))
-                    <li class="list-group-item">Датум рођења:
-                        <strong>
-                            {{ $kandidat->datumRodjenja->format('d.m.Y') }}
-                        </strong>
-                    </li>
-                @endif
-            </ul>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Пријава за полагање испита</h3>
-            </div>
-            <div class="panel-body">
-                <a href="{{"/"}}prijava/student/{{$kandidat->id}}" class="btn btn-primary"><span
-                            class="fa fa-plus"></span> Нова пријава</a>
 
-                <a href="{{"/"}}priznavanjeIspita/{{$kandidat->id}}" class="btn btn-info"><span
-                            class="fa fa-plus"></span> Признати испити</a>
-
-                <a href="{{"/"}}prijava/unosPrivremeni/{{$kandidat->id}}" class="btn btn-warning">
-                    <i class="fa fa-plus"></i> Додај испите</a>
-
-                <div id="messages">
-                    @if (Session::get('flash-error'))
-                        <div class="alert alert-dismissible alert-danger">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong>Грешка!</strong>
-                            @if(Session::get('flash-error') === 'update')
-                                Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                            @elseif(Session::get('flash-error') === 'delete')
-                                Дошло је до грешке при брисању података! Молимо вас покушајте поново.
-                            @elseif(Session::get('flash-error') === 'upis')
-                                Дошло је до грешке при упису кандидата! Молимо вас проверите да ли је кандидат уплатио
-                                школарину и покушајте поново.
-                            @endif
-                        </div>
-                    @elseif(Session::get('flash-success'))
-                        <div class="alert alert-dismissible alert-success">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong>Успех!</strong>
-                            @if(Session::get('flash-success') === 'update')
-                                Подаци о кандидату су успешно сачувани.
-                            @elseif(Session::get('flash-success') === 'delete')
-                                Подаци о кандидату су успешно обрисани.
-                            @elseif(Session::get('flash-success') === 'upis')
-                                Упис кандидата је успешно извршен.
-                            @endif
-                        </div>
-                    @endif
+        {{-- Student Info Card --}}
+        <x-card class="mb-6">
+            <h4 class="text-base font-semibold text-gray-700 mb-3">Подаци о студенту</h4>
+            <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <dt class="text-sm text-gray-500">Број Индекса</dt>
+                    <dd class="font-medium text-gray-900">{{ $kandidat->brojIndeksa }}</dd>
                 </div>
-                <hr>
-                <table id="tabela" class="table">
+                <div class="sm:col-span-2 lg:col-span-2">
+                    <dt class="text-sm text-gray-500">Име (име родитеља) презиме</dt>
+                    <dd class="font-medium text-gray-900">{{ $kandidat->imeKandidata . " (" . $kandidat->imePrezimeJednogRoditelja . ") " . $kandidat->prezimeKandidata }}</dd>
+                </div>
+                <div>
+                    <dt class="text-sm text-gray-500">ЈМБГ</dt>
+                    <dd class="font-medium text-gray-900">{{ $kandidat->jmbg }}</dd>
+                </div>
+                @if(!empty($kandidat->datumRodjenja))
+                    <div>
+                        <dt class="text-sm text-gray-500">Датум рођења</dt>
+                        <dd class="font-medium text-gray-900">{{ $kandidat->datumRodjenja->format('d.m.Y') }}</dd>
+                    </div>
+                @endif
+            </dl>
+        </x-card>
+
+        {{-- Exam Applications Panel --}}
+        <x-card>
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Пријава за полагање испита</h3>
+            </x-slot:header>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <a href="{{"/"}}prijava/student/{{$kandidat->id}}">
+                    <x-button variant="primary">
+                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Нова пријава
+                    </x-button>
+                </a>
+                <a href="{{"/"}}priznavanjeIspita/{{$kandidat->id}}">
+                    <x-button variant="info">
+                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Признати испити
+                    </x-button>
+                </a>
+                <a href="{{"/"}}prijava/unosPrivremeni/{{$kandidat->id}}">
+                    <x-button variant="warning">
+                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Додај испите
+                    </x-button>
+                </a>
+            </div>
+
+            <div id="messages">
+                @if (Session::get('flash-error'))
+                    <x-alert type="danger" :dismissible="true">
+                        <x-slot:title>Грешка!</x-slot:title>
+                        @if(Session::get('flash-error') === 'update')
+                            Дошло је до грешке при чувању података! Молимо вас покушајте поново.
+                        @elseif(Session::get('flash-error') === 'delete')
+                            Дошло је до грешке при брисању података! Молимо вас покушајте поново.
+                        @elseif(Session::get('flash-error') === 'upis')
+                            Дошло је до грешке при упису кандидата! Молимо вас проверите да ли је кандидат уплатио школарину и покушајте поново.
+                        @endif
+                    </x-alert>
+                @elseif(Session::get('flash-success'))
+                    <x-alert type="success" :dismissible="true">
+                        <x-slot:title>Успех!</x-slot:title>
+                        @if(Session::get('flash-success') === 'update')
+                            Подаци о кандидату су успешно сачувани.
+                        @elseif(Session::get('flash-success') === 'delete')
+                            Подаци о кандидату су успешно обрисани.
+                        @elseif(Session::get('flash-success') === 'upis')
+                            Упис кандидата је успешно извршен.
+                        @endif
+                    </x-alert>
+                @endif
+            </div>
+
+            <hr class="my-4 border-gray-200">
+
+            <div class="overflow-x-auto">
+                <table id="tabela" class="w-full text-sm text-left">
                     <thead>
                     <tr>
                         <th>Кандидат</th>
@@ -104,26 +121,30 @@
                             <td>{{$prijava->brojPolaganja}}</td>
                             <td data-order="{{$prijava->datum->timestamp}}">{{$prijava->datum->format('d.m.Y')}}</td>
                             <td>
-                                {{--<a class="btn btn-primary" href="{{"/"}}master/{{ $kandidat->id }}/edit">Измени</a>--}}
-                                <a class="btn btn-danger"
-                                   href="{{"/"}}prijava/delete/{{ $prijava->id }}?prijava=student"
-                                   onclick="return confirm('Да ли сте сигурни да желите да обришете ову пријаву?');">Бриши</a>
+                                <a href="{{"/"}}prijava/delete/{{ $prijava->id }}?prijava=student"
+                                   onclick="return confirm('Да ли сте сигурни да желите да обришете ову пријаву?');"
+                                   class="inline-flex items-center px-3 py-1.5 bg-danger-600 text-white text-sm font-medium rounded-lg hover:bg-danger-700 transition-colors">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                    Бриши
+                                </a>
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
-        </div>
-        @if($kandidat->tipStudija_id == 1)
-        @endif
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">Дипломирање</h3>
-            </div>
-            <div class="panel-body">
-                @if($diplomskiRadTema != null || $diplomskiRadPolaganje != null || $diplomskiRadOdbrana != null)
-                    <table id="tabela" class="table">
+        </x-card>
+
+        {{-- Diploma Section --}}
+        <x-card variant="success" class="mt-6">
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Дипломирање</h3>
+            </x-slot:header>
+            @if($diplomskiRadTema != null || $diplomskiRadPolaganje != null || $diplomskiRadOdbrana != null)
+                <div class="overflow-x-auto">
+                    <table id="tabela" class="w-full text-sm text-left">
                         <thead>
                         <tr>
                             <th>ВРСТА</th>
@@ -132,42 +153,41 @@
                             <th>Тему одобрио професор</th>
                             <th>Одбрану одобрио професор</th>
                             <th>Одобрена</th>
-                            {{--<th>Датум пријаве</th>--}}
-                            {{--<th>Датум одбране</th>--}}
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         @if($diplomskiRadTema != null)
                             <tr>
-                            <td>Пријава ТЕМЕ</td>
-                            <td>{{$diplomskiRadTema->nazivTeme}}</td>
-                            <td>{{$diplomskiRadTema->predmet?->predmet?->naziv ?? '-'}}</td>
-                            <td>{{($diplomskiRadTema->profesor?->ime ?? '') . " " . ($diplomskiRadTema->profesor?->prezime ?? '')}}</td>
-                            <td>-</td>
-                            <td>
-                                @if($diplomskiRadTema->indikatorOdobreno == 1)
-                                    <div class='label label-success'>ДА</div>
-                                @else
-                                    <div class='label label-danger'>НЕ</div>
-                                @endif
-                            </td>
-                            {{--<td>{{$diplomskiRadTema->datum->format('d.m.Y')}}</td>--}}
-                            {{--<td>-</td>--}}
-                            <td>
-                                <a class="btn btn-warning" href="{{"/"}}prijava/diplomskiTema/{{ $kandidat->id }}/edit">
-                                    <div title="Измена">
-                                        <span class="fa fa-edit"></span>
+                                <td>Пријава ТЕМЕ</td>
+                                <td>{{$diplomskiRadTema->nazivTeme}}</td>
+                                <td>{{$diplomskiRadTema->predmet?->predmet?->naziv ?? '-'}}</td>
+                                <td>{{($diplomskiRadTema->profesor?->ime ?? '') . " " . ($diplomskiRadTema->profesor?->prezime ?? '')}}</td>
+                                <td>-</td>
+                                <td>
+                                    @if($diplomskiRadTema->indikatorOdobreno == 1)
+                                        <x-badge variant="success">ДА</x-badge>
+                                    @else
+                                        <x-badge variant="danger">НЕ</x-badge>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="inline-flex gap-1">
+                                        <a href="{{"/"}}prijava/diplomskiTema/{{ $kandidat->id }}/edit" class="inline-flex items-center p-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 transition-colors" title="Измена">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{"/"}}deleteDiplomskiTema/{{ $kandidat->id }}/delete"
+                                           onclick="return confirm('Да ли сте сигурни да желите да обришете?');"
+                                           class="inline-flex items-center p-2 bg-danger-600 text-white rounded-lg hover:bg-danger-700 transition-colors" title="Брисање">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </a>
                                     </div>
-                                </a>
-                                <a class="btn btn-danger" href="{{"/"}}deleteDiplomskiTema/{{ $kandidat->id }}/delete"
-                                   onclick="return confirm('Да ли сте сигурни да желите да обришете?');">
-                                    <div title="Брисање">
-                                        <span class="fa fa-trash"></span>
-                                    </div>
-                                </a>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         @endif
                         @if($diplomskiRadOdbrana != null)
                             <tr>
@@ -178,25 +198,26 @@
                                 <td>{{($diplomskiRadOdbrana->odobrioOdbranuProfesor?->ime ?? '') . " " . ($diplomskiRadOdbrana->odobrioOdbranuProfesor?->prezime ?? '')}}</td>
                                 <td>
                                     @if($diplomskiRadOdbrana->indikatorOdobreno == 1)
-                                        <div class='label label-success'>ДА</div>
+                                        <x-badge variant="success">ДА</x-badge>
                                     @else
-                                        <div class='label label-danger'>НЕ</div>
+                                        <x-badge variant="danger">НЕ</x-badge>
                                     @endif
                                 </td>
-                                {{--<td>{{$diplomskiRadOdbrana->datumPrijave->format('d.m.Y')}}</td>--}}
-                                {{--<td>{{$diplomskiRadOdbrana->datumOdbrane->format('d.m.Y')}}</td>--}}
                                 <td>
-                                    <a class="btn btn-warning" href="{{"/"}}prijava/diplomskiOdbrana/{{ $kandidat->id }}/edit">
-                                        <div title="Измена">
-                                            <span class="fa fa-edit"></span>
-                                        </div>
-                                    </a>
-                                    <a class="btn btn-danger" href="{{"/"}}deleteDiplomskiOdbrana/{{ $kandidat->id }}/delete"
-                                       onclick="return confirm('Да ли сте сигурни да желите да обришете?');">
-                                        <div title="Брисање">
-                                            <span class="fa fa-trash"></span>
-                                        </div>
-                                    </a>
+                                    <div class="inline-flex gap-1">
+                                        <a href="{{"/"}}prijava/diplomskiOdbrana/{{ $kandidat->id }}/edit" class="inline-flex items-center p-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 transition-colors" title="Измена">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{"/"}}deleteDiplomskiOdbrana/{{ $kandidat->id }}/delete"
+                                           onclick="return confirm('Да ли сте сигурни да желите да обришете?');"
+                                           class="inline-flex items-center p-2 bg-danger-600 text-white rounded-lg hover:bg-danger-700 transition-colors" title="Брисање">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @endif
@@ -209,95 +230,119 @@
                                 <td>-</td>
                                 <td>
                                     @if($diplomskiRadPolaganje->brojBodova > 0)
-                                        <div class='label label-success'>Оцена: {{$diplomskiRadPolaganje->ocena}}</div>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Оцена: {{$diplomskiRadPolaganje->ocena}}</span>
                                     @endif
                                 </td>
-                                {{--<td>-</td>--}}
-                                {{--<td>{{$diplomskiRadPolaganje->datum->format('d.m.Y')}}</td>--}}
                                 <td>
-                                    <a class="btn btn-warning" href="{{"/"}}prijava/diplomskiPolaganje/{{ $kandidat->id }}/edit">
-                                        <div title="Измена">
-                                            <span class="fa fa-edit"></span>
-                                        </div>
-                                    </a>
-                                    <a class="btn btn-danger" href="{{"/"}}deleteDiplomskiPolaganje/{{ $kandidat->id }}/delete"
-                                       onclick="return confirm('Да ли сте сигурни да желите да обришете?');">
-                                        <div title="Брисање">
-                                            <span class="fa fa-trash"></span>
-                                        </div>
-                                    </a>
+                                    <div class="inline-flex gap-1">
+                                        <a href="{{"/"}}prijava/diplomskiPolaganje/{{ $kandidat->id }}/edit" class="inline-flex items-center p-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 transition-colors" title="Измена">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{"/"}}deleteDiplomskiPolaganje/{{ $kandidat->id }}/delete"
+                                           onclick="return confirm('Да ли сте сигурни да желите да обришете?');"
+                                           class="inline-flex items-center p-2 bg-danger-600 text-white rounded-lg hover:bg-danger-700 transition-colors" title="Брисање">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @endif
                         </tbody>
                     </table>
-                @endif
-                <a href="{{"/"}}prijava/diplomskiTema/{{$kandidat->id}}" class="btn btn-success"
-                @if($diplomskiRadTema != null) {{ 'disabled' }}@endif>
-                    <i class="fa fa-plus"></i> Пријава теме дипломског рада</a>
-
-                <a href="{{"/"}}prijava/diplomskiOdbrana/{{$kandidat->id}}" class="btn btn-success"
-                @if($diplomskiRadOdbrana != null) {{ 'disabled' }}@endif>
-                    <i class="fa fa-plus"></i> Пријава одбране дипломског рада</a>
-
-                <a href="{{"/"}}prijava/diplomskiPolaganje/{{$kandidat->id}}" class="btn btn-success"
-                @if($diplomskiRadPolaganje != null) {{ 'disabled' }}@endif>
-                    <i class="fa fa-plus"></i> Пријава за полагање дипломског испита</a>
-
-            </div>
-        </div>
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Документа</h3>
                 </div>
-                <div class="panel-body">
-                        <input type="hidden" value="{{$kandidat->id}}">
-                        <a class="btn btn-primary form-group" target="_blank"
-                           href="{{"/"}}izvestaji/diplomaStampa/{{$kandidat->id}}">Штампа уверења о дипломирању</a>
-                        <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/komisijaStampa/{{$kandidat->id}}">Комисија</a>
-                        <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/polozeniStampa/{{$kandidat->id}}">Уверење о положеним испитима</a>
-                        <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/zapisnikDiplomski/{{$kandidat->id}}">Записник са одбране дипломског</a>
-                </div>
+            @endif
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="{{"/"}}prijava/diplomskiTema/{{$kandidat->id}}"
+                   class="inline-flex items-center px-4 py-2 bg-success-600 text-white text-sm font-semibold rounded-lg hover:bg-success-700 transition-colors {{ $diplomskiRadTema != null ? 'opacity-50 pointer-events-none' : '' }}">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Пријава теме дипломског рада
+                </a>
+                <a href="{{"/"}}prijava/diplomskiOdbrana/{{$kandidat->id}}"
+                   class="inline-flex items-center px-4 py-2 bg-success-600 text-white text-sm font-semibold rounded-lg hover:bg-success-700 transition-colors {{ $diplomskiRadOdbrana != null ? 'opacity-50 pointer-events-none' : '' }}">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Пријава одбране дипломског рада
+                </a>
+                <a href="{{"/"}}prijava/diplomskiPolaganje/{{$kandidat->id}}"
+                   class="inline-flex items-center px-4 py-2 bg-success-600 text-white text-sm font-semibold rounded-lg hover:bg-success-700 transition-colors {{ $diplomskiRadPolaganje != null ? 'opacity-50 pointer-events-none' : '' }}">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Пријава за полагање дипломског испита
+                </a>
             </div>
+        </x-card>
+
+        {{-- Documents Section --}}
+        <x-card variant="success" class="mt-6">
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Документа</h3>
+            </x-slot:header>
+            <input type="hidden" value="{{$kandidat->id}}">
+            <div class="flex flex-wrap gap-2">
+                <a target="_blank" href="{{"/"}}izvestaji/diplomaStampa/{{$kandidat->id}}">
+                    <x-button variant="primary">Штампа уверења о дипломирању</x-button>
+                </a>
+                <a target="_blank" href="{{"/"}}izvestaji/komisijaStampa/{{$kandidat->id}}">
+                    <x-button variant="primary">Комисија</x-button>
+                </a>
+                <a target="_blank" href="{{"/"}}izvestaji/polozeniStampa/{{$kandidat->id}}">
+                    <x-button variant="primary">Уверење о положеним испитима</x-button>
+                </a>
+                <a target="_blank" href="{{"/"}}izvestaji/zapisnikDiplomski/{{$kandidat->id}}">
+                    <x-button variant="primary">Записник са одбране дипломског</x-button>
+                </a>
+            </div>
+        </x-card>
+
+        {{-- Passed Exams Section --}}
         @if(!empty($ispiti))
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Положени испити</h3>
-            </div>
-            <div class="panel-body">
-                <table id="tabela2" class="table">
-                    <thead>
-                    <tr>
-                        <th>Предмет</th>
-                        <th>Рок</th>
-                        <th>Оцена</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($ispiti as $index => $ispit)
+            <x-card class="mt-6">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Положени испити</h3>
+                </x-slot:header>
+                <div class="overflow-x-auto">
+                    <table id="tabela2" class="w-full text-sm text-left">
+                        <thead>
                         <tr>
-                            <td>{{$ispit->predmet?->predmet?->naziv ?? '-'}}</td>
-                            <td>{{$ispit->prijava?->rok?->naziv ?? '-'}}</td>
-                            <td>{{$ispit->konacnaOcena}}</td>
-                            <td>
-                                <a class="btn btn-danger"
-                                   href="{{"/"}}ispit/delete/{{ $ispit->id }}?brisiZapisnik=0"
-                                   onclick="return confirm('Ова акција брише само оцену и враћа испит у почетно стање на записнику. Да ли сте сигурни да желите да наставите?');">Бриши оцену</a>
-                                <a class="btn btn-danger"
-                                   href="{{"/"}}ispit/delete/{{ $ispit->id }}?brisiZapisnik=1"
-                                   onclick="return confirm('Ова акција брише оцену и упис студента на записнику. Да ли сте сигурни да желите да наставите?');">Бриши оцену и записник</a>
-                            </td>
+                            <th>Предмет</th>
+                            <th>Рок</th>
+                            <th>Оцена</th>
+                            <th></th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                        </thead>
+                        <tbody>
+                        @foreach($ispiti as $index => $ispit)
+                            <tr>
+                                <td>{{$ispit->predmet?->predmet?->naziv ?? '-'}}</td>
+                                <td>{{$ispit->prijava?->rok?->naziv ?? '-'}}</td>
+                                <td>{{$ispit->konacnaOcena}}</td>
+                                <td>
+                                    <div class="inline-flex gap-2">
+                                        <a href="{{"/"}}ispit/delete/{{ $ispit->id }}?brisiZapisnik=0"
+                                           onclick="return confirm('Ова акција брише само оцену и враћа испит у почетно стање на записнику. Да ли сте сигурни да желите да наставите?');"
+                                           class="inline-flex items-center px-3 py-1.5 bg-danger-600 text-white text-sm font-medium rounded-lg hover:bg-danger-700 transition-colors">Бриши оцену</a>
+                                        <a href="{{"/"}}ispit/delete/{{ $ispit->id }}?brisiZapisnik=1"
+                                           onclick="return confirm('Ова акција брише оцену и упис студента на записнику. Да ли сте сигурни да желите да наставите?');"
+                                           class="inline-flex items-center px-3 py-1.5 bg-danger-600 text-white text-sm font-medium rounded-lg hover:bg-danger-700 transition-colors">Бриши оцену и записник</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </x-card>
         @endif
-        <br>
-        <br>
     </div>
+
     <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>
     <script>
         $(document).ready(function () {
@@ -324,6 +369,3 @@
         });
     </script>
 @endsection
-
-
-

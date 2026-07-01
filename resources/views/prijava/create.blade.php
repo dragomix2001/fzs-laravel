@@ -1,332 +1,216 @@
 @extends('layouts.layout')
 @section('page_heading','Пријава за полагање испита')
 @section('section')
-    <div class="col-lg-10">
-        {{--GRESKE--}}
+    <div class="w-full lg:w-10/12">
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
-                <h4>Грешка!</h4>
+            <x-alert type="danger" :dismissible="true">
+                <x-slot:title>Грешка!</x-slot:title>
                 <ul>
                     @foreach (Session::get('errors')->all() as $error)
                         <li>{!! $error !!}</li>
                     @endforeach
                 </ul>
-            </div>
+            </x-alert>
         @endif
         @if (Session::get('flash-error'))
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Грешка!</strong>
+            <x-alert type="danger" :dismissible="true">
+                <x-slot:title>Грешка!</x-slot:title>
                 @if(Session::get('flash-error') === 'create')
                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
                 @endif
-            </div>
+            </x-alert>
         @endif
-        <div class="row">
+
+        <div class="mb-4">
             @if(!empty($kandidat))
-                <a class="btn btn-primary" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
+                <a href="/prijava/zaStudenta/{{ $kandidat->id }}">
+                    <x-button variant="primary">Назад на студента</x-button>
+                </a>
             @else
-                <a class="btn btn-primary" href="/prijava/zaPredmet/{{ $predmet->predmet_id }}">Назад на предмет</a>
+                <a href="/prijava/zaPredmet/{{ $predmet->predmet_id }}">
+                    <x-button variant="primary">Назад на предмет</x-button>
+                </a>
             @endif
         </div>
-        <br>
-        <div class="row">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Пријава за полагање испита</h3>
-                </div>
-                <div class="panel-body">
-                    <form role="form" method="post" action="{{ url('/prijava/') }}">
-                        {{ csrf_field() }}
-                        @if(!empty($kandidat))
-                            <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
-                            <input type="hidden" name="tipStudija_id" id="tipStudija_id"
-                                   value="{{ $kandidat->tipStudija_id }}">
-                            <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id"
-                                   value="{{ $kandidat->studijskiProgram_id }}">
 
-                            {{--<div class="form-group" style="width: 30%;">--}}
-                            {{--<label for="brojIndeksa">Број Индекса</label>--}}
-                            {{--<input id="brojIndeksa" class="form-control" type="text" name="brojIndeksa"--}}
-                            {{--value="{{ $kandidat->brojIndeksa }}" />--}}
-                            {{--</div>--}}
+        <x-card>
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Пријава за полагање испита</h3>
+            </x-slot:header>
+            <form role="form" method="post" action="{{ url('/prijava/') }}">
+                {{ csrf_field() }}
 
-                            <div class="form-group pull-left" style="width: 30%;">
-                                <label for="brojIndeksa">Број Индекса</label>
-                                <select class="form-control auto-combobox" id="brojIndeksa" name="brojIndeksa">
-                                    @foreach($brojeviIndeksa as $item)
-                                        <option value="{{ $item->id }}" {{ ($kandidat->studijskiProgram_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                    @endforeach
-                                </select>
+                @if(!empty($kandidat))
+                    {{-- KANDIDAT FLOW --}}
+                    <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
+                    <input type="hidden" name="tipStudija_id" id="tipStudija_id" value="{{ $kandidat->tipStudija_id }}">
+                    <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id" value="{{ $kandidat->studijskiProgram_id }}">
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="flex items-end gap-4">
+                            <div class="w-1/2">
+                                <x-form-select name="brojIndeksa" id="brojIndeksa" label="Број Индекса"
+                                               :options="$brojeviIndeksa->pluck('naziv','id')->toArray()"
+                                               :selected="$kandidat->studijskiProgram_id" />
                             </div>
-                            <div class="form-group pull-left" style="margin-right: 50%">
-                                <label for="asdasd">&nbsp;</label><br>
-                                <button type="button" name="" id="asdasd" class="btn btn-success"><span
-                                            style="font-size: 20px" class="fa fa-check"></span></button>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-5">
-                                    <label for="jmbg">ЈМБГ</label>
-                                    <input id="jmbg" class="form-control" type="text" name="jmbg"
-                                           value="{{ $kandidat->jmbg }}" disabled/>
-                                </div>
-
-                                <div class="form-group col-lg-6">
-                                    <label for="StudijskiProgram">Студијски програм</label>
-                                    <select class="form-control" id="StudijskiProgram" name="StudijskiProgram" disabled>
-                                        @foreach($studijskiProgram as $item)
-                                            <option value="{{ $item->id }}" {{ ($kandidat->studijskiProgram_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-lg-5">
-                                    <label for="imeKandidata">Име</label>
-                                    <input id="imeKandidata" class="form-control" type="text" name="imeKandidata"
-                                           value="{{ $kandidat->imeKandidata }}" disabled/>
-                                </div>
-
-                                <div class="form-group col-lg-5">
-                                    <label for="prezimeKandidata">Презиме</label>
-                                    <input id="prezimeKandidata" class="form-control" type="text"
-                                           name="prezimeKandidata"
-                                           value="{{ $kandidat->prezimeKandidata }}" disabled/>
-                                </div>
-                            </div>
-
-                            <div class="clearfix"></div>
-                            <hr>
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                    <label for="predmet_id">Пријављујем се за полагање испита из предмета</label>
-                                    <select class="form-control auto-combobox" id="predmet_id" name="predmet_id">
-                                        @foreach($predmeti as $item)
-                                            <option value="{{ $item->id }}">{{ $item->predmet?->naziv ?? '-' }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-4">
-                                    <label for="tipPredmeta_id">Тип предмета:</label>
-                                    <select class="form-control" id="tipPredmeta_id" name="tipPredmeta_id" disabled>
-                                        @foreach($tipPredmeta as $tip)
-                                            <option value="{{$tip->id}}">{{$tip->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-lg-3">
-                                    <label for="godinaStudija_id">Година студија</label>
-                                    <select class="form-control" id="godinaStudija_id" name="godinaStudija_id" disabled>
-                                        @foreach($godinaStudija as $item)
-                                            <option value="{{ $item->id }}" {{ ($kandidat->godinaStudija_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-lg-5">
-                                    <label for="tipStudija_id">Тип студија:</label>
-                                    <select class="form-control" id="tipStudija_id" name="tipStudija_id" disabled>
-                                        @foreach($tipStudija as $tip)
-                                            <option value="{{$tip->id}}" {{ ($kandidat->tipStudija_id == $tip->id ? "selected":"") }}>{{$tip->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="clearfix"></div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="form-group col-lg-8">
-                                    <label for="profesor_id">Професор</label>
-                                    <select class="form-control auto-combobox" id="profesor_id" name="profesor_id">
-                                        @foreach($profesor as $tip)
-                                            <option value="{{$tip->id}}">{{$tip->zvanje . " " .$tip->ime . " " . $tip->prezime}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            {{--//--}}
-                            {{--KANDIDAT KRAJ--}}
-                            {{--//--}}
-                        @else
-                            {{--//--}}
-                            {{--PREDMET POCETAK--}}
-                            {{--//--}}
-                            <input type="hidden" name="prijava_za_predmet" value="1">
-                            <input type="hidden" name="kandidat_id" id="kandidat_id" value="">
-                            <input type="hidden" name="tipStudija_id" id="tipStudija_id"
-                                   value="{{ $predmet->tipStudija_id }}">
-                            <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id"
-                                   value="{{ $predmet->studijskiProgram_id }}">
-
-                            <div class="form-group pull-left" style="width: 30%;">
-                                <label for="brojIndeksa">Број Индекса</label>
-                                <select class="form-control auto-combobox" id="brojIndeksa" name="brojIndeksa">
-                                    <option value=""></option>
-                                    @foreach($brojeviIndeksa as $item)
-                                        <option value="{{ $item->id }}">{{ $item->naziv }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group pull-left" style="margin-right: 50%">
-                                <label for="asdasd">&nbsp;</label><br>
-                                <button type="button" name="" id="asdasd" class="btn btn-success"><span
-                                            style="font-size: 20px" class="fa fa-check"></span></button>
-                            </div>
-
-                            <div class="form-group pull-left" style="width: 30%; margin-right: 2%">
-                                <label for="jmbg">ЈМБГ</label>
-                                <input id="jmbg" class="form-control" type="text" name="jmbg" value="" disabled/>
-                            </div>
-
-                            <div class="form-group pull-left" style="width: 50%;">
-                                <label for="StudijskiProgram">Студијски програм</label>
-                                <select class="form-control" id="StudijskiProgram" name="StudijskiProgram" disabled>
-                                    @foreach($studijskiProgram as $item)
-                                        <option value="{{ $item->id }}"{{ (($predmet->program?->id ?? null) == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group pull-left" style="width: 40%; margin-right: 2%">
-                                <label for="imeKandidata">Име</label>
-                                <input id="imeKandidata" class="form-control" type="text" name="imeKandidata" value=""
-                                       disabled/>
-                            </div>
-
-                            <div class="form-group pull-left" style="width: 40%;">
-                                <label for="prezimeKandidata">Презиме</label>
-                                <input id="prezimeKandidata" class="form-control" type="text" name="prezimeKandidata"
-                                       value="" disabled/>
-                            </div>
-
-                            <div class="clearfix"></div>
-                            <hr>
-
-                            <div class="form-group" style="width: 50%;">
-                                <label for="predmet_id">Пријављујем се за полагање испита из предмета</label>
-                                <select class="form-control" id="predmet_id" name="predmet_id">
-                                    <option value="{{ $predmet->id }}">{{ "Семестар " . $predmet->semestar . ': ' . ($predmet->predmet?->naziv ?? '-') }}</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group pull-left" style="width: 40%;  margin-right: 2%">
-                                <label for="tipPredmeta_id">Тип предмета:</label>
-                                <select class="form-control" id="tipPredmeta_id" name="tipPredmeta_id" disabled>
-                                    @foreach($tipPredmeta as $tip)
-                                        <option value="{{$tip->id}}" {{ ($predmet->tipPredmeta_id == $tip->id ? "selected":"") }}>{{$tip->naziv}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group pull-left" style="width: 10%; margin-right: 2%;">
-                                <label for="godinaStudija_id">Година студија</label>
-                                <select class="form-control" id="godinaStudija_id" name="godinaStudija_id" disabled>
-                                    @foreach($godinaStudija as $item)
-                                        <option value="{{ $item->id }}" {{ ($predmet->godinaStudija_id == $item->id ? "selected":"") }}>{{ $item->naziv }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group pull-left" style="width: 40%;">
-                                <label for="tipStudija_id">Тип студија:</label>
-                                <select class="form-control" id="tipStudija_id" name="tipStudija_id" disabled>
-                                     <option value="{{$predmet->tipStudija_id}}">{{$predmet->tipStudija?->naziv ?? '-'}}</option>
-                                </select>
-                            </div>
-
-                            <div class="clearfix"></div>
-                            <hr>
-
-                            <div class="form-group" style="width: 80%;">
-                                <label for="profesor_id">Професор</label>
-                                <select class="form-control" id="profesor_id" name="profesor_id">
-                                    @foreach($profesor as $tip)
-                                        <option value="{{$tip->id}}">{{$tip->zvanje . " " .$tip->ime . " " . $tip->prezime}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endif
-
-
-                        <div class="row">
-                            <div class="form-group col-lg-4">
-                                <label for="rok_id">Испитни рок</label>
-                                <select class="form-control" id="rok_id" name="rok_id">
-                                    @foreach($ispitniRok as $tip)
-                                        <option value="{{$tip->id}}">{{$tip->naziv}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group col-lg-4">
-                                <label for="brojPolaganja">Ипит полажем (редни број полагања)</label>
-                                <input id="brojPolaganja" class="form-control" type="text" name="brojPolaganja"
-                                       value="1"/>
-                            </div>
-
-                            <div class="form-group col-lg-4">
-                                <label for="formatDatum">Датум</label>
-                                <input id="formatDatum" class="form-control dateMask" type="text" name="formatDatum"
-                                       value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}"/>
+                            <div>
+                                <x-button variant="success" id="asdasd">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </x-button>
                             </div>
                         </div>
+                    </div>
 
-                        <input type="hidden" name="datum" id="datum"
-                               value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
-
-                        <div class="clearfix"></div>
-                        <hr>
-
-
-                        <div class="form-group text-center">
-                            <button type="submit" name="Submit" class="btn btn-success btn-lg"><span
-                                        class="fa fa-save"></span> Сачувај
-                            </button>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                        <x-form-input name="jmbg" id="jmbg" label="ЈМБГ" :value="$kandidat->jmbg" disabled />
+                        <div class="lg:col-span-2">
+                            <x-form-select name="StudijskiProgram" id="StudijskiProgram" label="Студијски програм"
+                                           :options="$studijskiProgram->pluck('naziv','id')->toArray()"
+                                           :selected="$kandidat->studijskiProgram_id" disabled />
                         </div>
+                        <x-form-input name="imeKandidata" id="imeKandidata" label="Име" :value="$kandidat->imeKandidata" disabled />
+                        <x-form-input name="prezimeKandidata" id="prezimeKandidata" label="Презиме" :value="$kandidat->prezimeKandidata" disabled />
+                    </div>
 
-                    </form>
+                    <hr class="my-6 border-gray-200">
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="lg:col-span-2">
+                            <x-form-select name="predmet_id" id="predmet_id" label="Пријављујем се за полагање испита из предмета"
+                                           :options="$predmeti->mapWithKeys(fn($i) => [$i->id => $i->predmet?->naziv ?? '-'])->toArray()" />
+                        </div>
+                        <x-form-select name="tipPredmeta_id" id="tipPredmeta_id" label="Тип предмета:"
+                                       :options="$tipPredmeta->pluck('naziv','id')->toArray()" disabled />
+                        <x-form-select name="godinaStudija_id" id="godinaStudija_id" label="Година студија"
+                                       :options="$godinaStudija->pluck('naziv','id')->toArray()"
+                                       :selected="$kandidat->godinaStudija_id" disabled />
+                        <x-form-select name="tipStudija_id" id="tipStudija_id" label="Тип студија:"
+                                       :options="$tipStudija->pluck('naziv','id')->toArray()"
+                                       :selected="$kandidat->tipStudija_id" disabled />
+                    </div>
+
+                    <hr class="my-6 border-gray-200">
+
+                    <div class="lg:w-8/12">
+                        <x-form-select name="profesor_id" id="profesor_id" label="Професор"
+                                       :options="$profesor->mapWithKeys(fn($t) => [$t->id => $t->zvanje . ' ' . $t->ime . ' ' . $t->prezime])->toArray()" />
+                    </div>
+
+                @else
+                    {{-- PREDMET FLOW --}}
+                    <input type="hidden" name="prijava_za_predmet" value="1">
+                    <input type="hidden" name="kandidat_id" id="kandidat_id" value="">
+                    <input type="hidden" name="tipStudija_id" id="tipStudija_id" value="{{ $predmet->tipStudija_id }}">
+                    <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id" value="{{ $predmet->studijskiProgram_id }}">
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="flex items-end gap-4">
+                            <div class="w-1/2">
+                                <x-form-select name="brojIndeksa" id="brojIndeksa" label="Број Индекса"
+                                               :options="$brojeviIndeksa->pluck('naziv','id')->toArray()" />
+                            </div>
+                            <div>
+                                <x-button variant="success" id="asdasd">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </x-button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                        <x-form-input name="jmbg" id="jmbg" label="ЈМБГ" value="" disabled />
+                        <div class="lg:col-span-2">
+                            <x-form-select name="StudijskiProgram" id="StudijskiProgram" label="Студијски програм"
+                                           :options="$studijskiProgram->pluck('naziv','id')->toArray()"
+                                           :selected="($predmet->program?->id ?? null)" disabled />
+                        </div>
+                        <x-form-input name="imeKandidata" id="imeKandidata" label="Име" value="" disabled />
+                        <x-form-input name="prezimeKandidata" id="prezimeKandidata" label="Презиме" value="" disabled />
+                    </div>
+
+                    <hr class="my-6 border-gray-200">
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="lg:col-span-2">
+                            <x-form-input name="predmet_display" label="Пријављујем се за полагање испита из предмета"
+                                          value="{{ 'Семестар ' . $predmet->semestar . ': ' . ($predmet->predmet?->naziv ?? '-') }}" disabled />
+                            <input type="hidden" name="predmet_id" id="predmet_id" value="{{ $predmet->id }}">
+                        </div>
+                        <x-form-select name="tipPredmeta_id" id="tipPredmeta_id" label="Тип предмета:"
+                                       :options="$tipPredmeta->pluck('naziv','id')->toArray()"
+                                       :selected="$predmet->tipPredmeta_id" disabled />
+                        <x-form-select name="godinaStudija_id" id="godinaStudija_id" label="Година студија"
+                                       :options="$godinaStudija->pluck('naziv','id')->toArray()"
+                                       :selected="$predmet->godinaStudija_id" disabled />
+                        <x-form-select name="tipStudija_id" id="tipStudija_id" label="Тип студија:"
+                                       :options="$tipStudija->pluck('naziv','id')->toArray()"
+                                       :selected="$predmet->tipStudija_id" disabled />
+                    </div>
+
+                    <hr class="my-6 border-gray-200">
+
+                    <div class="lg:w-4/5">
+                        <x-form-select name="profesor_id" id="profesor_id" label="Професор"
+                                       :options="$profesor->mapWithKeys(fn($t) => [$t->id => $t->zvanje . ' ' . $t->ime . ' ' . $t->prezime])->toArray()" />
+                    </div>
+                @endif
+
+                <hr class="my-6 border-gray-200">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <x-form-select name="rok_id" label="Испитни рок"
+                                   :options="$ispitniRok->pluck('naziv','id')->toArray()" />
+                    <x-form-input name="brojPolaganja" label="Испит полажем (редни број полагања)" value="1" />
+                    <x-form-input name="formatDatum" label="Датум"
+                                  value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}"
+                                  class="dateMask" />
                 </div>
-            </div>
-        </div>
+
+                <input type="hidden" name="datum" id="datum" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+
+                <div class="mt-6 text-center">
+                    <x-button variant="success" size="lg" type="submit" name="Submit">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Сачувај
+                    </x-button>
+                </div>
+            </form>
+        </x-card>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
+    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
     <script>
-        $(function () {
-            var formatDatum = $("#formatDatum");
-            formatDatum.datepicker({
-                dateFormat: 'dd.mm.yy.',
-                altField: "#datum",
-                altFormat: "yy-mm-dd"
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Date input sync
+            var formatDatum = document.getElementById('formatDatum');
+            if (formatDatum) {
+                formatDatum.addEventListener('input', function () {
+                    var date = moment(formatDatum.value, "DD.MM.YYYY");
+                    document.getElementById('datum').value = date.isValid() ? date.format('YYYY-MM-DD') : '';
+                });
+            }
 
-            formatDatum.on('input', function () {
-                var date = moment(formatDatum.val(), "dd.mm.yy");
-                $("#datum").val(date.format('YYYY-MM-DD'));
-            });
-
-
-            $(window).keydown(function (event) {
-                if (event.keyCode == 13) {
+            // Prevent Enter key form submission
+            document.addEventListener('keydown', function (event) {
+                if (event.keyCode === 13 && event.target.tagName !== 'TEXTAREA') {
                     event.preventDefault();
                     return false;
                 }
             });
         });
 
+        // jQuery for AJAX operations (preserved - complex DataTables/AJAX)
         $(document).ready(function () {
             var pathname = window.location.pathname;
+
+            // Lookup student by index number
             $('#asdasd').click(function () {
                 $.ajax({
                     url: '{{"/"}}prijava/vratiKandidataPrijava',
@@ -336,14 +220,12 @@
                         _token: $('input[name=_token]').val()
                     },
                     success: function (result) {
-                        //Azuriranje Studenta
                         $('#kandidat_id').val(result['student'].id);
                         $('#jmbg').val(result['student'].jmbg);
                         $('#imeKandidata').val(result['student'].imeKandidata);
                         $('#prezimeKandidata').val(result['student'].prezimeKandidata);
                         $('#studijskiProgram_id').val(result['student'].studijskiProgram_id);
 
-                        //Azuriranje Liste Predmeta
                         if (pathname.indexOf('/prijava/predmet/') == -1) {
                             $('#predmet_id').html(result['predmeti']);
                         }
@@ -354,6 +236,7 @@
                 });
             });
 
+            // Subject change handler - load professor/tip info
             $('#predmet_id').change(function () {
                 $.ajax({
                     url: '{{"/"}}prijava/vratiPredmetPrijava',
@@ -376,6 +259,4 @@
             });
         });
     </script>
-    <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
-    <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection

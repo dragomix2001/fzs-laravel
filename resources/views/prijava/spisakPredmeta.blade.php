@@ -3,9 +3,7 @@
 @section('section')
     <div id="messages">
         @if (Session::get('flash-error'))
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Грешка!</strong>
+            <x-alert type="danger">
                 @if(Session::get('flash-error') === 'update')
                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
                 @elseif(Session::get('flash-error') === 'delete')
@@ -14,11 +12,9 @@
                     Дошло је до грешке при упису кандидата! Молимо вас проверите да ли је кандидат уплатио школарину и
                     покушајте поново.
                 @endif
-            </div>
+            </x-alert>
         @elseif(Session::get('flash-success'))
-            <div class="alert alert-dismissible alert-success">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Успех!</strong>
+            <x-alert type="success">
                 @if(Session::get('flash-success') === 'update')
                     Подаци о кандидату су успешно сачувани.
                 @elseif(Session::get('flash-success') === 'delete')
@@ -26,75 +22,41 @@
                 @elseif(Session::get('flash-success') === 'upis')
                     Упис кандидата је успешно извршен.
                 @endif
-            </div>
+            </x-alert>
         @endif
     </div>
-    <ul class="nav nav-pills">
+    <ul class="flex flex-wrap gap-2 mb-4">
         @foreach($tipStudija as $tip)
-            <li role="presentation"
-                    {{ Request::input('tipStudijaId') == $tip->id  ? 'class=active' : '' }}>
-                <a href="?tipStudijaId={{ $tip->id }}">{{ $tip->naziv }}</a>
+            <li>
+                <a href="?tipStudijaId={{ $tip->id }}"
+                   class="inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150
+                   {{ Request::input('tipStudijaId') == $tip->id ? 'bg-primary-600 text-white shadow-sm' : 'bg-primary-50 text-primary-700 hover:bg-primary-100' }}">
+                    {{ $tip->naziv }}
+                </a>
             </li>
         @endforeach
     </ul>
     <br>
-    {{--@if(!empty(Request::input('tipStudijaId')))--}}
-    {{--<ul class="nav nav-pills">--}}
-    {{--@foreach($studijskiProgrami as $program)--}}
-    {{--<li role="presentation"--}}
-    {{--{{ Request::input('studijskiProgramId') == $program->id  ? 'class=active' : '' }}>--}}
-    {{--<a href="?tipStudijaId={{ Request::input('tipStudijaId') }}&studijskiProgramId={{ $program->id }}">{{ $program->naziv }}</a>--}}
-    {{--</li>--}}
-    {{--@endforeach--}}
-    {{--</ul>--}}
-    {{--<br>--}}
-    {{--<hr>--}}
-    {{--@endif--}}
-    <div class="col-lg-10">
+    <div class="w-full lg:w-10/12">
         @if(!empty($predmeti))
-            <table id="tabela" class="table">
+            <x-table>
                 <thead>
                 <th>Назив предмета</th>
-                {{--<th>Тип студија</th>--}}
-                {{--<th>Студијски програм</th>--}}
-                {{--<th>Тип предмета</th>--}}
-                {{--<th>Година студија</th>--}}
-                {{--<th>Семестар</th>--}}
-                {{--<th>ЕСПБ</th>--}}
-                {{--<th>Статус</th>--}}
                 <th>Акције</th>
                 </thead>
                 @foreach($predmeti as $predmet)
                     <tr>
                         <td>{{$predmet->naziv}}</td>
-                        {{--<td>--}}
-                        {{--{{$predmet->tipStudija->naziv}}--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{$predmet->studijskiProgram->naziv}}--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{$predmet->tipPredmeta->naziv}}--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{$predmet->godinaStudija->naziv}}--}}
-                        {{--</td>--}}
-                        {{--<td>{{$predmet->semestar}}</td>--}}
-                        {{--<td>{{$predmet->espb}}</td>--}}
-                        {{--<td>{{$predmet->statusPredmeta}}</td>--}}
                         <td>
-                            <div class="btn-group">
-                                <a href="prijava/zaPredmet/{{$predmet->id}}" class="btn btn-primary">Пријава испита</a>
+                            <div class="inline-flex gap-2">
+                                <a href="prijava/zaPredmet/{{$predmet->id}}"><x-button variant="primary" size="sm">Пријава испита</x-button></a>
                             </div>
                         </td>
                     </tr>
                 @endforeach
-            </table>
+            </x-table>
         @endif
         <br/>
     </div>
     <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>
 @endsection
-
-
-

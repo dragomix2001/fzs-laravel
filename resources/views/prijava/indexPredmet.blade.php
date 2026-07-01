@@ -1,69 +1,45 @@
 @extends('layouts.layout')
-@section('page_heading','Пријава испита')
+@section('page_heading','Пријава за полагање испита')
 @section('section')
-    <h3>Предмет: {{ $predmet->naziv }}</h3>
-    <br>
-    {{--<a href="{{"/"}}prijava/predmet/{{$predmet->id}}" class="btn btn-primary"><span class="fa fa-plus"></span> Нова пријава - један студент</a>--}}
-    <a href="{{"/"}}prijava/predmetVise/{{$predmet->id}}" class="btn btn-primary"><span class="fa fa-plus"></span> Нова пријава - више студената</a>
-    <div id="messages">
+    <div class="w-full lg:w-10/12">
         @if (Session::get('flash-error'))
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Грешка!</strong>
-                @if(Session::get('flash-error') === 'update')
+            <x-alert type="danger">
+                @if(Session::get('flash-error') === 'create')
                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                @elseif(Session::get('flash-error') === 'delete')
-                    Дошло је до грешке при брисању података! Молимо вас покушајте поново.
-                @elseif(Session::get('flash-error') === 'upis')
-                    Дошло је до грешке при упису кандидата! Молимо вас проверите да ли је кандидат уплатио школарину и покушајте поново.
                 @endif
-            </div>
-        @elseif(Session::get('flash-success'))
-            <div class="alert alert-dismissible alert-success">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Успех!</strong>
-                @if(Session::get('flash-success') === 'update')
-                    Подаци о кандидату су успешно сачувани.
-                @elseif(Session::get('flash-success') === 'delete')
-                    Подаци о кандидату су успешно обрисани.
-                @elseif(Session::get('flash-success') === 'upis')
-                    Упис кандидата је успешно извршен.
-                @endif
-            </div>
+            </x-alert>
         @endif
+        @if (Session::get('flash-success'))
+            <x-alert type="success">
+                Пријава је успешно забележена!
+            </x-alert>
+        @endif
+        <x-card>
+            <form role="form" method="post" action="{{ url('/prijava/') }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="prijava_za_predmet" value="1">
+                <input type="hidden" name="predmet_id" value="{{ $predmet->id }}">
+                <input type="hidden" name="tipStudija_id" value="{{ $predmet->tipStudija_id }}">
+                <input type="hidden" name="studijskiProgram_id" value="{{ $predmet->studijskiProgram_id }}">
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <x-form-input name="brojIndeksa" label="Број Индекса" :value="$kandidat->brojIndeksa" disabled />
+                    </div>
+                    <div>
+                        <x-form-select name="rok_id" label="Испитни рок" :options="$ispitniRok->pluck('naziv','id')->toArray()" />
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <x-button variant="success" size="lg">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Сачувај
+                    </x-button>
+                </div>
+            </form>
+        </x-card>
     </div>
-    <hr>
-    <h3>Пријављени студенти</h3>
-    <br>
-    <table id="tabela" class="table">
-        <thead>
-        <tr>
-            <th>Кандидат</th>
-            <th>Број Индекса</th>
-            <th>Рок</th>
-            <th>Код професора</th>
-            <th>Датум</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($prijave as $index => $prijava)
-            <tr>
-                <td>{{ ($prijava->kandidat?->imeKandidata ?? '') . " " . ($prijava->kandidat?->prezimeKandidata ?? '') }}</td>
-                <td>{{ $prijava->kandidat?->brojIndeksa ?? '' }}</td>
-                <td>{{ $prijava->rok?->naziv ?? '' }}</td>
-                <td>{{ ($prijava->profesor?->ime ?? '') . " " . ($prijava->profesor?->prezime ?? '') }}</td>
-                <td data-order="{{$prijava->datum->timestamp}}">{{ $prijava->datum->format('d.m.Y.') }}</td>
-                <td>
-                    {{--<a class="btn btn-primary" href="{{"/"}}master/{{ $kandidat->id }}/edit">Измени</a>--}}
-                    <a class="btn btn-danger" href="{{"/"}}prijava/delete/{{ $prijava->id }}?prijava=predmet"
-                       onclick="return confirm('Да ли сте сигурни да желите да обришете ову пријаву?');">Бриши</a>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-    <br>
-    <br>
-<script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>
 @endsection

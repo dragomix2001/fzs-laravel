@@ -1,247 +1,153 @@
 @extends('layouts.layout')
 @section('page_heading','Пријава полагања дипломског рада')
 @section('section')
-    <div class="col-lg-10">
-        {{--GRESKE--}}
+    <div class="w-full lg:w-10/12">
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
-                <h4>Грешка!</h4>
+            <x-alert type="danger" :dismissible="true">
+                <x-slot:title>Грешка!</x-slot:title>
                 <ul>
                     @foreach (Session::get('errors')->all() as $error)
                         <li>{!! $error !!}</li>
                     @endforeach
                 </ul>
-            </div>
+            </x-alert>
         @endif
         @if (Session::get('flash-error'))
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Грешка!</strong>
+            <x-alert type="danger" :dismissible="true">
+                <x-slot:title>Грешка!</x-slot:title>
                 @if(Session::get('flash-error') === 'create')
                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
                 @endif
-            </div>
+            </x-alert>
         @endif
-        <a class="btn btn-primary" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
-        <br>
-        <br>
-
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Пријава полагања дипломског рада</h3>
-            </div>
-            <div class="panel-body">
-                <form role="form" method="post" action="{{ url('/prijava/storeDiplomskiPolaganje') }}">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
-                    <input type="hidden" name="tipStudija_id" id="tipStudija_id"
-                           value="{{ $kandidat->tipStudija_id }}">
-                    <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id"
-                           value="{{ $kandidat->studijskiProgram_id }}">
-
-                    <div class="row">
-                        <div class="form-group col-lg-2">
-                            <label for="brojIndeksa">Број Индекса</label>
-                            <input type="text" value="{{$kandidat->brojIndeksa}}" class="form-control" disabled/>
-                        </div>
-
-                        <div class="form-group col-lg-8">
-                            <label for="imeKandidata">Име</label>
-                            <input id="imeKandidata" class="form-control" type="text" name="imeKandidata"
-                                   value="{{ $kandidat->imeKandidata . " " . $kandidat->imeRoditelja . " " . $kandidat->prezimeKandidata }}"
-                                   disabled/>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-lg-5">
-                            <label for="jmbg">ЈМБГ</label>
-                            <input id="jmbg" class="form-control" type="text" name="jmbg"
-                                   value="{{ $kandidat->jmbg }}" disabled/>
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label for="StudijskiProgram">Студијски програм</label>
-                            <input id="StudijskiProgram" type="text" value="{{ $kandidat->program?->naziv ?? '' }}"
-                                   class="form-control" disabled/>
-                        </div>
-                    </div>
-
-                    <div class="clearfix"></div>
-                    <hr>
-
-                    <div class="row">
-                        <div class="form-group col-lg-8">
-                            <label for="predmet_id">Дипломски рад из предмета</label>
-                            <select class="form-control auto-combobox" id="predmet_id" name="predmet_id">
-                                <option value=""></option>
-                                @foreach($predmeti as $item)
-                                    <option value="{{ $item->id }}">{{ $item->predmet?->naziv ?? '-' }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-10">
-                            <label for="nazivTeme">Назив теме:</label>
-                            <input id="nazivTeme" name="nazivTeme" type="text" class="form-control">
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="formatDatum">Датум</label>
-                            <input id="formatDatum" class="form-control dateMask" type="text" name="formatDatum"
-                                   value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}"/>
-                        </div>
-
-                        <input type="hidden" name="datum" id="datum"
-                               value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
-
-                        <div class="form-group col-lg-4">
-                            <label for="vreme">Време</label>
-                            <input id="vreme" class="form-control timeMask" type="text" name="vreme"/>
-                        </div>
-
-                    </div>
-
-                    <div class="clearfix"></div>
-                    <hr>
-                    <div class="row">
-                        <div class="form-group col-lg-8">
-                            <label for="profesor_id">Тему одобрио (ментор):</label>
-                            <select class="form-control auto-combobox" id="profesor_id" name="profesor_id">
-                                <option value=""></option>
-                                @foreach($profesor as $tip)
-                                    <option value="{{$tip->id}}">{{$tip->zvanje . " " .$tip->ime . " " . $tip->prezime}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="profesor_id_predsednik">Председник комисије:</label>
-                            <select class="form-control auto-combobox" id="profesor_id_predsednik"
-                                    name="profesor_id_predsednik">
-                                <option value=""></option>
-                                @foreach($profesor as $tip)
-                                    <option value="{{$tip->id}}">{{$tip->zvanje . " " .$tip->ime . " " . $tip->prezime}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="profesor_id_clan">Члан комисије:</label>
-                            <select class="form-control auto-combobox" id="profesor_id_clan" name="profesor_id_clan">
-                                <option value=""></option>
-                                @foreach($profesor as $tip)
-                                    <option value="{{$tip->id}}">{{$tip->zvanje . " " .$tip->ime . " " . $tip->prezime}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label for="brojBodova">Број бодова</label>
-                            <input type="text" class="form-control brojBodova"
-                                   id="brojBodova"
-                                   name="brojBodova">
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="ocena">Оцена</label>
-                            <select id="ocena" class="form-control konacnaOcena"
-                                    name="ocena">
-                                <option value="0"></option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="konacnaOcenaSlovima">Оцена словима</label>
-                            <select id="konacnaOcenaSlovima" class="form-control konacnaOcenaSlovima"
-                                    name="konacnaOcenaSlovima" disabled>
-                                <option value="0"></option>
-                                <option value="5">пет</option>
-                                <option value="6">шест</option>
-                                <option value="7">седам</option>
-                                <option value="8">осам</option>
-                                <option value="9">девет</option>
-                                <option value="10">десет</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <hr>
-                    <div class="form-group text-center">
-                        <button type="submit" name="Submit" class="btn btn-primary btn-lg"><span
-                                    class="fa fa-save"></span> Сачувај
-                        </button>
-                    </div>
-                </form>
-            </div>
+        <div class="mb-4">
+            <a href="/prijava/zaStudenta/{{ $kandidat->id }}">
+                <x-button variant="primary">&lt;&lt; Назад на студента</x-button>
+            </a>
         </div>
+
+        <x-card>
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Пријава полагања дипломског рада</h3>
+            </x-slot:header>
+            <form role="form" method="post" action="{{ url('/prijava/storeDiplomskiPolaganje') }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
+                <input type="hidden" name="tipStudija_id" id="tipStudija_id" value="{{ $kandidat->tipStudija_id }}">
+                <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id" value="{{ $kandidat->studijskiProgram_id }}">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <x-form-input name="brojIndeksa" label="Број Индекса" :value="$kandidat->brojIndeksa" disabled />
+                    <div class="sm:col-span-2">
+                        <x-form-input name="imeKandidata" label="Име"
+                                      value="{{ $kandidat->imeKandidata . ' ' . $kandidat->imeRoditelja . ' ' . $kandidat->prezimeKandidata }}" disabled />
+                    </div>
+                    <x-form-input name="jmbg" label="ЈМБГ" :value="$kandidat->jmbg" disabled />
+                    <div class="sm:col-span-2">
+                        <x-form-input name="StudijskiProgram" label="Студијски програм"
+                                      :value="$kandidat->program?->naziv ?? ''" disabled />
+                    </div>
+                </div>
+
+                <hr class="my-6 border-gray-200">
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="lg:col-span-2">
+                        <x-form-select name="predmet_id" label="Дипломски рад из предмета"
+                                       :options="$predmeti->mapWithKeys(fn($i) => [$i->id => $i->predmet?->naziv ?? '-'])->toArray()" />
+                    </div>
+                    <div class="lg:col-span-2">
+                        <x-form-input name="nazivTeme" label="Назив теме:" />
+                    </div>
+                    <x-form-input name="formatDatum" label="Датум"
+                                  value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}"
+                                  class="dateMask" />
+                    <input type="hidden" name="datum" id="datum" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+                    <x-form-input name="vreme" label="Време" class="timeMask" />
+                </div>
+
+                <hr class="my-6 border-gray-200">
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="lg:col-span-2">
+                        <x-form-select name="profesor_id" label="Тему одобрио (ментор):"
+                                       :options="$profesor->mapWithKeys(fn($t) => [$t->id => $t->zvanje . ' ' . $t->ime . ' ' . $t->prezime])->toArray()" />
+                    </div>
+                    <x-form-select name="profesor_id_predsednik" label="Председник комисије:"
+                                   :options="$profesor->mapWithKeys(fn($t) => [$t->id => $t->zvanje . ' ' . $t->ime . ' ' . $t->prezime])->toArray()" />
+                    <x-form-select name="profesor_id_clan" label="Члан комисије:"
+                                   :options="$profesor->mapWithKeys(fn($t) => [$t->id => $t->zvanje . ' ' . $t->ime . ' ' . $t->prezime])->toArray()" />
+                </div>
+
+                <hr class="my-6 border-gray-200">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <x-form-input name="brojBodova" label="Број бодова" class="brojBodova" />
+                    <x-form-select name="ocena" label="Оцена" id="ocena"
+                                   :options="['0'=>'','5'=>'5','6'=>'6','7'=>'7','8'=>'8','9'=>'9','10'=>'10']"
+                                   class="konacnaOcena" />
+                    <x-form-select name="konacnaOcenaSlovima" label="Оцена словима"
+                                   :options="['0'=>'','5'=>'пет','6'=>'шест','7'=>'седам','8'=>'осам','9'=>'девет','10'=>'десет']"
+                                   class="konacnaOcenaSlovima" disabled />
+                </div>
+
+                <div class="mt-6 text-center">
+                    <x-button variant="primary" size="lg">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Сачувај
+                    </x-button>
+                </div>
+            </form>
+        </x-card>
     </div>
+
     <script>
-        $(function () {
-            var formatDatum = $("#formatDatum");
-            formatDatum.datepicker({
-                dateFormat: 'dd.mm.yy.',
-                altField: "#datum",
-                altFormat: "yy-mm-dd"
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            var formatDatum = document.getElementById('formatDatum');
+            if (formatDatum) {
+                formatDatum.addEventListener('input', function () {
+                    var date = moment(formatDatum.value, "DD.MM.YYYY");
+                    document.getElementById('datum').value = date.isValid() ? date.format('YYYY-MM-DD') : '';
+                });
+            }
 
-            formatDatum.on('input', function () {
-                var date = moment(formatDatum.val(), "dd.mm.yy");
-                $("#datum").val(date.format('YYYY-MM-DD'));
-            });
-
-
-            $(window).keydown(function (event) {
-                if (event.keyCode == 13) {
+            document.addEventListener('keydown', function (event) {
+                if (event.keyCode === 13 && event.target.tagName !== 'TEXTAREA') {
                     event.preventDefault();
                     return false;
                 }
             });
-        });
 
-        $(document).ready(function () {
-            $('.brojBodova').on('input', function (e) {
-                var brojBodova = $(this).val();
+            // Score auto-calculation
+            var brojBodova = document.querySelector('.brojBodova');
+            var konacnaOcena = document.querySelector('.konacnaOcena');
+            var konacnaOcenaSlovima = document.querySelector('.konacnaOcenaSlovima');
+
+            function izracunajOcenu() {
+                var bodovi = parseInt(brojBodova.value) || 0;
                 var ocena = 0;
-                switch (true) {
-                    case (brojBodova == 0):
-                        ocena = 0;
-                        break;
-                    case (brojBodova <= 50):
-                        ocena = 5;
-                        break;
-                    case (brojBodova >= 51 && brojBodova <= 60):
-                        ocena = 6;
-                        break;
-                    case (brojBodova >= 61 && brojBodova <= 70):
-                        ocena = 7;
-                        break;
-                    case (brojBodova >= 71 && brojBodova <= 80):
-                        ocena = 8;
-                        break;
-                    case (brojBodova >= 81 && brojBodova <= 90):
-                        ocena = 9;
-                        break;
-                    case (brojBodova >= 91 && brojBodova <= 100):
-                        ocena = 10;
-                        break;
-                    default:
-                        ocena = 0;
-                        break;
-                }
-                $('.konacnaOcena').val(ocena);
-                $('.konacnaOcenaSlovima').val(ocena);
-            });
+                if (bodovi === 0) ocena = 0;
+                else if (bodovi <= 50) ocena = 5;
+                else if (bodovi >= 51 && bodovi <= 60) ocena = 6;
+                else if (bodovi >= 61 && bodovi <= 70) ocena = 7;
+                else if (bodovi >= 71 && bodovi <= 80) ocena = 8;
+                else if (bodovi >= 81 && bodovi <= 90) ocena = 9;
+                else if (bodovi >= 91 && bodovi <= 100) ocena = 10;
+                else ocena = 0;
+                konacnaOcena.value = ocena;
+                konacnaOcenaSlovima.value = ocena;
+            }
 
-            $('.konacnaOcena').change(function () {
-                $('.konacnaOcenaSlovima').val($('.konacnaOcena').val());
-            });
+            if (brojBodova) {
+                brojBodova.addEventListener('input', izracunajOcenu);
+            }
+            if (konacnaOcena) {
+                konacnaOcena.addEventListener('change', function () {
+                    konacnaOcenaSlovima.value = konacnaOcena.value;
+                });
+            }
         });
     </script>
     <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
