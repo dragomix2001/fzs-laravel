@@ -2,147 +2,43 @@
 @section('page_heading','Додај час у распоред')
 @section('section')
 
-<div class="col-sm-12 col-lg-10">
-<h2>Додај час у распоред</h2>
-    
+<div class="w-full lg:w-10/12">
+    <h2>Додај час у распоред</h2>
+
     <form method="POST" action="{{ route('raspored.store') }}">
         @csrf
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Предмет *</label>
-                    <select name="predmet_id" class="form-control" required>
-                        <option value="">-- Изаберите предмет --</option>
-                        @foreach($predmeti as $predmet)
-                            <option value="{{ $predmet->id }}">{{ $predmet->naziv }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Професор *</label>
-                    <select name="profesor_id" class="form-control" required>
-                        <option value="">-- Изаберите професора --</option>
-                        @foreach($profesori as $profesor)
-                            <option value="{{ $profesor->id }}">{{ $profesor->ime }} {{ $profesor->prezime }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <x-form-select label="Предмет *" name="predmet_id" required
+                           :options="collect(['' => '-- Изаберите предмет --'] + $predmeti->pluck('naziv','id')->toArray())->toArray()" />
+            <x-form-select label="Професор *" name="profesor_id" required
+                           :options="collect(['' => '-- Изаберите професора --'] + $profesori->mapWithKeys(function($p) { return [$p->id => $p->ime.' '.$p->prezime]; })->toArray())->toArray()" />
+
+            <x-form-select label="Студијски програм *" name="studijski_program_id" required
+                           :options="collect(['' => '-- Изаберите програм --'] + $studijskiProgrami->pluck('naziv','id')->toArray())->toArray()" />
+            <x-form-select label="Година студија *" name="godina_studija_id" required
+                           :options="collect(['' => '-- Изаберите годину --'] + $godineStudija->pluck('naziv','id')->toArray())->toArray()" />
+
+            <x-form-select label="Семестар *" name="semestar_id" required
+                           :options="collect(['' => '-- Изаберите семестар --'] + $semestri->pluck('naziv','id')->toArray())->toArray()" />
+            <x-form-select label="Школска година *" name="skolska_godina_id" required
+                           :options="$skolskeGodine->mapWithKeys(function($g) { return [$g->id => $g->godina.'/'.($g->godina+1)]; })->toArray()"
+                           :selected="$skolskeGodine->where('aktivan', true)->first()->id ?? ''" />
+
+            <x-form-select label="Облик наставе *" name="oblik_nastave_id" required
+                           :options="collect(['' => '-- Изаберите облик --'] + $obliciNastave->pluck('naziv','id')->toArray())->toArray()" />
+            <x-form-select label="Дан *" name="dan" required
+                           :options="['' => '-- Изаберите дан --', '1' => 'Понедељак', '2' => 'Уторак', '3' => 'Среда', '4' => 'Четвртак', '5' => 'Петак', '6' => 'Субота', '7' => 'Недеља']" />
+
+            <x-form-input label="Време од *" name="vreme_od" type="time" required />
+            <x-form-input label="Време до *" name="vreme_do" type="time" required />
+            <x-form-input label="Просторија" name="prostorija" type="text" placeholder="нпр. Сала 1" />
+            <x-form-input label="Група" name="grupa" type="text" placeholder="нпр. А, Б" />
         </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Студијски програм *</label>
-                    <select name="studijski_program_id" class="form-control" required>
-                        <option value="">-- Изаберите програм --</option>
-                        @foreach($studijskiProgrami as $program)
-                            <option value="{{ $program->id }}">{{ $program->naziv }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Година студија *</label>
-                    <select name="godina_studija_id" class="form-control" required>
-                        <option value="">-- Изаберите годину --</option>
-                        @foreach($godineStudija as $godina)
-                            <option value="{{ $godina->id }}">{{ $godina->naziv }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Семестар *</label>
-                    <select name="semestar_id" class="form-control" required>
-                        <option value="">-- Изаберите семестар --</option>
-                        @foreach($semestri as $semestar)
-                            <option value="{{ $semestar->id }}">{{ $semestar->naziv }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Школска година *</label>
-                    <select name="skolska_godina_id" class="form-control" required>
-                        @foreach($skolskeGodine as $godina)
-                            <option value="{{ $godina->id }}" {{ $godina->aktivan ? 'selected' : '' }}>
-                                {{ $godina->godina }}/{{ $godina->godina + 1 }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Облик наставе *</label>
-                    <select name="oblik_nastave_id" class="form-control" required>
-                        <option value="">-- Изаберите облик --</option>
-                        @foreach($obliciNastave as $oblik)
-                            <option value="{{ $oblik->id }}">{{ $oblik->naziv }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Дан *</label>
-                    <select name="dan" class="form-control" required>
-                        <option value="">-- Изаберите дан --</option>
-                        <option value="1">Понедељак</option>
-                        <option value="2">Уторак</option>
-                        <option value="3">Среда</option>
-                        <option value="4">Четвртак</option>
-                        <option value="5">Петак</option>
-                        <option value="6">Субота</option>
-                        <option value="7">Недеља</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Време од *</label>
-                    <input type="time" name="vreme_od" class="form-control" required>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Време до *</label>
-                    <input type="time" name="vreme_do" class="form-control" required>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Просторија</label>
-                    <input type="text" name="prostorija" class="form-control" placeholder="нпр. Сала 1">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Група</label>
-                    <input type="text" name="grupa" class="form-control" placeholder="нпр. А, Б">
-                </div>
-            </div>
-        </div>
-        
-        <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Сачувај</button>
-            <a href="{{ route('raspored.index') }}" class="btn btn-secondary">Откажи</a>
+
+        <div class="mt-6 flex gap-2">
+            <x-button variant="primary">Сачувај</x-button>
+            <a href="{{ route('raspored.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Откажи</a>
         </div>
     </form>
 </div>

@@ -2,47 +2,31 @@
 @section('page_heading','Календар распореда')
 @section('section')
 
-<div class="col-sm-12 col-lg-12">
-<h2>Календар часова</h2>
+<div class="w-full">
+    <h2>Календар часова</h2>
 
     <form method="GET" action="{{ route('raspored.kalendar') }}" class="mb-4">
-        <div class="row">
-            <div class="col-md-4">
-                <label>Школска година</label>
-                <select name="skolska_godina_id" class="form-control" onchange="this.form.submit()">
-                    <option value="">-- Активна година --</option>
-                    @foreach($skolskeGodine as $godina)
-                        <option value="{{ $godina->id }}" {{ request('skolska_godina_id') == $godina->id ? 'selected' : '' }}>
-                            {{ $godina->naziv }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label>Студијски програм</label>
-                <select name="studijski_program_id" class="form-control" onchange="this.form.submit()">
-                    <option value="">-- Сви програми --</option>
-                    @foreach($studijskiProgrami as $program)
-                        <option value="{{ $program->id }}" {{ request('studijski_program_id') == $program->id ? 'selected' : '' }}>
-                            {{ $program->naziv }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <x-form-select label="Школска година" name="skolska_godina_id"
+                           :options="collect(['' => '-- Активна година --'] + $skolskeGodine->pluck('naziv','id')->toArray())->toArray()"
+                           :selected="request('skolska_godina_id')"
+                           onchange="this.form.submit()" />
+            <x-form-select label="Студијски програм" name="studijski_program_id"
+                           :options="collect(['' => '-- Сви програми --'] + $studijskiProgrami->pluck('naziv','id')->toArray())->toArray()"
+                           :selected="request('studijski_program_id')"
+                           onchange="this.form.submit()" />
         </div>
     </form>
 
-    <div class="card">
-        <div class="card-body">
-            <div id="calendar"></div>
-        </div>
-    </div>
+    <x-card>
+        <div id="calendar"></div>
+    </x-card>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-    
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
         headerToolbar: {
@@ -68,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Предмет: ' + info.event.title + '\nПрофесор: ' + info.event.extendedProps.profesor + '\nПросторија: ' + info.event.extendedProps.prostorija + '\nГрупа: ' + info.event.extendedProps.grupa);
         }
     });
-    
+
     calendar.render();
 });
 </script>
