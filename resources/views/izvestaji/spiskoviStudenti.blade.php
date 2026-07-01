@@ -3,420 +3,280 @@
 @section('page_heading','Извештаји')
 @section('section')
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">PDF</a></li>
-        <li><a data-toggle="tab" href="#menu1">Excel</a></li>
-    </ul>
-    <div class="tab-content">
-        <div id="home" class="tab-pane fade in active">
-            <p></p>
+    <div class="border-b border-secondary-200">
+        <nav class="flex gap-4">
+            <a href="#pdfTab" id="tab-pdf" class="px-4 py-2 text-sm font-medium text-primary-600 border-b-2 border-primary-600" onclick="switchTab('pdf')">PDF</a>
+            <a href="#excelTab" id="tab-excel" class="px-4 py-2 text-sm font-medium text-secondary-500 hover:text-secondary-700 border-b-2 border-transparent" onclick="switchTab('excel')">Excel</a>
+        </nav>
+    </div>
 
-            <div class="col-sm-12 col-lg-12">
+    <div id="pdfTab" class="tab-content">
+        <div class="col-span-12">
 
-                <div class="col-sm-12 col-lg-4">
-                    <form role="form" target="_blank" method="post" action="{{ url('/izvestaji/spisakZaSmer/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак студената по смеровима</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-lg-10">
-                                        <label for="program">Студијски програм:</label>
-                                        <select class="form-control" id="program" name="program">
-                                            @foreach($program as $program)
-                                                <option value="{{$program->id}}">{{$program->naziv}}
-                                                    - {{$program->tipStudija->skrNaziv}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-lg-6">
-                                        <label for="godina">Година студија:</label>
-                                        <select id="godina" class="form-control" name="godina">
-                                            <option value="1">Прва</option>
-                                            <option value="2">Друга</option>
-                                            <option value="3">Трећа</option>
-                                            <option value="4">Четврта</option>
-                                            <option value="5">Пета</option>
-                                        </select>
-                                    </div>
-                                    <!--<div class="form-group">
-                                        <label for="skolskaGodina_id">Школска година:</label>
-                                        <select style="width:130px;" class="form-control" id="skolskaGodina_id"
-                                                name="test">
-                                            @foreach($skolskaGodina6 as $bla)
-                                                <option value="{{$bla->id}}">{{$bla->naziv}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>-->
-                                </div>
-                                <button type="submit" class="btn btn-primary">Штампај</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/spisakPoGodini/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак по години</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-lg-6">
-                                        <label for="godina">Година студија:</label>
-                                        <select id="godina" class="form-control" name="godina">
-                                            <option value="1">Прва</option>
-                                            <option value="2">Друга</option>
-                                            <option value="3">Трећа</option>
-                                            <option value="4">Четврта</option>
-                                            <option value="5">Пета</option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <!--<div class="form-group">
-                                    <label for="skolskaGodina_id">Школска година:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id"
-                                            name="skolskaGodina">
-                                        @foreach($skolskaGodina3 as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>-->
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/spisakPoProgramu/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак по програму</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-lg-12">
-                                        <label for="godina">Програм:</label>
-                                        <select class="form-control" id="program" name="program">
-                                            @foreach($programS as $programS)
-                                                <option value="{{$programS->id}}">{{$programS->naziv}}
-                                                    - {{$programS->tipStudija->skrNaziv}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <!-- <div class="form-group">
-                                    <label for="skolskaGodina_id">Школска година:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id"
-                                            name="godina">
-                                        @foreach($skolskaGodina4 as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>-->
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-                <div class="col-sm-12 col-lg-4">
-                    <form role="form" method="post" target="_blank"
-                          action="{{ url('/izvestaji/spisakPoPredmetima/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак студената по предметима</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label for="predmet">Предмет:</label>
-                                    <select class="form-control auto-combobox" id="predmet" name="predmet">
-                                        @foreach($predmeti as $predmet)
-                                            <option value="{{$predmet->id}}">{{$predmet->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <!-- <div class="form-group">
-                                    <label for="skolskaGodina_id">Школска година:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id"
-                                            name="godina">
-                                        @foreach($skolskaGodina7 as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>-->
-
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <form role="form" method="post" target="_blank"
-                          action="{{ url('/izvestaji/spisakDiplomiranih/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак дипломираних студената</h3>
-                            </div>
-                            <div class="panel-body">
-                                <!--<div class="form-group pull-left" style="width: 35%;  margin-right: 2%">
-                                    <label for="from">Од:</label>
-                                    <input name="from" id="from" type="text" class="form-control">
-                                </div>
-                                <div class="form-group pull-left" style="width: 35%;  margin-right: 2%">
-                                    <label for="to">До:</label>
-                                    <input name="to" id="to" type="text" class="form-control">
-                                </div>-->
-                                <div class="form-group pull-left" style="width: 20%; margin-right: 7%;">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/spisakPoSlavama/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак студената по славама</h3>
-                            </div>
-                            <div class="panel-body">
-
-                                <!--<div class="form-group">
-                                    <label for="skolskaGodina_id">Школска година:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id"
-                                            name="godina">
-                                        @foreach($skolskaGodina8 as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>-->
-
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </form>
-
-                    <form role="form" method="post" target="_blank"
-                          action="{{ url('/izvestaji/spisakPoProfesorima/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак предмета по професорима</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group pull-left" style="width: 20%; margin-right: 7%;">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-
-                <div class="col-sm-12 col-lg-4">
-                    <form role="form" target="_blank" method="post" action="{{ url('/izvestaji/nastavniPlan/') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Наставни план</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label for="program">Студијски програм:</label>
-                                    <select style="width:250px;" class="form-control" id="program" name="program">
-                                        @foreach($programPlan as $program)
-                                            <option value="{{$program->id}}">{{$program->naziv}}
-                                                - {{$program->tipStudija->skrNaziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="skolskaGodina_id">Школска година:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id"
-                                            name="godina">
-                                        @foreach($skolskaGodina as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form role="form" method="post" target="_blank"
-                          action="{{ url('/izvestaji/spisakPoSmerovimaAktivni') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак свих активних студената</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <!--<label for="skolskaGodina_id">Школска година:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id" name="godina">
-                                        @foreach($skolskaGodina9 as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                            </select>-->
-                                </div>
-                                <div class="form-group pull-left" style="width: 20%; margin-right: 7%;">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form role="form" method="post" target="_blank"
-                          action="{{ url('/izvestaji/spisakPoSmerovimaOstali') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак свих студената - остало</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <!--<label for="skolskaGodina_id">Школска година:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id" name="godina">
-                                        @foreach($skolskaGodina9 as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                            </select>-->
-                                </div>
-                                <div class="form-group pull-left" style="width: 20%; margin-right: 7%;">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                   <!-- <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/integralno') }}">
-                        {{csrf_field()}}
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Списак свих активних студената - интегрално</h3>
-
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label for="skolskaGodina_id">Школска година уписа:</label>
-                                    <select style="width:130px;" class="form-control" id="skolskaGodina_id"
-                                            name="godina">
-                                        @foreach($skolskaGodina9 as $godina)
-                                            <option value="{{$godina->id}}">{{$godina->naziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group pull-left" style="width: 20%; margin-right: 7%;">
-                                    <button type="submit" class="btn btn-primary">Штампај</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>-->
-
-                </div>
-
-
-            </div>
-        </div>
-        <div id="menu1" class="tab-pane fade">
-            <p></p>
-
-            <h3>Издвајање података у Excel табелу</h3>
-
-            <div class="col-sm-12 col-lg-4">
-
-                <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/excelStampa/') }}">
+            <div class="col-span-4">
+                <form role="form" target="_blank" method="post" action="{{ url('/izvestaji/spisakZaSmer/') }}">
                     {{csrf_field()}}
 
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Списак по програму</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="form-group col-lg-12">
-                                    <label for="godinaE">Програм:</label>
-                                    <select class="form-control" id="programE" name="programE">
-                                        @foreach($programE as $programE)
-                                            <option value="{{$programE->id}}">{{$programE->naziv}}
-                                                - {{$programE->tipStudija->skrNaziv}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак студената по смеровима</div>
+                        </x-slot:header>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="form-group">
+                                <label for="program" class="block text-sm font-medium text-secondary-700 mb-1">Студијски програм:</label>
+                                <select class="form-input" id="program" name="program">
+                                    @foreach($program as $program)
+                                        <option value="{{$program->id}}">{{$program->naziv}}
+                                            - {{$program->tipStudija->skrNaziv}}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <!--<div class="form-group">
-                                <label for="skolskaGodina_idE">Школска година:</label>
-                                <select style="width:130px;" class="form-control" id="skolskaGodina_idE" name="godinaE">
-                                    @foreach($skolskaGodinaE as $godina)
+                            <div class="form-group">
+                                <label for="godina" class="block text-sm font-medium text-secondary-700 mb-1">Година студија:</label>
+                                <select id="godina" class="form-input" name="godina">
+                                    <option value="1">Прва</option>
+                                    <option value="2">Друга</option>
+                                    <option value="3">Трећа</option>
+                                    <option value="4">Четврта</option>
+                                    <option value="5">Пета</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors mt-3">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+
+                <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/spisakPoGodini/') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак по години</div>
+                        </x-slot:header>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="form-group">
+                                <label for="godina" class="block text-sm font-medium text-secondary-700 mb-1">Година студија:</label>
+                                <select id="godina" class="form-input" name="godina">
+                                    <option value="1">Прва</option>
+                                    <option value="2">Друга</option>
+                                    <option value="3">Трећа</option>
+                                    <option value="4">Четврта</option>
+                                    <option value="5">Пета</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors mt-3">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+
+                <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/spisakPoProgramu/') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак по програму</div>
+                        </x-slot:header>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="form-group">
+                                <label for="program" class="block text-sm font-medium text-secondary-700 mb-1">Програм:</label>
+                                <select class="form-input" id="program" name="program">
+                                    @foreach($programS as $programS)
+                                        <option value="{{$programS->id}}">{{$programS->naziv}}
+                                            - {{$programS->tipStudija->skrNaziv}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors mt-3">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+            </div>
+
+            <div class="col-span-4">
+                <form role="form" method="post" target="_blank"
+                      action="{{ url('/izvestaji/spisakPoPredmetima/') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак студената по предметима</div>
+                        </x-slot:header>
+                        <div class="form-group">
+                            <label for="predmet" class="block text-sm font-medium text-secondary-700 mb-1">Предмет:</label>
+                            <select class="form-input auto-combobox" id="predmet" name="predmet">
+                                @foreach($predmeti as $predmet)
+                                    <option value="{{$predmet->id}}">{{$predmet->naziv}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors mt-3">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+
+                <form role="form" method="post" target="_blank"
+                      action="{{ url('/izvestaji/spisakDiplomiranih/') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак дипломираних студената</div>
+                        </x-slot:header>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+
+                <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/spisakPoSlavama/') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак студената по славама</div>
+                        </x-slot:header>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+
+                <form role="form" method="post" target="_blank"
+                      action="{{ url('/izvestaji/spisakPoProfesorima/') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак предмета по професорима</div>
+                        </x-slot:header>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+            </div>
+
+            <div class="col-span-4">
+                <form role="form" target="_blank" method="post" action="{{ url('/izvestaji/nastavniPlan/') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Наставни план</div>
+                        </x-slot:header>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="form-group">
+                                <label for="program" class="block text-sm font-medium text-secondary-700 mb-1">Студијски програм:</label>
+                                <select class="form-input" id="program" name="program">
+                                    @foreach($programPlan as $program)
+                                        <option value="{{$program->id}}">{{$program->naziv}}
+                                            - {{$program->tipStudija->skrNaziv}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="skolskaGodina_id" class="block text-sm font-medium text-secondary-700 mb-1">Школска година:</label>
+                                <select class="form-input" id="skolskaGodina_id"
+                                        name="godina">
+                                    @foreach($skolskaGodina as $godina)
                                         <option value="{{$godina->id}}">{{$godina->naziv}}</option>
                                     @endforeach
                                 </select>
-                            </div>-->
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Штампај</button>
                             </div>
                         </div>
-                    </div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors mt-3">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
                 </form>
 
+                <form role="form" method="post" target="_blank"
+                      action="{{ url('/izvestaji/spisakPoSmerovimaAktivni') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак свих активних студената</div>
+                        </x-slot:header>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
+
+                <form role="form" method="post" target="_blank"
+                      action="{{ url('/izvestaji/spisakPoSmerovimaOstali') }}">
+                    {{csrf_field()}}
+
+                    <x-card class="border-success-200 mb-4">
+                        <x-slot:header>
+                            <div class="font-semibold text-secondary-800">Списак свих студената - остало</div>
+                        </x-slot:header>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <span class="fa fa-print mr-2"></span> Штампај
+                        </button>
+                    </x-card>
+                </form>
             </div>
         </div>
     </div>
 
+    <div id="excelTab" class="tab-content hidden">
+        <h3 class="text-lg font-semibold text-secondary-800 my-4">Издвајање података у Excel табелу</h3>
 
+        <div class="col-span-4">
+            <form role="form" method="post" target="_blank" action="{{ url('/izvestaji/excelStampa/') }}">
+                {{csrf_field()}}
+
+                <x-card class="border-success-200">
+                    <x-slot:header>
+                        <div class="font-semibold text-secondary-800">Списак по програму</div>
+                    </x-slot:header>
+                    <div class="form-group">
+                        <label for="programE" class="block text-sm font-medium text-secondary-700 mb-1">Програм:</label>
+                        <select class="form-input" id="programE" name="programE">
+                            @foreach($programE as $programE)
+                                <option value="{{$programE->id}}">{{$programE->naziv}}
+                                    - {{$programE->tipStudija->skrNaziv}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors mt-3">
+                        <span class="fa fa-print mr-2"></span> Штампај
+                    </button>
+                </x-card>
+            </form>
+        </div>
+    </div>
 
     <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
     <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 
     <script>
-        $(document).ready(function () {
-            //$('#lice').combobox('autocomplete', $("#liceHidden").val());
+        function switchTab(tab) {
+            document.getElementById('pdfTab').classList.toggle('hidden', tab !== 'pdf');
+            document.getElementById('excelTab').classList.toggle('hidden', tab !== 'excel');
+            document.getElementById('tab-pdf').classList.toggle('border-primary-600', tab === 'pdf');
+            document.getElementById('tab-pdf').classList.toggle('border-transparent', tab !== 'pdf');
+            document.getElementById('tab-pdf').classList.toggle('text-primary-600', tab === 'pdf');
+            document.getElementById('tab-pdf').classList.toggle('text-secondary-500', tab !== 'pdf');
+            document.getElementById('tab-excel').classList.toggle('border-primary-600', tab === 'excel');
+            document.getElementById('tab-excel').classList.toggle('border-transparent', tab !== 'excel');
+            document.getElementById('tab-excel').classList.toggle('text-primary-600', tab === 'excel');
+            document.getElementById('tab-excel').classList.toggle('text-secondary-500', tab !== 'excel');
+        }
 
-            $("#from").datepicker({
-                dateFormat: 'dd.mm.yy.'
-            });
-
-            $("#to").datepicker({
-                dateFormat: 'dd.mm.yy.'
-            });
+        // Activate PDF tab by default
+        document.addEventListener('DOMContentLoaded', function() {
+            switchTab('pdf');
         });
     </script>
-
-
 
 @endsection

@@ -3,45 +3,33 @@
 @section('page_heading','Потврде')
 @section('section')
 
-    <div class="col-md-9">
+    <div class="col-span-9">
 
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title"></h3>
-            </div>
-            <div class="panel-body">
-                <!--<div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <!--<a class="btn btn-primary form-group"
-                       href="{{"/"}}izvestaji/{{$student->id}}/diplomaUnos">Унос података за
-                        уверење</a>
-                </div>-->
-                <!--<div class="form-group pull-left" style="width: 48%; margin-right: 2%">
-                    <a class="btn btn-primary form-group"
-                       href="{{"/"}}izvestaji/diplomskiUnos/{{$student->id}}">Унос података за
-                        дипломски</a>
-                </div>-->
-                <div class="form-group pull-left" style="width: 48%;">
+        <x-card class="border-success-200">
+            <x-slot:header>
+                <div class="font-semibold text-secondary-800">Потврде</div>
+            </x-slot:header>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-group">
                     <input type="hidden" value="{{$student->id}}">
-                    <a class="btn btn-primary form-group" target="_blank"
-                       href="{{"/"}}izvestaji/diplomaStampa/{{$student->id}}">Штампа
-                        уверења</a>
+                    <a class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors" target="_blank"
+                       href="{{"/"}}izvestaji/diplomaStampa/{{$student->id}}">
+                        <span class="fa fa-print mr-2"></span> Штампа уверења
+                    </a>
                 </div>
-                <div class="form-group pull-left" style="width: 48%; ">
-                    <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/komisijaStampa/{{$student->id}}">
-                        Комисија
+                <div class="form-group">
+                    <a target="_blank" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors" href="{{"/"}}izvestaji/komisijaStampa/{{$student->id}}">
+                        <span class="fa fa-print mr-2"></span> Комисија
                     </a>
                 </div>
 
-                <div class="form-group pull-left" style="width: 48%;">
-                    <a target="_blank" class="btn btn-primary" href="{{"/"}}izvestaji/polozeniStampa/{{$student->id}}">
-                        Уверење о положеним испитима
+                <div class="form-group">
+                    <a target="_blank" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors" href="{{"/"}}izvestaji/polozeniStampa/{{$student->id}}">
+                        <span class="fa fa-print mr-2"></span> Уверење о положеним испитима
                     </a>
                 </div>
             </div>
-            <div class="panel-body">
-
-            </div>
-        </div>
+        </x-card>
 
     </div>
 
