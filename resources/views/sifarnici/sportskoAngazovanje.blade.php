@@ -3,33 +3,18 @@
 @section('page_heading','Sportsko angažovanje')
 @section('section')
 
-    <div class="col-md-9">
-        <!--<a href="/sportskoAngazovanje/vrati">Visit W3Schools</a>-->
-        <!--<form class="btn" action="/kandidat/{{ $kandidat->id }}/edit">
-            <input type="submit" class="btn btn-primary" value="Vrati">
-        </form>-->
-        <a href="/kandidat/{{ $kandidat->id }}/edit">Nazad</a>
-        <div class="table-responsive">
-            <table id="tabela" class="table">
+    <div class="w-full lg:w-9/12">
+        <a href="/kandidat/{{ $kandidat->id }}/edit" class="text-primary-600 hover:text-primary-800 underline">Nazad</a>
+
+        <div class="mt-4">
+            <x-table>
                 <thead>
-                <th>
-                    Naziv kluba
-                </th>
-                <th>
-                    Period
-                </th>
-                <th>
-                    Broj godina
-                </th>
-                <th>
-                    Sport
-                </th>
-                <th>
-                    Ime i prezime
-                </th>
-                <th>
-                    Akcije
-                </th>
+                <th>Naziv kluba</th>
+                <th>Period</th>
+                <th>Broj godina</th>
+                <th>Sport</th>
+                <th>Ime i prezime</th>
+                <th>Akcije</th>
                 </thead>
 
                 @foreach($kandidat->angazovanja as $sportskoAngazovanje)
@@ -41,56 +26,40 @@
                         <td>{{$sportskoAngazovanje->kandidat->imeKandidata}}
                             &nbsp; {{$sportskoAngazovanje->kandidat->prezimeKandidata}}</td>
                         <td>
-                            <div class="btn-group">
-                                <form class="btn" action="/sportskoAngazovanje/{{$sportskoAngazovanje->id}}/edit">
-                                    <input type="submit" class="btn btn-primary" value="Promeni">
+                            <div class="inline-flex gap-2">
+                                <form class="inline-block" action="/sportskoAngazovanje/{{$sportskoAngazovanje->id}}/edit">
+                                    <x-button variant="primary">Promeni</x-button>
                                 </form>
-                                <form onsubmit="return confirm('Да ли сте сигурни да желите да обришете податке?');" class="btn" action="/sportskoAngazovanje/{{$sportskoAngazovanje->id}}/delete">
-                                    <input type="submit" class="btn btn-danger" value="Izbriši">
+                                <form class="inline-block" onsubmit="return confirm('Да ли сте сигурни да желите да обришете податке?');" action="/sportskoAngazovanje/{{$sportskoAngazovanje->id}}/delete">
+                                    <x-button variant="danger">Izbriši</x-button>
                                 </form>
                             </div>
                         </td>
                     </tr>
                 @endforeach
-            </table>
+            </x-table>
         </div>
-        <br/>
-        <form role="form" method="post" action="{{ url('/sportskoAngazovanje/unos') }}">
-            {{csrf_field()}}
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Sportsko angažovanje</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="nazivKluba">Naziv kluba:</label>
-                        <input name="nazivKluba" type="text" class="form-control">
+        <div class="mt-6">
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Sportsko angažovanje</h3>
+                </x-slot:header>
+                <form role="form" method="post" action="{{ url('/sportskoAngazovanje/unos') }}">
+                    {{csrf_field()}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <x-form-input label="Naziv kluba:" name="nazivKluba" type="text" />
+                        <x-form-input label="Od do godina:" name="odDoGodina" type="text" />
+                        <x-form-input label="Ukupno godina:" name="ukupnoGodina" type="text" />
+                        <x-form-select label="Sport:" name="sport_id"
+                                       :options="$sport->pluck('naziv','id')->toArray()" />
                     </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="odDoGodina">Od do godina:</label>
-                        <input name="odDoGodina" type="text" class="form-control">
+                    <div class="mt-6">
+                        <x-button variant="primary">Dodaj</x-button>
                     </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="ukupnoGodina">Ukupno godina:</label>
-                        <input name="ukupnoGodina" type="text" class="form-control">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%;  margin-right: 2%">
-                        <label for="sport_id">Sport:</label>
-                        <select class="form-control" id="sport_id" name="sport_id">
-                            @foreach($sport as $sport)
-                                <option value="{{$sport->id}}">{{$sport->naziv}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Dodaj</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+                </form>
+            </x-card>
+        </div>
     </div>
 
     <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>

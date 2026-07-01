@@ -3,70 +3,42 @@
 @section('page_heading','Измени професора')
 @section('section')
 
+    <div class="max-w-2xl">
+        <form method="post" action="{{"/"}}profesor/{{$profesor->id}}">
+            {{csrf_field()}}
+            {{method_field('PATCH')}}
 
-            <form role="form" method="post" action="{{"/"}}profesor/{{$profesor->id}}">
-                {{csrf_field()}}
-                {{method_field('PATCH')}}
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Професор</h3>
+                </x-slot:header>
 
-
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Професор</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <x-form-input label="ЈМБГ:" name="jmbg" type="text" :value="$profesor->jmbg" />
+                    <x-form-input label="Име:" name="ime" type="text" :value="$profesor->ime" />
+                    <x-form-input label="Презиме:" name="prezime" type="text" :value="$profesor->prezime" />
+                    <x-form-input label="Телефон:" name="telefon" type="text" :value="$profesor->telefon" />
+                    <x-form-input label="Е-маил:" name="mail" type="text" :value="$profesor->mail" />
+                    <div>
+                        <input type="hidden" id="statusHidden" value="{{$profesor->status_id}}">
+                        <x-form-select label="Статус:" name="status_id" id="status_id" :options="$status->pluck('naziv', 'id')->toArray()" />
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <label for="jmbg">ЈМБГ:</label>
-                            <input name="jmbg" type="text" class="form-control" value="{{$profesor->jmbg}}">
-                        </div>
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <label for="ime">Име:</label>
-                            <input name="ime" type="text" class="form-control" value="{{$profesor->ime}}">
-                        </div>
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <label for="prezime">Презиме:</label>
-                            <input name="prezime" type="text" class="form-control" value="{{$profesor->prezime}}">
-                        </div>
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <label for="telefon">Телефон:</label>
-                            <input name="telefon" type="text" class="form-control" value="{{$profesor->telefon}}">
-                        </div>
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <label for="mail">Е-маил:</label>
-                            <input name="mail" type="text" class="form-control" value="{{$profesor->mail}}">
-                        </div>
-                        <div class="form-group pull-left" style="width: 48%;  margin-right: 2%">
-                            <input type="hidden" id="statusHidden" value="{{$profesor->status_id}}">
-                            <label for="status_id">Статус:</label>
-                            <select class="form-control" id="status_id" name="status_id">
-                                @foreach($status as $status)
-                                    <option value="{{$status->id}}">{{$status->naziv}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <label for="kabinet">Кабинет:</label>
-                            <input name="kabinet" type="text" class="form-control" value="{{$profesor->kabinet}}">
-                        </div>
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <label for="zvanje">Звање:</label>
-                            <input name="zvanje" type="text" class="form-control" value="{{$profesor->jmbg}}">
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <button type="submit" class="btn btn-primary">Измени</button>
-                        </div>
-                    </div>
+                    <x-form-input label="Кабинет:" name="kabinet" type="text" :value="$profesor->kabinet" />
+                    <x-form-input label="Звање:" name="zvanje" type="text" :value="$profesor->jmbg" />
                 </div>
-            </form>
+
+                <div class="flex gap-2">
+                    <x-button variant="primary" type="submit">Измени</x-button>
+                </div>
+            </x-card>
+        </form>
+    </div>
 
     <script>
         $(document).ready(function () {
             $("#status_id").val($("#statusHidden").val());
 
-
-                //$("#tabs").tabs();
-
+            //$("#tabs").tabs();
 
             $('#tabela').dataTable({
                 "aaSorting": [],
@@ -91,9 +63,5 @@
 
         });
     </script>
-
-
-
-
 
 @endsection

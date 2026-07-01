@@ -3,27 +3,22 @@
 @section('page_heading','Измени регион')
 @section('section')
 
-    <div class="col-md-9">
+    <div class="w-full lg:w-9/12">
         <form role="form" method="post" action="{{"/"}}region/{{$region->id}}">
             {{csrf_field()}}
             {{method_field('PATCH')}}
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Регион</h3>
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Регион</h3>
+                </x-slot:header>
+                <div class="space-y-4">
+                    <x-form-input label="Назив:" name="naziv" type="text" value="{{$region->naziv}}" />
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив:</label>
-                        <input name="naziv" type="text" class="form-control" value="{{$region->naziv}}">
-                    </div>
+                <div class="mt-6">
+                    <x-button variant="primary">Измени</x-button>
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Измени</button>
-                    </div>
-                </div>
-            </div>
+            </x-card>
         </form>
     </div>
 

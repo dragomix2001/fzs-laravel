@@ -3,45 +3,27 @@
 @section('page_heading','Izmeni mesto')
 @section('section')
 
-    <div class="col-md-9">
-        <form role="form" method="post" action="/mesto/{{$mesto->id}}">
-            {{csrf_field()}}
-            {{method_field('PATCH')}}
+    <div class="w-full lg:w-9/12">
+        <x-card variant="success">
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Mesto</h3>
+            </x-slot:header>
+            <form role="form" method="post" action="/mesto/{{$mesto->id}}">
+                {{csrf_field()}}
+                {{method_field('PATCH')}}
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Mesto</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <x-form-input label="Naziv:" name="naziv" type="text" :value="$mesto->naziv" />
+                    <x-form-select label="Opština:" name="opstina_id"
+                                   id="opstina_id"
+                                   :options="$opstina->pluck('naziv','id')->toArray()"
+                                   :selected="$mesto->opstina_id" />
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Naziv:</label>
-                        <input name="naziv" type="text" class="form-control" value="{{$mesto->naziv}}">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%;  margin-right: 2%">
-                        <label for="opstina_id">Opština:</label>
-                        <input type="hidden" id="opstinaHidden" name="opstinaHidden"
-                               value="{{$mesto->opstina_id}}">
-                        <select class="form-control" id="opstina_id" name="opstina_id">
-                            @foreach($opstina as $opstina)
-                                <option value="{{$opstina->id}}">{{$opstina->naziv}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="mt-6">
+                    <x-button variant="primary">Izmeni</x-button>
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Izmeni</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+            </form>
+        </x-card>
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $("#opstina_id").val($("#opstinaHidden").val());
-        });
-    </script>
-
 
 @endsection

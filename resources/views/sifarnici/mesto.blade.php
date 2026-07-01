@@ -3,74 +3,55 @@
 @section('page_heading','Mesto')
 @section('section')
 
-    <div class="col-md-9">
-        <div class="table-responsive">
-            <table id="tabela" class="table">
-                <thead>
-                <th>
-                    Naziv
-                </th>
-                <th>
-                    Naziv opštine
-                </th>
-                <th>
-                    Akcije
-                </th>
-                </thead>
+    <div class="w-full lg:w-9/12">
+        <x-table>
+            <thead>
+            <th>Naziv</th>
+            <th>Naziv opštine</th>
+            <th>Akcije</th>
+            </thead>
 
-                @foreach($mesto as $mesto)
-                    <tr>
-                        <td>{{$mesto->naziv}}</td>
-                        <td>
-                            @if($mesto->opstina)
-                                {{$mesto->opstina->naziv}}
-                            @else
-                                Prazno
-                            @endif
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <form class="btn" action="mesto/{{$mesto->id}}/edit">
-                                    <input type="submit" class="btn btn-primary" value="Promeni">
-                                </form>
-                                <form onsubmit="return confirm('Да ли сте сигурни да желите да обришете податке?');" class="btn" action="mesto/{{$mesto->id}}/delete">
-                                    <input type="submit" class="btn btn-danger" value="Izbriši">
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
+            @foreach($mesto as $mesto)
+                <tr>
+                    <td>{{$mesto->naziv}}</td>
+                    <td>
+                        @if($mesto->opstina)
+                            {{$mesto->opstina->naziv}}
+                        @else
+                            Prazno
+                        @endif
+                    </td>
+                    <td>
+                        <div class="inline-flex gap-2">
+                            <form class="inline-block" action="mesto/{{$mesto->id}}/edit">
+                                <x-button variant="primary">Promeni</x-button>
+                            </form>
+                            <form class="inline-block" onsubmit="return confirm('Да ли сте сигурни да желите да обришете податке?');" action="mesto/{{$mesto->id}}/delete">
+                                <x-button variant="danger">Izbriši</x-button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </x-table>
+
+        <div class="mt-6">
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Mesto</h3>
+                </x-slot:header>
+                <form role="form" method="post" action="{{ url('/mesto/unos') }}">
+                    {{csrf_field()}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <x-form-input label="Naziv:" name="naziv" type="text" />
+                        <x-form-select label="Opština:" name="opstina_id" :options="$opstina->pluck('naziv','id')->toArray()" />
+                    </div>
+                    <div class="mt-6">
+                        <x-button variant="primary">Dodaj</x-button>
+                    </div>
+                </form>
+            </x-card>
         </div>
-        <br/>
-        <form role="form" method="post" action="{{ url('/mesto/unos') }}">
-            {{csrf_field()}}
-
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Mesto</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Naziv:</label>
-                        <input name="naziv" type="text" class="form-control">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%;  margin-right: 2%">
-                        <label for="opstina_id">Opština:</label>
-                        <select class="form-control" id="opstina_id" name="opstina_id">
-                            @foreach($opstina as $opstina)
-                                <option value="{{$opstina->id}}">{{$opstina->naziv}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Dodaj</button>
-                    </div>
-                </div>
-            </div>
-        </form>
     </div>
 
     <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>

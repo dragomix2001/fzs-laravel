@@ -3,41 +3,31 @@
 @section('page_heading','Измени статус кандидата')
 @section('section')
 
-    <div class="col-md-9">
+    <div class="w-full lg:w-9/12">
         <form role="form" method="post" action="{{"/"}}statusKandidata/{{$status->id}}">
             {{csrf_field()}}
             {{method_field('PATCH')}}
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Измени статус кандидата</h3>
-                </div>
-                <div class="panel-body">
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Измени статус кандидата</h3>
+                </x-slot:header>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <x-form-input label="Назив:" name="naziv" type="text" value="{{$status->naziv}}" />
 
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив:</label>
-                        <input name="naziv" type="text" class="form-control" value="{{$status->naziv}}">
-                    </div>
-
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <div class="checkbox">
-                            <label>
-                                @if($status->indikatorAktivan == 1)
-                                    <input name="indikatorAktivan" value="1" type="checkbox" checked="true">
-                                @else
-                                    <input name="indikatorAktivan" type="checkbox">
-                                @endif
-                                Активан</label>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Измени</button>
+                    <div class="flex items-start gap-3">
+                        @if($status->indikatorAktivan == 1)
+                            <input name="indikatorAktivan" value="1" type="checkbox" checked="true" class="mt-1 rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
+                        @else
+                            <input name="indikatorAktivan" type="checkbox" class="mt-1 rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
+                        @endif
+                        <label class="font-semibold text-gray-700">Активан</label>
                     </div>
                 </div>
-            </div>
+                <div class="mt-6">
+                    <x-button variant="primary">Измени</x-button>
+                </div>
+            </x-card>
         </form>
     </div>
 

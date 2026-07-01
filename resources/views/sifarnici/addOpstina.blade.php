@@ -6,31 +6,20 @@
     <form role="form" method="post" action="{{ url('/opstina/unos') }}">
         {{csrf_field()}}
 
+        <x-card variant="success">
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Општина</h3>
+            </x-slot:header>
 
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">Општина</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <x-form-input label="Назив:" name="naziv" type="text" />
+                <x-form-select label="Регион:" name="region_id" id="region_id" :options="$region->pluck('naziv', 'id')->toArray()" />
             </div>
-            <div class="panel-body">
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="naziv">Назив:</label>
-                    <input name="naziv" type="text" class="form-control">
-                </div>
-                <div class="form-group pull-left" style="width: 48%;  margin-right: 2%">
-                    <label for="region_id">Регион:</label>
-                    <select class="form-control" id="region_id" name="region_id">
-                        @foreach($region as $region)
-                            <option value="{{$region->id}}">{{$region->naziv}}</option>
-                        @endforeach
-                    </select>
-                </div>
+
+            <div class="flex gap-3">
+                <x-button variant="primary" type="submit">Додај</x-button>
             </div>
-            <div class="panel-body">
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <button type="submit" class="btn btn-primary">Додај</button>
-                </div>
-            </div>
-        </div>
+        </x-card>
     </form>
 
 @endsection

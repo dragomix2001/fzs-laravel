@@ -3,53 +3,34 @@
 @section('page_heading','Измена године студија')
 @section('section')
 
-    <div class="col-md-9">
+    <div class="w-full lg:w-9/12">
         <form role="form" method="post" action="{{"/"}}godinaStudija/{{$godinaStudija->id}}">
             {{csrf_field()}}
             {{method_field('PATCH')}}
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Измена године студија</h3>
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Измена године студија</h3>
+                </x-slot:header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <x-form-input label="Назив:" name="naziv" type="text" :value="$godinaStudija->naziv" />
+                    <x-form-input label="Римски назив:" name="nazivRimski" type="text" :value="$godinaStudija->nazivRimski" />
+                    <x-form-input label="Назив у падежу:" name="nazivSlovimaUPadezu" type="text" :value="$godinaStudija->nazivSlovimaUPadezu" />
+                    <x-form-input label="Редослед приказивања:" name="redosledPrikazivanja" type="text" :value="$godinaStudija->redosledPrikazivanja" />
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив:</label>
-                        <input name="naziv" type="text" class="form-control" value="{{$godinaStudija->naziv}}">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Римски назив:</label>
-                        <input name="nazivRimski" type="text" class="form-control"
-                               value="{{$godinaStudija->nazivRimski}}">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив у падежу:</label>
-                        <input name="nazivSlovimaUPadezu" type="text" class="form-control"
-                               value="{{$godinaStudija->nazivSlovimaUPadezu}}">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Редослед приказивања:</label>
-                        <input name="redosledPrikazivanja" type="text" class="form-control"
-                               value="{{$godinaStudija->redosledPrikazivanja}}">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <div class="checkbox">
-                            <label>
-                                @if($godinaStudija->indikatorAktivan == 1)
-                                    <input name="indikatorAktivan" value="1" type="checkbox" checked="true">
-                                @else
-                                    <input name="indikatorAktivan" type="checkbox">
-                                @endif
-                                Активан</label>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                            <button type="submit" class="btn btn-primary">Измени</button>
-                        </div>
-                    </div>
+
+                <div class="mb-6">
+                    <label class="flex items-start gap-3">
+                        <input name="indikatorAktivan" value="1" type="checkbox" @if($godinaStudija->indikatorAktivan == 1) checked @endif class="mt-1">
+                        <span>Активан</span>
+                    </label>
                 </div>
-            </div>
+
+                <div class="flex gap-3">
+                    <x-button variant="primary" type="submit">Измени</x-button>
+                </div>
+            </x-card>
         </form>
     </div>
 

@@ -3,32 +3,25 @@
 @section('page_heading','Измени предмет')
 @section('section')
 
-    <div class="col-md-9">
-
-        <form role="form" method="post" action="{{"/"}}predmet/{{$predmet->id}}">
+    <div class="max-w-2xl">
+        <form method="post" action="{{"/"}}predmet/{{$predmet->id}}">
             {{csrf_field()}}
             {{method_field('PATCH')}}
 
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Измени предмет</h3>
+                </x-slot:header>
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Измени предмет</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <x-form-input label="Назив:" name="naziv" type="text" :value="$predmet->naziv" />
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив:</label>
-                        <input name="naziv" type="text" class="form-control" value="{{$predmet->naziv}}">
-                    </div>
+
+                <div class="flex gap-2">
+                    <x-button variant="primary" type="submit">Измени</x-button>
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Измени</button>
-                    </div>
-                </div>
-            </div>
+            </x-card>
         </form>
-
-
     </div>
 
     <script>

@@ -3,36 +3,26 @@
 @section('page_heading','Додавање семестра')
 @section('section')
 
-    <div class="col-md-9">
+    <div class="w-full lg:w-9/12">
         <form role="form" method="post" action="{{ url('/semestar/unos') }}">
             {{csrf_field()}}
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Семестар</h3>
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Семестар</h3>
+                </x-slot:header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <x-form-input label="Назив:" name="naziv" type="text" />
+                    <x-form-input label="Назив римски:" name="nazivRimski" type="text" />
+                    <x-form-input label="Назив бројчано:" name="nazivBrojcano" type="number" />
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив:</label>
-                        <input name="naziv" type="text" class="form-control">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив римски:</label>
-                        <input name="nazivRimski" type="text" class="form-control">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Назив бројчано:</label>
-                        <input name="nazivBrojcano" type="number" class="form-control">
-                    </div>
+
+                <div class="flex gap-3">
+                    <x-button variant="primary" type="submit">Додај</x-button>
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Додај</button>
-                    </div>
-                </div>
-            </div>
+            </x-card>
         </form>
     </div>
-
 
 @endsection

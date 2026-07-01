@@ -3,45 +3,27 @@
 @section('page_heading','Izmeni školu/fakultet')
 @section('section')
 
-    <div class="col-md-9">
-        <form role="form" method="post" action="{{"/"}}srednjeSkoleFakulteti/{{$srednjeSkoleFakulteti->id}}">
-            {{csrf_field()}}
-            {{method_field('PATCH')}}
+    <div class="w-full lg:w-9/12">
+        <x-card variant="success">
+            <x-slot:header>
+                <h3 class="text-lg font-semibold">Izmeni školu/fakultet</h3>
+            </x-slot:header>
+            <form role="form" method="post" action="{{"/"}}srednjeSkoleFakulteti/{{$srednjeSkoleFakulteti->id}}">
+                {{csrf_field()}}
+                {{method_field('PATCH')}}
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Izmeni školu/fakultet</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <x-form-input label="Naziv:" name="naziv" type="text" :value="$srednjeSkoleFakulteti->naziv" />
+                    <x-form-select label="Škola/Fakultet:" name="indSkoleFakulteta"
+                                   id="indSkoleFakulteta"
+                                   :options="['1'=>'Škola','2'=>'Fakultet']"
+                                   :selected="$srednjeSkoleFakulteti->indSkoleFakulteta" />
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Naziv:</label>
-                        <input name="naziv" type="text" class="form-control" value="{{$srednjeSkoleFakulteti->naziv}}">
-                    </div>
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <label for="naziv">Škola/Fakultet:</label>
-                        <input type="hidden" id="indikatorHidden" name="indikatorHidden"
-                               value="{{$srednjeSkoleFakulteti->indSkoleFakulteta}}">
-                        <select class="form-control" id="indSkoleFakulteta" name="indSkoleFakulteta">
-                            <option value="1">Škola</option>
-                            <option value="2">Fakultet</option>
-                        </select>
-                    </div>
+                <div class="mt-6">
+                    <x-button variant="primary">Izmeni</x-button>
                 </div>
-                <div class="panel-body">
-                    <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                        <button type="submit" class="btn btn-primary">Izmeni</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+            </form>
+        </x-card>
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $("#indSkoleFakulteta").val($("#indikatorHidden").val());
-        });
-    </script>
-
-
 
 @endsection

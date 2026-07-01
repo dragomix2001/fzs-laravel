@@ -3,59 +3,31 @@
 @section('page_heading','Додавање професора')
 @section('section')
 
-    <form role="form" method="post" action="{{ url('/profesor/unos') }}">
-        {{csrf_field()}}
+    <div class="max-w-2xl">
+        <form method="post" action="{{ url('/profesor/unos') }}">
+            {{csrf_field()}}
 
+            <x-card variant="success">
+                <x-slot:header>
+                    <h3 class="text-lg font-semibold">Професор</h3>
+                </x-slot:header>
 
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">Професор</h3>
-            </div>
-            <div class="panel-body">
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="jmbg">ЈМБГ:</label>
-                    <input name="jmbg" type="text" class="form-control">
-                </div>
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="ime">Име:</label>
-                    <input name="ime" type="text" class="form-control">
-                </div>
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="prezime">Презиме:</label>
-                    <input name="prezime" type="text" class="form-control">
-                </div>
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="telefon">Телефон:</label>
-                    <input name="telefon" type="text" class="form-control">
-                </div>
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="mail">Е-маил:</label>
-                    <input name="mail" type="text" class="form-control">
-                </div>
-                <div class="form-group pull-left" style="width: 48%;  margin-right: 2%">
-                    <label for="status_id">Статус:</label>
-                    <select class="form-control" id="status_id" name="status_id">
-                        @foreach($status as $status)
-                            <option value="{{$status->id}}">{{$status->naziv}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="kabinet">Кабинет:</label>
-                    <input name="kabinet" type="text" class="form-control">
-                </div>
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <label for="zvanje">Звање:</label>
-                    <input name="zvanje" type="text" class="form-control">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <x-form-input label="ЈМБГ:" name="jmbg" type="text" />
+                    <x-form-input label="Име:" name="ime" type="text" />
+                    <x-form-input label="Презиме:" name="prezime" type="text" />
+                    <x-form-input label="Телефон:" name="telefon" type="text" />
+                    <x-form-input label="Е-маил:" name="mail" type="text" />
+                    <x-form-select label="Статус:" name="status_id" id="status_id" :options="$status->pluck('naziv', 'id')->toArray()" />
+                    <x-form-input label="Кабинет:" name="kabinet" type="text" />
+                    <x-form-input label="Звање:" name="zvanje" type="text" />
                 </div>
 
-            </div>
-            <div class="panel-body">
-                <div class="form-group pull-left" style="width: 48%; margin-right: 2%;">
-                    <button type="submit" class="btn btn-primary">Додај</button>
+                <div class="flex gap-2">
+                    <x-button variant="primary" type="submit">Додај</x-button>
                 </div>
-            </div>
-        </div>
-    </form>
+            </x-card>
+        </form>
+    </div>
 
 @endsection
