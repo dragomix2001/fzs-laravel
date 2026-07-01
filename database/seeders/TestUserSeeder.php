@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 /**
  * TestUserSeeder - Creates a test user for Playwright E2E tests
- * 
+ *
  * Credentials:
  * - Email: test@fzs.test
  * - Password: password
  * - Role: admin
- * 
+ *
  * Usage:
  *   php artisan db:seed --class=TestUserSeeder
  */
@@ -26,7 +26,7 @@ class TestUserSeeder extends Seeder
     {
         // Check if test user already exists
         $existingUser = User::where('email', 'test@fzs.test')->first();
-        
+
         if ($existingUser) {
             $this->command->info('Test user already exists. Updating...');
             $existingUser->update([
@@ -40,7 +40,7 @@ class TestUserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => User::ROLE_ADMIN,
             ]);
-            
+
             $this->command->info('Test user created successfully.');
         }
     }
