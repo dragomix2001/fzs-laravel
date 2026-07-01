@@ -2,15 +2,15 @@
 @section('page_heading','Календар')
 @section('section')
 
-<div class="col-sm-12 col-lg-10">
-    <a href="{{"/"}}kalendar/indexRok/" class="btn btn-primary">
+<div class="w-full lg:w-10/12">
+    <a href="{{"/"}}kalendar/indexRok/" class="inline-flex items-center gap-1 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">
         <span class="fa fa-envelope-square"></span>
         Сви рокови
     </a>
-    <br>
-    <br>
 
-    <div id='calendar'></div>
+    <div class="mt-4">
+        <div id='calendar'></div>
+    </div>
 </div>
 
 <script>
