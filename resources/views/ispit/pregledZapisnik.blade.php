@@ -6,36 +6,37 @@
             z-index: 2147483647 !important;
         }
     </style>
-    <div class="col-lg-10">
+    <div class="col-span-10">
         {{--Modal za dodavanje studenata POCETAK--}}
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document" style="width: 60%">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                    aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Додавање студената</h4>
+        <div id="myModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="myModalLabel">
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <div class="fixed inset-0 bg-black opacity-50" onclick="closeModal('myModal')"></div>
+                <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl z-10">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-secondary-200">
+                        <h4 class="text-lg font-semibold text-secondary-800">Додавање студената</h4>
+                        <button type="button" class="text-secondary-400 hover:text-secondary-600 text-xl leading-none" onclick="closeModal('myModal')">&times;</button>
                     </div>
-                    <div class="modal-body">
+                    <div class="px-6 py-4">
                         <form action="{{"/"}}zapisnik/pregled/dodajStudenta" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="zapisnikId" value="{{$zapisnik->id}}">
 
-                            <div class="form-group col-lg-4">
-                                <label for="addStudentList">Студенти</label>
-                                <select class="form-control auto-combobox" id="addStudentList" name="addStudentList">
-                                    <option value="0"></option>
-                                    @foreach($kandidati as $index => $kandidat)
-                                        <option value="{{$kandidat->id}}">{{$kandidat->brojIndeksa}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+                                <div class="md:col-span-4">
+                                    <label for="addStudentList" class="block text-sm font-medium text-secondary-700 mb-1">Студенти</label>
+                                    <select class="form-input auto-combobox" id="addStudentList" name="addStudentList">
+                                        <option value="0"></option>
+                                        @foreach($kandidati as $index => $kandidat)
+                                            <option value="{{$kandidat->id}}">{{$kandidat->brojIndeksa}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="flex items-end">
+                                    <input type="button" value="Додај" name="button" id="addStudentButton"
+                                           class="w-full px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer">
+                                </div>
                             </div>
-                            <div class="form-group col-lg-1">
-                                <label for="addStudentButton">&nbsp;</label>
-                                <input type="button" value="Додај" name="button" id="addStudentButton"
-                                       class="btn btn-success">
-                            </div>
-                            <table id="tabela" class="table">
+                            <x-table id="tabela">
                                 <thead>
                                 <tr>
                                     <th></th>
@@ -47,59 +48,55 @@
                                 <tbody id="addStudentTableBody">
 
                                 </tbody>
-                            </table>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Затвори</button>
-                            <input type="submit" class="btn btn-success" value="Додај">
+                            </x-table>
+                            <div class="flex gap-2 mt-4">
+                                <button type="button" class="px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors" onclick="closeModal('myModal')">Затвори</button>
+                                <input type="submit" class="px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" value="Додај">
+                            </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
                     </div>
                 </div>
             </div>
         </div>
         {{--Modal za dodavanje studenata KRAJ--}}
         {{--Modal za izmenu podataka POCETAK--}}
-        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document" style="width: 60%">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                    aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Измена</h4>
+        <div id="myModal2" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="myModalLabel">
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <div class="fixed inset-0 bg-black opacity-50" onclick="closeModal('myModal2')"></div>
+                <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl z-10">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-secondary-200">
+                        <h4 class="text-lg font-semibold text-secondary-800">Измена</h4>
+                        <button type="button" class="text-secondary-400 hover:text-secondary-600 text-xl leading-none" onclick="closeModal('myModal2')">&times;</button>
                     </div>
-                    <div class="modal-body">
+                    <div class="px-6 py-4">
                         <form action="{{"/"}}zapisnik/pregled/izmeniPodatke" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="zapisnikId" value="{{$zapisnik->id}}">
                             <input type="hidden" id="datum" name="datum" value="{{$zapisnik->datum}}">
                             <input type="hidden" id="datum2" name="datum2" value="{{$zapisnik->datum2}}">
 
-                            <div class="row">
-                                <div class="form-group col-lg-4">
-                                    <label for="ucionica">Учионица</label>
-                                    <input type="text" class="form-control" name="ucionica" id="ucionica">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="ucionica" class="block text-sm font-medium text-secondary-700 mb-1">Учионица</label>
+                                    <input type="text" class="form-input" name="ucionica" id="ucionica">
                                 </div>
-                                <div class="form-group col-lg-4">
-                                    <label for="vreme">Време</label>
-                                    <input type="text" class="form-control timeMask" name="vreme" id="vreme">
+                                <div>
+                                    <label for="vreme" class="block text-sm font-medium text-secondary-700 mb-1">Време</label>
+                                    <input type="text" class="form-input timeMask" name="vreme" id="vreme">
+                                </div>
+                                <div>
+                                    <label for="formatDatum" class="block text-sm font-medium text-secondary-700 mb-1">Датум</label>
+                                    <input type="text" class="form-input dateMask" name="formatDatum" id="formatDatum">
+                                </div>
+                                <div>
+                                    <label for="formatDatum2" class="block text-sm font-medium text-secondary-700 mb-1">Датум 2</label>
+                                    <input type="text" class="form-input dateMask" name="formatDatum2" id="formatDatum2">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-lg-4">
-                                    <label for="formatDatum">Датум</label>
-                                    <input type="text" class="form-control dateMask" name="formatDatum" id="formatDatum">
-                                </div>
-                                <div class="form-group col-lg-4">
-                                    <label for="formatDatum2">Датум 2</label>
-                                    <input type="text" class="form-control dateMask" name="formatDatum2" id="formatDatum2">
-                                </div>
-                                <div class="form-group col-lg-10">
-                                    <input type="submit" class="btn btn-success" value="Сачувај">
-                                </div>
+                            <div class="mt-4">
+                                <input type="submit" class="px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" value="Сачувај">
                             </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
                     </div>
                 </div>
             </div>
@@ -107,37 +104,56 @@
         {{--Modal za izmenu podataka KRAJ--}}
         <div id="messages">
             @if (Session::get('errors'))
-                <div class="alert alert-dismissable alert-danger">
-                    <h4>Грешка!</h4>
-                    <ul>
-                        @foreach (Session::get('errors')->all() as $error)
-                            <li>{!! $error !!}</li>
-                        @endforeach
-                    </ul>
+                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="text-sm font-semibold text-red-800">Грешка!</h4>
+                            <ul class="mt-1 text-sm text-red-700 list-disc list-inside">
+                                @foreach (Session::get('errors')->all() as $error)
+                                    <li>{!! $error !!}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             @endif
             @if (Session::get('flash-error'))
-                <div class="alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>Грешка!</strong>
-                    @if(Session::get('flash-error') === 'create')
-                        Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                    @endif
+                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-red-800">
+                                <strong>Грешка!</strong>
+                                @if(Session::get('flash-error') === 'create')
+                                    Дошло је до грешке при чувању података! Молимо вас покушајте поново.
+                                @endif
+                            </p>
+                        </div>
+                    </div>
                 </div>
             @endif
         </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <h3>Предмет: {{ $zapisnik->predmet?->naziv ?? '-' }}</h3>
-                <h4>Испитни рок: {{ $zapisnik->ispitniRok?->naziv ?? '-' }}</h4>
-                <h4>Професор: {{ ($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '') }}</h4>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="md:col-span-6">
+                <h3 class="text-lg font-semibold text-secondary-800">Предмет: {{ $zapisnik->predmet?->naziv ?? '-' }}</h3>
+                <h4 class="text-base text-secondary-700">Испитни рок: {{ $zapisnik->ispitniRok?->naziv ?? '-' }}</h4>
+                <h4 class="text-base text-secondary-700">Професор: {{ ($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '') }}</h4>
             </div>
-            <div class="col-lg-4" style="margin-top: 20px">
-                <h4>Време полагања: {{ substr($zapisnik->vreme, 0, -3) }}</h4>
-                <h4>Учионица: {{ $zapisnik->ucionica }}</h4>
-                <h4>Датум: {{ ($zapisnik->datum == null ? '' : \Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')) . ' / ' . ($zapisnik->datum2 == null ? '' : \Carbon\Carbon::parse($zapisnik->datum2)->format('d.m.Y.')) }}</h4>
+            <div class="md:col-span-4 mt-4">
+                <h4 class="text-base text-secondary-700">Време полагања: {{ substr($zapisnik->vreme, 0, -3) }}</h4>
+                <h4 class="text-base text-secondary-700">Учионица: {{ $zapisnik->ucionica }}</h4>
+                <h4 class="text-base text-secondary-700">Датум: {{ ($zapisnik->datum == null ? '' : \Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')) . ' / ' . ($zapisnik->datum2 == null ? '' : \Carbon\Carbon::parse($zapisnik->datum2)->format('d.m.Y.')) }}</h4>
             </div>
-            <div class="col-lg-2" style="margin-top: 20px">
+            <div class="md:col-span-2 mt-4">
                 <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post">
                     {{ csrf_field() }}
                     <div class="form-group">
@@ -146,22 +162,21 @@
                         <input type="hidden" name="profesor"
                                value="{{($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '')}}">
                         <input type="hidden" name="id" value="{{$zapisnik->id}}">
-                        <input type="submit" class="btn btn-primary" value="Штампа записника">
+                        <input type="submit" class="w-full px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" value="Штампа записника">
                     </div>
                 </form>
             </div>
-            <div class="col-lg-2">
-                <button type="button" name="edit" class="btn btn-primary" data-toggle="modal"
-                        data-target="#myModal2">
-                    <i class="fa fa-pencil-square-o"></i> Измени време/учионицу
+            <div class="md:col-span-2 mt-4">
+                <button type="button" name="edit" class="w-full px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors" onclick="openModal('myModal2')">
+                    <i class="fa fa-pencil-square-o mr-2"></i> Измени време/учионицу
                 </button>
             </div>
         </div>
-        <hr>
+        <hr class="my-4 border-secondary-200">
         @if(!empty($polozeniIspiti))
             <form action="{{"/"}}zapisnik/polozeniIspit" method="post">
                 {{ csrf_field() }}
-                <table class="table">
+                <x-table>
                     <thead>
                     <tr>
                         <th>Ред бр.</th>
@@ -184,23 +199,23 @@
                                 <input type="hidden" id="zapisnik_id" name="zapisnik_id[{{ $index }}]"
                                        value="{{ $zapisnik->id }}">
                                  <input type="hidden" id="prijava_id" name="prijava_id[{{ $index }}]"
-                                        value="{{ $prijavaIds[$ispit->kandidat?->id] ?? '' }}">
+                                         value="{{ $prijavaIds[$ispit->kandidat?->id] ?? '' }}">
                                  <input type="hidden" id="kandidat_id" name="kandidat_id[{{ $index }}]"
-                                        value="{{ $ispit->kandidat?->id }}">
+                                         value="{{ $ispit->kandidat?->id }}">
                                 <input type="hidden" id="predmet_id" name="predmet_id"
                                        value="{{ $zapisnik->predmet_id }}">
                             </td>
                             <td>{{$ispit->kandidat?->brojIndeksa ?? '-'}}</td>
                             <td>{{($ispit->kandidat?->imeKandidata ?? '') . " " . ($ispit->kandidat?->prezimeKandidata ?? '')}}</td>
                             <td>
-                                <input type="text" class="form-control brojBodova"
+                                <input type="text" class="form-input brojBodova w-20"
                                        id="brojBodova"
                                        name="brojBodova[{{ $index }}]"
                                        data-index="{{ $index }}"
                                        value="{{ $ispit->indikatorAktivan == 1 ? $ispit->brojBodova : "" }}">
                             </td>
                             <td>
-                                <select class="form-control konacnaOcena" data-index="{{ $index }}"
+                                <select class="form-input konacnaOcena" data-index="{{ $index }}"
                                         name="konacnaOcena[{{ $index }}]">
                                     <option value="0"></option>
                                     <option value="5" {{ $ispit->konacnaOcena == 5 ? 'selected' : "" }}>5</option>
@@ -213,7 +228,7 @@
                                 </select>
                             </td>
                             <td>
-                                <select class="form-control konacnaOcenaSlovima" data-index="{{ $index }}"
+                                <select class="form-input konacnaOcenaSlovima" data-index="{{ $index }}"
                                         name="konacnaOcenaSlovima" disabled>
                                     <option value="0"></option>
                                     <option value="5" {{ $ispit->konacnaOcena == 5 ? 'selected' : "" }}>пет</option>
@@ -230,7 +245,7 @@
                                 </select>
                             </td>
                             <td>
-                                <select class="form-control statusIspita" data-index="{{ $index }}"
+                                <select class="form-input statusIspita" data-index="{{ $index }}"
                                         name="statusIspita[{{$index}}]">
                                     <option value="0"></option>
                                     @foreach($statusIspita as $index => $status)
@@ -239,7 +254,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a class="btn btn-danger" style="padding: 9px 12px"
+                                <a class="inline-flex items-center px-3 py-2 bg-danger-600 hover:bg-danger-500 text-white text-sm font-medium rounded-lg transition-colors"
                                    href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}/{{ $ispit->kandidat?->id }}/delete"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете овог студента?');">
                                     <div title="Брисање">
@@ -251,18 +266,17 @@
                         <?php $i++ ?>
                     @endforeach
                     </tbody>
-                </table>
+                </x-table>
 
-                <div class="row">
-                    <div class="form-group text-center col-lg-10">
-                        <button type="submit" name="Submit" class="btn btn-success btn-lg"><span
-                                    class="fa fa-save"></span> Сачувај
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+                    <div class="md:col-span-10 text-center">
+                        <button type="submit" name="Submit" class="inline-flex items-center px-6 py-3 bg-success-600 hover:bg-success-500 text-white text-base font-medium rounded-lg transition-colors">
+                            <span class="fa fa-save mr-2"></span> Сачувај
                         </button>
                     </div>
-                    <div class="col-lg-2">
-                        <button type="button" name="add" class="btn btn-primary btn-lg" data-toggle="modal"
-                                data-target="#myModal"><span
-                                    class="fa fa-plus"></span> Додај студента
+                    <div class="md:col-span-2">
+                        <button type="button" name="add" class="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 hover:bg-primary-500 text-white text-base font-medium rounded-lg transition-colors" onclick="openModal('myModal')">
+                            <span class="fa fa-plus mr-2"></span> Додај студента
                         </button>
                     </div>
                 </div>
@@ -272,6 +286,14 @@
         <br>
     </div>
     <script>
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
         $(document).ready(function () {
             $('.brojBodova').on('input', function (e) {
                 var indeks = $(this).data('index');
@@ -386,6 +408,3 @@
     <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
     <script type="text/javascript" src="{{"/"}}js/dateMask.js"></script>
 @endsection
-
-
-

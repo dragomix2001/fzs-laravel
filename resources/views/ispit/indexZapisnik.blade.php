@@ -1,37 +1,48 @@
 @extends('layouts.layout')
 @section('page_heading','Записник о полагању испита')
 @section('section')
-    <div class="col-lg-12">
+    <div class="col-span-12">
         <div id="messages">
             @if (Session::get('flash-error'))
-                <div class="alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>Грешка!</strong>
-                    @if(Session::get('flash-error') === 'create')
-                        Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                    @endif
+                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-red-800">
+                                <strong>Грешка!</strong>
+                                @if(Session::get('flash-error') === 'create')
+                                    Дошло је до грешке при чувању података! Молимо вас покушајте поново.
+                                @endif
+                            </p>
+                        </div>
+                    </div>
                 </div>
             @endif
         </div>
         <br>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <a href="{{"/"}}zapisnik/create/" class="btn btn-primary"><span class="fa fa-plus"></span> Нов
-                    записник</a>
-                <a href="{{"/"}}zapisnik/arhiva/" class="btn btn-warning"><i class="fa fa-archive"></i> Архива</a>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="md:col-span-6">
+                <a href="{{"/"}}zapisnik/create/" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                    <span class="fa fa-plus mr-2"></span> Нов записник
+                </a>
+                <a href="{{"/"}}zapisnik/arhiva/" class="inline-flex items-center px-4 py-2 bg-warning-500 hover:bg-warning-400 text-white text-sm font-medium rounded-lg transition-colors">
+                    <i class="fa fa-archive mr-2"></i> Архива
+                </a>
             </div>
         </div>
-        <hr>
-        <h4>Филтрирање записника</h4>
+        <hr class="my-4 border-secondary-200">
+        <h4 class="text-base font-semibold text-secondary-800 mb-3">Филтрирање записника</h4>
         <form role="form" method="get" action="{{"/"}}zapisnik">
             {{ csrf_field() }}
-            <div class="row">
-
-                <div class="form-group col-lg-3">
-                    <label for="filter_predmet_id">Предмет</label>
-                    <select class="form-control auto-combobox" id="filter_predmet_id"
-                            name="filter_predmet_id">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="md:col-span-3">
+                    <label for="filter_predmet_id" class="block text-sm font-medium text-secondary-700 mb-1">Предмет</label>
+                    <select class="form-input auto-combobox" id="filter_predmet_id" name="filter_predmet_id">
                         <option value=""></option>
                     @foreach($predmeti as $item)
                             <option value="{{$item->id}}" {{ (!empty(app('request')->input('filter_predmet_id')) && app('request')->input('filter_predmet_id') == $item->id) ? 'selected' : '' }}>{{ $item->naziv }}</option>
@@ -39,10 +50,9 @@
                     </select>
                 </div>
 
-                <div class="form-group col-lg-3">
-                    <label for="filter_rok_id">Испитни рок</label>
-                    <select class="form-control" id="filter_rok_id"
-                            name="filter_rok_id">
+                <div class="md:col-span-3">
+                    <label for="filter_rok_id" class="block text-sm font-medium text-secondary-700 mb-1">Испитни рок</label>
+                    <select class="form-input" id="filter_rok_id" name="filter_rok_id">
                         <option value=""></option>
                         @if(!empty($aktivniIspitniRok))
                             @foreach($aktivniIspitniRok as $tip)
@@ -52,10 +62,9 @@
                     </select>
                 </div>
 
-                <div class="form-group col-lg-3">
-                    <label for="filter_profesor_id">Професор</label>
-                    <select class="form-control auto-combobox" id="filter_profesor_id"
-                            name="filter_profesor_id">
+                <div class="md:col-span-3">
+                    <label for="filter_profesor_id" class="block text-sm font-medium text-secondary-700 mb-1">Професор</label>
+                    <select class="form-input auto-combobox" id="filter_profesor_id" name="filter_profesor_id">
                         <option value=""></option>
                         @foreach($profesori as $item)
                             <option value="{{$item->id}}" {{ (!empty(app('request')->input('filter_profesor_id')) && app('request')->input('filter_profesor_id') == $item->id) ? 'selected' : '' }}>{{ $item->ime . " " . $item->prezime }}</option>
@@ -63,18 +72,18 @@
                     </select>
                 </div>
 
-                <div class="form-group col-lg-1">
-                    <label for="submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <input type="submit" id="submit" class="btn btn-primary" value="Филтрирај">
+                <div class="md:col-span-1 flex items-end">
+                    <input type="submit" id="submit" class="w-full px-3 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" value="Филтрирај">
                 </div>
-                <div class="form-group col-lg-1">
-                    <label for="a">&nbsp;</label>
-                    <a href="{{"/"}}zapisnik/" class="btn btn-danger"><i class="fa fa-close"></i> Поништи филтар</a>
+                <div class="md:col-span-2 flex items-end">
+                    <a href="{{"/"}}zapisnik/" class="w-full inline-flex items-center justify-center px-3 py-2 bg-danger-600 hover:bg-danger-500 text-white text-sm font-medium rounded-lg transition-colors">
+                        <i class="fa fa-close mr-2"></i> Поништи филтар
+                    </a>
                 </div>
             </div>
         </form>
-        <hr>
-        <table id="tabela" class="table">
+        <hr class="my-4 border-secondary-200">
+        <x-table id="tabela">
             <thead>
             <tr>
                 <th>Предмет</th>
@@ -94,7 +103,7 @@
                     <td data-order="{{ \Carbon\Carbon::parse($zapisnik->datum)->timestamp }}">{{\Carbon\Carbon::parse($zapisnik->datum)->format('d.m.Y.')}}</td>
                     <td>{{$zapisnik->studenti_count}}</td>
                     <td>
-                            <div>
+                        <div>
                             <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post" style="margin-bottom: 0px">
                                 {{ csrf_field() }}
                                 <div style="display:none;">
@@ -104,33 +113,32 @@
                                            value="{{($zapisnik->profesor?->ime ?? '') . " " . ($zapisnik->profesor?->prezime ?? '')}}">
                                     <input type="hidden" name="id" value="{{$zapisnik->id}}">
                                 </div>
-                                <a class="btn btn-primary" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед</a>
-                                <a class="btn btn-danger" href="{{"/"}}zapisnik/delete/{{ $zapisnik->id }}"
-                                   onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">
-                                    <div title="Брисање" style="padding: 2pt;">
-                                        <i class="fa fa-trash"></i>
-                                    </div>
-                                </a>
-                                <a class="btn btn-warning"
-                                   href="{{"/"}}zapisnik/arhiviraj/{{ $zapisnik->id }}">
-                                    <div title="архива">
-                                        <i class="fa fa-archive"></i> У архиву
-                                    </div>
-                                </a>
-                                <button type="submit" class="btn btn-primary fa fa-print"></button>
+                                <div class="flex gap-1 flex-wrap">
+                                    <a class="inline-flex items-center px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед</a>
+                                    <a class="inline-flex items-center px-3 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}zapisnik/delete/{{ $zapisnik->id }}"
+                                       onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">
+                                        <div title="Брисање" style="padding: 2pt;">
+                                            <i class="fa fa-trash"></i>
+                                        </div>
+                                    </a>
+                                    <a class="inline-flex items-center px-3 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded-lg transition-colors"
+                                       href="{{"/"}}zapisnik/arhiviraj/{{ $zapisnik->id }}">
+                                        <div title="архива">
+                                            <i class="fa fa-archive mr-1"></i> У архиву
+                                        </div>
+                                    </a>
+                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors fa fa-print"></button>
+                                </div>
                             </form>
-                            </div>
+                        </div>
                     </td>
                 </tr>
             @endforeach
             </tbody>
-        </table>
+        </x-table>
         <br>
         <br>
     </div>
     <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>
     <script type="text/javascript" src="{{"/"}}js/jquery-ui-autocomplete.js"></script>
 @endsection
-
-
-

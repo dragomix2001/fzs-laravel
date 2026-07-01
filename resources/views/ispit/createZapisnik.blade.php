@@ -1,136 +1,145 @@
 @extends('layouts.layout')
 @section('page_heading','Записник о полагању испита')
 @section('section')
-    <div class="col-lg-10">
+    <div class="col-span-10">
         {{-- GRESKE --}}
         @if (Session::get('errors'))
-            <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                <h4>Грешка!</h4>
-                <ul>
-                    @foreach (Session::get('errors')->all() as $error)
-                        <li>{!! $error !!}</li>
-                    @endforeach
-                </ul>
+            <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-sm font-semibold text-red-800">Грешка!</h4>
+                        <ul class="mt-1 text-sm text-red-700 list-disc list-inside">
+                            @foreach (Session::get('errors')->all() as $error)
+                                <li>{!! $error !!}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </div>
         @endif
         @if (Session::get('flash-error'))
-            <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                <strong>Грешка!</strong>
-                @if(Session::get('flash-error') === 'create')
-                    Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                @endif
+            <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-red-800">
+                            <strong>Грешка!</strong>
+                            @if(Session::get('flash-error') === 'create')
+                                Дошло је до грешке при чувању података! Молимо вас покушајте поново.
+                            @endif
+                        </p>
+                    </div>
+                </div>
             </div>
         @endif
-        <div class="card border-primary mb-3">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title">Записник о полагању испита</h3>
-            </div>
-            <div class="card-body">
-                <form role="form" method="post" action="{{ url('/zapisnik/storeZapisnik') }}">
-                    {{ csrf_field() }}
-                    <div class="row">
-                        <div class="form-group col-lg-5">
-                            <label for="rok_id">Испитни рок</label>
-                            <select class="form-control" id="rok_id"
-                                    name="rok_id">
-                                @if(!empty($aktivniIspitniRok))
-                                    @foreach($aktivniIspitniRok as $tip)
-                                        <option value="{{$tip->id}}" {{ (!empty($rok_id) && $rok_id == $tip->id) ? 'selected' : '' }}>{{$tip->naziv}}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-5">
-                            <label for="predmet_id">Предмет</label>
-                            <select class="form-control" id="predmet_id"
-                                    name="predmet_id">
-                                @foreach($predmeti as $item)
-                                    <option value="{{$item->id}}">{{ $item->naziv }}</option>
+        <x-card class="border-primary-200">
+            <x-slot:header>
+                <div class="font-semibold text-secondary-800">Записник о полагању испита</div>
+            </x-slot:header>
+            <form role="form" method="post" action="{{ url('/zapisnik/storeZapisnik') }}">
+                {{ csrf_field() }}
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div class="md:col-span-2">
+                        <label for="rok_id" class="block text-sm font-medium text-secondary-700 mb-1">Испитни рок</label>
+                        <select class="form-input" id="rok_id" name="rok_id">
+                            @if(!empty($aktivniIspitniRok))
+                                @foreach($aktivniIspitniRok as $tip)
+                                    <option value="{{$tip->id}}" {{ (!empty($rok_id) && $rok_id == $tip->id) ? 'selected' : '' }}>{{$tip->naziv}}</option>
                                 @endforeach
-                            </select>
-                        </div>
+                            @endif
+                        </select>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-lg-5">
-                            <label for="profesor_id">Професор</label>
-                            <select class="form-control" id="profesor_id"
-                                    name="profesor_id">
-                                @foreach($profesori as $item)
-                                    <option value="{{$item->id}}">{{ $item->ime . " " . $item->prezime }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label for="ajaxSubmitPrijava">&nbsp;</label><br>
-                            <button type="button" id="ajaxSubmitPrijava" class="btn btn-success w-100">
-                                <i class="fas fa-search"></i> Прикажи студенте
-                            </button>
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label for="addStudentLink">&nbsp;</label><br>
-                            <button type="button" id="addStudentLink" class="btn btn-primary w-100">
-                                <i class="fas fa-user-plus"></i> Додај студента
-                            </button>
-                        </div>
+                    <div class="md:col-span-2">
+                        <label for="predmet_id" class="block text-sm font-medium text-secondary-700 mb-1">Предмет</label>
+                        <select class="form-input" id="predmet_id" name="predmet_id">
+                            @foreach($predmeti as $item)
+                                <option value="{{$item->id}}">{{ $item->naziv }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="clearfix"></div>
-                    <hr>
-
-                    <input type="hidden" id="prijavaIspita_id" name="prijavaIspita_id" value="">
-
-                    <input type="hidden" id="datum" name="datum" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
-                    <input type="hidden" id="datum2" name="datum2" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
-
-                    <h3>Студенти који су пријавили испит у испитном року</h3>
-
-                    <div class="clearfix"></div>
-                    <hr>
-                    <div class="row">
-                        <div class="form-group col-lg-3">
-                            <label for="formatDatum">Датум</label>
-                            <input type="text" id="formatDatum" name="formatDatum" class="form-control dateMask"
-                                   value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}">
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label for="formatDatum">Датум 2</label>
-                            <input type="text" id="formatDatum2" name="formatDatum2" class="form-control dateMask"
-                                   value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}">
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label for="vreme">Време</label>
-                            <input type="text" id="vreme" name="vreme" class="form-control">
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label for="ucionica">Учионица</label>
-                            <input type="text" id="ucionica" name="ucionica" class="form-control">
-                        </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                    <div class="md:col-span-2">
+                        <label for="profesor_id" class="block text-sm font-medium text-secondary-700 mb-1">Професор</label>
+                        <select class="form-input" id="profesor_id" name="profesor_id">
+                            @foreach($profesori as $item)
+                                <option value="{{$item->id}}">{{ $item->ime . " " . $item->prezime }}</option>
+                            @endforeach
+                        </select>
                     </div>
-
-                    <table id="tabela" class="table table-striped table-hover">
-                        <thead class="table-dark">
-                        <tr>
-                            <th>Полагао</th>
-                            <th>Број Индекса</th>
-                            <th>Име и презиме</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-
-                    <div id="messageEmpty">
-                    </div>
-
-                    <div class="form-group text-center mt-4">
-                        <button type="submit" name="Submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-save"></i> Сачувај
+                    <div class="flex items-end">
+                        <button type="button" id="ajaxSubmitPrijava" class="w-full px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <i class="fas fa-search mr-2"></i> Прикажи студенте
                         </button>
                     </div>
-                </form>
-            </div>
-        </div>
+                    <div class="flex items-end">
+                        <button type="button" id="addStudentLink" class="w-full px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <i class="fas fa-user-plus mr-2"></i> Додај студента
+                        </button>
+                    </div>
+                </div>
+                <hr class="my-4 border-secondary-200">
+
+                <input type="hidden" id="prijavaIspita_id" name="prijavaIspita_id" value="">
+
+                <input type="hidden" id="datum" name="datum" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+                <input type="hidden" id="datum2" name="datum2" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+
+                <h3 class="text-base font-semibold text-secondary-800 mb-3">Студенти који су пријавили испит у испитном року</h3>
+
+                <hr class="my-4 border-secondary-200">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label for="formatDatum" class="block text-sm font-medium text-secondary-700 mb-1">Датум</label>
+                        <input type="text" id="formatDatum" name="formatDatum" class="form-input dateMask"
+                               value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}">
+                    </div>
+                    <div>
+                        <label for="formatDatum2" class="block text-sm font-medium text-secondary-700 mb-1">Датум 2</label>
+                        <input type="text" id="formatDatum2" name="formatDatum2" class="form-input dateMask"
+                               value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}">
+                    </div>
+                    <div>
+                        <label for="vreme" class="block text-sm font-medium text-secondary-700 mb-1">Време</label>
+                        <input type="text" id="vreme" name="vreme" class="form-input">
+                    </div>
+                    <div>
+                        <label for="ucionica" class="block text-sm font-medium text-secondary-700 mb-1">Учионица</label>
+                        <input type="text" id="ucionica" name="ucionica" class="form-input">
+                    </div>
+                </div>
+
+                <x-table id="tabela" class="mt-4">
+                    <thead>
+                    <tr>
+                        <th>Полагао</th>
+                        <th>Број Индекса</th>
+                        <th>Име и презиме</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </x-table>
+
+                <div id="messageEmpty">
+                </div>
+
+                <div class="form-group text-center mt-4">
+                    <button type="submit" name="Submit" class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white text-base font-medium rounded-lg transition-colors">
+                        <i class="fas fa-save mr-2"></i> Сачувај
+                    </button>
+                </div>
+            </form>
+        </x-card>
     </div>
 
     <script>
