@@ -1,59 +1,71 @@
 @extends('layouts.layout')
 @section('page_heading','Измена уплате')
 @section('section')
-    <div class="col-lg-9">
+    <div class="col-span-9">
         {{--GRESKE--}}
         @if (Session::get('errors'))
-            <div class="alert alert-dismissable alert-danger">
-                <h4>Грешка!</h4>
-                <ul>
-                    @foreach (Session::get('errors')->all() as $error)
-                        <li>{!! $error !!}</li>
-                    @endforeach
-                </ul>
+            <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-sm font-semibold text-red-800">Грешка!</h4>
+                        <ul class="mt-1 text-sm text-red-700 list-disc list-inside">
+                            @foreach (Session::get('errors')->all() as $error)
+                                <li>{!! $error !!}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </div>
         @endif
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">Измена уплате</h3>
-            </div>
-            <div class="panel-body">
-                <form role="form" method="post" action="{{"/"}}uplata/store">
-                    {{ csrf_field() }}
+        <x-card class="border-success-200">
+            <x-slot:header>
+                <div class="font-semibold text-secondary-800">Измена уплате</div>
+            </x-slot:header>
+            <form role="form" method="post" action="{{"/"}}uplata/store">
+                {{ csrf_field() }}
 
-                    <input type="hidden" name="id" id="id" value="{{ $uplata->id }}">
-                    <input type="hidden" name="skolarina_id" id="skolarina_id" value="{{ $skolarina->id }}">
-                    <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
+                <input type="hidden" name="id" id="id" value="{{ $uplata->id }}">
+                <input type="hidden" name="skolarina_id" id="skolarina_id" value="{{ $skolarina->id }}">
+                <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
 
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="iznos">Износ</label>
-                            <input id="iznos" class="form-control" type="text" name="iznos" value="{{ $uplata->iznos }}" />
-                        </div>
-
-                        <div class="form-group col-lg-8">
-                            <label for="naziv">Назив</label>
-                            <input id="naziv" class="form-control" type="text" name="naziv" value="{{ $uplata->naziv }}" />
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <x-form-input
+                            name="iznos"
+                            label="Износ"
+                            value="{{ $uplata->iznos }}"
+                            required />
                     </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label for="formatDatum">Датум уплате</label>
-                            <input id="formatDatum" class="form-control dateMask" type="text" name="formatDatum"
-                                   value="{{ $uplata->datum->format('d.m.Y.') }}"/>
-                        </div>
+
+                    <div class="form-group">
+                        <x-form-input
+                            name="naziv"
+                            label="Назив"
+                            value="{{ $uplata->naziv }}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="formatDatum" class="block text-sm font-medium text-secondary-700 mb-1">Датум уплате</label>
+                        <input id="formatDatum" class="form-input dateMask" type="text" name="formatDatum"
+                               value="{{ $uplata->datum->format('d.m.Y.') }}"/>
                         <input type="hidden" name="datum" id="datum" value="{{ $uplata->datum }}">
                     </div>
+                </div>
 
-                    <div class="clearfix"></div>
-                    <hr>
+                <hr class="my-4 border-secondary-200">
 
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-success btn-lg"><span class="fa fa-save"></span> Сачувај</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-success-600 hover:bg-success-500 text-white text-base font-medium rounded-lg transition-colors">
+                        <span class="fa fa-save mr-2"></span> Сачувај
+                    </button>
+                </div>
+            </form>
+        </x-card>
     </div>
     <script>
         $(function () {

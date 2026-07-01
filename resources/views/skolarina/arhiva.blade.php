@@ -1,130 +1,144 @@
 @extends('layouts.layout')
 @section('page_heading','Архива школарине')
 @section('section')
-    <div class="col-lg-12">
+    <div class="col-span-12">
         <div>
-            <h4>Подаци о студенту</h4>
-            <ul class="list-group">
-                <li class="list-group-item">Број Индекса:
+            <h4 class="text-lg font-semibold text-secondary-800 mb-3">Подаци о студенту</h4>
+            <ul class="divide-y divide-secondary-200 border border-secondary-200 rounded-lg overflow-hidden">
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">Број Индекса:
                     <strong>
                         {{ $kandidat->brojIndeksa }}
                     </strong>
                 </li>
-                <li class="list-group-item">Име (име родитеља) презиме:
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">Име (име родитеља) презиме:
                     <strong>
                         {{ $kandidat->imeKandidata . " (" . $kandidat->imePrezimeJednogRoditelja . ") " . $kandidat->prezimeKandidata }}
                     </strong>
                 </li>
-                <li class="list-group-item">Тип Студија:
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">Тип Студија:
                     <strong>
                         {{ $kandidat->tipStudija->naziv }}
                     </strong>
                 </li>
-                <li class="list-group-item">Студијски програм:
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">Студијски програм:
                     <strong>
                         {{ $kandidat->program->naziv }}
                     </strong>
                 </li>
-                <li class="list-group-item">Година студија:
+                <li class="px-4 py-3 bg-white text-sm text-secondary-700">Година студија:
                     <strong>
                         {{ $kandidat->godinaStudija->naziv }}
                     </strong>
                 </li>
             </ul>
         </div>
-        <hr>
+        <hr class="my-4 border-secondary-200">
         <div id="messages">
             @if (Session::get('flash-error'))
-                <div class="alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>Грешка!</strong>
-                    @if(Session::get('flash-error') === 'update')
-                        Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                    @elseif(Session::get('flash-error') === 'delete')
-                        Дошло је до грешке при брисању података! Молимо вас покушајте поново.
-                    @endif
+                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-red-800">
+                                <strong>Грешка!</strong>
+                                @if(Session::get('flash-error') === 'update')
+                                    Дошло је до грешке при чувању података! Молимо вас покушајте поново.
+                                @elseif(Session::get('flash-error') === 'delete')
+                                    Дошло је до грешке при брисању података! Молимо вас покушајте поново.
+                                @endif
+                            </p>
+                        </div>
+                    </div>
                 </div>
             @elseif(Session::get('flash-success'))
-                <div class="alert alert-dismissible alert-success">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>Успех!</strong>
-                    @if(Session::get('flash-success') === 'update')
-                        Подаци о школарини су успешно сачувани.
-                    @elseif(Session::get('flash-success') === 'delete')
-                        Подаци о школарини су успешно обрисани.
-                    @endif
+                <div class="rounded-lg bg-green-50 border border-green-200 p-4 mb-4" role="alert">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-green-800">
+                                <strong>Успех!</strong>
+                                @if(Session::get('flash-success') === 'update')
+                                    Подаци о школарини су успешно сачувани.
+                                @elseif(Session::get('flash-success') === 'delete')
+                                    Подаци о школарини су успешно обрисани.
+                                @endif
+                            </p>
+                        </div>
+                    </div>
                 </div>
             @endif
         </div>
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">Школарине</h3>
+        <x-card class="border-success-200">
+            <x-slot:header>
+                <div class="font-semibold text-secondary-800">Школарине</div>
+            </x-slot:header>
+
+            <div class="mb-4">
+                <a href="{{"/"}}skolarina/dodavanje/{{$kandidat->id}}" class="inline-flex items-center px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors">
+                    <span class="fa fa-plus mr-2"></span> Нова школарина
+                </a>
             </div>
-            <div class="panel-body">
 
-                <div class="form-group">
-                    <a href="{{"/"}}skolarina/dodavanje/{{$kandidat->id}}" class="btn btn-success">
-                        <span class="fa fa-plus"></span> Нова школарина
-                    </a>
-                </div>
-
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Тип студија</th>
-                        <th>Година студија</th>
-                        <th>Износ</th>
-                        <th>Број уплата</th>
-                        <th>Преостало дуговање</th>
-                        <th>Датум</th>
-                        <th>Коментар</th>
-                        <th>Измена</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if(!empty($sveSkolarine))
-                        @foreach($sveSkolarine as $index => $item)
-                            <tr>
-                                <td>{{$item->tipStudija?->naziv ?? '-'}}</td>
-                                <td>{{$item->godinaStudija?->naziv ?? '-'}}</td>
-                                <td>{{number_format($item->iznos, 2, ',', '.') . " RSD"}}</td>
-                                <td>{{$item->uplate->count()}}</td>
-                                <td>{{number_format(($item->iznos - $item->uplate->sum('iznos')), 2, ',', '.') . " RSD"}}</td>
-                                <td>{{$item->updated_at->format('d.m.Y.')}}</td>
-                                <td>{{$item->komentar}}</td>
-                                <td>
-                                    <a class="btn btn-primary"
-                                       href="{{"/"}}skolarina/view/{{$item->id}}">
-                                        <div title="Измена">
-                                            <span class="fa fa-eye"></span>
-                                        </div>
+            <x-table>
+                <thead>
+                <tr>
+                    <th>Тип студија</th>
+                    <th>Година студија</th>
+                    <th>Износ</th>
+                    <th>Број уплата</th>
+                    <th>Преостало дуговање</th>
+                    <th>Датум</th>
+                    <th>Коментар</th>
+                    <th>Измена</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if(!empty($sveSkolarine))
+                    @foreach($sveSkolarine as $index => $item)
+                        <tr>
+                            <td>{{$item->tipStudija?->naziv ?? '-'}}</td>
+                            <td>{{$item->godinaStudija?->naziv ?? '-'}}</td>
+                            <td>{{number_format($item->iznos, 2, ',', '.') . " RSD"}}</td>
+                            <td>{{$item->uplate->count()}}</td>
+                            <td>{{number_format(($item->iznos - $item->uplate->sum('iznos')), 2, ',', '.') . " RSD"}}</td>
+                            <td>{{$item->updated_at->format('d.m.Y.')}}</td>
+                            <td>{{$item->komentar}}</td>
+                            <td>
+                                <div class="flex gap-1">
+                                    <a class="inline-flex items-center px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors"
+                                       href="{{"/"}}skolarina/view/{{$item->id}}"
+                                       title="Преглед">
+                                        <span class="fa fa-eye"></span>
                                     </a>
-                                    <a class="btn btn-warning"
-                                       href="{{"/"}}skolarina/izmena/{{$item->id}}">
-                                        <div title="Измена">
-                                            <span class="fa fa-edit"></span>
-                                        </div>
+                                    <a class="inline-flex items-center px-3 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded-lg transition-colors"
+                                       href="{{"/"}}skolarina/izmena/{{$item->id}}"
+                                       title="Измена">
+                                        <span class="fa fa-edit"></span>
                                     </a>
-                                    <a class="btn btn-danger"
+                                    <a class="inline-flex items-center px-3 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors"
                                        href="{{"/"}}skolarina/delete/{{$item->id}}"
-                                       onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
-                                        <div title="Брисање">
-                                            <span class="fa fa-trash"></span>
-                                        </div>
+                                       onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');"
+                                       title="Брисање">
+                                        <span class="fa fa-trash"></span>
                                     </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+                </tbody>
+            </x-table>
+        </x-card>
     </div>
     <br>
     <br>
     <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>
 @endsection
-
-
-
