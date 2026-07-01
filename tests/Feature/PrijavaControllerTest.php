@@ -290,6 +290,39 @@ class PrijavaControllerTest extends TestCase
         $response->assertRedirect();
     }
 
+    public function test_store_prijava_ispita_predmet_many_creates_multiple_records(): void
+    {
+        $kandidat2 = Kandidat::factory()->create([
+            'tipStudija_id' => $this->tipStudija->id,
+            'studijskiProgram_id' => $this->program->id,
+            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
+            'godinaStudija_id' => $this->godinaStudija->id,
+            'statusUpisa_id' => $this->status->id,
+            'indikatorAktivan' => 1,
+        ]);
+
+        $response = $this->post('/prijava/predmetVise', [
+            'odabir' => [$this->kandidat->id, $kandidat2->id],
+            'predmet_id' => $this->predmet->id,
+            'rok_id' => $this->rok->id,
+            'profesor_id' => $this->profesor->id,
+            'datum' => now()->toDateString(),
+            'datum2' => now()->addDays(1)->toDateString(),
+            'tipPrijave_id' => $this->tipPrijave->id,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertViewIs('prijava.rezultat');
+        $this->assertDatabaseHas('prijava_ispita', [
+            'kandidat_id' => $this->kandidat->id,
+            'predmet_id' => $this->predmetProgram->id,
+        ]);
+        $this->assertDatabaseHas('prijava_ispita', [
+            'kandidat_id' => $kandidat2->id,
+            'predmet_id' => $this->predmetProgram->id,
+        ]);
+    }
+
     public function test_delete_prijava_ispita_redirects_to_predmet(): void
     {
         $prijava = PrijavaIspita::create([
@@ -629,5 +662,147 @@ class PrijavaControllerTest extends TestCase
         $response->assertViewHas('ispitniRok');
         $response->assertViewHas('profesor');
         $response->assertViewHas('kandidati');
+    }
+
+    public function test_update_diplomski_tema_updates_record(): void
+    {
+        $tema = DiplomskiPrijavaTeme::create([
+            'kandidat_id' => $this->kandidat->id,
+            'tipStudija_id' => $this->tipStudija->id,
+            'studijskiProgram_id' => $this->program->id,
+            'predmet_id' => $this->predmetProgram->id,
+            'profesor_id' => $this->profesor->id,
+            'nazivTeme' => 'Original Tema',
+            'datum' => now()->toDateString(),
+            'indikatorOdobreno' => 0,
+        ]);
+
+        $response = $this->put('/prijava/updateDiplomskiTema', [
+            'diplomskiTema_id' => $tema->id,
+            'kandidat_id' => $this->kandidat->id,
+            'nazivTeme' => 'Updated Tema',
+            'profesor_id' => $this->profesor->id,
+            'datum' => now()->toDateString(),
+        ]);
+
+        $this->assertDatabaseHas('diplomski_prijava_teme', [
+            'id' => $tema->id,
+            'nazivTeme' => 'Updated Tema',
+        ]);
+
+        $response->assertRedirect("/prijava/zaStudenta/{$this->kandidat->id}");
+    }
+
+    public function test_edit_diplomski_odbrana_returns_view(): void
+    {
+        $odbrana = DiplomskiPrijavaOdbrane::create([
+            'kandidat_id' => $this->kandidat->id,
+            'tipStudija_id' => $this->tipStudija->id,
+            'studijskiProgram_id' => $this->program->id,
+            'predmet_id' => $this->predmetProgram->id,
+            'temu_odobrio_profesor_id' => $this->profesor->id,
+            'odbranu_odobrio_profesor_id' => $this->profesor->id,
+            'nazivTeme' => 'Test Odbrana',
+            'datumPrijave' => now()->toDateString(),
+            'datumOdbrane' => now()->addDays(30)->toDateString(),
+            'indikatorOdobreno' => 0,
+        ]);
+
+        $response = $this->get("/prijava/diplomskiOdbrana/{$this->kandidat->id}/edit");
+
+        $response->assertStatus(200);
+        $response->assertViewIs('prijava.odbrana.editDiplomskiOdbrana');
+    }
+
+    public function test_update_diplomski_odbrana_updates_record(): void
+    {
+        $odbrana = DiplomskiPrijavaOdbrane::create([
+            'kandidat_id' => $this->kandidat->id,
+            'tipStudija_id' => $this->tipStudija->id,
+            'studijskiProgram_id' => $this->program->id,
+            'predmet_id' => $this->predmetProgram->id,
+            'temu_odobrio_profesor_id' => $this->profesor->id,
+            'odbranu_odobrio_profesor_id' => $this->profesor->id,
+            'nazivTeme' => 'Original Odbrana',
+            'datumPrijave' => now()->toDateString(),
+            'datumOdbrane' => now()->addDays(30)->toDateString(),
+            'indikatorOdobreno' => 0,
+        ]);
+
+        $response = $this->put('/prijava/updateDiplomskiOdbrana', [
+            'diplomskiRadOdbrana_id' => $odbrana->id,
+            'kandidat_id' => $this->kandidat->id,
+            'nazivTeme' => 'Updated Odbrana',
+            'temu_odobrio_profesor_id' => $this->profesor->id,
+            'odbranu_odobrio_profesor_id' => $this->profesor->id,
+            'datumPrijave' => now()->toDateString(),
+            'datumOdbrane' => now()->addDays(30)->toDateString(),
+        ]);
+
+        $this->assertDatabaseHas('diplomski_prijava_odbrane', [
+            'id' => $odbrana->id,
+            'nazivTeme' => 'Updated Odbrana',
+        ]);
+
+        $response->assertRedirect("/prijava/zaStudenta/{$this->kandidat->id}");
+    }
+
+    public function test_edit_diplomski_polaganje_returns_view(): void
+    {
+        $polaganje = DiplomskiPolaganje::create([
+            'kandidat_id' => $this->kandidat->id,
+            'tipStudija_id' => $this->tipStudija->id,
+            'studijskiProgram_id' => $this->program->id,
+            'predmet_id' => $this->predmetProgram->id,
+            'profesor_id' => $this->profesor->id,
+            'profesor_id_predsednik' => $this->profesor->id,
+            'profesor_id_clan' => $this->profesor->id,
+            'rok_id' => $this->rok->id,
+            'nazivTeme' => 'Test Polaganje',
+            'datum' => now()->toDateString(),
+            'vreme' => '10:00:00',
+        ]);
+
+        $response = $this->get("/prijava/diplomskiPolaganje/{$this->kandidat->id}/edit");
+
+        $response->assertStatus(200);
+        $response->assertViewIs('prijava.polaganje.editDiplomskiPolaganje');
+    }
+
+    public function test_update_diplomski_polaganje_updates_record(): void
+    {
+        $polaganje = DiplomskiPolaganje::create([
+            'kandidat_id' => $this->kandidat->id,
+            'tipStudija_id' => $this->tipStudija->id,
+            'studijskiProgram_id' => $this->program->id,
+            'predmet_id' => $this->predmetProgram->id,
+            'profesor_id' => $this->profesor->id,
+            'profesor_id_predsednik' => $this->profesor->id,
+            'profesor_id_clan' => $this->profesor->id,
+            'rok_id' => $this->rok->id,
+            'nazivTeme' => 'Original Polaganje',
+            'datum' => now()->toDateString(),
+            'vreme' => '10:00:00',
+        ]);
+
+        $response = $this->put('/prijava/updateDiplomskiPolaganje', [
+            'polaganje_id' => $polaganje->id,
+            'kandidat_id' => $this->kandidat->id,
+            'nazivTeme' => 'Updated Polaganje',
+            'profesor_id' => $this->profesor->id,
+            'profesor_id_predsednik' => $this->profesor->id,
+            'profesor_id_clan' => $this->profesor->id,
+            'rok_id' => $this->rok->id,
+            'datum' => now()->toDateString(),
+            'vreme' => '11:00:00',
+        ]);
+
+        $this->assertDatabaseHas('diplomski_polaganje', [
+            'id' => $polaganje->id,
+            'nazivTeme' => 'Updated Polaganje',
+            'vreme' => '11:00:00',
+        ]);
+
+        $response->assertRedirect("/prijava/zaStudenta/{$this->kandidat->id}");
     }
 }

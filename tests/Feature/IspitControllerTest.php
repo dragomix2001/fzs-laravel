@@ -317,4 +317,158 @@ class IspitControllerTest extends TestCase
             'arhiviran' => 1,
         ]);
     }
+
+    public function test_store_zapisnik_creates_new_record_and_redirects(): void
+    {
+        $response = $this->post('/zapisnik/store', [
+            'page' => 1,
+            'predmet_id' => $this->predmet->id,
+            'rok_id' => $this->rok->id,
+            'profesor_id' => $this->profesor->id,
+            'datum' => '2026-08-10',
+            'datum2' => '2026-08-11',
+            'vreme' => '14:00',
+            'ucionica' => 'C3',
+            'odabir' => [$this->kandidat->id],
+        ]);
+
+        $response->assertRedirect('/zapisnik/');
+        $this->assertDatabaseHas('zapisnik_o_polaganju_ispita', [
+            'predmet_id' => $this->predmet->id,
+            'rok_id' => $this->rok->id,
+            'profesor_id' => $this->profesor->id,
+            'ucionica' => 'C3',
+        ]);
+    }
+
+    public function test_delete_zapisnik_removes_record_and_redirects_back(): void
+    {
+        $response = $this->from('/zapisnik')
+            ->get('/zapisnik/delete/'.$this->zapisnik->id);
+
+        $response->assertRedirect('/zapisnik');
+        $this->assertDatabaseMissing('zapisnik_o_polaganju_ispita', [
+            'id' => $this->zapisnik->id,
+        ]);
+    }
+
+    public function test_polozeni_ispit_saves_exam_results_and_redirects(): void
+    {
+        $statusPolozio = StatusIspita::query()->firstOrCreate(
+            ['naziv' => 'Položio'],
+            ['indikatorAktivan' => 1]
+        );
+
+        $response = $this->post('/zapisnik/pregled/polozeniIspit', [
+            'ispit_id' => [$this->kandidat->id],
+            'ocenaPismeni' => [$this->kandidat->id => 15],
+            'ocenaUsmeni' => [$this->kandidat->id => 20],
+            'brojBodova' => [$this->kandidat->id => 35],
+            'konacnaOcena' => [$this->kandidat->id => 7],
+            'statusIspita' => [$this->kandidat->id => $statusPolozio->id],
+        ]);
+
+        $response->assertRedirect('/zapisnik/pregled/'.$this->zapisnik->id);
+        $this->assertDatabaseHas('polozeni_ispiti', [
+            'kandidat_id' => $this->kandidat->id,
+            'konacnaOcena' => 7,
+        ]);
+    }
+
+    public function test_priznavanje_ispita_returns_view_with_data(): void
+    {
+        $response = $this->get('/priznavanjeIspita/'.$this->kandidat->id);
+
+        $response->assertStatus(200);
+        $response->assertViewIs('ispit.priznatiIspiti');
+        $response->assertViewHas('kandidat');
+        $response->assertViewHas('sviPredmeti');
+    }
+
+    public function test_delete_polozeni_ispit_removes_exam_result_and_redirects_back(): void
+    {
+        $polozeniIspit = PolozeniIspiti::create([
+            'kandidat_id' => $this->kandidat->id,
+            'predmet_id' => $this->predmetProgram->id,
+            'prijava_id' => null,
+            'zapisnik_id' => $this->zapisnik->id,
+            'konacnaOcena' => 8,
+            'statusIspita' => 1,
+            'indikatorAktivan' => 1,
+        ]);
+
+        $response = $this->from('/zapisnik/pregled/'.$this->zapisnik->id)
+            ->get('/deletePolozeniIspit/'.$polozeniIspit->id.'?brisiZapisnik=0');
+
+        $response->assertRedirect('/zapisnik/pregled/'.$this->zapisnik->id);
+        $this->assertDatabaseMissing('polozeni_ispiti', [
+            'id' => $polozeniIspit->id,
+        ]);
+    }
+
+    public function test_pregled_zapisnik_delete_removes_student_from_zapisnik(): void
+    {
+        $response = $this->from('/zapisnik/pregled/'.$this->zapisnik->id)
+            ->get('/zapisnik/pregled/'.$this->zapisnik->id.'/delete/'.$this->kandidat->id);
+
+        $response->assertRedirect('/zapisnik/pregled/'.$this->zapisnik->id);
+    }
+
+    public function test_dodaj_studenta_adds_student_to_zapisnik_and_redirects(): void
+    {
+        $secondKandidat = Kandidat::factory()->create([
+            'tipStudija_id' => $this->tipStudija->id,
+            'studijskiProgram_id' => $this->program->id,
+            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
+            'godinaStudija_id' => $this->godinaStudija->id,
+            'statusUpisa_id' => $this->statusStudiranja->id,
+            'indikatorAktivan' => 1,
+        ]);
+
+        PrijavaIspita::create([
+            'kandidat_id' => $secondKandidat->id,
+            'predmet_id' => $this->predmetProgram->id,
+            'rok_id' => $this->rok->id,
+            'profesor_id' => $this->profesor->id,
+            'brojPolaganja' => 1,
+            'datum' => now()->toDateString(),
+            'tipPrijave_id' => $this->tipPrijave->id,
+        ]);
+
+        $response = $this->post('/zapisnik/pregled/dodajStudenta', [
+            'zapisnikId' => $this->zapisnik->id,
+            'odabir' => [$secondKandidat->id],
+        ]);
+
+        $response->assertRedirect('/zapisnik/pregled/'.$this->zapisnik->id);
+    }
+
+    public function test_arhiviraj_zapisnike_za_ispitni_rok_archives_all_for_rok(): void
+    {
+        $secondZapisnik = ZapisnikOPolaganjuIspita::create([
+            'predmet_id' => $this->predmet->id,
+            'rok_id' => $this->rok->id,
+            'profesor_id' => $this->profesor->id,
+            'datum' => now()->toDateString(),
+            'datum2' => now()->addDay()->toDateString(),
+            'vreme' => '11:00',
+            'ucionica' => 'D4',
+            'prijavaIspita_id' => null,
+        ]);
+
+        $response = $this->from('/zapisnik/arhiva')
+            ->post('/zapisnik/arhivirajZapisnikeZaIspitniRok', [
+                'rok_id' => $this->rok->id,
+            ]);
+
+        $response->assertRedirect('/zapisnik/arhiva');
+        $this->assertDatabaseHas('zapisnik_o_polaganju_ispita', [
+            'id' => $this->zapisnik->id,
+            'arhiviran' => 1,
+        ]);
+        $this->assertDatabaseHas('zapisnik_o_polaganju_ispita', [
+            'id' => $secondZapisnik->id,
+            'arhiviran' => 1,
+        ]);
+    }
 }

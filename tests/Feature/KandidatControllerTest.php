@@ -382,4 +382,186 @@ class KandidatControllerTest extends TestCase
 
         $response->assertRedirect('/kandidat/');
     }
+
+    public function test_store_page_1_creates_kandidat_and_returns_page_2_view(): void
+    {
+        $opstina = Opstina::query()->first();
+        $krsnaSlava = KrsnaSlava::query()->first();
+
+        $response = $this->post('/kandidat', [
+            'page' => 1,
+            'imeKandidata' => 'Марко',
+            'prezimeKandidata' => 'Петровић',
+            'jmbg' => '0101999123456',
+            'datumRodjenja' => '1999-01-01',
+            'mestoRodjenja' => $opstina->id,
+            'krsnaSlava_id' => $krsnaSlava->id,
+            'tipStudija_id' => $this->osnovneStudije->id,
+            'studijskiProgram_id' => $this->osnovniProgram->id,
+            'godinaStudija_id' => $this->godinaStudija->id,
+            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
+            'brojBodovaTest' => 0,
+            'brojBodovaSkola' => 0,
+            'ukupniBrojBodova' => 0,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertViewIs('kandidat.create_part_2');
+        $this->assertDatabaseHas('kandidat', [
+            'imeKandidata' => 'Марко',
+            'prezimeKandidata' => 'Петровић',
+            'jmbg' => '0101999123456',
+        ]);
+    }
+
+    public function test_store_page_2_completes_kandidat_creation_and_redirects(): void
+    {
+        $response = $this->post('/kandidat', [
+            'page' => 2,
+            'kandidatId' => $this->kandidat->id,
+            'srednjaOcenaSrednjaSkola' => 4.5,
+        ]);
+
+        $response->assertRedirect('/kandidat');
+        $this->assertDatabaseHas('kandidat', [
+            'id' => $this->kandidat->id,
+            'srednjaOcenaSrednjaSkola' => 4.5,
+        ]);
+    }
+
+    public function test_update_updates_kandidat_and_redirects_to_index(): void
+    {
+        $response = $this->put('/kandidat/'.$this->kandidat->id, [
+            'imeKandidata' => 'Никола Updated',
+            'prezimeKandidata' => 'Јовановић Updated',
+            'jmbg' => $this->kandidat->jmbg,
+            'datumRodjenja' => $this->kandidat->datumRodjenja,
+            'mestoRodjenja' => $this->kandidat->mesto_id,
+            'krsnaSlava_id' => $this->kandidat->krsnaSlava_id,
+            'tipStudija_id' => $this->kandidat->tipStudija_id,
+            'studijskiProgram_id' => $this->kandidat->studijskiProgram_id,
+            'godinaStudija_id' => $this->kandidat->godinaStudija_id,
+            'skolskaGodinaUpisa_id' => $this->kandidat->skolskaGodinaUpisa_id,
+            'statusUpisa_id' => $this->kandidat->statusUpisa_id,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('kandidat', [
+            'id' => $this->kandidat->id,
+            'imeKandidata' => 'Никола Updated',
+            'prezimeKandidata' => 'Јовановић Updated',
+        ]);
+    }
+
+    public function test_update_with_submitstay_redirects_back_to_edit(): void
+    {
+        $response = $this->put('/kandidat/'.$this->kandidat->id, [
+            'submitstay' => '1',
+            'imeKandidata' => 'Стефан',
+            'prezimeKandidata' => 'Николић',
+            'jmbg' => $this->kandidat->jmbg,
+            'datumRodjenja' => $this->kandidat->datumRodjenja,
+            'mestoRodjenja' => $this->kandidat->mesto_id,
+            'krsnaSlava_id' => $this->kandidat->krsnaSlava_id,
+            'tipStudija_id' => $this->kandidat->tipStudija_id,
+            'studijskiProgram_id' => $this->kandidat->studijskiProgram_id,
+            'godinaStudija_id' => $this->kandidat->godinaStudija_id,
+            'skolskaGodinaUpisa_id' => $this->kandidat->skolskaGodinaUpisa_id,
+            'statusUpisa_id' => $this->kandidat->statusUpisa_id,
+        ]);
+
+        $response->assertRedirect('/kandidat/'.$this->kandidat->id.'/edit');
+    }
+
+    public function test_destroy_deletes_kandidat_and_flashes_success(): void
+    {
+        $kandidatId = $this->kandidat->id;
+
+        $response = $this->from('/kandidat')
+            ->delete('/kandidat/'.$kandidatId);
+
+        $response->assertRedirect('/kandidat');
+        $response->assertSessionHas('flash-success', 'delete');
+        $this->assertDatabaseMissing('kandidat', [
+            'id' => $kandidatId,
+        ]);
+    }
+
+    public function test_store_master_creates_master_kandidat_and_redirects(): void
+    {
+        $opstina = Opstina::query()->first();
+        $krsnaSlava = KrsnaSlava::query()->first();
+
+        $response = $this->post('/master/storeMaster', [
+            'imeKandidata' => 'Анна',
+            'prezimeKandidata' => 'Поповић',
+            'jmbg' => '0202995654321',
+            'datumRodjenja' => '1995-02-02',
+            'mestoRodjenja' => $opstina->id,
+            'krsnaSlava_id' => $krsnaSlava->id,
+            'tipStudija_id' => $this->masterStudije->id,
+            'studijskiProgram_id' => $this->masterProgram->id,
+            'godinaStudija_id' => $this->godinaStudija->id,
+            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
+        ]);
+
+        $response->assertRedirect('/master');
+        $this->assertDatabaseHas('kandidat', [
+            'imeKandidata' => 'Анна',
+            'prezimeKandidata' => 'Поповић',
+            'jmbg' => '0202995654321',
+            'tipStudija_id' => $this->masterStudije->id,
+        ]);
+    }
+
+    public function test_update_master_updates_master_kandidat_and_redirects(): void
+    {
+        $response = $this->put('/master/'.$this->masterKandidat->id, [
+            'imeKandidata' => 'Master Updated',
+            'prezimeKandidata' => 'Name Updated',
+            'jmbg' => $this->masterKandidat->jmbg,
+            'datumRodjenja' => $this->masterKandidat->datumRodjenja,
+            'mestoRodjenja' => $this->masterKandidat->mesto_id,
+            'krsnaSlava_id' => $this->masterKandidat->krsnaSlava_id,
+            'tipStudija_id' => $this->masterKandidat->tipStudija_id,
+            'studijskiProgram_id' => $this->masterKandidat->studijskiProgram_id,
+            'godinaStudija_id' => $this->masterKandidat->godinaStudija_id,
+            'skolskaGodinaUpisa_id' => $this->masterKandidat->skolskaGodinaUpisa_id,
+            'statusUpisa_id' => $this->masterKandidat->statusUpisa_id,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('kandidat', [
+            'id' => $this->masterKandidat->id,
+            'imeKandidata' => 'Master Updated',
+        ]);
+    }
+
+    public function test_destroy_master_deletes_master_kandidat_and_flashes_success(): void
+    {
+        $masterKandidatId = $this->masterKandidat->id;
+
+        $response = $this->from('/master')
+            ->delete('/master/'.$masterKandidatId);
+
+        $response->assertRedirect('/master');
+        $response->assertSessionHas('flash-success', 'delete');
+        $this->assertDatabaseMissing('kandidat', [
+            'id' => $masterKandidatId,
+        ]);
+    }
+
+    public function test_test_post_returns_request_data(): void
+    {
+        $response = $this->post('/kandidat/test', [
+            'test_key' => 'test_value',
+            'another_key' => 'another_value',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'test_key' => 'test_value',
+            'another_key' => 'another_value',
+        ]);
+    }
 }
