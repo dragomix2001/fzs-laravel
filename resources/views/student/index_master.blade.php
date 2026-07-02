@@ -1,52 +1,66 @@
 @extends('layouts.layout')
 @section('page_heading',"Активни студенти мастер студија")
 @section('section')
-<div class="col-lg-12">
+<div class="col-span-12">
     <div id="messages">
         @if (Session::get('flash-error'))
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Грешка!</strong>
-                @if(Session::get('flash-error') === 'update')
-                    Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                @elseif(Session::get('flash-error') === 'delete')
-                    Дошло је до грешке при брисању података! Молимо вас покушајте поново.
-                @elseif(Session::get('flash-error') === 'upis')
-                    Дошло је до грешке при упису кандидата! Молимо вас проверите да ли је кандидат уплатио школарину и покушајте поново.
-                @endif
+            <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-red-800">
+                            <strong>Грешка!</strong>
+                            @if(Session::get('flash-error') === 'update')
+                                Дошло је до грешке при чувању података! Молимо вас покушајте поново.
+                            @elseif(Session::get('flash-error') === 'delete')
+                                Дошло је до грешке при брисању података! Молимо вас покушајте поново.
+                            @elseif(Session::get('flash-error') === 'upis')
+                                Дошло је до грешке при упису кандидата! Молимо вас проверите да ли је кандидат уплатио школарину и покушајте поново.
+                            @endif
+                        </p>
+                    </div>
+                </div>
             </div>
         @elseif(Session::get('flash-success'))
-            <div class="alert alert-dismissible alert-success">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Успех!</strong>
-                @if(Session::get('flash-success') === 'update')
-                    Подаци о кандидату су успешно сачувани.
-                @elseif(Session::get('flash-success') === 'delete')
-                    Подаци о кандидату су успешно обрисани.
-                @elseif(Session::get('flash-success') === 'upis')
-                    Упис кандидата је успешно извршен.
-                @endif
+            <div class="rounded-lg bg-green-50 border border-green-200 p-4 mb-4" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM3.707 9.293a1 1 0 00-1.414 1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-green-800">
+                            <strong>Успех!</strong>
+                            @if(Session::get('flash-success') === 'update')
+                                Подаци о кандидату су успешно сачувани.
+                            @elseif(Session::get('flash-success') === 'delete')
+                                Подаци о кандидату су успешно обрисани.
+                            @elseif(Session::get('flash-success') === 'upis')
+                                Упис кандидата је успешно извршен.
+                            @endif
+                        </p>
+                    </div>
+                </div>
             </div>
         @endif
     </div>
     
-    <div class="card mb-4">
-        <div class="card-header">
-            <ul class="nav nav-pills card-header-pills" role="tablist">
-                @foreach($studijskiProgrami as $program)
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::input('studijskiProgramId') == $program->id ? 'active' : '' }}" 
-                           href="?studijskiProgramId={{ $program->id }}">
-                            {{ $program->naziv }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="flex flex-wrap gap-2 mb-4">
+        @foreach($studijskiProgrami as $program)
+            <a class="px-3 py-1.5 text-sm font-medium rounded-full {{ Request::input('studijskiProgramId') == $program->id ? 'bg-primary-600 text-white' : 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200' }}" 
+               href="?studijskiProgramId={{ $program->id }}">
+                {{ $program->naziv }}
+            </a>
+        @endforeach
     </div>
     
-    <hr>
-        <table id="tabela" class="table">
+    <hr class="my-4 border-secondary-200">
+    <x-table id="tabela">
             <thead>
             <tr>
                 <th>Име</th>
@@ -64,37 +78,35 @@
                     <td>{{$kandidat->jmbg}}</td>
                     <td>{{$kandidat->brojIndeksa}}</td>
                     <td>
-                        <a class="btn btn-warning" href="{{"/"}}master/{{ $kandidat->id }}/edit">
-                            <div title="Измена">
-                                <span class="fa fa-edit"></span>
-                            </div>
-                        </a>
-                        <a class="btn btn-danger" href="{{"/"}}kandidat/{{ $kandidat->id }}/delete"
-                           onclick="return confirm('Да ли сте сигурни да желите да обришете податке овог студента?');">
-                            <div title="Брисање">
-                                <span class="fa fa-trash"></span>
-                            </div>
-                        </a>
-                        <a class="btn btn-primary btn-sm" href="{{"/"}}student/{{ $kandidat->id }}/upis">
-                            Статус
-                        </a>
-                        <a class="btn btn-primary btn-sm"
-                           href="{{"/"}}prijava/zaStudenta/{{ $kandidat->id }}">
-                            Испити
-                        </a>
-                        <a class="btn btn-primary btn-sm"
-                           href="{{"/"}}izvestaji/potvrdeStudent/{{$kandidat->id}}">
-                            Потврде
-                        </a>
-                        <a class="btn btn-primary btn-sm"
-                           href="{{"/"}}skolarina/{{$kandidat->id}}">
-                            Школарина
-                        </a>
+                        <div class="flex gap-1 flex-wrap">
+                            <a class="inline-flex items-center px-2.5 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}master/{{ $kandidat->id }}/edit" title="Измена">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="inline-flex items-center px-2.5 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}kandidat/{{ $kandidat->id }}/delete" title="Брисање"
+                               onclick="return confirm('Да ли сте сигурни да желите да обришете податке овог студента?');">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}student/{{ $kandidat->id }}/upis">
+                                Статус
+                            </a>
+                            <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors"
+                               href="{{"/"}}prijava/zaStudenta/{{ $kandidat->id }}">
+                                Испити
+                            </a>
+                            <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors"
+                               href="{{"/"}}izvestaji/potvrdeStudent/{{$kandidat->id}}">
+                                Потврде
+                            </a>
+                            <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors"
+                               href="{{"/"}}skolarina/{{$kandidat->id}}">
+                                Школарина
+                            </a>
+                        </div>
                     </td>
                 </tr>
             @endforeach
             </tbody>
-        </table>
+        </x-table>
     <br>
     <br>
 </div>
