@@ -1,50 +1,50 @@
-
-<nav class="navbar navbar-expand-lg navbar-{{$class}}">
-  <div class="container-fluid">
-        <div class="navbar-header">
-      <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
-        <span class="visually-hidden">Toggle navigation</span>
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="#">Brand</a>
-    </div>
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="visually-hidden">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="dropdown-divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li class="dropdown-divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
-      </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="mb-3">
-          <input type="text" class="form-control" placeholder="Search">
+<nav class="bg-{{ $class === 'inverse' ? 'secondary-900' : 'secondary-100' }} shadow-sm">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex items-center justify-between h-14">
+            <div class="flex items-center gap-4">
+                <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-secondary-500 hover:text-secondary-700 hover:bg-secondary-200 lg:hidden" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="text-lg font-bold {{ $class === 'inverse' ? 'text-white' : 'text-secondary-900' }}" href="#">Brand</a>
+            </div>
+            <div class="hidden lg:flex lg:items-center lg:gap-6" id="navbarNav">
+                <ul class="flex items-center gap-1">
+                    <li><a href="#" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-white bg-white/10' : 'text-primary-600 bg-primary-50' }} rounded-md">Link <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-gray-300 hover:text-white' : 'text-secondary-700 hover:text-secondary-900 hover:bg-secondary-50' }} rounded-md transition-colors">Link</a></li>
+                    <li x-data="{ open: false }" class="relative">
+                        <a href="#" @click.prevent="open = !open" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-gray-300 hover:text-white' : 'text-secondary-700 hover:text-secondary-900' }} rounded-md inline-flex items-center transition-colors" role="button">
+                            Dropdown <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <ul x-show="open" @click.away="open = false" class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-secondary-200 py-1 z-50" x-transition>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Action</a></li>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Another action</a></li>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Something else here</a></li>
+                            <li><hr class="my-1 border-secondary-200"></li>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="flex items-center gap-2 ml-4">
+                    <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" placeholder="Search">
+                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors">Submit</button>
+                </form>
+                <ul class="flex items-center gap-1 ml-4">
+                    <li><a href="#" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-gray-300 hover:text-white' : 'text-secondary-700 hover:text-secondary-900' }} rounded-md transition-colors">Link</a></li>
+                    <li x-data="{ open: false }" class="relative">
+                        <a href="#" @click.prevent="open = !open" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-gray-300 hover:text-white' : 'text-secondary-700 hover:text-secondary-900' }} rounded-md inline-flex items-center transition-colors" role="button">
+                            Dropdown <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <ul x-show="open" @click.away="open = false" class="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-secondary-200 py-1 z-50" x-transition>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Action</a></li>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Another action</a></li>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Something else here</a></li>
+                            <li><hr class="my-1 border-secondary-200"></li>
+                            <li><a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <button type="submit" class="btn btn-secondary">Submit</button>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="dropdown-divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div>
-  </div>
 </nav>
