@@ -2,61 +2,63 @@
 @section('page_heading','Аудит лог')
 @section('section')
 
-<div class="col-sm-12 col-lg-12">
-    <div class="card mb-3">
-        <div class="card-body">
-            <form method="GET" class="form-inline">
-                <div class="form-group mr-2">
-                    <label>Табела:</label>
-                    <select name="table_name" class="form-control">
+<div class="col-span-12">
+    <x-card>
+        <form method="GET">
+            <div class="flex flex-wrap items-end gap-3">
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Табела:</label>
+                    <select name="table_name" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                         <option value="">Све</option>
                         @foreach($tables as $table)
                         <option value="{{ $table }}" {{ request('table_name') == $table ? 'selected' : '' }}>{{ $table }}</option>
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Филтрирај</button>
-            </form>
-        </div>
-    </div>
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                    <i class="fas fa-filter mr-2"></i> Филтрирај
+                </button>
+            </div>
+        </form>
+    </x-card>
 
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-sm table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Корисник</th>
-                        <th>Акција</th>
-                        <th>Табела</th>
-                        <th>Запис</th>
-                        <th>IP</th>
-                        <th>Време</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($logs as $log)
-                    <tr>
-                        <td>{{ $log->id }}</td>
-                        <td>{{ $log->user->name ?? 'Систем' }}</td>
-                        <td>
-                            @switch($log->action)
-                                @case('create')<span class="badge badge-success">Креирано</span>@break
-                                @case('update')<span class="badge badge-info">Ажурирано</span>@break
-                                @case('delete')<span class="badge badge-danger">Обрисано</span>@break
-                                @default{{ $log->action }}
-                            @endswitch
-                        </td>
-                        <td>{{ $log->table_name }}</td>
-                        <td>{{ $log->record_id }}</td>
-                        <td>{{ $log->ip_address }}</td>
-                        <td>{{ $log->created_at->format('d.m.Y H:i') }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    <x-card>
+        <x-table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Корисник</th>
+                    <th>Акција</th>
+                    <th>Табела</th>
+                    <th>Запис</th>
+                    <th>IP</th>
+                    <th>Време</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($logs as $log)
+                <tr>
+                    <td>{{ $log->id }}</td>
+                    <td>{{ $log->user->name ?? 'Систем' }}</td>
+                    <td>
+                        @switch($log->action)
+                            @case('create')<x-badge variant="success">Креирано</x-badge>@break
+                            @case('update')<x-badge variant="info">Ажурирано</x-badge>@break
+                            @case('delete')<x-badge variant="danger">Обрисано</x-badge>@break
+                            @default<x-badge variant="secondary">{{ $log->action }}</x-badge>
+                        @endswitch
+                    </td>
+                    <td>{{ $log->table_name }}</td>
+                    <td>{{ $log->record_id }}</td>
+                    <td><code class="text-xs bg-secondary-100 px-1.5 py-0.5 rounded">{{ $log->ip_address }}</code></td>
+                    <td class="text-sm text-secondary-500">{{ $log->created_at->format('d.m.Y H:i') }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </x-table>
+        <div class="mt-4">
             {{ $logs->links() }}
         </div>
-    </div>
+    </x-card>
 </div>
 @endsection
