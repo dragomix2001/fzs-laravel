@@ -4,45 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>404 - Страница не постоји | Факултет за спорт</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #f5f5f5;
-        }
-        .error-container {
-            max-width: 600px;
-            margin: 100px auto;
-            text-align: center;
-        }
-        .error-code {
-            font-size: 120px;
-            font-weight: bold;
-            color: #0d6efd;
-            line-height: 1;
-        }
-        .error-message {
-            font-size: 24px;
-            color: #6c757d;
-            margin: 20px 0;
-        }
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    <div class="container">
-        <div class="error-container">
-            <div class="error-code">404</div>
-            <p class="error-message">Страница коју тражите не постоји</p>
-            <p class="text-muted">Страница је можда уклоњена или сте погрешили у адреси.</p>
-            <a href="{{ url('/') }}" class="btn btn-primary mt-3">
-                <i class="fas fa-home me-2"></i> На почетну страницу
-            </a>
-        </div>
+<body class="bg-secondary-100 font-sans">
+    <div class="max-w-lg mx-auto my-24 px-4 text-center">
+        <div class="text-8xl font-bold text-primary-600 leading-none mb-4">404</div>
+        <p class="text-2xl text-secondary-500 mb-4">Страница коју тражите не постоји</p>
+        <p class="text-secondary-400 mb-6">Страница је можда уклоњена или сте погрешили у адреси.</p>
+        <a href="{{ url('/') }}" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+            <i class="fas fa-home mr-2"></i> На почетну страницу
+        </a>
     </div>
 </body>
 </html>
