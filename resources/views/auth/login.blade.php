@@ -7,111 +7,52 @@
 
     <title>Факултет за спорт - Пријава</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #f5f5f5;
-        }
-        .login-container {
-            max-width: 500px;
-            margin: 80px auto;
-        }
-        .login-card {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .login-header {
-            background: #0d6efd;
-            color: #fff;
-            padding: 25px;
-            text-align: center;
-        }
-        .login-header .logo-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-        .login-header img {
-            height: 50px;
-        }
-        .login-header h3 {
-            margin: 0;
-            font-weight: 600;
-            font-size: 22px;
-        }
-        .login-body {
-            padding: 30px;
-        }
-        .form-control:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-        }
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-            padding: 10px 25px;
-        }
-        .btn-primary:hover {
-            background-color: #0b5ed7;
-            border-color: #0a58ca;
-        }
-    </style>
 </head>
-<body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="logo-wrapper">
-                    <img src="{{ asset('images/logo_fzs.png') }}" alt="FZS">
-                    <h3>Факултет за спорт</h3>
+<body class="bg-secondary-100 font-sans">
+    <div class="max-w-lg mx-auto my-20 px-4">
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="bg-primary-600 text-white px-6 py-8 text-center">
+                <div class="flex items-center justify-center gap-4 mb-3">
+                    <img src="{{ asset('images/logo_fzs.png') }}" alt="FZS" class="h-12">
+                    <h3 class="m-0 text-xl font-semibold">Факултет за спорт</h3>
                 </div>
             </div>
-            <div class="login-body">
+            <div class="px-6 py-8">
                 <form method="POST" action="{{ url('/login') }}">
                     @csrf
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Емаил адреса</label>
-                        <input type="text" class="form-control @error('email') is-invalid @enderror" 
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-secondary-700 mb-1">Емаил адреса</label>
+                        <input type="text" class="mt-1 block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm @error('email') border-danger-300 text-danger-900 focus:border-danger-500 focus:ring-danger-500 @enderror" 
                                id="email" name="email" value="{{ old('email') }}" required autofocus>
                         @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Лозинка</label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-secondary-700 mb-1">Лозинка</label>
+                        <input type="password" class="mt-1 block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm @error('password') border-danger-300 text-danger-900 focus:border-danger-500 focus:ring-danger-500 @enderror" 
                                id="password" name="password" required>
                         @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <p class="mt-1 text-sm text-danger-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Запамти ме</label>
+                    <div class="mb-4 flex items-center">
+                        <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" id="remember" name="remember">
+                        <label class="ml-2 text-sm text-secondary-700" for="remember">Запамти ме</label>
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt me-2"></i> Пријава
-                        </button>
-                    </div>
+                    <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Пријава
+                    </button>
                 </form>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
