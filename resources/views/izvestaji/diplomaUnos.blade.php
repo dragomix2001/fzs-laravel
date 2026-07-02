@@ -16,34 +16,34 @@
                         <div class="font-semibold text-secondary-800">Додавање уверења</div>
                     </x-slot:header>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="form-group">
+                        <div>
                             <label for="broj" class="block text-sm font-medium text-secondary-700 mb-1">Број:</label>
-                            <input value="{{$diploma->broj}}" name="broj" type="text" class="form-input">
+                            <input value="{{$diploma->broj}}" name="broj" type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="datumOdbrane" class="block text-sm font-medium text-secondary-700 mb-1">Датум:</label>
                             <input id="datumOdbrane" value="{{ date('d.m.Y.',strtotime($diploma->datumOdbrane)) }}"
                                    name="datumOdbrane" type="text"
-                                   class="form-input dateMask">
+                                   class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dateMask">
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="lice" class="block text-sm font-medium text-secondary-700 mb-1">Ментор:</label>
                             <input type="hidden" id="liceHidden" name="liceHidden"
                                    value="{{$diploma->potpis->ime}}  {{$diploma->potpis->prezime}}">
                             <input type="hidden" id="liceIdHidden" name="liceIdHidden" value="{{$diploma->potpis->id}}">
-                            <select class="form-input auto-combobox" id="lice" name="lice">
+                            <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm auto-combobox" id="lice" name="lice">
                                 @foreach($profesori as $profesori)
                                     <option value="{{$profesori->id}}">{{$profesori->ime}} {{$profesori->prezime}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="funkcija" class="block text-sm font-medium text-secondary-700 mb-1">Фукција:</label>
-                            <input value="{{$diploma->funkcija}}" name="funkcija" type="text" class="form-input">
+                            <input value="{{$diploma->funkcija}}" name="funkcija" type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                         </div>
                     </div>
                     <hr class="my-4 border-secondary-200">
-                    <div class="form-group">
+                    <div>
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Сачувај</button>
                     </div>
                 </x-card>
@@ -60,29 +60,29 @@
                         <div class="font-semibold text-secondary-800">Додавање дипломе</div>
                     </x-slot:header>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="form-group">
+                        <div>
                             <label for="broj" class="block text-sm font-medium text-secondary-700 mb-1">Број:</label>
-                            <input name="broj" type="text" class="form-input">
+                            <input name="broj" type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="datumOdbrane" class="block text-sm font-medium text-secondary-700 mb-1">Датум:</label>
-                            <input id="datumOdbrane" name="datumOdbrane" type="text" class="form-input dateMask">
+                            <input id="datumOdbrane" name="datumOdbrane" type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dateMask">
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="lice" class="block text-sm font-medium text-secondary-700 mb-1">Ментор:</label>
-                            <select class="form-input auto-combobox" id="lice" name="lice">
+                            <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm auto-combobox" id="lice" name="lice">
                                 @foreach($profesori as $profesori)
                                     <option value="{{$profesori->id}}">{{$profesori->ime}} {{$profesori->prezime}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="funkcija" class="block text-sm font-medium text-secondary-700 mb-1">Фукција:</label>
-                            <input name="funkcija" type="text" class="form-input">
+                            <input name="funkcija" type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                         </div>
                     </div>
                     <hr class="my-4 border-secondary-200">
-                    <div class="form-group">
+                    <div>
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Сачувај</button>
                     </div>
                 </x-card>

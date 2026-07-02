@@ -22,18 +22,18 @@
                             <div class="font-semibold text-secondary-800">Списак студената по смеровима</div>
                         </x-slot:header>
                         <div class="grid grid-cols-1 gap-4">
-                            <div class="form-group">
+                            <div>
                                 <label for="program" class="block text-sm font-medium text-secondary-700 mb-1">Студијски програм:</label>
-                                <select class="form-input" id="program" name="program">
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="program" name="program">
                                     @foreach($program as $program)
                                         <option value="{{$program->id}}">{{$program->naziv}}
                                             - {{$program->tipStudija->skrNaziv}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="godina" class="block text-sm font-medium text-secondary-700 mb-1">Година студија:</label>
-                                <select id="godina" class="form-input" name="godina">
+                                <select id="godina" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" name="godina">
                                     <option value="1">Прва</option>
                                     <option value="2">Друга</option>
                                     <option value="3">Трећа</option>
@@ -56,9 +56,9 @@
                             <div class="font-semibold text-secondary-800">Списак по години</div>
                         </x-slot:header>
                         <div class="grid grid-cols-1 gap-4">
-                            <div class="form-group">
+                            <div>
                                 <label for="godina" class="block text-sm font-medium text-secondary-700 mb-1">Година студија:</label>
-                                <select id="godina" class="form-input" name="godina">
+                                <select id="godina" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" name="godina">
                                     <option value="1">Прва</option>
                                     <option value="2">Друга</option>
                                     <option value="3">Трећа</option>
@@ -81,9 +81,9 @@
                             <div class="font-semibold text-secondary-800">Списак по програму</div>
                         </x-slot:header>
                         <div class="grid grid-cols-1 gap-4">
-                            <div class="form-group">
+                            <div>
                                 <label for="program" class="block text-sm font-medium text-secondary-700 mb-1">Програм:</label>
-                                <select class="form-input" id="program" name="program">
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="program" name="program">
                                     @foreach($programS as $programS)
                                         <option value="{{$programS->id}}">{{$programS->naziv}}
                                             - {{$programS->tipStudija->skrNaziv}}</option>
@@ -107,9 +107,9 @@
                         <x-slot:header>
                             <div class="font-semibold text-secondary-800">Списак студената по предметима</div>
                         </x-slot:header>
-                        <div class="form-group">
+                        <div>
                             <label for="predmet" class="block text-sm font-medium text-secondary-700 mb-1">Предмет:</label>
-                            <select class="form-input auto-combobox" id="predmet" name="predmet">
+                            <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm auto-combobox" id="predmet" name="predmet">
                                 @foreach($predmeti as $predmet)
                                     <option value="{{$predmet->id}}">{{$predmet->naziv}}</option>
                                 @endforeach
@@ -172,18 +172,18 @@
                             <div class="font-semibold text-secondary-800">Наставни план</div>
                         </x-slot:header>
                         <div class="grid grid-cols-1 gap-4">
-                            <div class="form-group">
+                            <div>
                                 <label for="program" class="block text-sm font-medium text-secondary-700 mb-1">Студијски програм:</label>
-                                <select class="form-input" id="program" name="program">
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="program" name="program">
                                     @foreach($programPlan as $program)
                                         <option value="{{$program->id}}">{{$program->naziv}}
                                             - {{$program->tipStudija->skrNaziv}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="skolskaGodina_id" class="block text-sm font-medium text-secondary-700 mb-1">Школска година:</label>
-                                <select class="form-input" id="skolskaGodina_id"
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="skolskaGodina_id"
                                         name="godina">
                                     @foreach($skolskaGodina as $godina)
                                         <option value="{{$godina->id}}">{{$godina->naziv}}</option>
@@ -239,9 +239,9 @@
                     <x-slot:header>
                         <div class="font-semibold text-secondary-800">Списак по програму</div>
                     </x-slot:header>
-                    <div class="form-group">
+                    <div>
                         <label for="programE" class="block text-sm font-medium text-secondary-700 mb-1">Програм:</label>
-                        <select class="form-input" id="programE" name="programE">
+                        <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="programE" name="programE">
                             @foreach($programE as $programE)
                                 <option value="{{$programE->id}}">{{$programE->naziv}}
                                     - {{$programE->tipStudija->skrNaziv}}</option>
