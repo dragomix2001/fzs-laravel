@@ -54,13 +54,13 @@
         <div class="border-b border-secondary-200 mb-4">
             <nav class="flex gap-1 -mb-px">
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ (Request::input('godina') == '1' || Request::input('godina') == null) ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=1&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Прва година</x-button>
+                   href="?godina=1&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Прва година</a>
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ Request::input('godina') == '2' ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=2&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Друга година</x-button>
+                   href="?godina=2&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Друга година</a>
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ Request::input('godina') == '3' ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=3&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Трећа година</x-button>
+                   href="?godina=3&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Трећа година</a>
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ Request::input('godina') == '4' ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=4&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Четврта година</x-button>
+                   href="?godina=4&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Четврта година</a>
             </nav>
         </div>
         
@@ -69,7 +69,7 @@
                 <a class="px-3 py-1.5 text-sm font-medium rounded-full {{ Request::input('studijskiProgramId') == $program->id ? 'bg-primary-600 text-white' : 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200' }}" 
                    href="?godina={{ Request::input('godina') }}&studijskiProgramId={{ $program->id }}">
                     {{ $program->naziv }}
-                </x-button>
+                </a>
             @endforeach
         </div>
         
@@ -98,24 +98,24 @@
                         <td>{{$kandidat->brojIndeksa}}</td>
                         <td>
                             <div class="flex gap-1 flex-wrap">
-                                <x-button variant="warning" size="xs">id . '/edit') }}">
+                                <x-button variant="warning" size="xs" href="{{ url('student/' . $kandidat->id . '/edit') }}">
                                     <i class="fas fa-edit"></i>
                                 </x-button>
-                                <x-button variant="danger" size="xs">id . '/delete') }}" onclick="return confirm('Да ли сте сигурни?');">
+                                <x-button variant="danger" size="xs" href="{{ url('student/' . $kandidat->id . '/delete') }}" onclick="return confirm('Да ли сте сигурни?');">
                                     <i class="fas fa-trash"></i>
-                                </a>
-                                <x-button variant="primary" size="xs">id . '/upis') }}">
+                                </x-button>
+                                <x-button variant="primary" size="xs" href="{{ url('student/' . $kandidat->id . '/upis') }}">
                                     <i class="fas fa-user-plus mr-1"></i> Упис
-                                </a>
-                                <x-button variant="info" size="xs">id) }}">
+                                </x-button>
+                                <x-button variant="info" size="xs" href="{{ url('student/' . $kandidat->id) }}">
                                     <i class="fas fa-file-alt mr-1"></i> Пријаве
-                                </a>
+                                </x-button>
                                 <x-button variant="secondary" size="xs" href="{{ url('/izvestaji/potvrdeStudent/' . $kandidat->id) }}">
                                     <i class="fas fa-file-pdf mr-1"></i> Потврда
-                                </a>
-                                <x-button variant="success" size="xs">id) }}">
+                                </x-button>
+                                <x-button variant="success" size="xs" href="{{ url('student/' . $kandidat->id . '/skolarina') }}">
                                     <i class="fas fa-money-bill mr-1"></i> Школарина
-                                </a>
+                                </x-button>
                             </div>
                         </td>
                     </tr>
