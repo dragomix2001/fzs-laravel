@@ -27,10 +27,10 @@
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-6">
-                <x-button variant="primary" size="md" href="{{"/"}}zapisnik/create/">
+                <x-button variant="primary" size="md" href="/zapisnik/create/">
                     <span class="fa fa-plus mr-2"></span> Нов записник
                 </x-button>
-                <x-button variant="warning" size="md" href="{{"/"}}zapisnik/arhiva/">
+                <x-button variant="warning" size="md" href="/zapisnik/arhiva/">
                     <i class="fa fa-archive mr-2"></i> Архива
                 </x-button>
             </div>
@@ -76,7 +76,7 @@
                     <input type="submit" id="submit" class="w-full px-3 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" value="Филтрирај">
                 </div>
                 <div class="md:col-span-2 flex items-end">
-                    <x-button variant="danger" size="sm" href="{{"/"}}zapisnik/">
+                    <x-button variant="danger" size="sm" href="/zapisnik/">
                         <i class="fa fa-close mr-2"></i> Поништи филтар
                     </x-button>
                 </div>
@@ -114,14 +114,14 @@
                                     <input type="hidden" name="id" value="{{$zapisnik->id}}">
                                 </div>
                                 <div class="flex gap-1 flex-wrap">
-                                    <x-button variant="primary" size="xs" href="/zapisnik/{{ $zapisnik->id }}">Преглед</x-button>
-                                    <x-button variant="danger" size="xs" href="/zapisnik/{{ $zapisnik->id }}"
+                                    <x-button variant="primary" size="xs" href="/zapisnik/pregled/{{ $zapisnik->id }}">Преглед</x-button>
+                                    <x-button variant="danger" size="xs" href="/zapisnik/delete/{{ $zapisnik->id }}"
                                        onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">
                                         <div title="Брисање" class="p-0.5">
                                             <i class="fa fa-trash"></i>
                                         </div>
                                     </x-button>
-                                    <x-button variant="warning" size="xs" href="/zapisnik/{{ $zapisnik->id }}">
+                                    <x-button variant="warning" size="xs" href="/zapisnik/arhiviraj/{{ $zapisnik->id }}">
                                         <div title="архива" class="p-0.5">
                                             <i class="fa fa-archive mr-1"></i> У архиву
                                         </div>

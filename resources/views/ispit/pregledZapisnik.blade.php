@@ -14,7 +14,7 @@
                 <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl z-10">
                     <div class="flex items-center justify-between px-6 py-4 border-b border-secondary-200">
                         <h4 class="text-lg font-semibold text-secondary-800">Додавање студената</h4>
-                        <button type="button" class="text-secondary-400 hover:text-secondary-600 text-xl leading-none" onclick="closeModal('myModal')">&times;</x-button>
+                        <button type="button" class="text-secondary-400 hover:text-secondary-600 text-xl leading-none" onclick="closeModal('myModal')">&times;</button>
                     </div>
                     <div class="px-6 py-4">
                         <form action="{{"/"}}zapisnik/pregled/dodajStudenta" method="post">
@@ -50,7 +50,7 @@
                                 </tbody>
                             </x-table>
                             <div class="flex gap-2 mt-4">
-                                <button type="button" class="px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors" onclick="closeModal('myModal')">Затвори</x-button>
+                                <button type="button" class="px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors" onclick="closeModal('myModal')">Затвори</button>
                                 <input type="submit" class="px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" value="Додај">
                             </div>
                         </form>
@@ -271,12 +271,12 @@
                     <div class="md:col-span-10 text-center">
                         <x-button variant="primary" size="md" type="submit">
                             <span class="fa fa-save mr-2"></span> Сачувај
-                        </button>
+                        </x-button>
                     </div>
                     <div class="md:col-span-2">
                         <x-button variant="primary" size="lg" type="button" onclick="openModal('myModal')">
                             <span class="fa fa-plus mr-2"></span> Додај студента
-                        </button>
+                        </x-button>
                     </div>
                 </div>
             </form>

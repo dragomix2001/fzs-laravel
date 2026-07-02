@@ -27,7 +27,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-8">
-                <x-button variant="secondary-soft" size="md" href="{{"/"}}zapisnik/">
+                <x-button variant="secondary-soft" size="md" href="/zapisnik/">
                     <i class="fa fa-backward mr-2"></i> Назад на преглед
                 </x-button>
             </div>
@@ -79,8 +79,8 @@
                     <td>{{$zapisnik->studenti_count}}</td>
                     <td>
                         <div class="flex gap-1">
-                            <x-button variant="primary" size="xs" href="/zapisnik/{{ $zapisnik->id }}">Преглед полагања</x-button>
-                            <x-button variant="danger" size="xs" href="/zapisnik/{{ $zapisnik->id }}"
+                            <x-button variant="primary" size="xs" href="/zapisnik/pregled/{{ $zapisnik->id }}">Преглед полагања</x-button>
+                            <x-button variant="danger" size="xs" href="/zapisnik/delete/{{ $zapisnik->id }}"
                                onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">Бриши</x-button>
                         </div>
                     </td>

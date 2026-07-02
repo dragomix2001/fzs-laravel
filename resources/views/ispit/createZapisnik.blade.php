@@ -79,7 +79,7 @@
                     <div class="flex items-end">
                         <button type="button" id="ajaxSubmitPrijava" class="w-full px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors">
                             <i class="fas fa-search mr-2"></i> Прикажи студенте
-                        </x-button>
+                        </button>
                     </div>
                     <div class="flex items-end">
                         <button type="button" id="addStudentLink" class="w-full px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
@@ -136,7 +136,7 @@
                 <div class="text-center mt-4">
                     <x-button variant="primary" size="md" type="submit">
                         <i class="fas fa-save mr-2"></i> Сачувај
-                    </button>
+                    </x-button>
                 </div>
             </form>
         </x-card>
