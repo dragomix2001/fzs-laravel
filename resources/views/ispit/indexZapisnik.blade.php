@@ -42,7 +42,7 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                 <div class="md:col-span-3">
                     <label for="filter_predmet_id" class="block text-sm font-medium text-secondary-700 mb-1">Предмет</label>
-                    <select class="form-input auto-combobox" id="filter_predmet_id" name="filter_predmet_id">
+                    <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm auto-combobox" id="filter_predmet_id" name="filter_predmet_id">
                         <option value=""></option>
                     @foreach($predmeti as $item)
                             <option value="{{$item->id}}" {{ (!empty(app('request')->input('filter_predmet_id')) && app('request')->input('filter_predmet_id') == $item->id) ? 'selected' : '' }}>{{ $item->naziv }}</option>
@@ -52,7 +52,7 @@
 
                 <div class="md:col-span-3">
                     <label for="filter_rok_id" class="block text-sm font-medium text-secondary-700 mb-1">Испитни рок</label>
-                    <select class="form-input" id="filter_rok_id" name="filter_rok_id">
+                    <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="filter_rok_id" name="filter_rok_id">
                         <option value=""></option>
                         @if(!empty($aktivniIspitniRok))
                             @foreach($aktivniIspitniRok as $tip)
@@ -64,7 +64,7 @@
 
                 <div class="md:col-span-3">
                     <label for="filter_profesor_id" class="block text-sm font-medium text-secondary-700 mb-1">Професор</label>
-                    <select class="form-input auto-combobox" id="filter_profesor_id" name="filter_profesor_id">
+                    <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm auto-combobox" id="filter_profesor_id" name="filter_profesor_id">
                         <option value=""></option>
                         @foreach($profesori as $item)
                             <option value="{{$item->id}}" {{ (!empty(app('request')->input('filter_profesor_id')) && app('request')->input('filter_profesor_id') == $item->id) ? 'selected' : '' }}>{{ $item->ime . " " . $item->prezime }}</option>
@@ -104,9 +104,9 @@
                     <td>{{$zapisnik->studenti_count}}</td>
                     <td>
                         <div>
-                            <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post" style="margin-bottom: 0px">
+                            <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post" class="mb-0">
                                 {{ csrf_field() }}
-                                <div style="display:none;">
+                                <div class="hidden">
                                     <input type="hidden" name="predmet" value="{{$zapisnik->predmet?->naziv ?? ''}}">
                                     <input type="hidden" name="rok" value="{{$zapisnik->ispitniRok?->naziv ?? ''}}">
                                     <input type="hidden" name="profesor"
@@ -117,13 +117,13 @@
                                     <a class="inline-flex items-center px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед</a>
                                     <a class="inline-flex items-center px-3 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}zapisnik/delete/{{ $zapisnik->id }}"
                                        onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">
-                                        <div title="Брисање" style="padding: 2pt;">
+                                        <div title="Брисање" class="p-0.5">
                                             <i class="fa fa-trash"></i>
                                         </div>
                                     </a>
                                     <a class="inline-flex items-center px-3 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded-lg transition-colors"
                                        href="{{"/"}}zapisnik/arhiviraj/{{ $zapisnik->id }}">
-                                        <div title="архива">
+                                        <div title="архива" class="p-0.5">
                                             <i class="fa fa-archive mr-1"></i> У архиву
                                         </div>
                                     </a>

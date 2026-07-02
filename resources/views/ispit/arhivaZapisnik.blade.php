@@ -41,7 +41,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div class="md:col-span-4">
                             <label for="rok_id" class="block text-sm font-medium text-secondary-700 mb-1">Архивирај записнике за испитни рок</label>
-                            <select class="form-input" id="rok_id" name="rok_id">
+                            <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="rok_id" name="rok_id">
                                 @if(!empty($aktivniIspitniRok))
                                     @foreach($aktivniIspitniRok as $tip)
                                         <option value="{{$tip->id}}" {{ (!empty($rok_id) && $rok_id == $tip->id) ? 'selected' : '' }}>{{$tip->naziv}}</option>

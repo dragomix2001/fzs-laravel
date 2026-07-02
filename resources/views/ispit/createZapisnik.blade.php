@@ -50,7 +50,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <div class="md:col-span-2">
                         <label for="rok_id" class="block text-sm font-medium text-secondary-700 mb-1">Испитни рок</label>
-                        <select class="form-input" id="rok_id" name="rok_id">
+                        <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="rok_id" name="rok_id">
                             @if(!empty($aktivniIspitniRok))
                                 @foreach($aktivniIspitniRok as $tip)
                                     <option value="{{$tip->id}}" {{ (!empty($rok_id) && $rok_id == $tip->id) ? 'selected' : '' }}>{{$tip->naziv}}</option>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <label for="predmet_id" class="block text-sm font-medium text-secondary-700 mb-1">Предмет</label>
-                        <select class="form-input" id="predmet_id" name="predmet_id">
+                        <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="predmet_id" name="predmet_id">
                             @foreach($predmeti as $item)
                                 <option value="{{$item->id}}">{{ $item->naziv }}</option>
                             @endforeach
@@ -70,7 +70,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
                     <div class="md:col-span-2">
                         <label for="profesor_id" class="block text-sm font-medium text-secondary-700 mb-1">Професор</label>
-                        <select class="form-input" id="profesor_id" name="profesor_id">
+                        <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="profesor_id" name="profesor_id">
                             @foreach($profesori as $item)
                                 <option value="{{$item->id}}">{{ $item->ime . " " . $item->prezime }}</option>
                             @endforeach
@@ -100,21 +100,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label for="formatDatum" class="block text-sm font-medium text-secondary-700 mb-1">Датум</label>
-                        <input type="text" id="formatDatum" name="formatDatum" class="form-input dateMask"
+                        <input type="text" id="formatDatum" name="formatDatum" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dateMask"
                                value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}">
                     </div>
                     <div>
                         <label for="formatDatum2" class="block text-sm font-medium text-secondary-700 mb-1">Датум 2</label>
-                        <input type="text" id="formatDatum2" name="formatDatum2" class="form-input dateMask"
+                        <input type="text" id="formatDatum2" name="formatDatum2" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dateMask"
                                value="{{ Carbon\Carbon::now()->format('d.m.Y.') }}">
                     </div>
                     <div>
                         <label for="vreme" class="block text-sm font-medium text-secondary-700 mb-1">Време</label>
-                        <input type="text" id="vreme" name="vreme" class="form-input">
+                        <input type="text" id="vreme" name="vreme" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                     </div>
                     <div>
                         <label for="ucionica" class="block text-sm font-medium text-secondary-700 mb-1">Учионица</label>
-                        <input type="text" id="ucionica" name="ucionica" class="form-input">
+                        <input type="text" id="ucionica" name="ucionica" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                     </div>
                 </div>
 
@@ -133,7 +133,7 @@
                 <div id="messageEmpty">
                 </div>
 
-                <div class="form-group text-center mt-4">
+                <div class="text-center mt-4">
                     <button type="submit" name="Submit" class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white text-base font-medium rounded-lg transition-colors">
                         <i class="fas fa-save mr-2"></i> Сачувај
                     </button>
