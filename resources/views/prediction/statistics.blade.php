@@ -5,78 +5,68 @@
 @section('page_heading', 'AI Статистика класе')
 
 @section('section')
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <a href="{{ route('prediction.index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left me-2"></i>
-                Назад на листу студената
-            </a>
-        </div>
+<div class="col-span-12">
+    <div class="mb-4">
+        <a href="{{ route('prediction.index') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Назад на листу студената
+        </a>
     </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body text-center">
-                    <h3>{{ $statistics['total_students'] }}</h3>
-                    <p class="mb-0">Укупно студената</p>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+            <div class="bg-primary-600 text-white rounded-lg shadow-sm p-6 text-center">
+                <p class="text-3xl font-bold">{{ $statistics['total_students'] }}</p>
+                <p class="mb-0 text-sm text-primary-100">Укупно студената</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white">
-                <div class="card-body text-center">
-                    <h3>{{ $statistics['overall_pass_rate'] }}%</h3>
-                    <p class="mb-0">Укупна пролазност</p>
-                </div>
+        <div>
+            <div class="bg-success-600 text-white rounded-lg shadow-sm p-6 text-center">
+                <p class="text-3xl font-bold">{{ $statistics['overall_pass_rate'] }}%</p>
+                <p class="mb-0 text-sm text-success-100">Укупна пролазност</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white">
-                <div class="card-body text-center">
-                    <h3>{{ $statistics['exam_statistics']['total_passed'] }}</h3>
-                    <p class="mb-0">Укупно положених испита</p>
-                </div>
+        <div>
+            <div class="bg-cyan-600 text-white rounded-lg shadow-sm p-6 text-center">
+                <p class="text-3xl font-bold">{{ $statistics['exam_statistics']['total_passed'] }}</p>
+                <p class="mb-0 text-sm text-cyan-100">Укупно положених испита</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body text-center">
-                    <h3>{{ $statistics['exam_statistics']['average_grade'] }}</h3>
-                    <p class="mb-0">Просечна оцена</p>
-                </div>
+        <div>
+            <div class="bg-warning-600 text-white rounded-lg shadow-sm p-6 text-center">
+                <p class="text-3xl font-bold">{{ $statistics['exam_statistics']['average_grade'] }}</p>
+                <p class="mb-0 text-sm text-warning-100">Просечна оцена</p>
             </div>
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div>
+            <div class="bg-white rounded-lg border border-secondary-200 shadow-sm overflow-hidden">
+                <div class="px-4 py-3 border-b border-secondary-200 bg-secondary-50">
+                    <h5 class="text-base font-semibold text-secondary-900 mb-0">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
                         Дистрибуција ризика
                     </h5>
                 </div>
-                <div class="card-body">
-                    <div class="chart-container">
+                <div class="p-4">
+                    <div class="chart-container" style="position: relative; height: 250px;">
                         <canvas id="riskChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-chart-bar me-2"></i>
+        <div>
+            <div class="bg-white rounded-lg border border-secondary-200 shadow-sm overflow-hidden">
+                <div class="px-4 py-3 border-b border-secondary-200 bg-secondary-50">
+                    <h5 class="text-base font-semibold text-secondary-900 mb-0">
+                        <i class="fas fa-chart-bar mr-2"></i>
                         Дистрибуција оцена
                     </h5>
                 </div>
-                <div class="card-body">
-                    <div class="chart-container">
+                <div class="p-4">
+                    <div class="chart-container" style="position: relative; height: 250px;">
                         <canvas id="gradeChart"></canvas>
                     </div>
                 </div>
@@ -84,55 +74,53 @@
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-chart-pie me-2"></i>
-                        Статистика
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>Дистрибуција ризика</h6>
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Висок ризик
-                                    <span class="badge bg-danger rounded-pill">{{ $statistics['risk_distribution']['high'] }}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Умерен ризик
-                                    <span class="badge bg-warning rounded-pill">{{ $statistics['risk_distribution']['medium'] }}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Низак ризик
-                                    <span class="badge bg-success rounded-pill">{{ $statistics['risk_distribution']['low'] }}</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6>Дистрибуција оцена</h6>
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    10 (одличан)
-                                    <span class="badge bg-success rounded-pill">{{ $statistics['exam_statistics']['grade_distribution']['excellent'] }}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    9 (врло добар)
-                                    <span class="badge bg-primary rounded-pill">{{ $statistics['exam_statistics']['grade_distribution']['very_good'] }}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    8 (добар)
-                                    <span class="badge bg-info rounded-pill">{{ $statistics['exam_statistics']['grade_distribution']['good'] }}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    7 (довољан)
-                                    <span class="badge bg-warning rounded-pill">{{ $statistics['exam_statistics']['grade_distribution']['sufficient'] }}</span>
-                                </li>
-                            </ul>
-                        </div>
+    <div class="mt-4">
+        <div class="bg-white rounded-lg border border-secondary-200 shadow-sm overflow-hidden">
+            <div class="px-4 py-3 border-b border-secondary-200 bg-secondary-50">
+                <h5 class="text-base font-semibold text-secondary-900 mb-0">
+                    <i class="fas fa-chart-pie mr-2"></i>
+                    Статистика
+                </h5>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h6 class="text-sm font-semibold text-secondary-700 mb-2">Дистрибуција ризика</h6>
+                        <ul class="space-y-2">
+                            <li class="flex items-center justify-between px-3 py-2 rounded-lg bg-secondary-50">
+                                <span class="text-sm text-secondary-700">Висок ризик</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-100 text-danger-700 ring-1 ring-inset ring-danger-600/20">{{ $statistics['risk_distribution']['high'] }}</span>
+                            </li>
+                            <li class="flex items-center justify-between px-3 py-2 rounded-lg bg-secondary-50">
+                                <span class="text-sm text-secondary-700">Умерен ризик</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning-100 text-warning-700 ring-1 ring-inset ring-warning-600/20">{{ $statistics['risk_distribution']['medium'] }}</span>
+                            </li>
+                            <li class="flex items-center justify-between px-3 py-2 rounded-lg bg-secondary-50">
+                                <span class="text-sm text-secondary-700">Низак ризик</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-700 ring-1 ring-inset ring-success-600/20">{{ $statistics['risk_distribution']['low'] }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h6 class="text-sm font-semibold text-secondary-700 mb-2">Дистрибуција оцена</h6>
+                        <ul class="space-y-2">
+                            <li class="flex items-center justify-between px-3 py-2 rounded-lg bg-secondary-50">
+                                <span class="text-sm text-secondary-700">10 (одличан)</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-700 ring-1 ring-inset ring-success-600/20">{{ $statistics['exam_statistics']['grade_distribution']['excellent'] }}</span>
+                            </li>
+                            <li class="flex items-center justify-between px-3 py-2 rounded-lg bg-secondary-50">
+                                <span class="text-sm text-secondary-700">9 (врло добар)</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700 ring-1 ring-inset ring-primary-600/20">{{ $statistics['exam_statistics']['grade_distribution']['very_good'] }}</span>
+                            </li>
+                            <li class="flex items-center justify-between px-3 py-2 rounded-lg bg-secondary-50">
+                                <span class="text-sm text-secondary-700">8 (добар)</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-100 text-cyan-700 ring-1 ring-inset ring-cyan-600/20">{{ $statistics['exam_statistics']['grade_distribution']['good'] }}</span>
+                            </li>
+                            <li class="flex items-center justify-between px-3 py-2 rounded-lg bg-secondary-50">
+                                <span class="text-sm text-secondary-700">7 (довољан)</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning-100 text-warning-700 ring-1 ring-inset ring-warning-600/20">{{ $statistics['exam_statistics']['grade_distribution']['sufficient'] }}</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
