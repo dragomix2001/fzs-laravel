@@ -83,7 +83,7 @@
                             <td>{{$predmet->espb}}</td>
                             <td>{{$predmet->tipPredmeta?->naziv ?? '-'}}</td>
                             <td>
-                                <select class="form-input konacnaOcena" data-index="{{ $index }}"
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm konacnaOcena" data-index="{{ $index }}"
                                         name="konacnaOcena[{{ $index }}]">
                                     <option value=""></option>
                                     <option value="6">6</option>
@@ -97,7 +97,7 @@
                     @endforeach
                     </tbody>
                 </x-table>
-                <div class="form-group text-center mt-4">
+                <div class="text-center mt-4">
                     <div id="sacuvaj" class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white text-base font-medium rounded-lg transition-colors cursor-pointer">
                         <i class="fa fa-save mr-2"></i> Сачувај
                     </div>

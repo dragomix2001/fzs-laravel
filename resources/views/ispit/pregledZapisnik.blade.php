@@ -24,7 +24,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
                                 <div class="md:col-span-4">
                                     <label for="addStudentList" class="block text-sm font-medium text-secondary-700 mb-1">Студенти</label>
-                                    <select class="form-input auto-combobox" id="addStudentList" name="addStudentList">
+                                    <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm auto-combobox" id="addStudentList" name="addStudentList">
                                         <option value="0"></option>
                                         @foreach($kandidati as $index => $kandidat)
                                             <option value="{{$kandidat->id}}">{{$kandidat->brojIndeksa}}</option>
@@ -78,19 +78,19 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label for="ucionica" class="block text-sm font-medium text-secondary-700 mb-1">Учионица</label>
-                                    <input type="text" class="form-input" name="ucionica" id="ucionica">
+                                    <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" name="ucionica" id="ucionica">
                                 </div>
                                 <div>
                                     <label for="vreme" class="block text-sm font-medium text-secondary-700 mb-1">Време</label>
-                                    <input type="text" class="form-input timeMask" name="vreme" id="vreme">
+                                    <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm timeMask" name="vreme" id="vreme">
                                 </div>
                                 <div>
                                     <label for="formatDatum" class="block text-sm font-medium text-secondary-700 mb-1">Датум</label>
-                                    <input type="text" class="form-input dateMask" name="formatDatum" id="formatDatum">
+                                    <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dateMask" name="formatDatum" id="formatDatum">
                                 </div>
                                 <div>
                                     <label for="formatDatum2" class="block text-sm font-medium text-secondary-700 mb-1">Датум 2</label>
-                                    <input type="text" class="form-input dateMask" name="formatDatum2" id="formatDatum2">
+                                    <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dateMask" name="formatDatum2" id="formatDatum2">
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -156,7 +156,7 @@
             <div class="md:col-span-2 mt-4">
                 <form target="_blank" action="{{"/"}}izvestaji/zapisnikStampa/{{$zapisnik->id}}" method="post">
                     {{ csrf_field() }}
-                    <div class="form-group">
+                    <div>
                         <input type="hidden" name="predmet" value="{{$zapisnik->predmet?->naziv ?? ''}}">
                         <input type="hidden" name="rok" value="{{$zapisnik->ispitniRok?->naziv ?? ''}}">
                         <input type="hidden" name="profesor"
@@ -208,14 +208,14 @@
                             <td>{{$ispit->kandidat?->brojIndeksa ?? '-'}}</td>
                             <td>{{($ispit->kandidat?->imeKandidata ?? '') . " " . ($ispit->kandidat?->prezimeKandidata ?? '')}}</td>
                             <td>
-                                <input type="text" class="form-input brojBodova w-20"
+                                <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm brojBodova w-20"
                                        id="brojBodova"
                                        name="brojBodova[{{ $index }}]"
                                        data-index="{{ $index }}"
                                        value="{{ $ispit->indikatorAktivan == 1 ? $ispit->brojBodova : "" }}">
                             </td>
                             <td>
-                                <select class="form-input konacnaOcena" data-index="{{ $index }}"
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm konacnaOcena" data-index="{{ $index }}"
                                         name="konacnaOcena[{{ $index }}]">
                                     <option value="0"></option>
                                     <option value="5" {{ $ispit->konacnaOcena == 5 ? 'selected' : "" }}>5</option>
@@ -228,7 +228,7 @@
                                 </select>
                             </td>
                             <td>
-                                <select class="form-input konacnaOcenaSlovima" data-index="{{ $index }}"
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm konacnaOcenaSlovima" data-index="{{ $index }}"
                                         name="konacnaOcenaSlovima" disabled>
                                     <option value="0"></option>
                                     <option value="5" {{ $ispit->konacnaOcena == 5 ? 'selected' : "" }}>пет</option>
@@ -245,7 +245,7 @@
                                 </select>
                             </td>
                             <td>
-                                <select class="form-input statusIspita" data-index="{{ $index }}"
+                                <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm statusIspita" data-index="{{ $index }}"
                                         name="statusIspita[{{$index}}]">
                                     <option value="0"></option>
                                     @foreach($statusIspita as $index => $status)
