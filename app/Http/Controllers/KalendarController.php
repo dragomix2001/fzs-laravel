@@ -15,7 +15,7 @@ class KalendarController extends Controller
 
     public function indexRok()
     {
-        $ispitniRokovi = AktivniIspitniRokovi::orderByRaw('YEAR(pocetak) DESC')->orderBy('pocetak', 'asc')->get();
+        $ispitniRokovi = AktivniIspitniRokovi::with('nadredjeniRok')->orderByRaw('YEAR(pocetak) DESC')->orderBy('pocetak', 'asc')->get();
 
         return view('kalendar.index_rok', compact('ispitniRokovi'));
     }
