@@ -13,8 +13,8 @@
     </div>
 
     <div class="flex gap-2 mb-4">
-        <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="inline-flex items-center px-4 py-2 bg-warning-500 text-white rounded text-sm font-medium hover:bg-warning-600">Оцени студенте</x-button>
-        <x-button variant="secondary-soft" size="md" href="{{ route('aktivnost.index') }}">Назад на листу</a>
+        <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="inline-flex items-center px-4 py-2 bg-warning-500 text-white rounded text-sm font-medium hover:bg-warning-600">Оцени студенте</a>
+        <x-button variant="secondary-soft" size="md" href="{{ route('aktivnost.index') }}">Назад на листу</x-button>
     </div>
 
     <h4 class="text-md font-semibold mt-4">Оцене студената</h4>

@@ -5,7 +5,7 @@
                 <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-secondary-500 hover:text-secondary-700 hover:bg-secondary-200 lg:hidden" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="sr-only">Toggle navigation</span>
                     <i class="fas fa-bars"></i>
-                </x-button>
+                </button>
                 <a class="text-lg font-bold {{ $class === 'inverse' ? 'text-white' : 'text-secondary-900' }}" href="#">Brand</a>
             </div>
             <div class="hidden lg:flex lg:items-center lg:gap-6" id="navbarNav">
@@ -27,7 +27,7 @@
                 </ul>
                 <form class="flex items-center gap-2 ml-4">
                     <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" placeholder="Search">
-                    <x-button variant="primary" size="xs" type="submit">Submit</button>
+                    <x-button variant="primary" size="xs" type="submit">Submit</x-button>
                 </form>
                 <ul class="flex items-center gap-1 ml-4">
                     <li><a href="#" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-secondary-300 hover:text-white' : 'text-secondary-700 hover:text-secondary-900' }} rounded-md transition-colors">Link</a></li>

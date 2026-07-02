@@ -417,7 +417,7 @@
                 <div class="flex items-center">
                     <button class="mobile-toggle mr-3" id="sidebarToggle" @click="sidebarOpen = !sidebarOpen">
                         <i class="fas fa-bars"></i>
-                    </x-button>
+                    </button>
                     <a href="{{ url('') }}" class="logo-link">
                         <img src="{{ asset('images/logo_fzs.png') }}" height="38" loading="lazy">
                         <span>Факултет за спорт</span>
@@ -427,7 +427,7 @@
                 <div class="flex items-center gap-3">
                     <x-button variant="outline" size="sm" href="{{ url('/pretraga') }}">
                         <i class="fas fa-search"></i>
-                    </a>
+                    </x-button>
                     
                     <x-button variant="outline" size="sm" type="button" id="themeToggle" title="Тема">
                         <i class="fas fa-moon" id="themeIcon"></i>
