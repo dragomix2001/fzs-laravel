@@ -26,7 +26,7 @@
                 </select>
             </div>
             <div class="flex items-end">
-                <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors w-full">Прикажи</button>
+                <x-button variant="primary" size="md" type="submit" class="w-full">Прикажи</x-button>
             </div>
         </div>
     </form>
@@ -67,8 +67,8 @@
     @endif
 
     <div class="mt-4 flex gap-2">
-        <a href="{{ route('prisustvo.create') }}" class="inline-flex items-center px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors">Унеси присуство</a>
-        <a href="{{ route('prisustvo.report') }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium rounded-lg transition-colors">Извештај</a>
+        <x-button variant="success" size="md" href="{{ route('prisustvo.create') }}">Унеси присуство</x-button>
+        <x-button variant="info" size="md" href="{{ route('prisustvo.report') }}">Извештај</x-button>
     </div>
 </div>
 @endsection

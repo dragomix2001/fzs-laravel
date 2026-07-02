@@ -40,9 +40,9 @@
                     </div>
                 </div>
 
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                <x-button variant="primary" size="md" type="submit">
                     <i class="fas fa-refresh mr-2"></i> Reset Password
-                </button>
+                </x-button>
             </form>
         </div>
     </div>

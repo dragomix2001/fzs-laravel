@@ -109,8 +109,8 @@
                     </select>
                 </div>
                 <div class="flex gap-2">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Submit Button</button>
-                    <button type="reset" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Reset Button</button>
+                    <x-button variant="primary" size="md" type="submit">Submit Button</x-button>
+                    <x-button variant="secondary-soft" size="md">Reset Button</x-button>
                 </div>
             </form>
         </x-card>
@@ -134,7 +134,7 @@
                         <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" disabled>
                         <span class="text-sm text-secondary-700">Disabled Checkbox</span>
                     </label>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg opacity-50 cursor-not-allowed">Disabled Button</button>
+                    <x-button variant="primary" size="md" type="submit" disabled>Disabled Button</x-button>
                 </fieldset>
             </form>
         </x-card>
@@ -182,9 +182,9 @@
                 </div>
                 <div class="flex">
                     <input type="text" class="block w-full rounded-l-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
-                    <button type="button" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-r-lg border border-l-0 border-secondary-300 transition-colors">
+                    <x-button variant="secondary-soft" size="md" type="button" class="rounded-r-lg border border-l-0 border-secondary-300">
                         <i class="fas fa-search"></i>
-                    </button>
+                    </x-button>
                 </div>
             </form>
         </x-card>

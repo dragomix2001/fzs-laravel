@@ -50,7 +50,7 @@
                     </div>
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="lg:col-span-2">
@@ -70,7 +70,7 @@
                                   class="timeMask" />
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="lg:col-span-2">
@@ -86,7 +86,7 @@
                                    :selected="$diplomskiRadPolaganje->profesor_id_clan" />
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <x-form-input name="brojBodova" label="Број бодова" class="brojBodova"

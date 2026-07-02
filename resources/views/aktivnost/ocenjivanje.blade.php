@@ -40,7 +40,7 @@
 
         <div class="mt-6 flex gap-2">
             <x-button variant="success">Сачувај оцене</x-button>
-            <a href="{{ route('aktivnost.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Одустани</a>
+            <x-button variant="secondary-soft" size="md" href="{{ route('aktivnost.index') }}">Одустани</x-button>
         </div>
     </form>
 </div>

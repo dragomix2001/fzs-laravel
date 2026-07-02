@@ -3,14 +3,13 @@
 @section('section')
     <div class="w-full lg:w-10/12">
         <div class="mb-4">
-            <a class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium" href="/prijava/zaStudenta/{{ $kandidat->id }}">Назад на студента</a>
+            <x-button variant="primary" size="md" href="/student/{{ $kandidat->id }}">Назад на студента</x-button>
         </div>
         <div>
             <h4>Подаци о студенту &nbsp;
-                <a class="inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600"
-                   href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                <x-button variant="warning" size="xs" href="/student/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                     <span class="fa fa-edit" title="Измена"></span>
-                </a>
+                </x-button>
             </h4>
             <ul class="divide-y divide-secondary-200 border border-secondary-200 rounded-lg overflow-hidden mt-2">
                 <li class="px-4 py-3 bg-white text-sm text-secondary-700">Број Индекса:
@@ -41,7 +40,7 @@
             </div>
             <div class="md:col-span-1 flex items-end">
                 <input type="button" value="Додај" name="button" id="addIspitButton"
-                       class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 cursor-pointer">
+                       class="inline-flex items-center px-4 py-2 bg-success-600 text-white text-sm font-medium rounded hover:bg-success-700 cursor-pointer">
             </div>
             <div class="md:col-span-10 mt-4">
                 <form action="{{"/"}}prijava/dodajPolozeneIspite" method="post">
@@ -80,10 +79,10 @@
                         <td>{{$ispit->predmet?->predmet?->naziv ?? '-'}}</td>
                         <td>{{$ispit->konacnaOcena}}</td>
                         <td>
-                            <a class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700" href="{{"/"}}deletePrivremeniIspit/{{$ispit->id}}"
+                            <x-button variant="danger" size="xs" href="/prijava/destroy/{{ $ispit->id }}"
                                onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
                                 <span title="Брисање"><i class="fa fa-trash"></i></span>
-                            </a>
+                            </x-button>
                         </td>
                     </tr>
                 @endforeach

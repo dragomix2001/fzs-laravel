@@ -15,24 +15,24 @@
 
         {{-- Student Info Card --}}
         <x-card class="mb-6">
-            <h4 class="text-base font-semibold text-gray-700 mb-3">Подаци о студенту</h4>
+            <h4 class="text-base font-semibold text-secondary-700 mb-3">Подаци о студенту</h4>
             <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                    <dt class="text-sm text-gray-500">Број Индекса</dt>
-                    <dd class="font-medium text-gray-900">{{ $kandidat->brojIndeksa }}</dd>
+                    <dt class="text-sm text-secondary-500">Број Индекса</dt>
+                    <dd class="font-medium text-secondary-900">{{ $kandidat->brojIndeksa }}</dd>
                 </div>
                 <div class="sm:col-span-2 lg:col-span-2">
-                    <dt class="text-sm text-gray-500">Име (име родитеља) презиме</dt>
-                    <dd class="font-medium text-gray-900">{{ $kandidat->imeKandidata . " (" . $kandidat->imePrezimeJednogRoditelja . ") " . $kandidat->prezimeKandidata }}</dd>
+                    <dt class="text-sm text-secondary-500">Име (име родитеља) презиме</dt>
+                    <dd class="font-medium text-secondary-900">{{ $kandidat->imeKandidata . " (" . $kandidat->imePrezimeJednogRoditelja . ") " . $kandidat->prezimeKandidata }}</dd>
                 </div>
                 <div>
-                    <dt class="text-sm text-gray-500">ЈМБГ</dt>
-                    <dd class="font-medium text-gray-900">{{ $kandidat->jmbg }}</dd>
+                    <dt class="text-sm text-secondary-500">ЈМБГ</dt>
+                    <dd class="font-medium text-secondary-900">{{ $kandidat->jmbg }}</dd>
                 </div>
                 @if(!empty($kandidat->datumRodjenja))
                     <div>
-                        <dt class="text-sm text-gray-500">Датум рођења</dt>
-                        <dd class="font-medium text-gray-900">{{ $kandidat->datumRodjenja->format('d.m.Y') }}</dd>
+                        <dt class="text-sm text-secondary-500">Датум рођења</dt>
+                        <dd class="font-medium text-secondary-900">{{ $kandidat->datumRodjenja->format('d.m.Y') }}</dd>
                     </div>
                 @endif
             </dl>
@@ -96,7 +96,7 @@
                 @endif
             </div>
 
-            <hr class="my-4 border-gray-200">
+            <hr class="my-4 border-secondary-200">
 
             <div class="overflow-x-auto">
                 <table id="tabela" class="w-full text-sm text-left">
@@ -230,7 +230,7 @@
                                 <td>-</td>
                                 <td>
                                     @if($diplomskiRadPolaganje->brojBodova > 0)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Оцена: {{$diplomskiRadPolaganje->ocena}}</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800">Оцена: {{$diplomskiRadPolaganje->ocena}}</span>
                                     @endif
                                 </td>
                                 <td>

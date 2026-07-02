@@ -26,7 +26,7 @@
                     </x-slot:header>
                     <p>{!! nl2br(e($obavestenje->sadrzaj)) !!}</p>
                     @if($obavestenje->profesor)
-                        <small class="text-gray-500">
+                        <small class="text-secondary-500">
                             Професор: {{ $obavestenje->profesor->ime }} {{ $obavestenje->profesor->prezime }}
                         </small>
                     @endif
@@ -38,7 +38,7 @@
     @endif
 
     <div class="mt-4">
-        <a href="{{ url('/') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Почетна</a>
+        <x-button variant="secondary-soft" size="md" href="{{ url('/') }}">Почетна</x-button>
     </div>
 </div>
 @endsection

@@ -8,7 +8,7 @@
             <label class="flex items-center gap-2">
                 <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">Check me out</span>
             </label>
-            <button type="submit" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Submit</button>
+            <x-button variant="secondary-soft" size="md">Submit</x-button>
         </form>
     </div>
     <div>
@@ -32,6 +32,6 @@
     <p class="text-xs text-secondary-500 mb-2">Add <code class="bg-secondary-100 px-1 py-0.5 rounded text-xs">.form-search</code> to the form and <code class="bg-secondary-100 px-1 py-0.5 rounded text-xs">.search-query</code> to the <code class="bg-secondary-100 px-1 py-0.5 rounded text-xs">input</code> for an extra-rounded text input.</p>
     <form class="flex gap-2">
         <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" placeholder="Search...">
-        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors shrink-0">Search</button>
+        <x-button variant="primary" size="md" type="submit" class="shrink-0">Search</x-button>
     </form>
 </div>

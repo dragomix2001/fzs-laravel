@@ -5,7 +5,7 @@
 
     <div class="max-w-4xl">
         <div class="mb-4">
-            <a href="/predmet" class="text-blue-600 hover:text-blue-800">&lt;&lt;Назад на предмете</a>
+            <a href="/predmet" class="text-primary-600 hover:text-primary-800">&lt;&lt;Назад на предмете</a>
         </div>
 
         <div class="mb-4">

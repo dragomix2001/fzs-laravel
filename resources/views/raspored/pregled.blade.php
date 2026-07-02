@@ -39,7 +39,7 @@
                                 <td>
                                     {{ $cas->predmet->naziv ?? '-' }}
                                     @if($cas->grupa)
-                                        <br><small class="text-gray-500">Група: {{ $cas->grupa }}</small>
+                                        <br><small class="text-secondary-500">Група: {{ $cas->grupa }}</small>
                                     @endif
                                 </td>
                                 <td>{{ $cas->profesor->ime ?? '' }} {{ $cas->profesor->prezime ?? '' }}</td>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('raspored.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Назад на управљање</a>
+        <x-button variant="secondary-soft" size="md" href="{{ route('raspored.index') }}">Назад на управљање</x-button>
     </div>
 </div>
 @endsection

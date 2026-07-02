@@ -64,12 +64,12 @@
                 </div>
                 
                 <div class="mt-4 flex gap-2">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                    <x-button variant="primary" size="md" type="submit">
                         <i class="fas fa-search mr-2"></i> Тражи
-                    </button>
-                    <a href="{{ url('/pretraga') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">
+                    </x-button>
+                    <x-button variant="secondary-soft" size="md" href="{{ url('/pretraga') }}">
                         <i class="fas fa-undo mr-2"></i> Ресетуј
-                    </a>
+                    </x-button>
                 </div>
             </form>
         </x-card>
@@ -101,21 +101,21 @@
                                 <td>{{ optional($kandidat->statusUpisa)->naziv }}</td>
                                 <td>
                                     <div class="flex flex-wrap gap-1">
-                                        <a class="inline-flex items-center px-2.5 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded transition-colors" href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                                        <x-button variant="warning" size="xs" href="/student/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                                             <i class="fas fa-edit mr-1"></i>
-                                        </a>
-                                        <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded transition-colors" href="{{"/"}}student/{{ $kandidat->id }}/upis">
+                                        </x-button>
+                                        <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}/upis">
                                             Статус
-                                        </a>
-                                        <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded transition-colors" href="{{"/"}}prijava/zaStudenta/{{ $kandidat->id }}">
+                                        </x-button>
+                                        <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}">
                                             Испити
-                                        </a>
-                                        <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded transition-colors" href="{{"/"}}izvestaji/potvrdeStudent/{{$kandidat->id}}">
+                                        </x-button>
+                                        <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}">
                                             Потврде
-                                        </a>
-                                        <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded transition-colors" href="{{"/"}}skolarina/{{$kandidat->id}}">
+                                        </x-button>
+                                        <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}">
                                             Школарина
-                                        </a>
+                                        </x-button>
                                     </div>
                                 </td>
                             </tr>
@@ -149,9 +149,9 @@
                                 <td>{{$predmet->naziv}}</td>
                                 <td>{{$predmet->espb}}</td>
                                 <td>
-                                    <a class="inline-flex items-center px-2.5 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded transition-colors" href="{{"/"}}predmet/{{ $predmet->id }}/edit">
+                                    <x-button variant="warning" size="xs" href="/predmet/{{ $predmet->id }}/edit">
                                         <i class="fas fa-edit mr-1"></i> Измени
-                                    </a>
+                                    </x-button>
                                 </td>
                             </tr>
                         @endforeach

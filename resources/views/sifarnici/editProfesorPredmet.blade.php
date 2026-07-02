@@ -5,7 +5,7 @@
 
     <div class="max-w-4xl">
         <div class="mb-4">
-            <a href="/profesor" class="text-blue-600 hover:text-blue-800">&lt;&lt;Назад на професоре</a>
+            <a href="/profesor" class="text-primary-600 hover:text-primary-800">&lt;&lt;Назад на професоре</a>
         </div>
 
         <div class="mb-4">

@@ -24,9 +24,9 @@
                     @endif
                 </div>
 
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                <x-button variant="primary" size="md" type="submit">
                     <i class="fas fa-envelope mr-2"></i> Send Password Reset Link
-                </button>
+                </x-button>
             </form>
         </div>
     </div>

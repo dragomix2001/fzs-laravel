@@ -6,8 +6,8 @@
     <h2>Континуирано оцењивање</h2>
 
     <div class="flex gap-2 mb-4">
-        <a href="{{ route('aktivnost.create') }}" class="inline-flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm font-medium">Нова активност</a>
-        <a href="{{ route('aktivnost.rezime') }}" class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">Преглед свих активности</a>
+        <x-button variant="success" size="md" href="{{ route('aktivnost.create') }}">Нова активност</x-button>
+        <x-button variant="primary" size="md" href="{{ route('aktivnost.rezime') }}">Преглед свих активности</x-button>
     </div>
 
     <x-table>
@@ -31,8 +31,8 @@
                 <td>{{ $aktivnost->datum }}</td>
                 <td>
                     <div class="inline-flex gap-1">
-                        <a href="{{ route('aktivnost.show', $aktivnost->id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Прикажи</a>
-                        <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600">Оцени</a>
+                        <a href="{{ route('aktivnost.show', $aktivnost->id) }}" class="inline-flex items-center px-3 py-1.5 bg-primary-600 text-white text-xs font-medium rounded hover:bg-primary-700">Прикажи</a>
+                        <a href="{{ route('aktivnost.ocenjivanje', $aktivnost->id) }}" class="inline-flex items-center px-3 py-1.5 bg-warning-500 text-white text-xs font-medium rounded hover:bg-warning-600">Оцени</a>
                     </div>
                 </td>
             </tr>

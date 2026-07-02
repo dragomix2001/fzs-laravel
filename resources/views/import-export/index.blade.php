@@ -12,9 +12,9 @@
                     <label class="block text-sm font-medium text-secondary-700">Excel фајл (.xlsx, .xls, .csv)</label>
                     <input type="file" name="file" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" required>
                 </div>
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                <x-button variant="primary" size="md" type="submit">
                     <i class="fas fa-upload mr-2"></i> Увоз
-                </button>
+                </x-button>
             </form>
             <hr class="my-4 border-secondary-200">
             <h5 class="text-sm font-semibold text-secondary-900 mb-2">Очекивани формат колона:</h5>

@@ -47,7 +47,7 @@
             </table>
         </div>
         <div class="px-4 py-3 border-t border-secondary-200 bg-secondary-50 flex gap-2">
-            <a href="{{ route('user.index') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Назад</a>
+            <x-button variant="secondary-soft" size="md" href="{{ route('user.index') }}">Назад</x-button>
             <a href="{{ route('user.edit', $user->id) }}" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Измени</a>
         </div>
     </div>

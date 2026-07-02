@@ -19,9 +19,9 @@
         @endif
     </div>
 
-    <a href="{{"/"}}kalendar/createRok/" class="inline-flex items-center gap-1 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">
+    <x-button variant="primary" size="md" href="{{"/"}}kalendar/createRok/">
         <span class="fa fa-plus"></span> Нови рок
-    </a>
+    </x-button>
 
     <div class="mt-4">
         @if(!empty($ispitniRokovi))
@@ -47,13 +47,13 @@
                         <td>{{$rok->komentar}}</td>
                         <td>
                             <div class="inline-flex gap-1">
-                                <a class="inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600" href="{{"/"}}kalendar/editRok/{{ $rok->id }}">
+                                <x-button variant="warning" size="xs" href="/kalendar/rok/{{ $rok->id }}/edit">
                                     <span class="fa fa-edit" title="Измена"></span>
-                                </a>
-                                <a class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700" href="{{"/"}}kalendar/deleteRok/{{ $rok->id }}"
+                                </x-button>
+                                <x-button variant="danger" size="xs" href="/kalendar/rok/{{ $rok->id }}"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете испитни рок?');">
                                     <span class="fa fa-trash" title="Брисање"></span>
-                                </a>
+                                </x-button>
                             </div>
                         </td>
                     </tr>

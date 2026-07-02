@@ -14,7 +14,7 @@
                 <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl z-10">
                     <div class="flex items-center justify-between px-6 py-4 border-b border-secondary-200">
                         <h4 class="text-lg font-semibold text-secondary-800">Додавање студената</h4>
-                        <button type="button" class="text-secondary-400 hover:text-secondary-600 text-xl leading-none" onclick="closeModal('myModal')">&times;</button>
+                        <button type="button" class="text-secondary-400 hover:text-secondary-600 text-xl leading-none" onclick="closeModal('myModal')">&times;</x-button>
                     </div>
                     <div class="px-6 py-4">
                         <form action="{{"/"}}zapisnik/pregled/dodajStudenta" method="post">
@@ -50,7 +50,7 @@
                                 </tbody>
                             </x-table>
                             <div class="flex gap-2 mt-4">
-                                <button type="button" class="px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors" onclick="closeModal('myModal')">Затвори</button>
+                                <button type="button" class="px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors" onclick="closeModal('myModal')">Затвори</x-button>
                                 <input type="submit" class="px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" value="Додај">
                             </div>
                         </form>
@@ -104,16 +104,16 @@
         {{--Modal za izmenu podataka KRAJ--}}
         <div id="messages">
             @if (Session::get('errors'))
-                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="rounded-lg bg-danger-50 border border-danger-200 p-4 mb-4" role="alert">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-5 w-5 text-danger-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h4 class="text-sm font-semibold text-red-800">Грешка!</h4>
-                            <ul class="mt-1 text-sm text-red-700 list-disc list-inside">
+                            <h4 class="text-sm font-semibold text-danger-800">Грешка!</h4>
+                            <ul class="mt-1 text-sm text-danger-700 list-disc list-inside">
                                 @foreach (Session::get('errors')->all() as $error)
                                     <li>{!! $error !!}</li>
                                 @endforeach
@@ -123,15 +123,15 @@
                 </div>
             @endif
             @if (Session::get('flash-error'))
-                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="rounded-lg bg-danger-50 border border-danger-200 p-4 mb-4" role="alert">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-5 w-5 text-danger-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-medium text-red-800">
+                            <p class="text-sm font-medium text-danger-800">
                                 <strong>Грешка!</strong>
                                 @if(Session::get('flash-error') === 'create')
                                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
@@ -254,13 +254,12 @@
                                 </select>
                             </td>
                             <td>
-                                <a class="inline-flex items-center px-3 py-2 bg-danger-600 hover:bg-danger-500 text-white text-sm font-medium rounded-lg transition-colors"
-                                   href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}/{{ $ispit->kandidat?->id }}/delete"
+                                <x-button variant="danger" size="sm" href="/zapisnik/{{ $ispit->id }}/{{ $ispit->kandidat?->id }}/delete"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете овог студента?');">
                                     <div title="Брисање">
                                         <span class="fa fa-trash"></span>
                                     </div>
-                                </a>
+                                </x-button>
                             </td>
                         </tr>
                         <?php $i++ ?>
@@ -270,12 +269,12 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
                     <div class="md:col-span-10 text-center">
-                        <button type="submit" name="Submit" class="inline-flex items-center px-6 py-3 bg-success-600 hover:bg-success-500 text-white text-base font-medium rounded-lg transition-colors">
+                        <x-button variant="primary" size="md" type="submit">
                             <span class="fa fa-save mr-2"></span> Сачувај
                         </button>
                     </div>
                     <div class="md:col-span-2">
-                        <button type="button" name="add" class="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 hover:bg-primary-500 text-white text-base font-medium rounded-lg transition-colors" onclick="openModal('myModal')">
+                        <x-button variant="primary" size="lg" type="button" onclick="openModal('myModal')">
                             <span class="fa fa-plus mr-2"></span> Додај студента
                         </button>
                     </div>

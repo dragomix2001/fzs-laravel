@@ -21,7 +21,7 @@
                             <input name="remember" type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500">
                             <span class="text-sm text-secondary-700">Remember Me</span>
                         </label>
-                        <a href="{{ url('') }}" class="inline-flex items-center justify-center w-full px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors">Login</a>
+                        <x-button variant="success" size="md" href="{{ url('') }}">Login</x-button>
                     </fieldset>
                 </form>
             </div>

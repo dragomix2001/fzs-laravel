@@ -11,7 +11,7 @@
 ])
 
 @php
-$inputClasses = 'block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 disabled:bg-secondary-100 disabled:cursor-not-allowed';
+$inputClasses = 'block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm disabled:bg-secondary-100 disabled:cursor-not-allowed';
 if ($error) {
     $inputClasses = 'block w-full rounded-lg border-danger-300 text-danger-900 placeholder-danger-300 focus:border-danger-500 focus:ring-danger-500';
 }

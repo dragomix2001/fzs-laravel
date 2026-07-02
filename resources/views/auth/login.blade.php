@@ -47,9 +47,9 @@
                         <label class="ml-2 text-sm text-secondary-700" for="remember">Запамти ме</label>
                     </div>
 
-                    <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                    <x-button variant="primary" size="md" type="submit">
                         <i class="fas fa-sign-in-alt mr-2"></i> Пријава
-                    </button>
+                    </x-button>
                 </form>
             </div>
         </div>

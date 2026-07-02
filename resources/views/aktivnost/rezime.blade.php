@@ -5,7 +5,7 @@
 <div class="w-full lg:w-10/12">
     <h2>Резиме активности: {{ $predmet->naziv ?? '' }}</h2>
 
-    <a href="{{ route('aktivnost.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 mb-4">Назад на листу</a>
+    <x-button variant="secondary-soft" size="md" href="{{ route('aktivnost.index') }}" class="mb-4">Назад на листу</x-button>
 
     @if(isset($aktivnosti) && count($aktivnosti) > 0)
     <div class="mb-4">
@@ -38,9 +38,9 @@
                     <td>{{ $rez['max'] }}</td>
                     <td>
                         @if($rez['procenat'] >= 51)
-                            <span class="text-green-600 font-bold">{{ $rez['procenat'] }}%</span>
+                            <span class="text-success-600 font-bold">{{ $rez['procenat'] }}%</span>
                         @else
-                            <span class="text-red-600 font-bold">{{ $rez['procenat'] }}%</span>
+                            <span class="text-danger-600 font-bold">{{ $rez['procenat'] }}%</span>
                         @endif
                     </td>
                 </tr>

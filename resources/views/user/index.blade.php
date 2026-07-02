@@ -4,7 +4,7 @@
 
 <div class="col-span-12 lg:col-span-10">
     <div class="mb-4">
-        <a href="{{ route('user.create') }}" class="inline-flex items-center px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors">Додај корисника</a>
+        <x-button variant="success" size="md" href="{{ route('user.create') }}">Додај корисника</x-button>
     </div>
 
     <div class="bg-white rounded-lg border border-secondary-200 shadow-sm overflow-hidden">
@@ -50,7 +50,7 @@
                                 <form method="POST" action="{{ route('user.destroy', $user->id) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center px-2.5 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors" onclick="return confirm('Да ли сте сигурни?')">Обриши</button>
+                                    <x-button variant="danger" size="xs" type="submit" onclick="return confirm('Да ли сте сигурни?')">Обриши</x-button>
                                 </form>
                             </div>
                         </td>

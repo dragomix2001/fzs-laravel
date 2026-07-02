@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="lg:col-span-2">
@@ -73,7 +73,7 @@
                            value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="space-y-4">
                     <div class="lg:w-8/12">
@@ -83,13 +83,13 @@
                     </div>
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="space-y-4">
                     <div class="flex items-start gap-3">
                         <input type="checkbox" name="indikatorOdobreno" value="1" id="indikatorOdobreno"
-                               class="mt-1 rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
-                        <label for="indikatorOdobreno" class="font-semibold text-gray-700">Одбрана одобрена</label>
+                               class="mt-1 rounded border-secondary-300 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
+                        <label for="indikatorOdobreno" class="font-semibold text-secondary-700">Одбрана одобрена</label>
                     </div>
                     <div class="lg:w-8/12">
                         <x-form-select name="odbranu_odobrio_profesor_id" label="Одбрану одобрио:"

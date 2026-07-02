@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="flex items-end">
-                <noscript><button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors w-full">Учитај студенте</button></noscript>
+                <noscript><x-button variant="primary" size="md" type="submit" class="w-full">Учитај студенте</x-button></noscript>
             </div>
         </div>
     </form>
@@ -77,8 +77,8 @@
             </div>
 
             <div class="mt-4 flex gap-2">
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-success-600 hover:bg-success-500 text-white text-sm font-medium rounded-lg transition-colors">Сачувај присуство</button>
-                <a href="{{ route('prisustvo.index') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Одустани</a>
+                <x-button variant="success" size="md">Сачувај присуство</x-button>
+                <x-button variant="secondary-soft" size="md" href="{{ route('prisustvo.index') }}">Одустани</x-button>
             </div>
         </form>
     @else

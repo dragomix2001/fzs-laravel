@@ -8,9 +8,9 @@
         <h2 class="text-xl font-semibold text-secondary-900">Аналитика и статистика</h2>
     </div>
     <div class="text-right">
-        <button class="inline-flex items-center px-3 py-1.5 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors" x-data @click="$dispatch('open-modal', 'widgetSettings')">
+        <x-button variant="secondary-soft" size="sm">
             <i class="fas fa-cog mr-1"></i> Виџети
-        </button>
+        </x-button>
     </div>
 </div>
 
@@ -164,8 +164,8 @@
         @endif
     </div>
     <div class="mt-4 flex gap-2">
-        <a href="{{ route('dashboard.studenti') }}" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Детаљни преглед студената</a>
-        <a href="{{ route('dashboard.ispiti') }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium rounded-lg transition-colors">Аналитика испита</a>
+        <x-button variant="primary" size="md" href="{{ route('dashboard.studenti') }}">Детаљни преглед студената</x-button>
+        <x-button variant="info" size="md" href="{{ route('dashboard.ispiti') }}">Аналитика испита</x-button>
     </div>
 </div>
 
@@ -220,8 +220,8 @@
                     </div>
                 </div>
                 <div class="px-4 py-3 bg-secondary-50 text-right sm:px-6 border-t border-secondary-200">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Сачувај</button>
-                    <button type="button" @click="open = false" class="ml-2 inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Откажи</button>
+                    <x-button variant="primary" size="md" type="submit">Сачувај</x-button>
+                    <x-button variant="primary" size="md" type="submit">Откажи</x-button>
                 </div>
             </form>
         </div>

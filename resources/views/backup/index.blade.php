@@ -8,15 +8,15 @@
         <form method="POST" action="{{ route('backup.create') }}">
             @csrf
             <div class="flex flex-wrap gap-2">
-                <button type="submit" name="type" value="full" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                <x-button variant="primary" size="md" type="submit">
                     <i class="fas fa-database mr-2"></i> Пуна копија (DB + FAJLOVI)
-                </button>
-                <button type="submit" name="type" value="database" class="inline-flex items-center px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium rounded-lg transition-colors">
+                </x-button>
+                <x-button variant="info" size="md">
                     <i class="fas fa-server mr-2"></i> Само база
-                </button>
-                <button type="submit" name="type" value="files" class="inline-flex items-center px-4 py-2 bg-secondary-600 hover:bg-secondary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                </x-button>
+                <x-button variant="primary" size="md" type="submit">
                     <i class="fas fa-folder mr-2"></i> Само фајлови
-                </button>
+                </x-button>
             </div>
         </form>
     </x-card>
@@ -47,9 +47,9 @@
                             <form method="POST" action="{{ route('backup.delete', ['filename' => $backup['name']]) }}" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="inline-flex items-center px-2.5 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded transition-colors" onclick="return confirm('Да ли сте сигурни?')">
+                                <x-button variant="danger" size="xs" type="submit" onclick="return confirm('Да ли сте сигурни?')">
                                     <i class="fas fa-trash mr-1"></i> Обриши
-                                </button>
+                                </x-button>
                             </form>
                         </div>
                     </td>

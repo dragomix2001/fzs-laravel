@@ -28,14 +28,14 @@
                                   value="{{ $predmet->naziv }}" disabled />
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="w-full lg:w-4/5 mb-4">
                     <x-form-select name="profesor_id" label="Професор"
                                    :options="$profesor->mapWithKeys(fn($t) => [$t->id => $t->zvanje . ' ' . $t->ime . ' ' . $t->prezime])->toArray()" />
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <x-form-select name="rok_id" label="Испитни рок"
@@ -53,12 +53,12 @@
                 <input type="hidden" name="datum" id="datum" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
                 <input type="hidden" name="datum2" id="datum2" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end">
                     <div>
-                        <label for="studentSearch" class="block text-sm font-medium text-gray-700 mb-1">Претрага студента (број индекса)</label>
-                        <input type="text" id="studentSearch" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 px-4 py-2 border" placeholder="Унесите број индекса за претрагу...">
+                        <label for="studentSearch" class="block text-sm font-medium text-secondary-700 mb-1">Претрага студента (број индекса)</label>
+                        <input type="text" id="studentSearch" class="w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 px-4 py-2 border" placeholder="Унесите број индекса за претрагу...">
                     </div>
                     <input type="hidden" id="addStudentList" name="addStudentList" value="">
                     <div>
@@ -79,7 +79,7 @@
                     </tbody>
                 </x-table>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="text-center">
                     <x-button variant="success" size="lg" type="submit" name="Submit2" value="Креирај пријаву и записник">

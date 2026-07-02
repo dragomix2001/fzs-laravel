@@ -3,10 +3,10 @@
 @section('section')
 
 <div class="w-full lg:w-10/12">
-    <a href="{{"/"}}kalendar/indexRok/" class="inline-flex items-center gap-1 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">
+    <x-button variant="primary" size="md" href="{{"/"}}kalendar/indexRok/">
         <span class="fa fa-envelope-square"></span>
         Сви рокови
-    </a>
+    </x-button>
 
     <div class="mt-4">
         <div id='calendar'></div>

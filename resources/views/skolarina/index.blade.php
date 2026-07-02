@@ -144,17 +144,15 @@
                                 <td>{{$uplata->naziv}}</td>
                                 <td>
                                     <div class="flex gap-1">
-                                        <a class="inline-flex items-center px-3 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded-lg transition-colors"
-                                           href="{{"/"}}skolarina/uplata/edit/{{$uplata->id}}"
+                                        <x-button variant="warning" size="xs" href="/skolarina/uplate/{{ $uplata->id }}/edit"
                                            title="Измена">
                                             <span class="fa fa-edit"></span>
-                                        </a>
-                                        <a class="inline-flex items-center px-3 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors"
-                                           href="{{"/"}}skolarina/uplata/delete/{{$uplata->id}}"
+                                        </x-button>
+                                        <x-button variant="danger" size="xs" href="/skolarina/uplate/{{ $uplata->id }}"
                                            onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');"
                                            title="Брисање">
                                             <span class="fa fa-trash"></span>
-                                        </a>
+                                        </x-button>
                                     </div>
                                 </td>
                             </tr>

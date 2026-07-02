@@ -76,9 +76,9 @@
                     <x-button variant="success">
                         <span class="fa fa-save"></span> Сачувај
                     </x-button>
-                    <a class="inline-flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700" href="{{"/"}}kalendar/deleteRok/{{ $rok->id }}">
+                    <x-button variant="danger" size="md" href="/kalendar/rok/{{ $rok->id }}/delete">
                         <span class="fa fa-trash"></span> Бриши рок
-                    </a>
+                    </x-button>
                 </div>
 
             </form>

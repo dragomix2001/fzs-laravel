@@ -4,15 +4,15 @@
     <div class="col-span-12">
         <div id="messages">
             @if (Session::get('flash-error'))
-                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="rounded-lg bg-danger-50 border border-danger-200 p-4 mb-4" role="alert">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-5 w-5 text-danger-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-medium text-red-800">
+                            <p class="text-sm font-medium text-danger-800">
                                 <strong>Грешка!</strong>
                                 @if(Session::get('flash-error') === 'update')
                                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
@@ -27,15 +27,15 @@
                     </div>
                 </div>
             @elseif(Session::get('flash-success'))
-                <div class="rounded-lg bg-green-50 border border-green-200 p-4 mb-4" role="alert">
+                <div class="rounded-lg bg-success-50 border border-success-200 p-4 mb-4" role="alert">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-5 w-5 text-success-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM3.707 9.293a1 1 0 00-1.414 1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-medium text-green-800">
+                            <p class="text-sm font-medium text-success-800">
                                 <strong>Успех!</strong>
                                 @if(Session::get('flash-success') === 'update')
                                     Подаци о кандидату су успешно сачувани.
@@ -54,13 +54,13 @@
         <div class="border-b border-secondary-200 mb-4">
             <nav class="flex gap-1 -mb-px">
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ (Request::input('godina') == '1' || Request::input('godina') == null) ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=1&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Прва година</a>
+                   href="?godina=1&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Прва година</x-button>
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ Request::input('godina') == '2' ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=2&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Друга година</a>
+                   href="?godina=2&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Друга година</x-button>
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ Request::input('godina') == '3' ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=3&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Трећа година</a>
+                   href="?godina=3&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Трећа година</x-button>
                 <a class="px-4 py-2 text-sm font-medium rounded-t-lg {{ Request::input('godina') == '4' ? 'bg-white text-primary-600 border border-secondary-200 border-b-0' : 'text-secondary-500 hover:text-secondary-700' }}" 
-                   href="?godina=4&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Четврта година</a>
+                   href="?godina=4&studijskiProgramId={{ Request::input('studijskiProgramId') }}">Четврта година</x-button>
             </nav>
         </div>
         
@@ -69,7 +69,7 @@
                 <a class="px-3 py-1.5 text-sm font-medium rounded-full {{ Request::input('studijskiProgramId') == $program->id ? 'bg-primary-600 text-white' : 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200' }}" 
                    href="?godina={{ Request::input('godina') }}&studijskiProgramId={{ $program->id }}">
                     {{ $program->naziv }}
-                </a>
+                </x-button>
             @endforeach
         </div>
         
@@ -98,22 +98,22 @@
                         <td>{{$kandidat->brojIndeksa}}</td>
                         <td>
                             <div class="flex gap-1 flex-wrap">
-                                <a class="inline-flex items-center px-2.5 py-1.5 bg-warning-500 hover:bg-warning-400 text-white text-xs font-medium rounded-lg transition-colors" href="{{ url('/kandidat/' . $kandidat->id . '/edit') }}">
+                                <x-button variant="warning" size="xs">id . '/edit') }}">
                                     <i class="fas fa-edit"></i>
-                                </a>
-                                <a class="inline-flex items-center px-2.5 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{ url('/kandidat/' . $kandidat->id . '/delete') }}" onclick="return confirm('Да ли сте сигурни?');">
+                                </x-button>
+                                <x-button variant="danger" size="xs">id . '/delete') }}" onclick="return confirm('Да ли сте сигурни?');">
                                     <i class="fas fa-trash"></i>
                                 </a>
-                                <a class="inline-flex items-center px-2.5 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{ url('/student/' . $kandidat->id . '/upis') }}">
+                                <x-button variant="primary" size="xs">id . '/upis') }}">
                                     <i class="fas fa-user-plus mr-1"></i> Упис
                                 </a>
-                                <a class="inline-flex items-center px-2.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{ url('/prijava/zaStudenta/' . $kandidat->id) }}">
+                                <x-button variant="info" size="xs">id) }}">
                                     <i class="fas fa-file-alt mr-1"></i> Пријаве
                                 </a>
-                                <a class="inline-flex items-center px-2.5 py-1.5 bg-secondary-600 hover:bg-secondary-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{ url('/izvestaji/potvrdeStudent/' . $kandidat->id) }}">
+                                <x-button variant="secondary" size="xs" href="{{ url('/izvestaji/potvrdeStudent/' . $kandidat->id) }}">
                                     <i class="fas fa-file-pdf mr-1"></i> Потврда
                                 </a>
-                                <a class="inline-flex items-center px-2.5 py-1.5 bg-success-600 hover:bg-success-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{ url('/skolarina/' . $kandidat->id) }}">
+                                <x-button variant="success" size="xs">id) }}">
                                     <i class="fas fa-money-bill mr-1"></i> Школарина
                                 </a>
                             </div>

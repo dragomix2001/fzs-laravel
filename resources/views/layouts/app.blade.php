@@ -16,33 +16,30 @@
         body {
             font-family: 'Lato';
         }
-        .fa-btn {
-            margin-right: 6px;
-        }
     </style>
 </head>
-<body id="app-layout" class="bg-gray-100 font-sans text-gray-900 leading-normal">
-    <nav x-data="{ open: false }" class="bg-white border-b border-gray-200 shadow-sm">
+<body id="app-layout" class="bg-secondary-100 font-sans text-secondary-900 leading-normal">
+    <nav x-data="{ open: false }" class="bg-white border-b border-secondary-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
                         <img class="h-8 w-auto mr-2" src="{{ asset('images/logo_fzs.png') }}" loading="lazy" alt="Logo">
-                        <a href="{{ url('') }}" class="font-bold text-xl text-gray-800 tracking-tight hover:text-gray-600">Факултет за спорт</a>
+                        <a href="{{ url('') }}" class="font-bold text-xl text-secondary-800 tracking-tight hover:text-secondary-600">Факултет за спорт</a>
                     </div>
                 </div>
 
                 <div class="hidden sm:ml-6 sm:flex sm:items-center">
                     @if (Auth::guest())
                         <div class="space-x-4">
-                            <a href="{{ url('/login') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Пријава</a>
-                            <a href="{{ url('/register') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Регистрација</a>
+                            <a href="{{ url('/login') }}" class="text-secondary-500 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium">Пријава</a>
+                            <a href="{{ url('/register') }}" class="text-secondary-500 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium">Регистрација</a>
                         </div>
                     @else
                         <div class="ml-3 relative" x-data="{ dropdownOpen: false }" @click.away="dropdownOpen = false">
                             <div>
-                                <button @click="dropdownOpen = !dropdownOpen" type="button" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out" id="user-menu" aria-expanded="false" aria-haspopup="true">
-                                    <span class="text-gray-700 font-medium px-3 py-2">{{ Auth::user()->name }} <i class="fas fa-caret-down ml-1"></i></span>
+                                <button @click="dropdownOpen = !dropdownOpen" type="button" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-secondary-300 transition duration-150 ease-in-out" id="user-menu" aria-expanded="false" aria-haspopup="true">
+                                    <span class="text-secondary-700 font-medium px-3 py-2">{{ Auth::user()->name }} <i class="fas fa-caret-down ml-1"></i></span>
                                 </button>
                             </div>
 
@@ -57,7 +54,7 @@
                                  role="menu" aria-orientation="vertical" aria-labelledby="user-menu" style="display: none;">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-sign-out-alt mr-2"></i>Одјава</a>
+                                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-100" role="menuitem"><i class="fas fa-sign-out-alt mr-2"></i>Одјава</a>
                                 </form>
                             </div>
                         </div>
@@ -65,7 +62,7 @@
                 </div>
                 
                 <div class="-mr-2 flex items-center sm:hidden">
-                    <button @click="open = !open" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                    <button @click="open = !open" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-secondary-400 hover:text-secondary-500 hover:bg-secondary-100 focus:outline-none focus:bg-secondary-100 focus:text-secondary-500 transition duration-150 ease-in-out">
                         <span class="sr-only">Отвори мени</span>
                         <i class="fas fa-bars text-xl" x-show="!open"></i>
                         <i class="fas fa-times text-xl" x-show="open" style="display: none;"></i>
@@ -77,17 +74,17 @@
         <div x-show="open" class="sm:hidden" style="display: none;">
             <div class="pt-2 pb-3 space-y-1">
                 @if (Auth::guest())
-                    <a href="{{ url('/login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">Пријава</a>
-                    <a href="{{ url('/register') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">Регистрација</a>
+                    <a href="{{ url('/login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-secondary-600 hover:text-secondary-800 hover:bg-secondary-50 hover:border-secondary-300 focus:outline-none focus:text-secondary-800 focus:bg-secondary-50 focus:border-secondary-300 transition duration-150 ease-in-out">Пријава</a>
+                    <a href="{{ url('/register') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-secondary-600 hover:text-secondary-800 hover:bg-secondary-50 hover:border-secondary-300 focus:outline-none focus:text-secondary-800 focus:bg-secondary-50 focus:border-secondary-300 transition duration-150 ease-in-out">Регистрација</a>
                 @else
-                    <div class="border-t border-gray-200 pt-4 pb-1">
+                    <div class="border-t border-secondary-200 pt-4 pb-1">
                         <div class="px-4">
-                            <div class="text-base font-medium text-gray-800">{{ Auth::user()->name }}</div>
+                            <div class="text-base font-medium text-secondary-800">{{ Auth::user()->name }}</div>
                         </div>
                         <div class="mt-3 space-y-1">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:text-gray-800 focus:bg-gray-100 transition duration-150 ease-in-out">Одјава</a>
+                                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="block px-4 py-2 text-base font-medium text-secondary-500 hover:text-secondary-800 hover:bg-secondary-100 focus:outline-none focus:text-secondary-800 focus:bg-secondary-100 transition duration-150 ease-in-out">Одјава</a>
                             </form>
                         </div>
                     </div>

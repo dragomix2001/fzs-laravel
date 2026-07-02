@@ -74,7 +74,7 @@
                         <x-form-input name="prezimeKandidata" id="prezimeKandidata" label="Презиме" :value="$kandidat->prezimeKandidata" disabled />
                     </div>
 
-                    <hr class="my-6 border-gray-200">
+                    <hr class="my-6 border-secondary-200">
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="lg:col-span-2">
@@ -91,7 +91,7 @@
                                        :selected="$kandidat->tipStudija_id" disabled />
                     </div>
 
-                    <hr class="my-6 border-gray-200">
+                    <hr class="my-6 border-secondary-200">
 
                     <div class="lg:w-8/12">
                         <x-form-select name="profesor_id" id="profesor_id" label="Професор"
@@ -132,7 +132,7 @@
                         <x-form-input name="prezimeKandidata" id="prezimeKandidata" label="Презиме" value="" disabled />
                     </div>
 
-                    <hr class="my-6 border-gray-200">
+                    <hr class="my-6 border-secondary-200">
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="lg:col-span-2">
@@ -151,7 +151,7 @@
                                        :selected="$predmet->tipStudija_id" disabled />
                     </div>
 
-                    <hr class="my-6 border-gray-200">
+                    <hr class="my-6 border-secondary-200">
 
                     <div class="lg:w-4/5">
                         <x-form-select name="profesor_id" id="profesor_id" label="Професор"
@@ -159,7 +159,7 @@
                     </div>
                 @endif
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-secondary-200">
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <x-form-select name="rok_id" label="Испитни рок"

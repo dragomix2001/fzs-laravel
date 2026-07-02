@@ -55,22 +55,22 @@
                     <td>{{ $obavestenje->profesor->ime ?? '' }} {{ $obavestenje->profesor->prezime ?? '' }}</td>
                     <td>
                         @if($obavestenje->aktivan)
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Активно</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800">Активно</span>
                         @else
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Неактивно</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-800">Неактивно</span>
                         @endif
                     </td>
                     <td>
                         <div class="inline-flex gap-1 flex-wrap">
-                            <a href="{{ url('/obavestenja/' . $obavestenje->id) }}" class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Прикажи</a>
-                            <a href="{{ url('/obavestenja/' . ($obavestenje->id ?? '0') . '/edit') }}" class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Измени</a>
-                            <a href="{{ url('/obavestenja/' . $obavestenje->id . '/toggle') }}" class="inline-flex items-center px-2 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600">
+                            <x-button variant="primary" size="xs" href="{{ url('/obavestenja/' . $obavestenje->id) }}">Прикажи</x-button>
+                            <x-button variant="primary" size="xs" href="{{ url('/obavestenja/' . ($obavestenje->id ?? '0') . '/edit') }}">Измени</x-button>
+                            <a href="{{ url('/obavestenja/' . $obavestenje->id . '/toggle') }}" class="inline-flex items-center px-2 py-1 bg-warning-500 text-white text-xs font-medium rounded hover:bg-warning-600">
                                 {{ $obavestenje->aktivan ? 'Деактивирај' : 'Активирај' }}
                             </a>
                             <form action="{{ url('/obavestenja/' . $obavestenje->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="inline-flex items-center px-2 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700" onclick="return confirm('Да ли сте сигурни?')">Обриши</button>
+                                <x-button variant="danger" size="xs" type="submit" onclick="return confirm('Да ли сте сигурни?')">Обриши</x-button>
                             </form>
                         </div>
                     </td>
@@ -83,8 +83,8 @@
     @endif
 
     <div class="mt-4 flex gap-2">
-        <a href="{{ route('obavestenja.create') }}" class="inline-flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm font-medium">Додај обавештење</a>
-        <a href="{{ route('obavestenja.javna') }}" class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">Јавна обавештења</a>
+        <x-button variant="success" size="md" href="{{ route('obavestenja.create') }}">Додај обавештење</x-button>
+        <x-button variant="primary" size="md" href="{{ route('obavestenja.javna') }}">Јавна обавештења</x-button>
     </div>
 </div>
 @endsection

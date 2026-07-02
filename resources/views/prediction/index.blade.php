@@ -13,10 +13,10 @@
             </p>
         </div>
         <div class="text-right">
-            <a href="{{ route('prediction.statistics') }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium rounded-lg transition-colors">
+            <x-button variant="info" size="md" href="{{ route('prediction.statistics') }}">
                 <i class="fas fa-chart-bar mr-2"></i>
                 Статистика класе
-            </a>
+            </x-button>
         </div>
     </div>
 

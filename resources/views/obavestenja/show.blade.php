@@ -36,9 +36,9 @@
             <div>
                 <strong>Статус:</strong>
                 @if($obavestenje->aktivan)
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Активно</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800">Активно</span>
                 @else
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Неактивно</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-800">Неактивно</span>
                 @endif
             </div>
             <hr class="border-secondary-200">
@@ -48,8 +48,8 @@
         </div>
         <x-slot:footer>
             <div class="flex gap-2">
-                <a href="{{ route('obavestenja.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300">Назад</a>
-                <a href="{{ url('/obavestenja/' . ($obavestenje->id ?? '0') . '/edit') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700">Измени</a>
+                <x-button variant="secondary-soft" size="md" href="{{ route('obavestenja.index') }}">Назад</x-button>
+                <a href="{{ url('/obavestenja/' . ($obavestenje->id ?? '0') . '/edit') }}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded text-sm font-medium hover:bg-primary-700">Измени</a>
             </div>
         </x-slot:footer>
     </x-card>

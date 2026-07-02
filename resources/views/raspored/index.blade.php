@@ -23,12 +23,12 @@
     </form>
 
     <div class="mb-3 flex gap-2">
-        <a href="{{ route('raspored.kalendar') }}" class="inline-flex items-center gap-1 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">
+        <x-button variant="primary" size="md" href="{{ route('raspored.kalendar') }}">
             <span class="fa fa-calendar"></span> Календар
-        </a>
-        <a href="{{ route('raspored.pregled') }}" class="inline-flex items-center gap-1 text-gray-700 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded text-sm font-medium">
+        </x-button>
+        <x-button variant="secondary-soft" size="md" href="{{ route('raspored.pregled') }}" class="gap-1">
             <span class="fa fa-list"></span> Табеларни преглед
-        </a>
+        </x-button>
     </div>
 
     @if($raspored->count() > 0)
@@ -69,11 +69,11 @@
                     <td>{{ $r->grupa ?? '-' }}</td>
                     <td>
                         <div class="inline-flex gap-1">
-                            <a href="{{ route('raspored.edit', $r->id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Измени</a>
+                            <a href="{{ route('raspored.edit', $r->id) }}" class="inline-flex items-center px-3 py-1.5 bg-primary-600 text-white text-xs font-medium rounded hover:bg-primary-700">Измени</a>
                             <form action="{{ route('raspored.destroy', $r->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700" onclick="return confirm('Да ли сте сигурни?')">Обриши</button>
+                                <x-button variant="danger" size="xs" type="submit" onclick="return confirm('Да ли сте сигурни?')">Обриши</x-button>
                             </form>
                         </div>
                     </td>
@@ -88,8 +88,8 @@
     @endif
 
     <div class="mt-4 flex gap-2">
-        <a href="{{ route('raspored.create') }}" class="inline-flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm font-medium">Додај час</a>
-        <a href="{{ route('raspored.pregled') }}" class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">Преглед распореда</a>
+        <x-button variant="success" size="md" href="{{ route('raspored.create') }}">Додај час</x-button>
+        <x-button variant="primary" size="md" href="{{ route('raspored.pregled') }}">Преглед распореда</x-button>
     </div>
 </div>
 @endsection

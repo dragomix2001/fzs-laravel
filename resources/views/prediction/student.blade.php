@@ -7,10 +7,10 @@
 @section('section')
 <div class="col-span-12">
     <div class="mb-4">
-        <a href="{{ route('prediction.index') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">
+        <x-button variant="secondary-soft" size="md" href="{{ route('prediction.index') }}">
             <i class="fas fa-arrow-left mr-2"></i>
             Назад на листу
-        </a>
+        </x-button>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

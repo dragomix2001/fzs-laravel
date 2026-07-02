@@ -6,7 +6,7 @@
     <h2 class="text-xl font-semibold text-secondary-900 mb-4">Извештај о присуству студената</h2>
     
     <div class="mb-4">
-        <a href="{{ route('prisustvo.index') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Назад на евиденцију</a>
+        <x-button variant="secondary-soft" size="md" href="{{ route('prisustvo.index') }}">Назад на евиденцију</x-button>
     </div>
 
     @if($prisanstva && $prisanstva->count() > 0)

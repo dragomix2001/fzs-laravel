@@ -15,9 +15,9 @@
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                <x-button variant="primary" size="md" type="submit">
                     <i class="fas fa-filter mr-2"></i> Филтрирај
-                </button>
+                </x-button>
             </div>
         </form>
     </x-card>

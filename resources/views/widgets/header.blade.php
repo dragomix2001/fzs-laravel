@@ -3,9 +3,9 @@
         <div class="flex items-center justify-between h-14">
             <a class="text-lg font-bold text-white" href="/me">Laravel</a>
             <ul class="flex items-center gap-1">
-                <li><a href="/me" class="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-md transition-colors">Home</a></li>
+                <li><a href="/me" class="px-3 py-2 text-sm font-medium text-secondary-300 hover:text-white rounded-md transition-colors">Home</a></li>
                 <li x-data="{ open: false }" class="relative">
-                    <a href="#" @click.prevent="open = !open" class="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-md inline-flex items-center transition-colors" role="button">
+                    <a href="#" @click.prevent="open = !open" class="px-3 py-2 text-sm font-medium text-secondary-300 hover:text-white rounded-md inline-flex items-center transition-colors" role="button">
                         Components <i class="fas fa-chevron-down ml-1 text-xs"></i>
                     </a>
                     <ul x-show="open" @click.away="open = false" class="absolute right-0 mt-1 w-52 bg-white rounded-lg shadow-lg border border-secondary-200 py-1 z-50" x-transition>

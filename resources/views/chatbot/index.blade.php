@@ -37,12 +37,12 @@
                                    class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" 
                                    placeholder="Укуцајте ваше питање..." 
                                    autocomplete="off">
-                            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                            <x-button variant="primary" size="md" type="submit">
                                 <i class="fas fa-paper-plane"></i>
-                            </button>
-                            <button type="button" id="clearHistory" class="inline-flex items-center justify-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">
+                            </x-button>
+                            <x-button variant="primary" size="md" type="submit">
                                 <i class="fas fa-trash"></i>
-                            </button>
+                            </x-button>
                         </form>
                     </div>
                 </div>

@@ -4,15 +4,15 @@
     <div class="col-span-12">
         <div id="messages">
             @if (Session::get('flash-error'))
-                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4" role="alert">
+                <div class="rounded-lg bg-danger-50 border border-danger-200 p-4 mb-4" role="alert">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-5 w-5 text-danger-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-medium text-red-800">
+                            <p class="text-sm font-medium text-danger-800">
                                 <strong>Грешка!</strong>
                                 @if(Session::get('flash-error') === 'create')
                                     Дошло је до грешке при чувању података! Молимо вас покушајте поново.
@@ -27,9 +27,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-8">
-                <a href="{{"/"}}zapisnik/" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">
+                <x-button variant="secondary-soft" size="md" href="{{"/"}}zapisnik/">
                     <i class="fa fa-backward mr-2"></i> Назад на преглед
-                </a>
+                </x-button>
             </div>
             <br>
             <br>
@@ -79,9 +79,9 @@
                     <td>{{$zapisnik->studenti_count}}</td>
                     <td>
                         <div class="flex gap-1">
-                            <a class="inline-flex items-center px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}zapisnik/pregled/{{ $zapisnik->id }}">Преглед полагања</a>
-                            <a class="inline-flex items-center px-3 py-1.5 bg-danger-600 hover:bg-danger-500 text-white text-xs font-medium rounded-lg transition-colors" href="{{"/"}}zapisnik/delete/{{ $zapisnik->id }}"
-                               onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">Бриши</a>
+                            <x-button variant="primary" size="xs" href="/zapisnik/{{ $zapisnik->id }}">Преглед полагања</x-button>
+                            <x-button variant="danger" size="xs" href="/zapisnik/{{ $zapisnik->id }}"
+                               onclick="return confirm('Да ли сте сигурни да желите да обришете овај записник?');">Бриши</x-button>
                         </div>
                     </td>
                 </tr>

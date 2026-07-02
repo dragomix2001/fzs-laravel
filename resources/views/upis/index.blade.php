@@ -24,7 +24,7 @@
                                            :options="$skolskaGodinaUpisa->pluck('naziv','id')->toArray()" />
                         </div>
                         <div class="flex items-center justify-end gap-2 px-6 py-4 border-t border-secondary-200">
-                            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300" onclick="document.getElementById('myModal').classList.add('hidden')">Затвори</button>
+                            <x-button variant="secondary-soft" size="md" type="button" onclick="document.getElementById('myModal').classList.add('hidden')">Затвори</x-button>
                             <x-button variant="success">Изврши упис</x-button>
                         </div>
                     </form>
@@ -35,9 +35,9 @@
 
         <div>
             <h4>Подаци о студенту &nbsp;
-                <a class="inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600" href="{{"/"}}{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
+                <x-button variant="warning" size="xs" href="/student/{{ $kandidat->tipStudija_id == 1 ? 'kandidat' : 'master' }}/{{ $kandidat->id }}/edit">
                     <span class="fa fa-edit" title="Измена"></span>
-                </a>
+                </x-button>
             </h4>
             <ul class="divide-y divide-secondary-200 border border-secondary-200 rounded-lg overflow-hidden mt-2">
                 <li class="px-4 py-3 bg-white text-sm text-secondary-700">Број Индекса:
@@ -77,17 +77,17 @@
                     </select>
                 </div>
                 <div>
-                    <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.upisan') }}/0" class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium" id="buttonPonovnogUpisa">Упиши са новим бројем индекса</a>
+                    <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.upisan') }}/0" class="inline-flex items-center text-white bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded text-sm font-medium" id="buttonPonovnogUpisa">Упиши са новим бројем индекса</a>
                 </div>
                 @else
-                    <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.nijeupisan') }}/0" class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium">Врати на статус кандидата</a>
+                    <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.nijeupisan') }}/0" class="inline-flex items-center text-white bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded text-sm font-medium">Врати на статус кандидата</a>
                     @if($kandidat->statusUpisa_id != Config::get('constants.statusi.diplomirao'))
-                        <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.diplomirao') }}/0" class="inline-flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm font-medium ml-2">Дипломирао</a>
+                        <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.diplomirao') }}/0" class="inline-flex items-center text-white bg-success-600 hover:bg-success-700 px-4 py-2 rounded text-sm font-medium ml-2">Дипломирао</a>
                     @endif
                     @if($kandidat->tipStudija_id == 1)
-                        <button type="button" class="inline-flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm font-medium ml-2" onclick="document.getElementById('myModal').classList.remove('hidden')">
+                        <x-button variant="secondary-soft" size="md" type="button" onclick="document.getElementById('myModal').classList.remove('hidden')">
                             Упис на мастер студије
-                        </button>
+                        </x-button>
                     @endif
                 @endif
             </div>
@@ -113,24 +113,24 @@
                         </thead>
                         <tbody>
                         @foreach($masterStudije as $godina)
-                            <tr @if($godina->pokusaj > 1) class="bg-yellow-50" @else class="bg-blue-50" @endif>
+                            <tr @if($godina->pokusaj > 1) class="bg-warning-50" @else class="bg-primary-50" @endif>
                                 <td>{{ $godina->godina }}</td>
                                 <td>{{ $godina->pokusaj }}</td>
                                 <td>
                                     @if($godina->statusGodine_id == 1)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 2)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 3)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-100 text-danger-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 4)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning-100 text-warning-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 5)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 6)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 7)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @endif
                                 </td>
                                 <td>@if(!empty($godina->datumUpisa)){{$godina->datumUpisa->format('d.m.Y.')}}@endif</td>
@@ -138,42 +138,36 @@
                                 <td>
                                     <div class="inline-flex gap-1 flex-wrap">
                                         @if($godina->statusGodine_id == 1)
-                                            <a class="inline-flex items-center px-2 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
+                                            <x-button variant="danger" size="xs" href="/student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
                                                 <i class="fa fa-ban"></i> Поништи упис
-                                            </a>
-                                            <a class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
+                                            </x-button>
+                                            <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
                                                 <i class="fa fa-check"></i> Завршио годину
-                                            </a>
+                                            </x-button>
                                         @elseif($godina->statusGodine_id == 3)
-                                            <a class="inline-flex items-center px-2 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао годину
-                                            </a>
+                                            <x-button variant="success" size="xs" href="/student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао годину
+                                            </x-button>
                                         @endif
 
                                         @if($godina->statusGodine_id == Config::get('constants.statusi.zamrzao'))
-                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.upisan') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Одмрзни годину</a>
+                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.upisan') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-primary-600 text-white text-xs font-medium rounded hover:bg-primary-700">Одмрзни годину</a>
                                         @elseif($godina->statusGodine_id == Config::get('constants.statusi.upisan'))
-                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zamrzao') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Замрзни годину</a>
+                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zamrzao') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-primary-600 text-white text-xs font-medium rounded hover:bg-primary-700">Замрзни годину</a>
                                         @endif
 
                                         @if($godina->pokusaj == 1 && ($godina->statusGodine_id == 1 || $godina->statusGodine_id == 4))
-                                            <a class="inline-flex items-center px-2 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
+                                            <x-button variant="warning" size="xs" href="/student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
                                                 Обнови годину
-                                            </a>
+                                            </x-button>
                                         @elseif($godina->pokusaj > 1)
-                                            <a class="inline-flex items-center px-2 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
+                                            <x-button variant="danger" size="xs" href="/student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
                                                onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
                                                 <span class="fa fa-trash" style="margin: 3px"></span>
-                                            </a>
+                                            </x-button>
                                         @endif
-                                        <a class="inline-flex items-center px-2 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600"
-                                           href="{{"/"}}student/{{ $godina->id }}/izmenaGodine">
+                                        <x-button variant="warning" size="xs" href="/student/{{ $kandidat->id }}/izmenaGodine">
                                             <span class="fa fa-edit" title="Измена"></span>
-                                        </a>
+                                        </x-button>
                                     </div>
                                 </td>
                             </tr>
@@ -197,24 +191,24 @@
                         </thead>
                         <tbody>
                         @foreach($osnovneStudije as $godina)
-                            <tr @if($godina->pokusaj > 1) class="bg-yellow-50" @else class="bg-blue-50" @endif>
+                            <tr @if($godina->pokusaj > 1) class="bg-warning-50" @else class="bg-primary-50" @endif>
                                 <td>{{ $godina->godina }}</td>
                                 <td>{{ $godina->pokusaj }}</td>
                                 <td>
                                     @if($godina->statusGodine_id == 1)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 2)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 3)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-100 text-danger-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 4)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning-100 text-warning-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 5)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 6)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @elseif($godina->statusGodine_id == 7)
-                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>{{$godina->status?->naziv ?? '-'}}</span>
+                                        <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800'>{{$godina->status?->naziv ?? '-'}}</span>
                                     @endif
                                 </td>
                                 <td>@if(!empty($godina->datumUpisa)){{$godina->datumUpisa->format('d.m.Y.')}}@endif</td>
@@ -222,42 +216,36 @@
                                 <td>
                                     <div class="inline-flex gap-1 flex-wrap">
                                         @if($godina->statusGodine_id == 1)
-                                            <a class="inline-flex items-center px-2 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
+                                            <x-button variant="danger" size="xs" href="/student/{{ $kandidat->id }}/ponistiUpis?upisId={{ $godina->id }}">
                                                 <i class="fa fa-ban"></i> Поништи упис
-                                            </a>
-                                            <a class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
+                                            </x-button>
+                                            <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zavrsio') }}/{{$godina->id}}">
                                                 <i class="fa fa-check"></i> Завршио годину
-                                            </a>
+                                            </x-button>
                                         @elseif($godina->statusGodine_id == 3)
-                                            <a class="inline-flex items-center px-2 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао годину
-                                            </a>
+                                            <x-button variant="success" size="xs" href="/student/{{ $kandidat->id }}/upisiStudenta?godina={{ $godina->godina }}&pokusaj={{ $godina->pokusaj }}">Уписао годину
+                                            </x-button>
                                         @endif
 
                                         @if($godina->statusGodine_id == Config::get('constants.statusi.zamrzao'))
-                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.upisan') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Одмрзни годину</a>
+                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.upisan') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-primary-600 text-white text-xs font-medium rounded hover:bg-primary-700">Одмрзни годину</a>
                                         @elseif($godina->statusGodine_id == Config::get('constants.statusi.upisan'))
-                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zamrzao') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">Замрзни годину</a>
+                                            <a href="/student/{{ $kandidat->id }}/status/{{ Config::get('constants.statusi.zamrzao') }}/{{$godina->id}}" class="inline-flex items-center px-2 py-1 bg-primary-600 text-white text-xs font-medium rounded hover:bg-primary-700">Замрзни годину</a>
                                         @endif
 
                                         @if($godina->pokusaj == 1 && ($godina->statusGodine_id == 1 || $godina->statusGodine_id == 4))
-                                            <a class="inline-flex items-center px-2 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
+                                            <x-button variant="warning" size="xs" href="/student/{{ $kandidat->id }}/obnova?godina={{ $godina->godina }}&tipStudijaId={{ $godina->tipStudija_id }}">
                                                 Обнови годину
-                                            </a>
+                                            </x-button>
                                         @elseif($godina->pokusaj > 1)
-                                            <a class="inline-flex items-center px-2 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700"
-                                               href="{{"/"}}student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
+                                            <x-button variant="danger" size="xs" href="/student/{{ $kandidat->id }}/obrisiObnovu?upisId={{ $godina->id }}"
                                                onclick="return confirm('Да ли сте сигурни да желите да обришете податке?');">
                                                 <span class="fa fa-trash" style="margin: 3px"></span>
-                                            </a>
+                                            </x-button>
                                         @endif
-                                        <a class="inline-flex items-center px-2 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600"
-                                           href="{{"/"}}student/{{ $godina->id }}/izmenaGodine">
+                                        <x-button variant="warning" size="xs" href="/student/{{ $kandidat->id }}/izmenaGodine">
                                             <span class="fa fa-edit" title="Измена"></span>
-                                        </a>
+                                        </x-button>
                                     </div>
                                 </td>
                             </tr>

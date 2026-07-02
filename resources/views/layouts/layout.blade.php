@@ -172,46 +172,7 @@
             letter-spacing: 0.5px;
         }
         
-        .table-hover tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .badge-status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        @media screen and (max-width: 767px) {
-            .table-responsive {
-                border: none;
-            }
-            .table {
-                font-size: 12px;
-            }
-            .table th, .table td {
-                padding: 6px 8px;
-                white-space: nowrap;
-            }
-        }
-        
-        .badge-success-custom {
-            background: #d1e7dd;
-            color: #0f5132;
-        }
-        .badge-warning-custom {
-            background: #fff3cd;
-            color: #664d03;
-        }
-        .badge-danger-custom {
-            background: #f8d7da;
-            color: #842029;
-        }
-        .badge-info-custom {
-            background: #cff4fc;
-            color: #055160;
-        }
+
         
         .main-content {
             margin-left: var(--sidebar-width);
@@ -250,14 +211,7 @@
             font-size: 18px;
         }
         
-        .page-header {
-            margin: 20px 0;
-            padding: 0 0 15px 0;
-            border-bottom: 2px solid var(--border-color);
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
+
         
         .mobile-toggle {
             display: none;
@@ -463,7 +417,7 @@
                 <div class="flex items-center">
                     <button class="mobile-toggle mr-3" id="sidebarToggle" @click="sidebarOpen = !sidebarOpen">
                         <i class="fas fa-bars"></i>
-                    </button>
+                    </x-button>
                     <a href="{{ url('') }}" class="logo-link">
                         <img src="{{ asset('images/logo_fzs.png') }}" height="38" loading="lazy">
                         <span>Факултет за спорт</span>
@@ -471,21 +425,21 @@
                 </div>
                 
                 <div class="flex items-center gap-3">
-                    <a href="{{ url('/pretraga') }}" class="inline-flex items-center px-3 py-1.5 border border-secondary-300 text-secondary-700 hover:bg-secondary-50 rounded-lg text-sm transition-colors">
+                    <x-button variant="outline" size="sm" href="{{ url('/pretraga') }}">
                         <i class="fas fa-search"></i>
                     </a>
                     
-                    <button type="button" class="inline-flex items-center px-3 py-1.5 border border-secondary-300 text-secondary-700 hover:bg-secondary-50 rounded-lg text-sm transition-colors" id="themeToggle" title="Тема">
+                    <x-button variant="outline" size="sm" type="button" id="themeToggle" title="Тема">
                         <i class="fas fa-moon" id="themeIcon"></i>
-                    </button>
+                    </x-button>
                     
                     @if(!Auth::guest())
                         <div class="relative" x-data="{ open: false }" @click.away="open = false">
-                            <button @click="open = !open" class="inline-flex items-center px-3 py-1.5 border border-secondary-300 text-secondary-700 hover:bg-secondary-50 rounded-lg text-sm transition-colors" type="button" aria-expanded="false">
+                            <x-button variant="outline" size="sm" type="button" @click="open = !open" aria-expanded="false">
                                 <i class="fas fa-user-circle mr-2"></i>
                                 {{ Auth::user()->name }}
                                 <i class="fas fa-chevron-down ml-2 text-xs"></i>
-                            </button>
+                            </x-button>
                             <div x-show="open" style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-secondary-200">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -499,7 +453,7 @@
             
             <!-- Page Content -->
             <main class="p-3">
-                <h1 class="page-header">@yield('page_heading')</h1>
+                <h1 class="text-2xl font-semibold text-secondary-800 mb-4 pb-4 border-b border-secondary-200">@yield('page_heading')</h1>
                 
                 @yield('section')
             </main>

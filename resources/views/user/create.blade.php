@@ -34,8 +34,8 @@
                 </div>
             </div>
             <div class="px-6 py-3 border-t border-secondary-200 bg-secondary-50 flex gap-2">
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Креирај</button>
-                <a href="{{ route('user.index') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Откажи</a>
+                <x-button variant="primary" size="md" type="submit">Креирај</x-button>
+                <x-button variant="secondary-soft" size="md" href="{{ route('user.index') }}">Откажи</x-button>
             </div>
         </div>
     </form>

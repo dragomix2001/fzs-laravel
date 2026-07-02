@@ -108,7 +108,7 @@
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('dashboard.index') }}" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Назад</a>
+        <x-button variant="secondary-soft" size="md" href="{{ route('dashboard.index') }}">Назад</x-button>
     </div>
 </div>
 @endsection

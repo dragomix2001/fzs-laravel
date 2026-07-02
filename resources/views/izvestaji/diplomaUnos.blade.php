@@ -44,7 +44,7 @@
                     </div>
                     <hr class="my-4 border-secondary-200">
                     <div>
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Сачувај</button>
+                        <x-button variant="primary" size="md" type="submit">Сачувај</x-button>
                     </div>
                 </x-card>
             </form>
@@ -83,7 +83,7 @@
                     </div>
                     <hr class="my-4 border-secondary-200">
                     <div>
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Сачувај</button>
+                        <x-button variant="primary" size="md" type="submit">Сачувај</x-button>
                     </div>
                 </x-card>
             </form>
