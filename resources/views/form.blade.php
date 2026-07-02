@@ -2,177 +2,193 @@
 @section('page_heading','Form')
 
 @section('section')
-<div class="col-sm-12">
-<div class="row">
-    <div class="col-lg-6">
-        <form role="form">
-            <div class="form-group">
-                <label>Text Input</label>
-                <input class="form-control">
-                <p class="help-block">Example block-level help text here.</p>
-            </div>
-            <div class="form-group">
-                <label>Text Input with Placeholder</label>
-                <input class="form-control" placeholder="Enter text">
-            </div>
-            <div class="form-group">
-                <label>Static Control</label>
-                <p class="form-control-static">email@example.com</p>
-            </div>
-            <div class="form-group">
-                <label>File input</label>
-                <input type="file">
-            </div>
-            <div class="form-group">
-                <label>Text area</label>
-                <textarea class="form-control" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Checkboxes</label>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">Checkbox 1
-                    </label>
+<div class="col-span-12">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div>
+        <x-card>
+            <x-slot:title>Form Controls</x-slot:title>
+            <form class="space-y-4">
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Text Input</label>
+                    <input class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                    <p class="text-xs text-secondary-400">Example block-level help text here.</p>
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">Checkbox 2
-                    </label>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Text Input with Placeholder</label>
+                    <input class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" placeholder="Enter text">
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">Checkbox 3
-                    </label>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Static Control</label>
+                    <p class="py-2 px-3 bg-secondary-50 rounded-lg text-sm text-secondary-600">email@example.com</p>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>Inline Checkboxes</label>
-                <label class="checkbox-inline">
-                    <input type="checkbox">1
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox">2
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox">3
-                </label>
-            </div>
-            <div class="form-group">
-                <label>Radio Buttons</label>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Radio 1
-                    </label>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">File input</label>
+                    <input type="file" class="block w-full text-sm text-secondary-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
                 </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Radio 2
-                    </label>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Text area</label>
+                    <textarea class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" rows="3"></textarea>
                 </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">Radio 3
-                    </label>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Checkboxes</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" value="">
+                            <span class="text-sm text-secondary-700">Checkbox 1</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" value="">
+                            <span class="text-sm text-secondary-700">Checkbox 2</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" value="">
+                            <span class="text-sm text-secondary-700">Checkbox 3</span>
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>Inline Radio Buttons</label>
-                <label class="radio-inline">
-                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>1
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">2
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3">3
-                </label>
-            </div>
-            <div class="form-group">
-                <label>Selects</label>
-                <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Multiple Selects</label>
-                <select multiple class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-default">Submit Button</button>
-            <button type="reset" class="btn btn-default">Reset Button</button>
-        </form>
-    </div>
-    <div class="col-lg-6">
-        <h2>Disabled Form States</h2>
-        <form role="form">
-            <fieldset disabled>
-                <div class="form-group">
-                    <label for="disabledSelect">Disabled input</label>
-                    <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Inline Checkboxes</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">1</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">2</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">3</span>
+                        </label>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="disabledSelect">Disabled select menu</label>
-                    <select id="disabledSelect" class="form-control">
-                        <option>Disabled select</option>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Radio Buttons</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="optionsRadios" value="option1" checked class="border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">Radio 1</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="optionsRadios" value="option2" class="border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">Radio 2</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="optionsRadios" value="option3" class="border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">Radio 3</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Inline Radio Buttons</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="optionsRadiosInline" value="option1" checked class="border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">1</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="optionsRadiosInline" value="option2" class="border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">2</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="optionsRadiosInline" value="option3" class="border-secondary-300 text-primary-600 focus:ring-primary-500"> <span class="text-sm text-secondary-700">3</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Selects</label>
+                    <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
                     </select>
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox">Disabled Checkbox
-                    </label>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-secondary-700">Multiple Selects</label>
+                    <select multiple class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Disabled Button</button>
-            </fieldset>
-        </form>
-        <h2>Form Validation</h2>
-        <form role="form">
-            <div class="form-group has-success">
-                <label class="control-label" for="inputSuccess">Input with success</label>
-                <input type="text" class="form-control" id="inputSuccess">
-            </div>
-            <div class="form-group has-warning">
-                <label class="control-label" for="inputWarning">Input with warning</label>
-                <input type="text" class="form-control" id="inputWarning">
-            </div>
-            <div class="form-group has-error">
-                <label class="control-label" for="inputError">Input with error</label>
-                <input type="text" class="form-control" id="inputError">
-            </div>
-        </form>
-        <h2>Input Groups</h2>
-        <form role="form">
-            <div class="form-group input-group">
-                <span class="input-group-addon">@</span>
-                <input type="text" class="form-control" placeholder="Username">
-            </div>
-            <div class="form-group input-group">
-                <input type="text" class="form-control">
-                <span class="input-group-addon">.00</span>
-            </div>
-            <div class="form-group input-group">
-                <span class="input-group-addon"><i class="fa fa-eur"></i></span>
-                <input type="text" class="form-control" placeholder="Font Awesome Icon">
-            </div>
-            <div class="form-group input-group">
-                <span class="input-group-addon">$</span>
-                <input type="text" class="form-control">
-                <span class="input-group-addon">.00</span>
-            </div>
-            <div class="form-group input-group">
-                <input type="text" class="form-control">
-                <span class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-search"></i></button></span>
-            </div>
-        </form>
-        <p>For complete documentation, please visit <a href="http://getbootstrap.com/css/#forms">Bootstrap's Form Documentation</a>.</p>
+                <div class="flex gap-2">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Submit Button</button>
+                    <button type="reset" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-lg transition-colors">Reset Button</button>
+                </div>
+            </form>
+        </x-card>
+    </div>
+    <div class="space-y-6">
+        <x-card>
+            <x-slot:title>Disabled Form States</x-slot:title>
+            <form>
+                <fieldset disabled class="space-y-4 opacity-60">
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-secondary-700">Disabled input</label>
+                        <input class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" type="text" placeholder="Disabled input" disabled>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-secondary-700">Disabled select menu</label>
+                        <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                            <option>Disabled select</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" disabled>
+                        <span class="text-sm text-secondary-700">Disabled Checkbox</span>
+                    </label>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg opacity-50 cursor-not-allowed">Disabled Button</button>
+                </fieldset>
+            </form>
+        </x-card>
+
+        <x-card>
+            <x-slot:title>Form Validation</x-slot:title>
+            <form class="space-y-4">
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-success-700">Input with success</label>
+                    <input type="text" class="block w-full rounded-lg border-success-400 shadow-sm focus:border-success-500 focus:ring-success-500 sm:text-sm" value="Valid input">
+                    <p class="text-xs text-success-600"><i class="fas fa-check mr-1"></i> Looks good!</p>
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-warning-700">Input with warning</label>
+                    <input type="text" class="block w-full rounded-lg border-warning-400 shadow-sm focus:border-warning-500 focus:ring-warning-500 sm:text-sm" value="Warning value">
+                    <p class="text-xs text-warning-600"><i class="fas fa-exclamation-triangle mr-1"></i> This value may not be correct.</p>
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-danger-700">Input with error</label>
+                    <input type="text" class="block w-full rounded-lg border-danger-400 shadow-sm focus:border-danger-500 focus:ring-danger-500 sm:text-sm" value="Error value">
+                    <p class="text-xs text-danger-600"><i class="fas fa-times mr-1"></i> Please correct this error.</p>
+                </div>
+            </form>
+        </x-card>
+
+        <x-card>
+            <x-slot:title>Input Groups</x-slot:title>
+            <form class="space-y-4">
+                <div class="flex">
+                    <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-secondary-300 bg-secondary-50 text-secondary-500 text-sm">@</span>
+                    <input type="text" class="block w-full rounded-none rounded-r-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" placeholder="Username">
+                </div>
+                <div class="flex">
+                    <input type="text" class="block w-full rounded-l-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                    <span class="inline-flex items-center px-3 rounded-r-lg border border-l-0 border-secondary-300 bg-secondary-50 text-secondary-500 text-sm">.00</span>
+                </div>
+                <div class="flex">
+                    <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-secondary-300 bg-secondary-50 text-secondary-500 text-sm"><i class="fas fa-euro-sign"></i></span>
+                    <input type="text" class="block w-full rounded-none rounded-r-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" placeholder="Font Awesome Icon">
+                </div>
+                <div class="flex">
+                    <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-secondary-300 bg-secondary-50 text-secondary-500 text-sm">$</span>
+                    <input type="text" class="block w-full border-x-0 border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                    <span class="inline-flex items-center px-3 rounded-r-lg border border-l-0 border-secondary-300 bg-secondary-50 text-secondary-500 text-sm">.00</span>
+                </div>
+                <div class="flex">
+                    <input type="text" class="block w-full rounded-l-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                    <button type="button" class="inline-flex items-center px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-sm font-medium rounded-r-lg border border-l-0 border-secondary-300 transition-colors">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </x-card>
+        <p class="text-xs text-secondary-400">For complete documentation, please visit <a href="http://getbootstrap.com/css/#forms" class="text-primary-600 hover:underline">Bootstrap's Form Documentation</a>.</p>
     </div>
 </div>
 </div>
