@@ -14,7 +14,7 @@
 				font-family: 'Lato';
 			}
 
-			.container {
+			.error-wrap {
 				text-align: center;
 				display: table-cell;
 				vertical-align: middle;
@@ -32,7 +32,7 @@
 		</style>
 	</head>
 	<body>
-		<div class="container">
+		<div class="error-wrap">
 			<div class="content">
 				<div class="title">Be right back.</div>
 			</div>

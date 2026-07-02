@@ -14,9 +14,9 @@
     $colorClass = $alertColors[$class] ?? 'bg-secondary-50 border-secondary-200 text-secondary-800';
     $iconColor = $iconColors[$class] ?? 'text-secondary-500';
 @endphp
-<div class="flex items-start gap-3 px-4 py-3 rounded-lg border {{ $colorClass }}" role="alert">
+<div x-data="{ show: true }" x-show="show" class="flex items-start gap-3 px-4 py-3 rounded-lg border {{ $colorClass }}" role="alert">
     @if(isset($dismissable))
-    <button type="button" class="ml-auto shrink-0 {{ $iconColor }} hover:opacity-75" data-bs-dismiss="alert" aria-label="Close">
+    <button type="button" class="ml-auto shrink-0 {{ $iconColor }} hover:opacity-75" @click="show = false" aria-label="Close">
         <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
     </button>
     @endif

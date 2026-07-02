@@ -1,14 +1,14 @@
-<nav class="bg-{{ $class === 'inverse' ? 'secondary-900' : 'secondary-100' }} shadow-sm">
+<nav x-data="{ navOpen: false }" class="bg-{{ $class === 'inverse' ? 'secondary-900' : 'secondary-100' }} shadow-sm">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex items-center justify-between h-14">
             <div class="flex items-center gap-4">
-                <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-secondary-500 hover:text-secondary-700 hover:bg-secondary-200 lg:hidden" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-secondary-500 hover:text-secondary-700 hover:bg-secondary-200 lg:hidden" @click="navOpen = !navOpen">
                     <span class="sr-only">Toggle navigation</span>
                     <i class="fas fa-bars"></i>
                 </button>
                 <a class="text-lg font-bold {{ $class === 'inverse' ? 'text-white' : 'text-secondary-900' }}" href="#">Brand</a>
             </div>
-            <div class="hidden lg:flex lg:items-center lg:gap-6" id="navbarNav">
+            <div :class="navOpen ? 'block' : 'hidden'" class="lg:flex lg:items-center lg:gap-6" id="navbarNav" @click.away="navOpen = false">
                 <ul class="flex items-center gap-1">
                     <li><a href="#" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-white bg-white/10' : 'text-primary-600 bg-primary-50' }} rounded-md">Link <span class="sr-only">(current)</span></a></li>
                     <li><a href="#" class="px-3 py-2 text-sm font-medium {{ $class === 'inverse' ? 'text-secondary-300 hover:text-white' : 'text-secondary-700 hover:text-secondary-900 hover:bg-secondary-50' }} rounded-md transition-colors">Link</a></li>

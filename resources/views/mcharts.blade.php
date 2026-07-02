@@ -1,9 +1,9 @@
 @extends('layouts.layout')
 @section('page_heading','Charts')
 @section('section')
-<div class="col-sm-12">	
-	<div class="row">
-		<div class="col-sm-6">
+<div class="col-span-12">	
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		<div>
 			@section ('cchart1_panel_title','Line Chart')
 			@section ('cchart1_panel_body')
 			@include('widgets.charts.clinechart')
@@ -16,7 +16,7 @@
 			@endsection
 			@include('widgets.panel', array('header'=>true, 'as'=>'cchart3'))
 		</div>
-		<div class="col-sm-6">
+		<div>
 			
 			@section ('cchart2_panel_title','Pie Chart')
 			@section ('cchart2_panel_body')

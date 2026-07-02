@@ -13,7 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.dataTables.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     @stack('styles')
@@ -462,9 +462,7 @@
 
     @include('partials.toast')
     @include('partials.ajax-loader')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     @stack('scripts')
     
     <script>
@@ -498,28 +496,6 @@
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
             }
-        });
-        
-        // Bootstrap 3→5 data attribute compatibility
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('[data-dismiss]').forEach(function(el) {
-                el.setAttribute('data-bs-dismiss', el.getAttribute('data-dismiss'));
-            });
-            document.querySelectorAll('[data-toggle]').forEach(function(el) {
-                el.setAttribute('data-bs-toggle', el.getAttribute('data-toggle'));
-            });
-            document.querySelectorAll('[data-target]').forEach(function(el) {
-                el.setAttribute('data-bs-target', el.getAttribute('data-target'));
-            });
-            document.querySelectorAll('[data-placement]').forEach(function(el) {
-                el.setAttribute('data-bs-placement', el.getAttribute('data-placement'));
-            });
-            document.querySelectorAll('[data-content]').forEach(function(el) {
-                el.setAttribute('data-bs-content', el.getAttribute('data-content'));
-            });
-            document.querySelectorAll('[data-container]').forEach(function(el) {
-                el.setAttribute('data-bs-container', el.getAttribute('data-container'));
-            });
         });
     </script>
 </body>

@@ -12,8 +12,8 @@
 	@include('widgets.alert', array('class'=>'danger', 'message'=> 'My message', 'icon'=> 'remove'))
 	@endsection
 @include('widgets.panel', array('header'=>true, 'as'=>'alert1'))
-<div class="row">
-	<div class="col-sm-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div>
 		@section ('alert3_panel_title','Dismissable Alerts')
 		@section ('alert3_panel_body')
 		@include('widgets.alert', array('class'=>'success', 'dismissable'=>true, 'message'=> 'My message', 'icon'=> 'check'))
@@ -23,7 +23,7 @@
 		@endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'alert3'))
 	</div>
-	<div class="col-sm-6">
+	<div>
 		@section ('alert2_panel_title','Links in Alerts')
 		@section ('alert2_panel_body')
 		@include('widgets.alert', array('class'=>'success', 'link'=> 'link', 'message'=> 'My message', 'icon'=> 'check'))

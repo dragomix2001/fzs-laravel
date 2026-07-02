@@ -188,7 +188,7 @@
                 </div>
             </form>
         </x-card>
-        <p class="text-xs text-secondary-400">For complete documentation, please visit <a href="http://getbootstrap.com/css/#forms" class="text-primary-600 hover:underline">Bootstrap's Form Documentation</a>.</p>
+        <p class="text-xs text-secondary-400">For complete documentation, please visit <a href="https://tailwindcss.com/docs/forms" class="text-primary-600 hover:underline">Tailwind CSS Forms</a>.</p>
     </div>
 </div>
 </div>

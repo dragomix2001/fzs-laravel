@@ -1,9 +1,9 @@
 @extends('layouts.layout')
 @section('page_heading','Typoghraphy')
 @section('section')
-<div class="col-sm-12">
-<div class="row">
-	<div class="col-sm-4"> 
+<div class="col-span-12">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+	<div> 
 		@section ('typo1_panel_title','Headings')
 		@section ('typo1_panel_body')
 		<h1>Heading 1 <small>Sub-heading</small> </h1> 
@@ -15,7 +15,7 @@
 		@endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo1'))
 	</div>
-	<div class="col-sm-4"> 
+	<div> 
 		@section ('typo2_panel_title','Paragraphs')
 		@section ('typo2_panel_body')
 		<p class="lead">This is an example of lead body copy.</p>
@@ -29,7 +29,7 @@
 		@endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo2'))
 	</div>
-	<div class="col-sm-4">
+	<div>
 		@section ('typo3_panel_title','Emphasis Classes')
 		@section ('typo3_panel_body')
 		<p class="text-muted">This is an example of muted text.</p> 
@@ -42,8 +42,8 @@
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo3'))
 	</div>
 </div> 
-<div class="row">
-	<div class="col-sm-4">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+	<div>
 		@section ('typo4_panel_title','Abbreviations')
 		@section ('typo4_panel_body')
 		<p>The abbreviation of the word attribute is <abbr title="attribute">attr</abbr>.</p> 
@@ -60,7 +60,7 @@
 		@endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo4'))
 	</div>
-	<div class="col-sm-4">
+	<div>
 		@section ('typo5_panel_title','Blockquotes')
 		@section ('typo5_panel_body')
 		<h4>Default Blockquote</h4> 
@@ -78,7 +78,7 @@
 		 @endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo5'))
 	</div>
-	<div class="col-sm-4">
+	<div>
 		@section ('typo6_panel_title','List')
 		@section ('typo6_panel_body')
 		<h4>Unordered List</h4> 
@@ -114,9 +114,9 @@
 		@endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo6'))
 	</div>
-</div> 
-<div class="row">
-	<div class="col-sm-4">
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+	<div>
 		@section ('typo7_panel_title','Description Lists')
 		@section ('typo7_panel_body')  
 		<dl> 
@@ -134,7 +134,7 @@
 		@endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo7'))
 	</div>
-	<div class="col-sm-4">
+	<div>
 		@section ('typo8_panel_title','Code')
 		@section ('typo8_panel_body') 
 		<p>This is an example of an inline code element within body copy. Wrap inline code within a <code>&lt;code&gt;...&lt;/code&gt;</code>tag.</p>
@@ -142,6 +142,5 @@
 		@endsection
 		@include('widgets.panel', array('header'=>true, 'as'=>'typo8'))
 	</div>
-</div>	
-</div>
+</div>	</div>
 @stop

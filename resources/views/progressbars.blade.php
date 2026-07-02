@@ -5,8 +5,8 @@
 @section('section')
 
 
-<div class="row">
-	<div class="col-sm-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div>
 		@section ('progress_panel_body')
 		<h3>Regular</h3>
 		@include('widgets.progress', array('class'=> '', 'value'=>'47'))
@@ -16,7 +16,7 @@
 		@endsection
 		@include('widgets.panel', array('controls'=>true, 'as'=>'progress'))
 	</div>
-	<div class="col-sm-6">
+	<div>
 		@section ('cprogress_panel_title','Contextual Progressbars')
 		@section ('cprogress_panel_body')
 		@include('widgets.progress', array('class'=> 'success', 'value'=>'97'))
@@ -29,8 +29,8 @@
 </div>
 
 
-<div class="rpw">
-	<div class="col-sm-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div>
 		@section ('sprogress_panel_title','Striped Progresbars')
 		@section ('sprogress_panel_body')
 		@include('widgets.progress', array('class'=> 'success', 'striped'=> true, 'value'=>'97'))
@@ -40,7 +40,7 @@
 		@endsection
 		@include('widgets.panel', array('controls'=>true, 'header'=>true, 'as'=>'sprogress'))
 	</div>
-	<div class="col-sm-6">
+	<div>
 		@section ('stprogress_panel_body')
 		<h3>Animated</h3>
 		@include('widgets.progress', array('animated'=> true, 'value'=>'72'))
