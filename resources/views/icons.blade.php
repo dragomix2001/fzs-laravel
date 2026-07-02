@@ -1,1024 +1,522 @@
 @extends('layouts.layout')
 @section('page_heading','Icons')
 @section('section')
-	<div class="col-sm-12">
-		@section ('icons_panel_title','Icons')
-		@section ('icons_panel_body')
-		<div class="row">
-			<div class="fa col-lg-3">
-				<p>@include('widgets.icon', array('class'=>'glass')) fa-glass 
-
-				<p>@include('widgets.icon', array('class'=>'music')) fa-music
-
-				<p>@include('widgets.icon', array('class'=>'search')) fa-search
-
-				<p>@include('widgets.icon', array('class'=>'envelope-o')) fa-envelope-o
-
-				<p>@include('widgets.icon', array('class'=>'heart')) fa-heart
-
-				<p>@include('widgets.icon', array('class'=>'star')) fa-star
-
-				<p>@include('widgets.icon', array('class'=>'star-o')) fa-star-o
-
-				<p>@include('widgets.icon', array('class'=>'user')) fa-user
-
-				<p>@include('widgets.icon', array('class'=>'film')) fa-film
-
-				<p>@include('widgets.icon', array('class'=>'th-large')) fa-th-large
-
-				<p>@include('widgets.icon', array('class'=>'th')) fa-th
-
-				<p>@include('widgets.icon', array('class'=>'th-list')) fa-th-list
-
-				<p>@include('widgets.icon', array('class'=>'check')) fa-check
-
-				<p>@include('widgets.icon', array('class'=>'times')) fa-times
-
-				<p>@include('widgets.icon', array('class'=>'search-plus')) fa-search-plus
-
-				<p>@include('widgets.icon', array('class'=>'search-minus')) fa-search-minus
-
-				<p>@include('widgets.icon', array('class'=>'power-off')) fa-power-off
-
-				<p>@include('widgets.icon', array('class'=>'signal')) fa-signal
-
-				<p>@include('widgets.icon', array('class'=>'gear')) fa-gear
-
-				<p>@include('widgets.icon', array('class'=>'cog')) fa-cog
-
-				<p>@include('widgets.icon', array('class'=>'trash-o')) fa-trash-o
-
-				<p>@include('widgets.icon', array('class'=>'home')) fa-home
-
-				<p>@include('widgets.icon', array('class'=>'file-o')) fa-file-o
-
-				<p>@include('widgets.icon', array('class'=>'clock-o')) fa-clock-o
-
-				<p>@include('widgets.icon', array('class'=>'road')) fa-road
-
-				<p>@include('widgets.icon', array('class'=>'download')) fa-download
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-o-down')) fa-arrow-circle-o-down
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-o-up')) fa-arrow-circle-o-up
-
-				<p>@include('widgets.icon', array('class'=>'inbox')) fa-inbox
-
-				<p>@include('widgets.icon', array('class'=>'play-circle-o')) fa-play-circle-o
-
-				<p>@include('widgets.icon', array('class'=>'rotate-right')) fa-rotate-right
-
-				<p>@include('widgets.icon', array('class'=>'repeat')) fa-repeat
-
-				<p>@include('widgets.icon', array('class'=>'refresh')) fa-refresh
-
-				<p>@include('widgets.icon', array('class'=>'list-alt')) fa-list-alt
-
-				<p>@include('widgets.icon', array('class'=>'lock')) fa-lock
-
-				<p>@include('widgets.icon', array('class'=>'flag')) fa-flag
-
-				<p>@include('widgets.icon', array('class'=>'headphones')) fa-headphones
-
-				<p>@include('widgets.icon', array('class'=>'volume-off')) fa-volume-off
-
-				<p>@include('widgets.icon', array('class'=>'volume-down')) fa-volume-down
-
-				<p>@include('widgets.icon', array('class'=>'volume-up')) fa-volume-up
-
-				<p>@include('widgets.icon', array('class'=>'qrcode')) fa-qrcode
-
-				<p>@include('widgets.icon', array('class'=>'barcode')) fa-barcode
-
-				<p>@include('widgets.icon', array('class'=>'tag')) fa-tag
-
-				<p>@include('widgets.icon', array('class'=>'tags')) fa-tags
-
-				<p>@include('widgets.icon', array('class'=>'book')) fa-book
-
-				<p>@include('widgets.icon', array('class'=>'bookmark')) fa-bookmark
-
-				<p>@include('widgets.icon', array('class'=>'print')) fa-print
-
-				<p>@include('widgets.icon', array('class'=>'camera')) fa-camera
-
-				<p>@include('widgets.icon', array('class'=>'font')) fa-font
-
-				<p>@include('widgets.icon', array('class'=>'bold')) fa-bold
-
-				<p>@include('widgets.icon', array('class'=>'italic')) fa-italic
-
-				<p>@include('widgets.icon', array('class'=>'text-height')) fa-text-height
-
-				<p>@include('widgets.icon', array('class'=>'text-width')) fa-text-width
-
-				<p>@include('widgets.icon', array('class'=>'align-left')) fa-align-left
-
-				<p>@include('widgets.icon', array('class'=>'align-center')) fa-align-center
-
-				<p>@include('widgets.icon', array('class'=>'align-right')) fa-align-right
-
-				<p>@include('widgets.icon', array('class'=>'align-justify')) fa-align-justify
-
-				<p>@include('widgets.icon', array('class'=>'list')) fa-list
-
-				<p>@include('widgets.icon', array('class'=>'dedent')) fa-dedent
-
-				<p>@include('widgets.icon', array('class'=>'outdent')) fa-outdent
-
-				<p>@include('widgets.icon', array('class'=>'indent')) fa-indent
-
-				<p>@include('widgets.icon', array('class'=>'video-camera')) fa-video-camera
-
-				<p>@include('widgets.icon', array('class'=>'photo')) fa-photo
-
-				<p>@include('widgets.icon', array('class'=>'image')) fa-image
-
-				<p>@include('widgets.icon', array('class'=>'picture-o')) fa-picture-o
-
-				<p>@include('widgets.icon', array('class'=>'pencil')) fa-pencil
-
-				<p>@include('widgets.icon', array('class'=>'map-marker')) fa-map-marker
-
-				<p>@include('widgets.icon', array('class'=>'adjust')) fa-adjust
-
-				<p>@include('widgets.icon', array('class'=>'tint')) fa-tint
-
-				<p>@include('widgets.icon', array('class'=>'edit')) fa-edit
-
-				<p>@include('widgets.icon', array('class'=>'pencil-square-o')) fa-pencil-square-o
-
-				<p>@include('widgets.icon', array('class'=>'share-square-o')) fa-share-square-o
-
-				<p>@include('widgets.icon', array('class'=>'check-square-o')) fa-check-square-o
-
-				<p>@include('widgets.icon', array('class'=>'arrows')) fa-arrows
-
-				<p>@include('widgets.icon', array('class'=>'step-backward')) fa-step-backward
-
-				<p>@include('widgets.icon', array('class'=>'fast-backward')) fa-fast-backward
-
-				<p>@include('widgets.icon', array('class'=>'backward')) fa-backward
-
-				<p>@include('widgets.icon', array('class'=>'play')) fa-play
-
-				<p>@include('widgets.icon', array('class'=>'pause')) fa-pause
-
-				<p>@include('widgets.icon', array('class'=>'stop')) fa-stop
-
-				<p>@include('widgets.icon', array('class'=>'forward')) fa-forward
-
-				<p>@include('widgets.icon', array('class'=>'fast-forward')) fa-fast-forward
-
-				<p>@include('widgets.icon', array('class'=>'step-forward')) fa-step-forward
-
-				<p>@include('widgets.icon', array('class'=>'eject')) fa-eject
-
-				<p>@include('widgets.icon', array('class'=>'chevron-left')) fa-chevron-left
-
-				<p>@include('widgets.icon', array('class'=>'chevron-right')) fa-chevron-right
-
-				<p>@include('widgets.icon', array('class'=>'plus-circle')) fa-plus-circle
-
-				<p>@include('widgets.icon', array('class'=>'minus-circle')) fa-minus-circle
-
-				<p>@include('widgets.icon', array('class'=>'times-circle')) fa-times-circle
-
-				<p>@include('widgets.icon', array('class'=>'check-circle')) fa-check-circle
-
-				<p>@include('widgets.icon', array('class'=>'question-circle')) fa-question-circle
-
-				<p>@include('widgets.icon', array('class'=>'info-circle')) fa-info-circle
-
-				<p>@include('widgets.icon', array('class'=>'crosshairs')) fa-crosshairs
-
-				<p>@include('widgets.icon', array('class'=>'times-circle-o')) fa-times-circle-o
-
-				<p>@include('widgets.icon', array('class'=>'check-circle-o')) fa-check-circle-o
-
-				<p>@include('widgets.icon', array('class'=>'ban')) fa-ban
-
-				<p>@include('widgets.icon', array('class'=>'arrow-left')) fa-arrow-left
-
-				<p>@include('widgets.icon', array('class'=>'arrow-right')) fa-arrow-right
-
-				<p>@include('widgets.icon', array('class'=>'arrow-up')) fa-arrow-up
-
-				<p>@include('widgets.icon', array('class'=>'arrow-down')) fa-arrow-down
-
-				<p>@include('widgets.icon', array('class'=>'mail-forward')) fa-mail-forward
-
-				<p>@include('widgets.icon', array('class'=>'share')) fa-share
-
-				<p>@include('widgets.icon', array('class'=>'expand')) fa-expand
-
-				<p>@include('widgets.icon', array('class'=>'compress')) fa-compress
-
-				<p>@include('widgets.icon', array('class'=>'plus')) fa-plus
-
-				<p>@include('widgets.icon', array('class'=>'minus')) fa-minus
-
-				<p>@include('widgets.icon', array('class'=>'asterisk')) fa-asterisk
-
-				<p>@include('widgets.icon', array('class'=>'exclamation-circle')) fa-exclamation-circle
-
-				<p>@include('widgets.icon', array('class'=>'gift')) fa-gift
-
-				<p>@include('widgets.icon', array('class'=>'leaf')) fa-leaf
-
-				<p>@include('widgets.icon', array('class'=>'fire')) fa-fire
-
-				<p>@include('widgets.icon', array('class'=>'eye')) fa-eye
-
-				<p>@include('widgets.icon', array('class'=>'eye-slash')) fa-eye-slash
-
-				<p>@include('widgets.icon', array('class'=>'warning')) fa-warning
-
-				<p>@include('widgets.icon', array('class'=>'exclamation-triangle')) fa-exclamation-triangle
-
-				<p>@include('widgets.icon', array('class'=>'plane')) fa-plane
-
-				<p>@include('widgets.icon', array('class'=>'calendar')) fa-calendar
-
-				<p>@include('widgets.icon', array('class'=>'random')) fa-random
-
-				<p>@include('widgets.icon', array('class'=>'comment')) fa-comment
-
-				<p>@include('widgets.icon', array('class'=>'magnet')) fa-magnet
-
-				<p>@include('widgets.icon', array('class'=>'chevron-up')) fa-chevron-up
-
-				<p>@include('widgets.icon', array('class'=>'chevron-down')) fa-chevron-down
-
-				<p>@include('widgets.icon', array('class'=>'retweet')) fa-retweet
-
-				<p>@include('widgets.icon', array('class'=>'shopping-cart')) fa-shopping-cart
-
-				<p>@include('widgets.icon', array('class'=>'folder')) fa-folder
-
-				<p>@include('widgets.icon', array('class'=>'folder-open')) fa-folder-open
-			</div>
-			<div class="fa col-lg-3">
-				<p>@include('widgets.icon', array('class'=>'arrows-v')) fa-arrows-v 
-
-				<p>@include('widgets.icon', array('class'=>'arrows-h')) fa-arrows-h
-
-				<p>@include('widgets.icon', array('class'=>'bar-chart-o')) fa-bar-chart-o
-
-				<p>@include('widgets.icon', array('class'=>'twitter-square')) fa-twitter-square
-
-				<p>@include('widgets.icon', array('class'=>'facebook-square')) fa-facebook-square
-
-				<p>@include('widgets.icon', array('class'=>'camera-retro')) fa-camera-retro
-
-				<p>@include('widgets.icon', array('class'=>'key')) fa-key
-
-				<p>@include('widgets.icon', array('class'=>'gears')) fa-gears
-
-				<p>@include('widgets.icon', array('class'=>'cogs')) fa-cogs
-
-				<p>@include('widgets.icon', array('class'=>'comments')) fa-comments
-
-				<p>@include('widgets.icon', array('class'=>'thumbs-o-up')) fa-thumbs-o-up
-
-				<p>@include('widgets.icon', array('class'=>'thumbs-o-down')) fa-thumbs-o-down
-
-				<p>@include('widgets.icon', array('class'=>'star-half')) fa-star-half
-
-				<p>@include('widgets.icon', array('class'=>'heart-o')) fa-heart-o
-
-				<p>@include('widgets.icon', array('class'=>'sign-out')) fa-sign-out
-
-				<p>@include('widgets.icon', array('class'=>'linkedin-square')) fa-linkedin-square
-
-				<p>@include('widgets.icon', array('class'=>'thumb-tack')) fa-thumb-tack
-
-				<p>@include('widgets.icon', array('class'=>'external-link')) fa-external-link
-
-				<p>@include('widgets.icon', array('class'=>'sign-in')) fa-sign-in
-
-				<p>@include('widgets.icon', array('class'=>'trophy')) fa-trophy
-
-				<p>@include('widgets.icon', array('class'=>'github-square')) fa-github-square
-
-				<p>@include('widgets.icon', array('class'=>'upload')) fa-upload
-
-				<p>@include('widgets.icon', array('class'=>'lemon-o')) fa-lemon-o
-
-				<p>@include('widgets.icon', array('class'=>'phone')) fa-phone
-
-				<p>@include('widgets.icon', array('class'=>'square-o')) fa-square-o
-
-				<p>@include('widgets.icon', array('class'=>'bookmark-o')) fa-bookmark-o
-
-				<p>@include('widgets.icon', array('class'=>'phone-square')) fa-phone-square
-
-				<p>@include('widgets.icon', array('class'=>'twitter')) fa-twitter
-
-				<p>@include('widgets.icon', array('class'=>'facebook')) fa-facebook
-
-				<p>@include('widgets.icon', array('class'=>'github')) fa-github
-
-				<p>@include('widgets.icon', array('class'=>'unlock')) fa-unlock
-
-				<p>@include('widgets.icon', array('class'=>'credit-card')) fa-credit-card
-
-				<p>@include('widgets.icon', array('class'=>'rss')) fa-rss
-
-				<p>@include('widgets.icon', array('class'=>'hdd-o')) fa-hdd-o
-
-				<p>@include('widgets.icon', array('class'=>'bullhorn')) fa-bullhorn
-
-				<p>@include('widgets.icon', array('class'=>'bell')) fa-bell
-
-				<p>@include('widgets.icon', array('class'=>'certificate')) fa-certificate
-
-				<p>@include('widgets.icon', array('class'=>'hand-o-right')) fa-hand-o-right
-
-				<p>@include('widgets.icon', array('class'=>'hand-o-left')) fa-hand-o-left
-
-				<p>@include('widgets.icon', array('class'=>'hand-o-up')) fa-hand-o-up
-
-				<p>@include('widgets.icon', array('class'=>'hand-o-down')) fa-hand-o-down
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-left')) fa-arrow-circle-left
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-right')) fa-arrow-circle-right
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-up')) fa-arrow-circle-up
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-down')) fa-arrow-circle-down
-
-				<p>@include('widgets.icon', array('class'=>'globe')) fa-globe
-
-				<p>@include('widgets.icon', array('class'=>'wrench')) fa-wrench
-
-				<p>@include('widgets.icon', array('class'=>'tasks')) fa-tasks
-
-				<p>@include('widgets.icon', array('class'=>'filter')) fa-filter
-
-				<p>@include('widgets.icon', array('class'=>'brifiase')) fa-brifiase
-
-				<p>@include('widgets.icon', array('class'=>'arrows-alt')) fa-arrows-alt
-
-				<p>@include('widgets.icon', array('class'=>'group')) fa-group
-
-				<p>@include('widgets.icon', array('class'=>'users')) fa-users
-
-				<p>@include('widgets.icon', array('class'=>'chain')) fa-chain
-
-				<p>@include('widgets.icon', array('class'=>'link')) fa-link
-
-				<p>@include('widgets.icon', array('class'=>'cloud')) fa-cloud
-
-				<p>@include('widgets.icon', array('class'=>'flask')) fa-flask
-
-				<p>@include('widgets.icon', array('class'=>'cut')) fa-cut
-
-				<p>@include('widgets.icon', array('class'=>'scissors')) fa-scissors
-
-				<p>@include('widgets.icon', array('class'=>'copy')) fa-copy
-
-				<p>@include('widgets.icon', array('class'=>'files-o')) fa-files-o
-
-				<p>@include('widgets.icon', array('class'=>'paperclip')) fa-paperclip
-
-				<p>@include('widgets.icon', array('class'=>'save')) fa-save
-
-				<p>@include('widgets.icon', array('class'=>'floppy-o')) fa-floppy-o
-
-				<p>@include('widgets.icon', array('class'=>'square')) fa-square
-
-				<p>@include('widgets.icon', array('class'=>'navicon')) fa-navicon
-
-				<p>@include('widgets.icon', array('class'=>'reorder')) fa-reorder
-
-				<p>@include('widgets.icon', array('class'=>'bars')) fa-bars
-
-				<p>@include('widgets.icon', array('class'=>'list-ul')) fa-list-ul
-
-				<p>@include('widgets.icon', array('class'=>'list-ol')) fa-list-ol
-
-				<p>@include('widgets.icon', array('class'=>'strikethrough')) fa-strikethrough
-
-				<p>@include('widgets.icon', array('class'=>'underline')) fa-underline
-
-				<p>@include('widgets.icon', array('class'=>'table')) fa-table
-
-				<p>@include('widgets.icon', array('class'=>'magic')) fa-magic
-
-				<p>@include('widgets.icon', array('class'=>'truck')) fa-truck
-
-				<p>@include('widgets.icon', array('class'=>'pinterest')) fa-pinterest
-
-				<p>@include('widgets.icon', array('class'=>'pinterest-square')) fa-pinterest-square
-
-				<p>@include('widgets.icon', array('class'=>'google-plus-square')) fa-google-plus-square
-
-				<p>@include('widgets.icon', array('class'=>'google-plus')) fa-google-plus
-
-				<p>@include('widgets.icon', array('class'=>'money')) fa-money
-
-				<p>@include('widgets.icon', array('class'=>'caret-down')) fa-caret-down
-
-				<p>@include('widgets.icon', array('class'=>'caret-up')) fa-caret-up
-
-				<p>@include('widgets.icon', array('class'=>'caret-left')) fa-caret-left
-
-				<p>@include('widgets.icon', array('class'=>'caret-right')) fa-caret-right
-
-				<p>@include('widgets.icon', array('class'=>'columns')) fa-columns
-
-				<p>@include('widgets.icon', array('class'=>'unsorted')) fa-unsorted
-
-				<p>@include('widgets.icon', array('class'=>'sort')) fa-sort
-
-				<p>@include('widgets.icon', array('class'=>'sort-down')) fa-sort-down
-
-				<p>@include('widgets.icon', array('class'=>'sort-desc')) fa-sort-desc
-
-				<p>@include('widgets.icon', array('class'=>'sort-up')) fa-sort-up
-
-				<p>@include('widgets.icon', array('class'=>'sort-asc')) fa-sort-asc
-
-				<p>@include('widgets.icon', array('class'=>'envelope')) fa-envelope
-
-				<p>@include('widgets.icon', array('class'=>'linkedin')) fa-linkedin
-
-				<p>@include('widgets.icon', array('class'=>'rotate-left')) fa-rotate-left
-
-				<p>@include('widgets.icon', array('class'=>'undo')) fa-undo
-
-				<p>@include('widgets.icon', array('class'=>'legal')) fa-legal
-
-				<p>@include('widgets.icon', array('class'=>'gavel')) fa-gavel
-
-				<p>@include('widgets.icon', array('class'=>'dashboard')) fa-dashboard
-
-				<p>@include('widgets.icon', array('class'=>'tachometer')) fa-tachometer
-
-				<p>@include('widgets.icon', array('class'=>'comment-o')) fa-comment-o
-
-				<p>@include('widgets.icon', array('class'=>'comments-o')) fa-comments-o
-
-				<p>@include('widgets.icon', array('class'=>'flash')) fa-flash
-
-				<p>@include('widgets.icon', array('class'=>'bolt')) fa-bolt
-
-				<p>@include('widgets.icon', array('class'=>'sitemap')) fa-sitemap
-
-				<p>@include('widgets.icon', array('class'=>'mbreli')) fa-umbreli
-
-				<p>@include('widgets.icon', array('class'=>'paste')) fa-paste
-
-				<p>@include('widgets.icon', array('class'=>'clipboard')) fa-clipboard
-
-				<p>@include('widgets.icon', array('class'=>'lightbulb-o')) fa-lightbulb-o
-
-				<p>@include('widgets.icon', array('class'=>'exchange')) fa-exchange
-
-				<p>@include('widgets.icon', array('class'=>'cloud-download')) fa-cloud-download
-
-				<p>@include('widgets.icon', array('class'=>'cloud-upload')) fa-cloud-upload
-
-				<p>@include('widgets.icon', array('class'=>'user-md')) fa-user-md
-
-				<p>@include('widgets.icon', array('class'=>'stethoscope')) fa-stethoscope
-
-				<p>@include('widgets.icon', array('class'=>'suitcase')) fa-suitcase
-
-				<p>@include('widgets.icon', array('class'=>'bell-o')) fa-bell-o
-
-				<p>@include('widgets.icon', array('class'=>'coffee')) fa-coffee
-
-				<p>@include('widgets.icon', array('class'=>'cutlery')) fa-cutlery
-
-				<p>@include('widgets.icon', array('class'=>'file-text-o')) fa-file-text-o
-
-				<p>@include('widgets.icon', array('class'=>'building-o')) fa-building-o
-
-				<p>@include('widgets.icon', array('class'=>'hospital-o')) fa-hospital-o
-
-				<p>@include('widgets.icon', array('class'=>'ambulance')) fa-ambulance
-
-				<p>@include('widgets.icon', array('class'=>'medkit')) fa-medkit
-
-				<p>@include('widgets.icon', array('class'=>'fighter-jet')) fa-fighter-jet
-
-				<p>@include('widgets.icon', array('class'=>'beer')) fa-beer
-
-				<p>@include('widgets.icon', array('class'=>'h-square')) fa-h-square
-
-				<p>@include('widgets.icon', array('class'=>'plus-square')) fa-plus-square
-			</div>
-			<div class="fa col-lg-3">
-				<p>@include('widgets.icon', array('class'=>'angle-double-left')) fa-angle-double-left
-
-				<p>@include('widgets.icon', array('class'=>'angle-double-right')) fa-angle-double-right
-
-				<p>@include('widgets.icon', array('class'=>'angle-double-up')) fa-angle-double-up
-
-				<p>@include('widgets.icon', array('class'=>'angle-double-down')) fa-angle-double-down
-
-				<p>@include('widgets.icon', array('class'=>'angle-left')) fa-angle-left
-
-				<p>@include('widgets.icon', array('class'=>'angle-right')) fa-angle-right
-
-				<p>@include('widgets.icon', array('class'=>'angle-up')) fa-angle-up
-
-				<p>@include('widgets.icon', array('class'=>'angle-down')) fa-angle-down
-
-				<p>@include('widgets.icon', array('class'=>'desktop')) fa-desktop
-
-				<p>@include('widgets.icon', array('class'=>'laptop')) fa-laptop
-
-				<p>@include('widgets.icon', array('class'=>'tablet')) fa-tablet
-
-				<p>@include('widgets.icon', array('class'=>'mobile-phone')) fa-mobile-phone
-
-				<p>@include('widgets.icon', array('class'=>'mobile')) fa-mobile
-
-				<p>@include('widgets.icon', array('class'=>'circle-o')) fa-circle-o
-
-				<p>@include('widgets.icon', array('class'=>'quote-left')) fa-quote-left
-
-				<p>@include('widgets.icon', array('class'=>'quote-right')) fa-quote-right
-
-				<p>@include('widgets.icon', array('class'=>'spinner')) fa-spinner
-
-				<p>@include('widgets.icon', array('class'=>'circle')) fa-circle
-
-				<p>@include('widgets.icon', array('class'=>'mail-reply')) fa-mail-reply
-
-				<p>@include('widgets.icon', array('class'=>'reply')) fa-reply
-
-				<p>@include('widgets.icon', array('class'=>'github-alt')) fa-github-alt
-
-				<p>@include('widgets.icon', array('class'=>'folder-o')) fa-folder-o
-
-				<p>@include('widgets.icon', array('class'=>'folder-open-o')) fa-folder-open-o
-
-				<p>@include('widgets.icon', array('class'=>'smile-o')) fa-smile-o
-
-				<p>@include('widgets.icon', array('class'=>'frown-o')) fa-frown-o
-
-				<p>@include('widgets.icon', array('class'=>'meh-o')) fa-meh-o
-
-				<p>@include('widgets.icon', array('class'=>'gamepad')) fa-gamepad
-
-				<p>@include('widgets.icon', array('class'=>'keyboard-o')) fa-keyboard-o
-
-				<p>@include('widgets.icon', array('class'=>'flag-o')) fa-flag-o
-
-				<p>@include('widgets.icon', array('class'=>'flag-checkered')) fa-flag-checkered
-
-				<p>@include('widgets.icon', array('class'=>'terminal')) fa-terminal
-
-				<p>@include('widgets.icon', array('class'=>'code')) fa-code
-
-				<p>@include('widgets.icon', array('class'=>'mail-reply-all')) fa-mail-reply-all
-
-				<p>@include('widgets.icon', array('class'=>'reply-all')) fa-reply-all
-
-				<p>@include('widgets.icon', array('class'=>'star-half-empty')) fa-star-half-empty
-
-				<p>@include('widgets.icon', array('class'=>'star-half-full')) fa-star-half-full
-
-				<p>@include('widgets.icon', array('class'=>'star-half-o')) fa-star-half-o
-
-				<p>@include('widgets.icon', array('class'=>'location-arrow')) fa-location-arrow
-
-				<p>@include('widgets.icon', array('class'=>'crop')) fa-crop
-
-				<p>@include('widgets.icon', array('class'=>'code-fork')) fa-code-fork
-
-				<p>@include('widgets.icon', array('class'=>'unlink')) fa-unlink
-
-				<p>@include('widgets.icon', array('class'=>'chain-broei')) fa-chain-broei
-
-				<p>@include('widgets.icon', array('class'=>'question')) fa-question
-
-				<p>@include('widgets.icon', array('class'=>'info')) fa-info
-
-				<p>@include('widgets.icon', array('class'=>'exclamation')) fa-exclamation
-
-				<p>@include('widgets.icon', array('class'=>'superscript')) fa-superscript
-
-				<p>@include('widgets.icon', array('class'=>'subscript')) fa-subscript
-
-				<p>@include('widgets.icon', array('class'=>'eraser')) fa-eraser
-
-				<p>@include('widgets.icon', array('class'=>'puzzle-piece')) fa-puzzle-piece
-
-				<p>@include('widgets.icon', array('class'=>'microphone')) fa-microphone
-
-				<p>@include('widgets.icon', array('class'=>'microphone-slash')) fa-microphone-slash
-
-				<p>@include('widgets.icon', array('class'=>'shield')) fa-shield
-
-				<p>@include('widgets.icon', array('class'=>'calendar-o')) fa-calendar-o
-
-				<p>@include('widgets.icon', array('class'=>'fire-extinguisher')) fa-fire-extinguisher
-
-				<p>@include('widgets.icon', array('class'=>'rocket')) fa-rocket
-
-				<p>@include('widgets.icon', array('class'=>'maxcdn')) fa-maxcdn
-
-				<p>@include('widgets.icon', array('class'=>'chevron-circle-left')) fa-chevron-circle-left
-
-				<p>@include('widgets.icon', array('class'=>'chevron-circle-right')) fa-chevron-circle-right
-
-				<p>@include('widgets.icon', array('class'=>'chevron-circle-up')) fa-chevron-circle-up
-
-				<p>@include('widgets.icon', array('class'=>'chevron-circle-down')) fa-chevron-circle-down
-
-				<p>@include('widgets.icon', array('class'=>'html5')) fa-html5
-
-				<p>@include('widgets.icon', array('class'=>'css3')) fa-css3
-
-				<p>@include('widgets.icon', array('class'=>'anchor')) fa-anchor
-
-				<p>@include('widgets.icon', array('class'=>'unlock-alt')) fa-unlock-alt
-
-				<p>@include('widgets.icon', array('class'=>'bullseye')) fa-bullseye
-
-				<p>@include('widgets.icon', array('class'=>'ellipsis-h')) fa-ellipsis-h
-
-				<p>@include('widgets.icon', array('class'=>'ellipsis-v')) fa-ellipsis-v
-
-				<p>@include('widgets.icon', array('class'=>'rss-square')) fa-rss-square
-
-				<p>@include('widgets.icon', array('class'=>'play-circle')) fa-play-circle
-
-				<p>@include('widgets.icon', array('class'=>'ticket')) fa-ticket
-
-				<p>@include('widgets.icon', array('class'=>'minus-square')) fa-minus-square
-
-				<p>@include('widgets.icon', array('class'=>'minus-square-o')) fa-minus-square-o
-
-				<p>@include('widgets.icon', array('class'=>'level-up')) fa-level-up
-
-				<p>@include('widgets.icon', array('class'=>'level-down')) fa-level-down
-
-				<p>@include('widgets.icon', array('class'=>'check-square')) fa-check-square
-
-				<p>@include('widgets.icon', array('class'=>'pencil-square')) fa-pencil-square
-
-				<p>@include('widgets.icon', array('class'=>'external-link-square')) fa-external-link-square
-
-				<p>@include('widgets.icon', array('class'=>'share-square')) fa-share-square
-
-				<p>@include('widgets.icon', array('class'=>'compass')) fa-compass
-
-				<p>@include('widgets.icon', array('class'=>'toggle-down')) fa-toggle-down
-
-				<p>@include('widgets.icon', array('class'=>'caret-square-o-down')) fa-caret-square-o-down
-
-				<p>@include('widgets.icon', array('class'=>'toggle-up')) fa-toggle-up
-
-				<p>@include('widgets.icon', array('class'=>'caret-square-o-up')) fa-caret-square-o-up
-
-				<p>@include('widgets.icon', array('class'=>'toggle-right')) fa-toggle-right
-
-				<p>@include('widgets.icon', array('class'=>'caret-square-o-right')) fa-caret-square-o-right
-
-				<p>@include('widgets.icon', array('class'=>'euro')) fa-euro
-
-				<p>@include('widgets.icon', array('class'=>'eur')) fa-eur
-
-				<p>@include('widgets.icon', array('class'=>'gbp')) fa-gbp
-
-				<p>@include('widgets.icon', array('class'=>'dollar')) fa-dollar
-
-				<p>@include('widgets.icon', array('class'=>'usd')) fa-usd
-
-				<p>@include('widgets.icon', array('class'=>'rupee')) fa-rupee
-
-				<p>@include('widgets.icon', array('class'=>'inr')) fa-inr
-
-				<p>@include('widgets.icon', array('class'=>'cny')) fa-cny
-
-				<p>@include('widgets.icon', array('class'=>'rmb')) fa-rmb
-
-				<p>@include('widgets.icon', array('class'=>'yen')) fa-yen
-
-				<p>@include('widgets.icon', array('class'=>'jpy')) fa-jpy
-
-				<p>@include('widgets.icon', array('class'=>'ruble')) fa-ruble
-
-				<p>@include('widgets.icon', array('class'=>'rouble')) fa-rouble
-
-				<p>@include('widgets.icon', array('class'=>'rub')) fa-rub
-
-				<p>@include('widgets.icon', array('class'=>'won')) fa-won
-
-				<p>@include('widgets.icon', array('class'=>'krw')) fa-krw
-
-				<p>@include('widgets.icon', array('class'=>'bitcoin')) fa-bitcoin
-
-				<p>@include('widgets.icon', array('class'=>'btc')) fa-btc
-
-				<p>@include('widgets.icon', array('class'=>'file')) fa-file
-
-				<p>@include('widgets.icon', array('class'=>'file-text')) fa-file-text
-
-				<p>@include('widgets.icon', array('class'=>'sort-alpha-asc')) fa-sort-alpha-asc
-
-				<p>@include('widgets.icon', array('class'=>'sort-alpha-desc')) fa-sort-alpha-desc
-
-				<p>@include('widgets.icon', array('class'=>'sort-amount-asc')) fa-sort-amount-asc
-
-				<p>@include('widgets.icon', array('class'=>'sort-amount-desc')) fa-sort-amount-desc
-
-				<p>@include('widgets.icon', array('class'=>'sort-numeric-asc')) fa-sort-numeric-asc
-
-				<p>@include('widgets.icon', array('class'=>'sort-numeric-desc')) fa-sort-numeric-desc
-
-				<p>@include('widgets.icon', array('class'=>'thumbs-up')) fa-thumbs-up
-
-				<p>@include('widgets.icon', array('class'=>'thumbs-down')) fa-thumbs-down
-
-				<p>@include('widgets.icon', array('class'=>'youtube-square')) fa-youtube-square
-
-				<p>@include('widgets.icon', array('class'=>'youtube')) fa-youtube
-
-				<p>@include('widgets.icon', array('class'=>'xing')) fa-xing
-
-				<p>@include('widgets.icon', array('class'=>'xing-square')) fa-xing-square
-
-				<p>@include('widgets.icon', array('class'=>'youtube-play')) fa-youtube-play
-
-				<p>@include('widgets.icon', array('class'=>'dropbox')) fa-dropbox
-
-				<p>@include('widgets.icon', array('class'=>'stack-overflow')) fa-stack-overflow
-
-				<p>@include('widgets.icon', array('class'=>'instagram')) fa-instagram
-
-				<p>@include('widgets.icon', array('class'=>'flickr')) fa-flickr
-
-				<p>@include('widgets.icon', array('class'=>'adn')) fa-adn
-
-				<p>@include('widgets.icon', array('class'=>'bitbucket')) fa-bitbucket
-
-				<p>@include('widgets.icon', array('class'=>'bitbucket-square')) fa-bitbucket-square
-
-				<p>@include('widgets.icon', array('class'=>'tumblr')) fa-tumblr
-			</div>
-			<div class="fa col-lg-3">
-				<p>@include('widgets.icon', array('class'=>'tumblr-square')) fa-tumblr-square 
-
-				<p>@include('widgets.icon', array('class'=>'long-arrow-down')) fa-long-arrow-down
-
-				<p>@include('widgets.icon', array('class'=>'long-arrow-up')) fa-long-arrow-up
-
-				<p>@include('widgets.icon', array('class'=>'long-arrow-left')) fa-long-arrow-left
-
-				<p>@include('widgets.icon', array('class'=>'long-arrow-right')) fa-long-arrow-right
-
-				<p>@include('widgets.icon', array('class'=>'apple')) fa-apple
-
-				<p>@include('widgets.icon', array('class'=>'windows')) fa-windows
-
-				<p>@include('widgets.icon', array('class'=>'android')) fa-android
-
-				<p>@include('widgets.icon', array('class'=>'linux')) fa-linux
-
-				<p>@include('widgets.icon', array('class'=>'dribbble')) fa-dribbble
-
-				<p>@include('widgets.icon', array('class'=>'skype')) fa-skype
-
-				<p>@include('widgets.icon', array('class'=>'foursquare')) fa-foursquare
-
-				<p>@include('widgets.icon', array('class'=>'trello')) fa-trello
-
-				<p>@include('widgets.icon', array('class'=>'female')) fa-female
-
-				<p>@include('widgets.icon', array('class'=>'male')) fa-male
-
-				<p>@include('widgets.icon', array('class'=>'gittip')) fa-gittip
-
-				<p>@include('widgets.icon', array('class'=>'sun-o')) fa-sun-o
-
-				<p>@include('widgets.icon', array('class'=>'moon-o')) fa-moon-o
-
-				<p>@include('widgets.icon', array('class'=>'archive')) fa-archive
-
-				<p>@include('widgets.icon', array('class'=>'bug')) fa-bug
-
-				<p>@include('widgets.icon', array('class'=>'vk')) fa-vk
-
-				<p>@include('widgets.icon', array('class'=>'weibo')) fa-weibo
-
-				<p>@include('widgets.icon', array('class'=>'renren')) fa-renren
-
-				<p>@include('widgets.icon', array('class'=>'pagelines')) fa-pagelines
-
-				<p>@include('widgets.icon', array('class'=>'stack-exchange')) fa-stack-exchange
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-o-right')) fa-arrow-circle-o-right
-
-				<p>@include('widgets.icon', array('class'=>'arrow-circle-o-left')) fa-arrow-circle-o-left
-
-				<p>@include('widgets.icon', array('class'=>'toggle-left')) fa-toggle-left
-
-				<p>@include('widgets.icon', array('class'=>'caret-square-o-left')) fa-caret-square-o-left
-
-				<p>@include('widgets.icon', array('class'=>'dot-circle-o')) fa-dot-circle-o
-
-				<p>@include('widgets.icon', array('class'=>'wheelchair')) fa-wheelchair
-
-				<p>@include('widgets.icon', array('class'=>'vimeo-square')) fa-vimeo-square
-
-				<p>@include('widgets.icon', array('class'=>'turkish-lira')) fa-turkish-lira
-
-				<p>@include('widgets.icon', array('class'=>'try')) fa-try
-
-				<p>@include('widgets.icon', array('class'=>'plus-square-o')) fa-plus-square-o
-
-				<p>@include('widgets.icon', array('class'=>'space-shuttle')) fa-space-shuttle
-
-				<p>@include('widgets.icon', array('class'=>'slack')) fa-slack
-
-				<p>@include('widgets.icon', array('class'=>'envelope-square')) fa-envelope-square
-
-				<p>@include('widgets.icon', array('class'=>'wordpress')) fa-wordpress
-
-				<p>@include('widgets.icon', array('class'=>'openid')) fa-openid
-
-				<p>@include('widgets.icon', array('class'=>'institution')) fa-institution
-
-				<p>@include('widgets.icon', array('class'=>'bank')) fa-bank
-
-				<p>@include('widgets.icon', array('class'=>'university')) fa-university
-
-				<p>@include('widgets.icon', array('class'=>'mortar-board')) fa-mortar-board
-
-				<p>@include('widgets.icon', array('class'=>'graduation-cap')) fa-graduation-cap
-
-				<p>@include('widgets.icon', array('class'=>'yahoo')) fa-yahoo
-
-				<p>@include('widgets.icon', array('class'=>'google')) fa-google
-
-				<p>@include('widgets.icon', array('class'=>'reddit')) fa-reddit
-
-				<p>@include('widgets.icon', array('class'=>'reddit-square')) fa-reddit-square
-
-				<p>@include('widgets.icon', array('class'=>'stumbleupon-circle')) fa-stumbleupon-circle
-
-				<p>@include('widgets.icon', array('class'=>'stumbleupon')) fa-stumbleupon
-
-				<p>@include('widgets.icon', array('class'=>'delicious')) fa-delicious
-
-				<p>@include('widgets.icon', array('class'=>'digg')) fa-digg
-
-				<p>@include('widgets.icon', array('class'=>'pied-piper-square')) fa-pied-piper-square
-
-				<p>@include('widgets.icon', array('class'=>'pied-piper')) fa-pied-piper
-
-				<p>@include('widgets.icon', array('class'=>'pied-piper-alt')) fa-pied-piper-alt
-
-				<p>@include('widgets.icon', array('class'=>'drupal')) fa-drupal
-
-				<p>@include('widgets.icon', array('class'=>'joomla')) fa-joomla
-
-				<p>@include('widgets.icon', array('class'=>'language')) fa-language
-
-				<p>@include('widgets.icon', array('class'=>'fax')) fa-fax
-
-				<p>@include('widgets.icon', array('class'=>'building')) fa-building
-
-				<p>@include('widgets.icon', array('class'=>'child')) fa-child
-
-				<p>@include('widgets.icon', array('class'=>'paw')) fa-paw
-
-				<p>@include('widgets.icon', array('class'=>'spoon')) fa-spoon
-
-				<p>@include('widgets.icon', array('class'=>'cube')) fa-cube
-
-				<p>@include('widgets.icon', array('class'=>'cubes')) fa-cubes
-
-				<p>@include('widgets.icon', array('class'=>'behance')) fa-behance
-
-				<p>@include('widgets.icon', array('class'=>'behance-square')) fa-behance-square
-
-				<p>@include('widgets.icon', array('class'=>'steam')) fa-steam
-
-				<p>@include('widgets.icon', array('class'=>'steam-square')) fa-steam-square
-
-				<p>@include('widgets.icon', array('class'=>'recycle')) fa-recycle
-
-				<p>@include('widgets.icon', array('class'=>'automobile')) fa-automobile
-
-				<p>@include('widgets.icon', array('class'=>'car')) fa-car
-
-				<p>@include('widgets.icon', array('class'=>'cab')) fa-cab
-
-				<p>@include('widgets.icon', array('class'=>'taxi')) fa-taxi
-
-				<p>@include('widgets.icon', array('class'=>'tree')) fa-tree
-
-				<p>@include('widgets.icon', array('class'=>'spotify')) fa-spotify
-
-				<p>@include('widgets.icon', array('class'=>'deviantart')) fa-deviantart
-
-				<p>@include('widgets.icon', array('class'=>'soundcloud')) fa-soundcloud
-
-				<p>@include('widgets.icon', array('class'=>'database')) fa-database
-
-				<p>@include('widgets.icon', array('class'=>'file-pdf-o')) fa-file-pdf-o
-
-				<p>@include('widgets.icon', array('class'=>'file-word-o')) fa-file-word-o
-
-				<p>@include('widgets.icon', array('class'=>'file-excel-o')) fa-file-excel-o
-
-				<p>@include('widgets.icon', array('class'=>'file-powerpoint-o')) fa-file-powerpoint-o
-
-				<p>@include('widgets.icon', array('class'=>'file-photo-o')) fa-file-photo-o
-
-				<p>@include('widgets.icon', array('class'=>'file-picture-o')) fa-file-picture-o
-
-				<p>@include('widgets.icon', array('class'=>'file-image-o')) fa-file-image-o
-
-				<p>@include('widgets.icon', array('class'=>'file-zip-o')) fa-file-zip-o
-
-				<p>@include('widgets.icon', array('class'=>'file-archive-o')) fa-file-archive-o
-
-				<p>@include('widgets.icon', array('class'=>'file-sound-o')) fa-file-sound-o
-
-				<p>@include('widgets.icon', array('class'=>'file-audio-o')) fa-file-audio-o
-
-				<p>@include('widgets.icon', array('class'=>'file-movie-o')) fa-file-movie-o
-
-				<p>@include('widgets.icon', array('class'=>'file-video-o')) fa-file-video-o
-
-				<p>@include('widgets.icon', array('class'=>'file-code-o')) fa-file-code-o
-
-				<p>@include('widgets.icon', array('class'=>'vine')) fa-vine
-
-				<p>@include('widgets.icon', array('class'=>'codepen')) fa-codepen
-
-				<p>@include('widgets.icon', array('class'=>'jsfiddle')) fa-jsfiddle
-
-				<p>@include('widgets.icon', array('class'=>'life-bouy')) fa-life-bouy
-
-				<p>@include('widgets.icon', array('class'=>'life-saver')) fa-life-saver
-
-				<p>@include('widgets.icon', array('class'=>'support')) fa-support
-
-				<p>@include('widgets.icon', array('class'=>'life-ring')) fa-life-ring
-
-				<p>@include('widgets.icon', array('class'=>'circle-o-notch')) fa-circle-o-notch
-
-				<p>@include('widgets.icon', array('class'=>'ra')) fa-ra
-
-				<p>@include('widgets.icon', array('class'=>'rebel')) fa-rebel
-
-				<p>@include('widgets.icon', array('class'=>'ge')) fa-ge
-
-				<p>@include('widgets.icon', array('class'=>'empire')) fa-empire
-
-				<p>@include('widgets.icon', array('class'=>'git-square')) fa-git-square
-
-				<p>@include('widgets.icon', array('class'=>'git')) fa-git
-
-				<p>@include('widgets.icon', array('class'=>'hacker-news')) fa-hacker-news
-
-				<p>@include('widgets.icon', array('class'=>'tencent-weibo')) fa-tencent-weibo
-
-				<p>@include('widgets.icon', array('class'=>'qq')) fa-qq
-
-				<p>@include('widgets.icon', array('class'=>'wechat')) fa-wechat
-
-				<p>@include('widgets.icon', array('class'=>'weixin')) fa-weixin
-
-				<p>@include('widgets.icon', array('class'=>'send')) fa-send
-
-				<p>@include('widgets.icon', array('class'=>'paper-plane')) fa-paper-plane
-
-				<p>@include('widgets.icon', array('class'=>'send-o')) fa-send-o
-
-				<p>@include('widgets.icon', array('class'=>'paper-plane-o')) fa-paper-plane-o
-
-				<p>@include('widgets.icon', array('class'=>'history')) fa-history
-
-				<p>@include('widgets.icon', array('class'=>'circle-thin')) fa-circle-thin
-
-				<p>@include('widgets.icon', array('class'=>'header')) fa-header
-
-				<p>@include('widgets.icon', array('class'=>'paragraph')) fa-paragraph
-
-				<p>@include('widgets.icon', array('class'=>'sliders')) fa-sliders
-
-				<p>@include('widgets.icon', array('class'=>'share-alt')) fa-share-alt
-
-				<p>@include('widgets.icon', array('class'=>'share-alt-square')) fa-share-alt-square
-
-				<p>@include('widgets.icon', array('class'=>'bomb')) fa-bomb
-
-			</div>
-		
-		@endsection
-		@include('widgets.panel', array('header'=>true, 'as'=>'icons'))
-	
-	
+<div class="col-span-12">
+<x-card>
+<x-slot:title>Icons</x-slot:title>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+<div>
+@include('widgets.icon', array('class'=>'glass')) fa-glass 
+@include('widgets.icon', array('class'=>'music')) fa-music
+@include('widgets.icon', array('class'=>'search')) fa-search
+@include('widgets.icon', array('class'=>'envelope-o')) fa-envelope-o
+@include('widgets.icon', array('class'=>'heart')) fa-heart
+@include('widgets.icon', array('class'=>'star')) fa-star
+@include('widgets.icon', array('class'=>'star-o')) fa-star-o
+@include('widgets.icon', array('class'=>'user')) fa-user
+@include('widgets.icon', array('class'=>'film')) fa-film
+@include('widgets.icon', array('class'=>'th-large')) fa-th-large
+@include('widgets.icon', array('class'=>'th')) fa-th
+@include('widgets.icon', array('class'=>'th-list')) fa-th-list
+@include('widgets.icon', array('class'=>'check')) fa-check
+@include('widgets.icon', array('class'=>'times')) fa-times
+@include('widgets.icon', array('class'=>'search-plus')) fa-search-plus
+@include('widgets.icon', array('class'=>'search-minus')) fa-search-minus
+@include('widgets.icon', array('class'=>'power-off')) fa-power-off
+@include('widgets.icon', array('class'=>'signal')) fa-signal
+@include('widgets.icon', array('class'=>'gear')) fa-gear
+@include('widgets.icon', array('class'=>'cog')) fa-cog
+@include('widgets.icon', array('class'=>'trash-o')) fa-trash-o
+@include('widgets.icon', array('class'=>'home')) fa-home
+@include('widgets.icon', array('class'=>'file-o')) fa-file-o
+@include('widgets.icon', array('class'=>'clock-o')) fa-clock-o
+@include('widgets.icon', array('class'=>'road')) fa-road
+@include('widgets.icon', array('class'=>'download')) fa-download
+@include('widgets.icon', array('class'=>'arrow-circle-o-down')) fa-arrow-circle-o-down
+@include('widgets.icon', array('class'=>'arrow-circle-o-up')) fa-arrow-circle-o-up
+@include('widgets.icon', array('class'=>'inbox')) fa-inbox
+@include('widgets.icon', array('class'=>'play-circle-o')) fa-play-circle-o
+@include('widgets.icon', array('class'=>'rotate-right')) fa-rotate-right
+@include('widgets.icon', array('class'=>'repeat')) fa-repeat
+@include('widgets.icon', array('class'=>'refresh')) fa-refresh
+@include('widgets.icon', array('class'=>'list-alt')) fa-list-alt
+@include('widgets.icon', array('class'=>'lock')) fa-lock
+@include('widgets.icon', array('class'=>'flag')) fa-flag
+@include('widgets.icon', array('class'=>'headphones')) fa-headphones
+@include('widgets.icon', array('class'=>'volume-off')) fa-volume-off
+@include('widgets.icon', array('class'=>'volume-down')) fa-volume-down
+@include('widgets.icon', array('class'=>'volume-up')) fa-volume-up
+@include('widgets.icon', array('class'=>'qrcode')) fa-qrcode
+@include('widgets.icon', array('class'=>'barcode')) fa-barcode
+@include('widgets.icon', array('class'=>'tag')) fa-tag
+@include('widgets.icon', array('class'=>'tags')) fa-tags
+@include('widgets.icon', array('class'=>'book')) fa-book
+@include('widgets.icon', array('class'=>'bookmark')) fa-bookmark
+@include('widgets.icon', array('class'=>'print')) fa-print
+@include('widgets.icon', array('class'=>'camera')) fa-camera
+@include('widgets.icon', array('class'=>'font')) fa-font
+@include('widgets.icon', array('class'=>'bold')) fa-bold
+@include('widgets.icon', array('class'=>'italic')) fa-italic
+@include('widgets.icon', array('class'=>'text-height')) fa-text-height
+@include('widgets.icon', array('class'=>'text-width')) fa-text-width
+@include('widgets.icon', array('class'=>'align-left')) fa-align-left
+@include('widgets.icon', array('class'=>'align-center')) fa-align-center
+@include('widgets.icon', array('class'=>'align-right')) fa-align-right
+@include('widgets.icon', array('class'=>'align-justify')) fa-align-justify
+@include('widgets.icon', array('class'=>'list')) fa-list
+@include('widgets.icon', array('class'=>'dedent')) fa-dedent
+@include('widgets.icon', array('class'=>'outdent')) fa-outdent
+@include('widgets.icon', array('class'=>'indent')) fa-indent
+@include('widgets.icon', array('class'=>'video-camera')) fa-video-camera
+@include('widgets.icon', array('class'=>'photo')) fa-photo
+@include('widgets.icon', array('class'=>'image')) fa-image
+@include('widgets.icon', array('class'=>'picture-o')) fa-picture-o
+@include('widgets.icon', array('class'=>'pencil')) fa-pencil
+@include('widgets.icon', array('class'=>'map-marker')) fa-map-marker
+@include('widgets.icon', array('class'=>'adjust')) fa-adjust
+@include('widgets.icon', array('class'=>'tint')) fa-tint
+@include('widgets.icon', array('class'=>'edit')) fa-edit
+@include('widgets.icon', array('class'=>'pencil-square-o')) fa-pencil-square-o
+@include('widgets.icon', array('class'=>'share-square-o')) fa-share-square-o
+@include('widgets.icon', array('class'=>'check-square-o')) fa-check-square-o
+@include('widgets.icon', array('class'=>'arrows')) fa-arrows
+@include('widgets.icon', array('class'=>'step-backward')) fa-step-backward
+@include('widgets.icon', array('class'=>'fast-backward')) fa-fast-backward
+@include('widgets.icon', array('class'=>'backward')) fa-backward
+@include('widgets.icon', array('class'=>'play')) fa-play
+@include('widgets.icon', array('class'=>'pause')) fa-pause
+@include('widgets.icon', array('class'=>'stop')) fa-stop
+@include('widgets.icon', array('class'=>'forward')) fa-forward
+@include('widgets.icon', array('class'=>'fast-forward')) fa-fast-forward
+@include('widgets.icon', array('class'=>'step-forward')) fa-step-forward
+@include('widgets.icon', array('class'=>'eject')) fa-eject
+@include('widgets.icon', array('class'=>'chevron-left')) fa-chevron-left
+@include('widgets.icon', array('class'=>'chevron-right')) fa-chevron-right
+@include('widgets.icon', array('class'=>'plus-circle')) fa-plus-circle
+@include('widgets.icon', array('class'=>'minus-circle')) fa-minus-circle
+@include('widgets.icon', array('class'=>'times-circle')) fa-times-circle
+@include('widgets.icon', array('class'=>'check-circle')) fa-check-circle
+@include('widgets.icon', array('class'=>'question-circle')) fa-question-circle
+@include('widgets.icon', array('class'=>'info-circle')) fa-info-circle
+@include('widgets.icon', array('class'=>'crosshairs')) fa-crosshairs
+@include('widgets.icon', array('class'=>'times-circle-o')) fa-times-circle-o
+@include('widgets.icon', array('class'=>'check-circle-o')) fa-check-circle-o
+@include('widgets.icon', array('class'=>'ban')) fa-ban
+@include('widgets.icon', array('class'=>'arrow-left')) fa-arrow-left
+@include('widgets.icon', array('class'=>'arrow-right')) fa-arrow-right
+@include('widgets.icon', array('class'=>'arrow-up')) fa-arrow-up
+@include('widgets.icon', array('class'=>'arrow-down')) fa-arrow-down
+@include('widgets.icon', array('class'=>'mail-forward')) fa-mail-forward
+@include('widgets.icon', array('class'=>'share')) fa-share
+@include('widgets.icon', array('class'=>'expand')) fa-expand
+@include('widgets.icon', array('class'=>'compress')) fa-compress
+@include('widgets.icon', array('class'=>'plus')) fa-plus
+@include('widgets.icon', array('class'=>'minus')) fa-minus
+@include('widgets.icon', array('class'=>'asterisk')) fa-asterisk
+@include('widgets.icon', array('class'=>'exclamation-circle')) fa-exclamation-circle
+@include('widgets.icon', array('class'=>'gift')) fa-gift
+@include('widgets.icon', array('class'=>'leaf')) fa-leaf
+@include('widgets.icon', array('class'=>'fire')) fa-fire
+@include('widgets.icon', array('class'=>'eye')) fa-eye
+@include('widgets.icon', array('class'=>'eye-slash')) fa-eye-slash
+@include('widgets.icon', array('class'=>'warning')) fa-warning
+@include('widgets.icon', array('class'=>'exclamation-triangle')) fa-exclamation-triangle
+@include('widgets.icon', array('class'=>'plane')) fa-plane
+@include('widgets.icon', array('class'=>'calendar')) fa-calendar
+@include('widgets.icon', array('class'=>'random')) fa-random
+@include('widgets.icon', array('class'=>'comment')) fa-comment
+@include('widgets.icon', array('class'=>'magnet')) fa-magnet
+@include('widgets.icon', array('class'=>'chevron-up')) fa-chevron-up
+@include('widgets.icon', array('class'=>'chevron-down')) fa-chevron-down
+@include('widgets.icon', array('class'=>'retweet')) fa-retweet
+@include('widgets.icon', array('class'=>'shopping-cart')) fa-shopping-cart
+@include('widgets.icon', array('class'=>'folder')) fa-folder
+@include('widgets.icon', array('class'=>'folder-open')) fa-folder-open
+</div>
+<div>
+@include('widgets.icon', array('class'=>'arrows-v')) fa-arrows-v 
+@include('widgets.icon', array('class'=>'arrows-h')) fa-arrows-h
+@include('widgets.icon', array('class'=>'bar-chart-o')) fa-bar-chart-o
+@include('widgets.icon', array('class'=>'twitter-square')) fa-twitter-square
+@include('widgets.icon', array('class'=>'facebook-square')) fa-facebook-square
+@include('widgets.icon', array('class'=>'camera-retro')) fa-camera-retro
+@include('widgets.icon', array('class'=>'key')) fa-key
+@include('widgets.icon', array('class'=>'gears')) fa-gears
+@include('widgets.icon', array('class'=>'cogs')) fa-cogs
+@include('widgets.icon', array('class'=>'comments')) fa-comments
+@include('widgets.icon', array('class'=>'thumbs-o-up')) fa-thumbs-o-up
+@include('widgets.icon', array('class'=>'thumbs-o-down')) fa-thumbs-o-down
+@include('widgets.icon', array('class'=>'star-half')) fa-star-half
+@include('widgets.icon', array('class'=>'heart-o')) fa-heart-o
+@include('widgets.icon', array('class'=>'sign-out')) fa-sign-out
+@include('widgets.icon', array('class'=>'linkedin-square')) fa-linkedin-square
+@include('widgets.icon', array('class'=>'thumb-tack')) fa-thumb-tack
+@include('widgets.icon', array('class'=>'external-link')) fa-external-link
+@include('widgets.icon', array('class'=>'sign-in')) fa-sign-in
+@include('widgets.icon', array('class'=>'trophy')) fa-trophy
+@include('widgets.icon', array('class'=>'github-square')) fa-github-square
+@include('widgets.icon', array('class'=>'upload')) fa-upload
+@include('widgets.icon', array('class'=>'lemon-o')) fa-lemon-o
+@include('widgets.icon', array('class'=>'phone')) fa-phone
+@include('widgets.icon', array('class'=>'square-o')) fa-square-o
+@include('widgets.icon', array('class'=>'bookmark-o')) fa-bookmark-o
+@include('widgets.icon', array('class'=>'phone-square')) fa-phone-square
+@include('widgets.icon', array('class'=>'twitter')) fa-twitter
+@include('widgets.icon', array('class'=>'facebook')) fa-facebook
+@include('widgets.icon', array('class'=>'github')) fa-github
+@include('widgets.icon', array('class'=>'unlock')) fa-unlock
+@include('widgets.icon', array('class'=>'credit-card')) fa-credit-card
+@include('widgets.icon', array('class'=>'rss')) fa-rss
+@include('widgets.icon', array('class'=>'hdd-o')) fa-hdd-o
+@include('widgets.icon', array('class'=>'bullhorn')) fa-bullhorn
+@include('widgets.icon', array('class'=>'bell')) fa-bell
+@include('widgets.icon', array('class'=>'certificate')) fa-certificate
+@include('widgets.icon', array('class'=>'hand-o-right')) fa-hand-o-right
+@include('widgets.icon', array('class'=>'hand-o-left')) fa-hand-o-left
+@include('widgets.icon', array('class'=>'hand-o-up')) fa-hand-o-up
+@include('widgets.icon', array('class'=>'hand-o-down')) fa-hand-o-down
+@include('widgets.icon', array('class'=>'arrow-circle-left')) fa-arrow-circle-left
+@include('widgets.icon', array('class'=>'arrow-circle-right')) fa-arrow-circle-right
+@include('widgets.icon', array('class'=>'arrow-circle-up')) fa-arrow-circle-up
+@include('widgets.icon', array('class'=>'arrow-circle-down')) fa-arrow-circle-down
+@include('widgets.icon', array('class'=>'globe')) fa-globe
+@include('widgets.icon', array('class'=>'wrench')) fa-wrench
+@include('widgets.icon', array('class'=>'tasks')) fa-tasks
+@include('widgets.icon', array('class'=>'filter')) fa-filter
+@include('widgets.icon', array('class'=>'brifiase')) fa-brifiase
+@include('widgets.icon', array('class'=>'arrows-alt')) fa-arrows-alt
+@include('widgets.icon', array('class'=>'group')) fa-group
+@include('widgets.icon', array('class'=>'users')) fa-users
+@include('widgets.icon', array('class'=>'chain')) fa-chain
+@include('widgets.icon', array('class'=>'link')) fa-link
+@include('widgets.icon', array('class'=>'cloud')) fa-cloud
+@include('widgets.icon', array('class'=>'flask')) fa-flask
+@include('widgets.icon', array('class'=>'cut')) fa-cut
+@include('widgets.icon', array('class'=>'scissors')) fa-scissors
+@include('widgets.icon', array('class'=>'copy')) fa-copy
+@include('widgets.icon', array('class'=>'files-o')) fa-files-o
+@include('widgets.icon', array('class'=>'paperclip')) fa-paperclip
+@include('widgets.icon', array('class'=>'save')) fa-save
+@include('widgets.icon', array('class'=>'floppy-o')) fa-floppy-o
+@include('widgets.icon', array('class'=>'square')) fa-square
+@include('widgets.icon', array('class'=>'navicon')) fa-navicon
+@include('widgets.icon', array('class'=>'reorder')) fa-reorder
+@include('widgets.icon', array('class'=>'bars')) fa-bars
+@include('widgets.icon', array('class'=>'list-ul')) fa-list-ul
+@include('widgets.icon', array('class'=>'list-ol')) fa-list-ol
+@include('widgets.icon', array('class'=>'strikethrough')) fa-strikethrough
+@include('widgets.icon', array('class'=>'underline')) fa-underline
+@include('widgets.icon', array('class'=>'table')) fa-table
+@include('widgets.icon', array('class'=>'magic')) fa-magic
+@include('widgets.icon', array('class'=>'truck')) fa-truck
+@include('widgets.icon', array('class'=>'pinterest')) fa-pinterest
+@include('widgets.icon', array('class'=>'pinterest-square')) fa-pinterest-square
+@include('widgets.icon', array('class'=>'google-plus-square')) fa-google-plus-square
+@include('widgets.icon', array('class'=>'google-plus')) fa-google-plus
+@include('widgets.icon', array('class'=>'money')) fa-money
+@include('widgets.icon', array('class'=>'caret-down')) fa-caret-down
+@include('widgets.icon', array('class'=>'caret-up')) fa-caret-up
+@include('widgets.icon', array('class'=>'caret-left')) fa-caret-left
+@include('widgets.icon', array('class'=>'caret-right')) fa-caret-right
+@include('widgets.icon', array('class'=>'columns')) fa-columns
+@include('widgets.icon', array('class'=>'unsorted')) fa-unsorted
+@include('widgets.icon', array('class'=>'sort')) fa-sort
+@include('widgets.icon', array('class'=>'sort-down')) fa-sort-down
+@include('widgets.icon', array('class'=>'sort-desc')) fa-sort-desc
+@include('widgets.icon', array('class'=>'sort-up')) fa-sort-up
+@include('widgets.icon', array('class'=>'sort-asc')) fa-sort-asc
+@include('widgets.icon', array('class'=>'envelope')) fa-envelope
+@include('widgets.icon', array('class'=>'linkedin')) fa-linkedin
+@include('widgets.icon', array('class'=>'rotate-left')) fa-rotate-left
+@include('widgets.icon', array('class'=>'undo')) fa-undo
+@include('widgets.icon', array('class'=>'legal')) fa-legal
+@include('widgets.icon', array('class'=>'gavel')) fa-gavel
+@include('widgets.icon', array('class'=>'dashboard')) fa-dashboard
+@include('widgets.icon', array('class'=>'tachometer')) fa-tachometer
+@include('widgets.icon', array('class'=>'comment-o')) fa-comment-o
+@include('widgets.icon', array('class'=>'comments-o')) fa-comments-o
+@include('widgets.icon', array('class'=>'flash')) fa-flash
+@include('widgets.icon', array('class'=>'bolt')) fa-bolt
+@include('widgets.icon', array('class'=>'sitemap')) fa-sitemap
+@include('widgets.icon', array('class'=>'mbreli')) fa-umbreli
+@include('widgets.icon', array('class'=>'paste')) fa-paste
+@include('widgets.icon', array('class'=>'clipboard')) fa-clipboard
+@include('widgets.icon', array('class'=>'lightbulb-o')) fa-lightbulb-o
+@include('widgets.icon', array('class'=>'exchange')) fa-exchange
+@include('widgets.icon', array('class'=>'cloud-download')) fa-cloud-download
+@include('widgets.icon', array('class'=>'cloud-upload')) fa-cloud-upload
+@include('widgets.icon', array('class'=>'user-md')) fa-user-md
+@include('widgets.icon', array('class'=>'stethoscope')) fa-stethoscope
+@include('widgets.icon', array('class'=>'suitcase')) fa-suitcase
+@include('widgets.icon', array('class'=>'bell-o')) fa-bell-o
+@include('widgets.icon', array('class'=>'coffee')) fa-coffee
+@include('widgets.icon', array('class'=>'cutlery')) fa-cutlery
+@include('widgets.icon', array('class'=>'file-text-o')) fa-file-text-o
+@include('widgets.icon', array('class'=>'building-o')) fa-building-o
+@include('widgets.icon', array('class'=>'hospital-o')) fa-hospital-o
+@include('widgets.icon', array('class'=>'ambulance')) fa-ambulance
+@include('widgets.icon', array('class'=>'medkit')) fa-medkit
+@include('widgets.icon', array('class'=>'fighter-jet')) fa-fighter-jet
+@include('widgets.icon', array('class'=>'beer')) fa-beer
+@include('widgets.icon', array('class'=>'h-square')) fa-h-square
+@include('widgets.icon', array('class'=>'plus-square')) fa-plus-square
+</div>
+<div>
+@include('widgets.icon', array('class'=>'angle-double-left')) fa-angle-double-left
+@include('widgets.icon', array('class'=>'angle-double-right')) fa-angle-double-right
+@include('widgets.icon', array('class'=>'angle-double-up')) fa-angle-double-up
+@include('widgets.icon', array('class'=>'angle-double-down')) fa-angle-double-down
+@include('widgets.icon', array('class'=>'angle-left')) fa-angle-left
+@include('widgets.icon', array('class'=>'angle-right')) fa-angle-right
+@include('widgets.icon', array('class'=>'angle-up')) fa-angle-up
+@include('widgets.icon', array('class'=>'angle-down')) fa-angle-down
+@include('widgets.icon', array('class'=>'desktop')) fa-desktop
+@include('widgets.icon', array('class'=>'laptop')) fa-laptop
+@include('widgets.icon', array('class'=>'tablet')) fa-tablet
+@include('widgets.icon', array('class'=>'mobile-phone')) fa-mobile-phone
+@include('widgets.icon', array('class'=>'mobile')) fa-mobile
+@include('widgets.icon', array('class'=>'circle-o')) fa-circle-o
+@include('widgets.icon', array('class'=>'quote-left')) fa-quote-left
+@include('widgets.icon', array('class'=>'quote-right')) fa-quote-right
+@include('widgets.icon', array('class'=>'spinner')) fa-spinner
+@include('widgets.icon', array('class'=>'circle')) fa-circle
+@include('widgets.icon', array('class'=>'mail-reply')) fa-mail-reply
+@include('widgets.icon', array('class'=>'reply')) fa-reply
+@include('widgets.icon', array('class'=>'github-alt')) fa-github-alt
+@include('widgets.icon', array('class'=>'folder-o')) fa-folder-o
+@include('widgets.icon', array('class'=>'folder-open-o')) fa-folder-open-o
+@include('widgets.icon', array('class'=>'smile-o')) fa-smile-o
+@include('widgets.icon', array('class'=>'frown-o')) fa-frown-o
+@include('widgets.icon', array('class'=>'meh-o')) fa-meh-o
+@include('widgets.icon', array('class'=>'gamepad')) fa-gamepad
+@include('widgets.icon', array('class'=>'keyboard-o')) fa-keyboard-o
+@include('widgets.icon', array('class'=>'flag-o')) fa-flag-o
+@include('widgets.icon', array('class'=>'flag-checkered')) fa-flag-checkered
+@include('widgets.icon', array('class'=>'terminal')) fa-terminal
+@include('widgets.icon', array('class'=>'code')) fa-code
+@include('widgets.icon', array('class'=>'mail-reply-all')) fa-mail-reply-all
+@include('widgets.icon', array('class'=>'reply-all')) fa-reply-all
+@include('widgets.icon', array('class'=>'star-half-empty')) fa-star-half-empty
+@include('widgets.icon', array('class'=>'star-half-full')) fa-star-half-full
+@include('widgets.icon', array('class'=>'star-half-o')) fa-star-half-o
+@include('widgets.icon', array('class'=>'location-arrow')) fa-location-arrow
+@include('widgets.icon', array('class'=>'crop')) fa-crop
+@include('widgets.icon', array('class'=>'code-fork')) fa-code-fork
+@include('widgets.icon', array('class'=>'unlink')) fa-unlink
+@include('widgets.icon', array('class'=>'chain-broei')) fa-chain-broei
+@include('widgets.icon', array('class'=>'question')) fa-question
+@include('widgets.icon', array('class'=>'info')) fa-info
+@include('widgets.icon', array('class'=>'exclamation')) fa-exclamation
+@include('widgets.icon', array('class'=>'superscript')) fa-superscript
+@include('widgets.icon', array('class'=>'subscript')) fa-subscript
+@include('widgets.icon', array('class'=>'eraser')) fa-eraser
+@include('widgets.icon', array('class'=>'puzzle-piece')) fa-puzzle-piece
+@include('widgets.icon', array('class'=>'microphone')) fa-microphone
+@include('widgets.icon', array('class'=>'microphone-slash')) fa-microphone-slash
+@include('widgets.icon', array('class'=>'shield')) fa-shield
+@include('widgets.icon', array('class'=>'calendar-o')) fa-calendar-o
+@include('widgets.icon', array('class'=>'fire-extinguisher')) fa-fire-extinguisher
+@include('widgets.icon', array('class'=>'rocket')) fa-rocket
+@include('widgets.icon', array('class'=>'maxcdn')) fa-maxcdn
+@include('widgets.icon', array('class'=>'chevron-circle-left')) fa-chevron-circle-left
+@include('widgets.icon', array('class'=>'chevron-circle-right')) fa-chevron-circle-right
+@include('widgets.icon', array('class'=>'chevron-circle-up')) fa-chevron-circle-up
+@include('widgets.icon', array('class'=>'chevron-circle-down')) fa-chevron-circle-down
+@include('widgets.icon', array('class'=>'html5')) fa-html5
+@include('widgets.icon', array('class'=>'css3')) fa-css3
+@include('widgets.icon', array('class'=>'anchor')) fa-anchor
+@include('widgets.icon', array('class'=>'unlock-alt')) fa-unlock-alt
+@include('widgets.icon', array('class'=>'bullseye')) fa-bullseye
+@include('widgets.icon', array('class'=>'ellipsis-h')) fa-ellipsis-h
+@include('widgets.icon', array('class'=>'ellipsis-v')) fa-ellipsis-v
+@include('widgets.icon', array('class'=>'rss-square')) fa-rss-square
+@include('widgets.icon', array('class'=>'play-circle')) fa-play-circle
+@include('widgets.icon', array('class'=>'ticket')) fa-ticket
+@include('widgets.icon', array('class'=>'minus-square')) fa-minus-square
+@include('widgets.icon', array('class'=>'minus-square-o')) fa-minus-square-o
+@include('widgets.icon', array('class'=>'level-up')) fa-level-up
+@include('widgets.icon', array('class'=>'level-down')) fa-level-down
+@include('widgets.icon', array('class'=>'check-square')) fa-check-square
+@include('widgets.icon', array('class'=>'pencil-square')) fa-pencil-square
+@include('widgets.icon', array('class'=>'external-link-square')) fa-external-link-square
+@include('widgets.icon', array('class'=>'share-square')) fa-share-square
+@include('widgets.icon', array('class'=>'compass')) fa-compass
+@include('widgets.icon', array('class'=>'toggle-down')) fa-toggle-down
+@include('widgets.icon', array('class'=>'caret-square-o-down')) fa-caret-square-o-down
+@include('widgets.icon', array('class'=>'toggle-up')) fa-toggle-up
+@include('widgets.icon', array('class'=>'caret-square-o-up')) fa-caret-square-o-up
+@include('widgets.icon', array('class'=>'toggle-right')) fa-toggle-right
+@include('widgets.icon', array('class'=>'caret-square-o-right')) fa-caret-square-o-right
+@include('widgets.icon', array('class'=>'euro')) fa-euro
+@include('widgets.icon', array('class'=>'eur')) fa-eur
+@include('widgets.icon', array('class'=>'gbp')) fa-gbp
+@include('widgets.icon', array('class'=>'dollar')) fa-dollar
+@include('widgets.icon', array('class'=>'usd')) fa-usd
+@include('widgets.icon', array('class'=>'rupee')) fa-rupee
+@include('widgets.icon', array('class'=>'inr')) fa-inr
+@include('widgets.icon', array('class'=>'cny')) fa-cny
+@include('widgets.icon', array('class'=>'rmb')) fa-rmb
+@include('widgets.icon', array('class'=>'yen')) fa-yen
+@include('widgets.icon', array('class'=>'jpy')) fa-jpy
+@include('widgets.icon', array('class'=>'ruble')) fa-ruble
+@include('widgets.icon', array('class'=>'rouble')) fa-rouble
+@include('widgets.icon', array('class'=>'rub')) fa-rub
+@include('widgets.icon', array('class'=>'won')) fa-won
+@include('widgets.icon', array('class'=>'krw')) fa-krw
+@include('widgets.icon', array('class'=>'bitcoin')) fa-bitcoin
+@include('widgets.icon', array('class'=>'btc')) fa-btc
+@include('widgets.icon', array('class'=>'file')) fa-file
+@include('widgets.icon', array('class'=>'file-text')) fa-file-text
+@include('widgets.icon', array('class'=>'sort-alpha-asc')) fa-sort-alpha-asc
+@include('widgets.icon', array('class'=>'sort-alpha-desc')) fa-sort-alpha-desc
+@include('widgets.icon', array('class'=>'sort-amount-asc')) fa-sort-amount-asc
+@include('widgets.icon', array('class'=>'sort-amount-desc')) fa-sort-amount-desc
+@include('widgets.icon', array('class'=>'sort-numeric-asc')) fa-sort-numeric-asc
+@include('widgets.icon', array('class'=>'sort-numeric-desc')) fa-sort-numeric-desc
+@include('widgets.icon', array('class'=>'thumbs-up')) fa-thumbs-up
+@include('widgets.icon', array('class'=>'thumbs-down')) fa-thumbs-down
+@include('widgets.icon', array('class'=>'youtube-square')) fa-youtube-square
+@include('widgets.icon', array('class'=>'youtube')) fa-youtube
+@include('widgets.icon', array('class'=>'xing')) fa-xing
+@include('widgets.icon', array('class'=>'xing-square')) fa-xing-square
+@include('widgets.icon', array('class'=>'youtube-play')) fa-youtube-play
+@include('widgets.icon', array('class'=>'dropbox')) fa-dropbox
+@include('widgets.icon', array('class'=>'stack-overflow')) fa-stack-overflow
+@include('widgets.icon', array('class'=>'instagram')) fa-instagram
+@include('widgets.icon', array('class'=>'flickr')) fa-flickr
+@include('widgets.icon', array('class'=>'adn')) fa-adn
+@include('widgets.icon', array('class'=>'bitbucket')) fa-bitbucket
+@include('widgets.icon', array('class'=>'bitbucket-square')) fa-bitbucket-square
+@include('widgets.icon', array('class'=>'tumblr')) fa-tumblr
+</div>
+<div>
+@include('widgets.icon', array('class'=>'tumblr-square')) fa-tumblr-square 
+@include('widgets.icon', array('class'=>'long-arrow-down')) fa-long-arrow-down
+@include('widgets.icon', array('class'=>'long-arrow-up')) fa-long-arrow-up
+@include('widgets.icon', array('class'=>'long-arrow-left')) fa-long-arrow-left
+@include('widgets.icon', array('class'=>'long-arrow-right')) fa-long-arrow-right
+@include('widgets.icon', array('class'=>'apple')) fa-apple
+@include('widgets.icon', array('class'=>'windows')) fa-windows
+@include('widgets.icon', array('class'=>'android')) fa-android
+@include('widgets.icon', array('class'=>'linux')) fa-linux
+@include('widgets.icon', array('class'=>'dribbble')) fa-dribbble
+@include('widgets.icon', array('class'=>'skype')) fa-skype
+@include('widgets.icon', array('class'=>'foursquare')) fa-foursquare
+@include('widgets.icon', array('class'=>'trello')) fa-trello
+@include('widgets.icon', array('class'=>'female')) fa-female
+@include('widgets.icon', array('class'=>'male')) fa-male
+@include('widgets.icon', array('class'=>'gittip')) fa-gittip
+@include('widgets.icon', array('class'=>'sun-o')) fa-sun-o
+@include('widgets.icon', array('class'=>'moon-o')) fa-moon-o
+@include('widgets.icon', array('class'=>'archive')) fa-archive
+@include('widgets.icon', array('class'=>'bug')) fa-bug
+@include('widgets.icon', array('class'=>'vk')) fa-vk
+@include('widgets.icon', array('class'=>'weibo')) fa-weibo
+@include('widgets.icon', array('class'=>'renren')) fa-renren
+@include('widgets.icon', array('class'=>'pagelines')) fa-pagelines
+@include('widgets.icon', array('class'=>'stack-exchange')) fa-stack-exchange
+@include('widgets.icon', array('class'=>'arrow-circle-o-right')) fa-arrow-circle-o-right
+@include('widgets.icon', array('class'=>'arrow-circle-o-left')) fa-arrow-circle-o-left
+@include('widgets.icon', array('class'=>'toggle-left')) fa-toggle-left
+@include('widgets.icon', array('class'=>'caret-square-o-left')) fa-caret-square-o-left
+@include('widgets.icon', array('class'=>'dot-circle-o')) fa-dot-circle-o
+@include('widgets.icon', array('class'=>'wheelchair')) fa-wheelchair
+@include('widgets.icon', array('class'=>'vimeo-square')) fa-vimeo-square
+@include('widgets.icon', array('class'=>'turkish-lira')) fa-turkish-lira
+@include('widgets.icon', array('class'=>'try')) fa-try
+@include('widgets.icon', array('class'=>'plus-square-o')) fa-plus-square-o
+@include('widgets.icon', array('class'=>'space-shuttle')) fa-space-shuttle
+@include('widgets.icon', array('class'=>'slack')) fa-slack
+@include('widgets.icon', array('class'=>'envelope-square')) fa-envelope-square
+@include('widgets.icon', array('class'=>'wordpress')) fa-wordpress
+@include('widgets.icon', array('class'=>'openid')) fa-openid
+@include('widgets.icon', array('class'=>'institution')) fa-institution
+@include('widgets.icon', array('class'=>'bank')) fa-bank
+@include('widgets.icon', array('class'=>'university')) fa-university
+@include('widgets.icon', array('class'=>'mortar-board')) fa-mortar-board
+@include('widgets.icon', array('class'=>'graduation-cap')) fa-graduation-cap
+@include('widgets.icon', array('class'=>'yahoo')) fa-yahoo
+@include('widgets.icon', array('class'=>'google')) fa-google
+@include('widgets.icon', array('class'=>'reddit')) fa-reddit
+@include('widgets.icon', array('class'=>'reddit-square')) fa-reddit-square
+@include('widgets.icon', array('class'=>'stumbleupon-circle')) fa-stumbleupon-circle
+@include('widgets.icon', array('class'=>'stumbleupon')) fa-stumbleupon
+@include('widgets.icon', array('class'=>'delicious')) fa-delicious
+@include('widgets.icon', array('class'=>'digg')) fa-digg
+@include('widgets.icon', array('class'=>'pied-piper-square')) fa-pied-piper-square
+@include('widgets.icon', array('class'=>'pied-piper')) fa-pied-piper
+@include('widgets.icon', array('class'=>'pied-piper-alt')) fa-pied-piper-alt
+@include('widgets.icon', array('class'=>'drupal')) fa-drupal
+@include('widgets.icon', array('class'=>'joomla')) fa-joomla
+@include('widgets.icon', array('class'=>'language')) fa-language
+@include('widgets.icon', array('class'=>'fax')) fa-fax
+@include('widgets.icon', array('class'=>'building')) fa-building
+@include('widgets.icon', array('class'=>'child')) fa-child
+@include('widgets.icon', array('class'=>'paw')) fa-paw
+@include('widgets.icon', array('class'=>'spoon')) fa-spoon
+@include('widgets.icon', array('class'=>'cube')) fa-cube
+@include('widgets.icon', array('class'=>'cubes')) fa-cubes
+@include('widgets.icon', array('class'=>'behance')) fa-behance
+@include('widgets.icon', array('class'=>'behance-square')) fa-behance-square
+@include('widgets.icon', array('class'=>'steam')) fa-steam
+@include('widgets.icon', array('class'=>'steam-square')) fa-steam-square
+@include('widgets.icon', array('class'=>'recycle')) fa-recycle
+@include('widgets.icon', array('class'=>'automobile')) fa-automobile
+@include('widgets.icon', array('class'=>'car')) fa-car
+@include('widgets.icon', array('class'=>'cab')) fa-cab
+@include('widgets.icon', array('class'=>'taxi')) fa-taxi
+@include('widgets.icon', array('class'=>'tree')) fa-tree
+@include('widgets.icon', array('class'=>'spotify')) fa-spotify
+@include('widgets.icon', array('class'=>'deviantart')) fa-deviantart
+@include('widgets.icon', array('class'=>'soundcloud')) fa-soundcloud
+@include('widgets.icon', array('class'=>'database')) fa-database
+@include('widgets.icon', array('class'=>'file-pdf-o')) fa-file-pdf-o
+@include('widgets.icon', array('class'=>'file-word-o')) fa-file-word-o
+@include('widgets.icon', array('class'=>'file-excel-o')) fa-file-excel-o
+@include('widgets.icon', array('class'=>'file-powerpoint-o')) fa-file-powerpoint-o
+@include('widgets.icon', array('class'=>'file-photo-o')) fa-file-photo-o
+@include('widgets.icon', array('class'=>'file-picture-o')) fa-file-picture-o
+@include('widgets.icon', array('class'=>'file-image-o')) fa-file-image-o
+@include('widgets.icon', array('class'=>'file-zip-o')) fa-file-zip-o
+@include('widgets.icon', array('class'=>'file-archive-o')) fa-file-archive-o
+@include('widgets.icon', array('class'=>'file-sound-o')) fa-file-sound-o
+@include('widgets.icon', array('class'=>'file-audio-o')) fa-file-audio-o
+@include('widgets.icon', array('class'=>'file-movie-o')) fa-file-movie-o
+@include('widgets.icon', array('class'=>'file-video-o')) fa-file-video-o
+@include('widgets.icon', array('class'=>'file-code-o')) fa-file-code-o
+@include('widgets.icon', array('class'=>'vine')) fa-vine
+@include('widgets.icon', array('class'=>'codepen')) fa-codepen
+@include('widgets.icon', array('class'=>'jsfiddle')) fa-jsfiddle
+@include('widgets.icon', array('class'=>'life-bouy')) fa-life-bouy
+@include('widgets.icon', array('class'=>'life-saver')) fa-life-saver
+@include('widgets.icon', array('class'=>'support')) fa-support
+@include('widgets.icon', array('class'=>'life-ring')) fa-life-ring
+@include('widgets.icon', array('class'=>'circle-o-notch')) fa-circle-o-notch
+@include('widgets.icon', array('class'=>'ra')) fa-ra
+@include('widgets.icon', array('class'=>'rebel')) fa-rebel
+@include('widgets.icon', array('class'=>'ge')) fa-ge
+@include('widgets.icon', array('class'=>'empire')) fa-empire
+@include('widgets.icon', array('class'=>'git-square')) fa-git-square
+@include('widgets.icon', array('class'=>'git')) fa-git
+@include('widgets.icon', array('class'=>'hacker-news')) fa-hacker-news
+@include('widgets.icon', array('class'=>'tencent-weibo')) fa-tencent-weibo
+@include('widgets.icon', array('class'=>'qq')) fa-qq
+@include('widgets.icon', array('class'=>'wechat')) fa-wechat
+@include('widgets.icon', array('class'=>'weixin')) fa-weixin
+@include('widgets.icon', array('class'=>'send')) fa-send
+@include('widgets.icon', array('class'=>'paper-plane')) fa-paper-plane
+@include('widgets.icon', array('class'=>'send-o')) fa-send-o
+@include('widgets.icon', array('class'=>'paper-plane-o')) fa-paper-plane-o
+@include('widgets.icon', array('class'=>'history')) fa-history
+@include('widgets.icon', array('class'=>'circle-thin')) fa-circle-thin
+@include('widgets.icon', array('class'=>'header')) fa-header
+@include('widgets.icon', array('class'=>'paragraph')) fa-paragraph
+@include('widgets.icon', array('class'=>'sliders')) fa-sliders
+@include('widgets.icon', array('class'=>'share-alt')) fa-share-alt
+@include('widgets.icon', array('class'=>'share-alt-square')) fa-share-alt-square
+@include('widgets.icon', array('class'=>'bomb')) fa-bomb
+</div>
+</div>
+</x-card>
+</div>
 @stop
