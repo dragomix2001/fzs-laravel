@@ -51,7 +51,7 @@
                 <input type="hidden" name="id" value="{{ $skolarina->id }}">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-group">
+                    <div>
                         <x-form-input
                             name="iznos"
                             label="Износ"
@@ -59,14 +59,14 @@
                             required />
                     </div>
 
-                    <div class="form-group">
+                    <div>
                         <x-form-input
                             name="komentar"
                             label="Коментар"
                             value="{{ $skolarina->komentar }}" />
                     </div>
 
-                    <div class="form-group">
+                    <div>
                         <x-form-select
                             name="tipStudija_id"
                             label="Тип студија"
@@ -77,7 +77,7 @@
                         </x-form-select>
                     </div>
 
-                    <div class="form-group">
+                    <div>
                         <x-form-select
                             name="godinaStudija_id"
                             label="Година студија"
@@ -91,7 +91,7 @@
 
                 <hr class="my-4 border-secondary-200">
 
-                <div class="form-group text-center">
+                <div class="text-center mt-4">
                     <button type="submit" class="inline-flex items-center px-6 py-3 bg-success-600 hover:bg-success-500 text-white text-base font-medium rounded-lg transition-colors">
                         <span class="fa fa-save mr-2"></span> Сачувај
                     </button>

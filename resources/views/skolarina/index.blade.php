@@ -49,7 +49,7 @@
                 </a>
             </div>
         @else
-            <div class="form-group text-center mt-4">
+            <div class="text-center mt-4">
                 <a href="{{"/"}}skolarina/dodavanje/{{$kandidat->id}}" class="inline-flex items-center px-6 py-3 bg-success-600 hover:bg-success-500 text-white text-base font-medium rounded-lg transition-colors">
                     <span class="fa fa-plus mr-2"></span> Унос школарине
                 </a>

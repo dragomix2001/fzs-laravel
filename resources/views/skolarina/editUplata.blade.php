@@ -34,7 +34,7 @@
                 <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-group">
+                    <div>
                         <x-form-input
                             name="iznos"
                             label="Износ"
@@ -42,16 +42,16 @@
                             required />
                     </div>
 
-                    <div class="form-group">
+                    <div>
                         <x-form-input
                             name="naziv"
                             label="Назив"
                             value="{{ $uplata->naziv }}" />
                     </div>
 
-                    <div class="form-group">
+                    <div>
                         <label for="formatDatum" class="block text-sm font-medium text-secondary-700 mb-1">Датум уплате</label>
-                        <input id="formatDatum" class="form-input dateMask" type="text" name="formatDatum"
+                        <input id="formatDatum" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dateMask" type="text" name="formatDatum"
                                value="{{ $uplata->datum->format('d.m.Y.') }}"/>
                         <input type="hidden" name="datum" id="datum" value="{{ $uplata->datum }}">
                     </div>
@@ -59,7 +59,7 @@
 
                 <hr class="my-4 border-secondary-200">
 
-                <div class="form-group text-center">
+                <div class="text-center mt-4">
                     <button type="submit" class="inline-flex items-center px-6 py-3 bg-success-600 hover:bg-success-500 text-white text-base font-medium rounded-lg transition-colors">
                         <span class="fa fa-save mr-2"></span> Сачувај
                     </button>
