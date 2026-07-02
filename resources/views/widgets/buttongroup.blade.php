@@ -1,7 +1,6 @@
-<div class="btn-group {{{ isset($large) ? 'btn-group-lg' : ''}}} {{{ isset($small) ? 'btn-group-sm' : ''}}} {{{ isset($extrasmall) ? 'btn-group-xs' : ''}}}" role="group" aria-label="...">
-  <button type="button" class="btn btn-default">{{$value1}}</button>
-  <button type="button" class="btn btn-default">{{$value2}}</button>
-  <button type="button" class="btn btn-default">{{$value3}}</button>
-  <button type="button" class="btn btn-default">{{$value4}}</button>
+<div class="inline-flex -space-x-px shadow-sm" role="group">
+    <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-secondary-700 bg-white border border-secondary-300 rounded-l-lg hover:bg-secondary-50 transition-colors">{{ $value1 }}</button>
+    <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-secondary-700 bg-white border border-secondary-300 hover:bg-secondary-50 transition-colors">{{ $value2 }}</button>
+    <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-secondary-700 bg-white border border-secondary-300 hover:bg-secondary-50 transition-colors">{{ $value3 }}</button>
+    <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-secondary-700 bg-white border border-secondary-300 rounded-r-lg hover:bg-secondary-50 transition-colors">{{ $value4 }}</button>
 </div>
-	 
