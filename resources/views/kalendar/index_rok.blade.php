@@ -19,7 +19,7 @@
         @endif
     </div>
 
-    <x-button variant="primary" size="md" href="{{"/"}}kalendar/createRok/">
+    <x-button variant="primary" size="md" href="/kalendar/createRok/">
         <span class="fa fa-plus"></span> Нови рок
     </x-button>
 
@@ -39,7 +39,7 @@
                 </thead>
                 @foreach($ispitniRokovi as $rok)
                     <tr>
-                        <td>{{$rok->nadredjeniRok->naziv ?? '-'}}</td>
+                        <td>{{$rok->nadredjeniRok?->naziv ?? '-'}}</td>
                         <td>{{$rok->naziv}}</td>
                         <td>{{\Carbon\Carbon::parse($rok->pocetak)->format('d.m.Y.')}}</td>
                         <td>{{\Carbon\Carbon::parse($rok->kraj)->format('d.m.Y.')}}</td>
@@ -47,10 +47,10 @@
                         <td>{{$rok->komentar}}</td>
                         <td>
                             <div class="inline-flex gap-1">
-                                <x-button variant="warning" size="xs" href="/kalendar/rok/{{ $rok->id }}/edit">
+                                <x-button variant="warning" size="xs" href="/kalendar/editRok/{{ $rok->id }}">
                                     <span class="fa fa-edit" title="Измена"></span>
                                 </x-button>
-                                <x-button variant="danger" size="xs" href="/kalendar/rok/{{ $rok->id }}"
+                                <x-button variant="danger" size="xs" href="/kalendar/deleteRok/{{ $rok->id }}"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете испитни рок?');">
                                     <span class="fa fa-trash" title="Брисање"></span>
                                 </x-button>

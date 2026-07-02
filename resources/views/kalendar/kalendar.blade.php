@@ -3,7 +3,7 @@
 @section('section')
 
 <div class="w-full lg:w-10/12">
-    <x-button variant="primary" size="md" href="{{"/"}}kalendar/indexRok/">
+    <x-button variant="primary" size="md" href="/kalendar/indexRok/">
         <span class="fa fa-envelope-square"></span>
         Сви рокови
     </x-button>
@@ -36,7 +36,7 @@
                 }
             ],
             eventClick: function(calEvent, jsEvent, view) {
-                window.location.href = '{{"/"}}kalendar/editRok/' + calEvent.id;
+                window.location.href = '/kalendar/editRok/' + calEvent.id;
             }
         })
     });
