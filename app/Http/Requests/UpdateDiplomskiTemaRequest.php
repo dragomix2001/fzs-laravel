@@ -14,7 +14,7 @@ class UpdateDiplomskiTemaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'predmet_id' => 'required',
+            'predmet_id' => 'nullable',
             'profesor_id' => 'required',
             'nazivTeme' => 'required',
         ];

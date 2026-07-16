@@ -14,7 +14,7 @@ class UpdateDiplomskiOdbranaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'predmet_id' => 'required',
+            'predmet_id' => 'nullable',
             'temu_odobrio_profesor_id' => 'required',
             'nazivTeme' => 'required',
             'odbranu_odobrio_profesor_id' => 'required',
