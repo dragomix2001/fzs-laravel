@@ -74,6 +74,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          set -o pipefail
           vendor/bin/phpunit --testdox --do-not-fail-on-warning --coverage-text --coverage-clover=coverage.xml | tee test-output.txt
           echo ""
           echo "=== COVERAGE SUMMARY ==="
