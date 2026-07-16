@@ -13,11 +13,11 @@ use App\Models\PrilozenaDokumenta;
 use App\Models\SkolskaGodUpisa;
 use App\Models\Sport;
 use App\Models\SportskoAngazovanje;
+use App\Models\SrednjeSkoleFakulteti;
 use App\Models\StatusGodine;
 use App\Models\StatusStudiranja;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
-use App\Models\SrednjeSkoleFakulteti;
 use App\Models\UspehSrednjaSkola;
 use Illuminate\Database\Eloquent\Collection;
 

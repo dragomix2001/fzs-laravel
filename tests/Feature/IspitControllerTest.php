@@ -18,6 +18,7 @@ use App\Models\TipPredmeta;
 use App\Models\TipPrijave;
 use App\Models\TipStudija;
 use App\Models\User;
+use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganjuIspita;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -430,7 +431,7 @@ class IspitControllerTest extends TestCase
         ]);
 
         // Ensure both students are linked to the zapisnik
-        \App\Models\ZapisnikOPolaganju_Student::create([
+        ZapisnikOPolaganju_Student::create([
             'zapisnik_id' => $this->zapisnik->id,
             'kandidat_id' => $this->kandidat->id,
             'prijavaIspita_id' => $this->zapisnik->prijavaIspita_id,
@@ -446,7 +447,7 @@ class IspitControllerTest extends TestCase
             'tipPrijave_id' => $this->tipPrijave->id,
         ]);
 
-        \App\Models\ZapisnikOPolaganju_Student::create([
+        ZapisnikOPolaganju_Student::create([
             'zapisnik_id' => $this->zapisnik->id,
             'kandidat_id' => $secondKandidat->id,
             'prijavaIspita_id' => $prijava2->id,

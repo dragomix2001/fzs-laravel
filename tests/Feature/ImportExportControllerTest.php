@@ -8,7 +8,7 @@ use App\Http\Controllers\ImportExportController;
 use App\Http\Requests\ImportFileRequest;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 
@@ -84,7 +84,7 @@ class ImportExportControllerTest extends TestCase
 
         // Create request directly via static create (bypasses FormRequest
         // container resolution which would trigger validation and throw)
-        $fakeFile = \Illuminate\Http\UploadedFile::fake()->create('kandidati.xlsx');
+        $fakeFile = UploadedFile::fake()->create('kandidati.xlsx');
         $request = ImportFileRequest::create(
             '/import-export/import',
             'POST',
