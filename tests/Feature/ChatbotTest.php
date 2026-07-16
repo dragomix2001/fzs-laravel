@@ -13,8 +13,7 @@ class ChatbotTest extends TestCase
 
     public function test_chatbot_returns_mock_response_when_no_openai_key(): void
     {
-        $_ENV['OPENAI_API_KEY'] = 'sk-your-openai-api-key-here';
-        putenv('OPENAI_API_KEY=sk-your-openai-api-key-here');
+        config(['openai.api_key' => 'sk-your-openai-api-key-here']);
 
         $chatbot = new ChatbotService(
             $this->createMock(RagService::class)
@@ -36,8 +35,7 @@ class ChatbotTest extends TestCase
         $chatbot = new ChatbotService($ragMock);
 
         // Set an invalid API key to trigger exception handling
-        $_ENV['OPENAI_API_KEY'] = 'invalid-key';
-        putenv('OPENAI_API_KEY=invalid-key');
+        config(['openai.api_key' => 'invalid-key']);
 
         $response = $chatbot->chat('test message');
 
@@ -61,8 +59,7 @@ class ChatbotTest extends TestCase
 
     public function test_chatbot_session_handling_works(): void
     {
-        $_ENV['OPENAI_API_KEY'] = 'sk-your-openai-api-key-here';
-        putenv('OPENAI_API_KEY=sk-your-openai-api-key-here');
+        config(['openai.api_key' => 'sk-your-openai-api-key-here']);
 
         $ragMock = $this->createMock(RagService::class);
         $ragMock->method('findRelevantContext')->willReturn('Mock context');
