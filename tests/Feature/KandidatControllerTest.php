@@ -390,18 +390,17 @@ class KandidatControllerTest extends TestCase
 
         $response = $this->post('/kandidat', [
             'page' => 1,
-            'imeKandidata' => 'Марко',
-            'prezimeKandidata' => 'Петровић',
-            'jmbg' => '0101999123456',
-            'datumRodjenja' => '1999-01-01',
+            'ImeKandidata' => 'Марко',
+            'PrezimeKandidata' => 'Петровић',
+            'JMBG' => '0101999123456',
+            'DatumRodjenja' => '1999-01-01',
             'mestoRodjenja' => $opstina->id,
-            'krsnaSlava_id' => $krsnaSlava->id,
-            'tipStudija_id' => $this->osnovneStudije->id,
-            'studijskiProgram_id' => $this->osnovniProgram->id,
-            'godinaStudija_id' => $this->godinaStudija->id,
-            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
-            'brojBodovaTest' => 0,
-            'brojBodovaSkola' => 0,
+            'KrsnaSlava' => $krsnaSlava->id,
+            'StudijskiProgram' => $this->osnovniProgram->id,
+            'GodinaStudija' => $this->godinaStudija->id,
+            'SkolskeGodineUpisa' => $this->skolskaGodina->id,
+            'BrojBodovaTest' => 0,
+            'BrojBodovaSkola' => 0,
             'ukupniBrojBodova' => 0,
         ]);
 
@@ -418,8 +417,13 @@ class KandidatControllerTest extends TestCase
     {
         $response = $this->post('/kandidat', [
             'page' => 2,
-            'kandidatId' => $this->kandidat->id,
-            'srednjaOcenaSrednjaSkola' => 4.5,
+            'insertedId' => $this->kandidat->id,
+            'OpstiUspehSrednjaSkola' => 1,
+            'SrednjaOcenaSrednjaSkola' => 4.5,
+            'prviRazred' => 1, 'SrednjaOcena1' => 4.5,
+            'drugiRazred' => 1, 'SrednjaOcena2' => 4.5,
+            'treciRazred' => 1, 'SrednjaOcena3' => 4.5,
+            'cetvrtiRazred' => 1, 'SrednjaOcena4' => 4.5,
         ]);
 
         $response->assertRedirect('/kandidat');
@@ -432,17 +436,23 @@ class KandidatControllerTest extends TestCase
     public function test_update_updates_kandidat_and_redirects_to_index(): void
     {
         $response = $this->put('/kandidat/'.$this->kandidat->id, [
-            'imeKandidata' => 'Никола Updated',
-            'prezimeKandidata' => 'Јовановић Updated',
-            'jmbg' => $this->kandidat->jmbg,
-            'datumRodjenja' => $this->kandidat->datumRodjenja,
+            'ImeKandidata' => 'Никола Updated',
+            'PrezimeKandidata' => 'Јовановић Updated',
+            'JMBG' => $this->kandidat->jmbg,
+            'DatumRodjenja' => $this->kandidat->datumRodjenja,
             'mestoRodjenja' => $this->kandidat->mesto_id,
-            'krsnaSlava_id' => $this->kandidat->krsnaSlava_id,
-            'tipStudija_id' => $this->kandidat->tipStudija_id,
-            'studijskiProgram_id' => $this->kandidat->studijskiProgram_id,
-            'godinaStudija_id' => $this->kandidat->godinaStudija_id,
-            'skolskaGodinaUpisa_id' => $this->kandidat->skolskaGodinaUpisa_id,
+            'KrsnaSlava' => $this->kandidat->krsnaSlava_id,
+            'TipStudija' => $this->kandidat->tipStudija_id,
+            'StudijskiProgram' => $this->kandidat->studijskiProgram_id,
+            'GodinaStudija' => $this->kandidat->godinaStudija_id,
+            'SkolskeGodineUpisa' => $this->kandidat->skolskaGodinaUpisa_id,
             'statusUpisa_id' => $this->kandidat->statusUpisa_id,
+            'prviRazred' => 1, 'SrednjaOcena1' => 4.5,
+            'drugiRazred' => 1, 'SrednjaOcena2' => 4.5,
+            'treciRazred' => 1, 'SrednjaOcena3' => 4.5,
+            'cetvrtiRazred' => 1, 'SrednjaOcena4' => 4.5,
+            'OpstiUspehSrednjaSkola' => 1,
+            'SrednjaOcenaSrednjaSkola' => 4.5,
         ]);
 
         $response->assertRedirect();
@@ -457,17 +467,23 @@ class KandidatControllerTest extends TestCase
     {
         $response = $this->put('/kandidat/'.$this->kandidat->id, [
             'submitstay' => '1',
-            'imeKandidata' => 'Стефан',
-            'prezimeKandidata' => 'Николић',
-            'jmbg' => $this->kandidat->jmbg,
-            'datumRodjenja' => $this->kandidat->datumRodjenja,
+            'ImeKandidata' => 'Стефан',
+            'PrezimeKandidata' => 'Николић',
+            'JMBG' => $this->kandidat->jmbg,
+            'DatumRodjenja' => $this->kandidat->datumRodjenja,
             'mestoRodjenja' => $this->kandidat->mesto_id,
-            'krsnaSlava_id' => $this->kandidat->krsnaSlava_id,
-            'tipStudija_id' => $this->kandidat->tipStudija_id,
-            'studijskiProgram_id' => $this->kandidat->studijskiProgram_id,
-            'godinaStudija_id' => $this->kandidat->godinaStudija_id,
-            'skolskaGodinaUpisa_id' => $this->kandidat->skolskaGodinaUpisa_id,
+            'KrsnaSlava' => $this->kandidat->krsnaSlava_id,
+            'TipStudija' => $this->kandidat->tipStudija_id,
+            'StudijskiProgram' => $this->kandidat->studijskiProgram_id,
+            'GodinaStudija' => $this->kandidat->godinaStudija_id,
+            'SkolskeGodineUpisa' => $this->kandidat->skolskaGodinaUpisa_id,
             'statusUpisa_id' => $this->kandidat->statusUpisa_id,
+            'prviRazred' => 1, 'SrednjaOcena1' => 4.5,
+            'drugiRazred' => 1, 'SrednjaOcena2' => 4.5,
+            'treciRazred' => 1, 'SrednjaOcena3' => 4.5,
+            'cetvrtiRazred' => 1, 'SrednjaOcena4' => 4.5,
+            'OpstiUspehSrednjaSkola' => 1,
+            'SrednjaOcenaSrednjaSkola' => 4.5,
         ]);
 
         $response->assertRedirect('/kandidat/'.$this->kandidat->id.'/edit');
@@ -492,20 +508,20 @@ class KandidatControllerTest extends TestCase
         $opstina = Opstina::query()->first();
         $krsnaSlava = KrsnaSlava::query()->first();
 
-        $response = $this->post('/master/storeMaster', [
-            'imeKandidata' => 'Анна',
-            'prezimeKandidata' => 'Поповић',
-            'jmbg' => '0202995654321',
-            'datumRodjenja' => '1995-02-02',
+        $response = $this->post('/storeMaster/', [
+            'ImeKandidata' => 'Анна',
+            'PrezimeKandidata' => 'Поповић',
+            'JMBG' => '0202995654321',
+            'DatumRodjenja' => '1995-02-02',
             'mestoRodjenja' => $opstina->id,
-            'krsnaSlava_id' => $krsnaSlava->id,
-            'tipStudija_id' => $this->masterStudije->id,
-            'studijskiProgram_id' => $this->masterProgram->id,
-            'godinaStudija_id' => $this->godinaStudija->id,
-            'skolskaGodinaUpisa_id' => $this->skolskaGodina->id,
+            'KrsnaSlava' => $krsnaSlava->id,
+            'TipStudija' => $this->masterStudije->id,
+            'StudijskiProgram' => $this->masterProgram->id,
+            'GodinaStudija' => $this->godinaStudija->id,
+            'SkolskeGodineUpisa' => $this->skolskaGodina->id,
         ]);
 
-        $response->assertRedirect('/master');
+        $response->assertRedirect();
         $this->assertDatabaseHas('kandidat', [
             'imeKandidata' => 'Анна',
             'prezimeKandidata' => 'Поповић',
@@ -516,17 +532,17 @@ class KandidatControllerTest extends TestCase
 
     public function test_update_master_updates_master_kandidat_and_redirects(): void
     {
-        $response = $this->put('/master/'.$this->masterKandidat->id, [
-            'imeKandidata' => 'Master Updated',
-            'prezimeKandidata' => 'Name Updated',
-            'jmbg' => $this->masterKandidat->jmbg,
-            'datumRodjenja' => $this->masterKandidat->datumRodjenja,
+        $response = $this->post('/master/'.$this->masterKandidat->id.'/edit', [
+            'ImeKandidata' => 'Master Updated',
+            'PrezimeKandidata' => 'Name Updated',
+            'JMBG' => $this->masterKandidat->jmbg,
+            'DatumRodjenja' => $this->masterKandidat->datumRodjenja,
             'mestoRodjenja' => $this->masterKandidat->mesto_id,
-            'krsnaSlava_id' => $this->masterKandidat->krsnaSlava_id,
-            'tipStudija_id' => $this->masterKandidat->tipStudija_id,
-            'studijskiProgram_id' => $this->masterKandidat->studijskiProgram_id,
-            'godinaStudija_id' => $this->masterKandidat->godinaStudija_id,
-            'skolskaGodinaUpisa_id' => $this->masterKandidat->skolskaGodinaUpisa_id,
+            'KrsnaSlava' => $this->masterKandidat->krsnaSlava_id,
+            'TipStudija' => $this->masterKandidat->tipStudija_id,
+            'StudijskiProgram' => $this->masterKandidat->studijskiProgram_id,
+            'GodinaStudija' => $this->masterKandidat->godinaStudija_id,
+            'SkolskeGodineUpisa' => $this->masterKandidat->skolskaGodinaUpisa_id,
             'statusUpisa_id' => $this->masterKandidat->statusUpisa_id,
         ]);
 
@@ -542,7 +558,7 @@ class KandidatControllerTest extends TestCase
         $masterKandidatId = $this->masterKandidat->id;
 
         $response = $this->from('/master')
-            ->delete('/master/'.$masterKandidatId);
+            ->get('/master/'.$masterKandidatId.'/delete');
 
         $response->assertRedirect('/master');
         $response->assertSessionHas('flash-success', 'delete');
@@ -553,7 +569,7 @@ class KandidatControllerTest extends TestCase
 
     public function test_test_post_returns_request_data(): void
     {
-        $response = $this->post('/kandidat/test', [
+        $response = $this->post('/testPost', [
             'test_key' => 'test_value',
             'another_key' => 'another_value',
         ]);

@@ -677,7 +677,7 @@ class PrijavaControllerTest extends TestCase
             'indikatorOdobreno' => 0,
         ]);
 
-        $response = $this->put('/prijava/updateDiplomskiTema', [
+        $response = $this->post('/prijava/updateDiplomskiTema', [
             'diplomskiTema_id' => $tema->id,
             'kandidat_id' => $this->kandidat->id,
             'nazivTeme' => 'Updated Tema',
@@ -729,7 +729,7 @@ class PrijavaControllerTest extends TestCase
             'indikatorOdobreno' => 0,
         ]);
 
-        $response = $this->put('/prijava/updateDiplomskiOdbrana', [
+        $response = $this->post('/prijava/updateDiplomskiOdbrana', [
             'diplomskiRadOdbrana_id' => $odbrana->id,
             'kandidat_id' => $this->kandidat->id,
             'nazivTeme' => 'Updated Odbrana',
@@ -785,7 +785,7 @@ class PrijavaControllerTest extends TestCase
             'vreme' => '10:00:00',
         ]);
 
-        $response = $this->put('/prijava/updateDiplomskiPolaganje', [
+        $response = $this->post('/prijava/updateDiplomskiPolaganje', [
             'polaganje_id' => $polaganje->id,
             'kandidat_id' => $this->kandidat->id,
             'nazivTeme' => 'Updated Polaganje',
