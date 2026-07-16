@@ -72,6 +72,27 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/prijava/vratiPredmetPrijava', 'App\Http\Controllers\PrijavaController@vratiPredmetPrijava');
     Route::post('/prijava/vratiKandidataPoBroju', 'App\Http\Controllers\PrijavaController@vratiKandidataPoBroju');
 
+    // DIPLOMSKI RAD - TEMA
+    Route::get('/prijava/diplomskiTema/{kandidat}', 'App\Http\Controllers\PrijavaController@diplomskiTema');
+    Route::post('/prijava/storeDiplomskiTema', 'App\Http\Controllers\PrijavaController@storeDiplomskiTema');
+    Route::get('/prijava/diplomskiTema/{kandidat}/edit', 'App\Http\Controllers\PrijavaController@editdiplomskiTema');
+    Route::post('/prijava/updateDiplomskiTema', 'App\Http\Controllers\PrijavaController@updateDiplomskiTema');
+    Route::get('/prijava/diplomskiTema/{kandidat}/delete', 'App\Http\Controllers\PrijavaController@deleteDiplomskiTema');
+
+    // DIPLOMSKI RAD - ODBRANA
+    Route::get('/prijava/diplomskiOdbrana/{kandidat}', 'App\Http\Controllers\PrijavaController@diplomskiOdbrana');
+    Route::post('/prijava/storeDiplomskiOdbrana', 'App\Http\Controllers\PrijavaController@storeDiplomskiOdbrana');
+    Route::get('/prijava/diplomskiOdbrana/{kandidat}/edit', 'App\Http\Controllers\PrijavaController@editDiplomskiOdbrana');
+    Route::post('/prijava/updateDiplomskiOdbrana', 'App\Http\Controllers\PrijavaController@updateDiplomskiOdbrana');
+    Route::get('/prijava/diplomskiOdbrana/{kandidat}/delete', 'App\Http\Controllers\PrijavaController@deleteDiplomskiOdbrana');
+
+    // DIPLOMSKI RAD - POLAGANJE
+    Route::get('/prijava/diplomskiPolaganje/{kandidat}', 'App\Http\Controllers\PrijavaController@diplomskiPolaganje');
+    Route::post('/prijava/storeDiplomskiPolaganje', 'App\Http\Controllers\PrijavaController@storeDiplomskiPolaganje');
+    Route::get('/prijava/diplomskiPolaganje/{kandidat}/edit', 'App\Http\Controllers\PrijavaController@editDiplomskiPolaganje');
+    Route::post('/prijava/updateDiplomskiPolaganje', 'App\Http\Controllers\PrijavaController@updateDiplomskiPolaganje');
+    Route::get('/prijava/diplomskiPolaganje/{kandidat}/delete', 'App\Http\Controllers\PrijavaController@deleteDiplomskiPolaganje');
+
     Route::get('/zapisnik', 'App\Http\Controllers\IspitController@indexZapisnik');
     Route::get('/zapisnik/create', 'App\Http\Controllers\IspitController@createZapisnik');
     Route::get('/zapisnik/vratiZapisnikPredmet', 'App\Http\Controllers\IspitController@vratiZapisnikPredmet');

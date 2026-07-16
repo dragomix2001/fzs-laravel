@@ -17,6 +17,7 @@ use App\Models\StatusGodine;
 use App\Models\StatusStudiranja;
 use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
+use App\Models\SrednjeSkoleFakulteti;
 use App\Models\UspehSrednjaSkola;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -100,6 +101,8 @@ class DropdownDataService
             'godinaStudija' => GodinaStudija::all(),
             'skolskeGodineUpisa' => SkolskaGodUpisa::all(),
             'dokumentaMaster' => PrilozenaDokumenta::where('skolskaGodina_id', '3')->get(),
+            'nazivSkoleFakulteta' => SrednjeSkoleFakulteti::all(),
+            'mestoZavrseneSkoleFakulteta' => Opstina::all(),
         ];
     }
 

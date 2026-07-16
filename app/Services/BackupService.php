@@ -62,10 +62,11 @@ class BackupService
         }
 
         $command = sprintf(
-            'mysqldump -h%s -u%s %s > %s 2>/dev/null',
+            'mysqldump -h%s -u%s %s %s > %s 2>/dev/null',
             escapeshellarg($host),
             escapeshellarg($username),
             $password ? '-p'.escapeshellarg($password) : '',
+            escapeshellarg($database),
             escapeshellarg($sqlFile)
         );
 

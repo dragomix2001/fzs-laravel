@@ -81,7 +81,7 @@ class DiplomskiPrijavaService
     public function updateDiplomskiTema(int $temaId, array $data, bool $indikatorOdobreno): DiplomskiPrijavaTeme
     {
         $prijavaTeme = DiplomskiPrijavaTeme::findOrFail($temaId);
-        $prijavaTeme->fill($data);
+        $prijavaTeme->fill(collect($data)->only($prijavaTeme->getFillable())->toArray());
         $prijavaTeme->indikatorOdobreno = (bool) $indikatorOdobreno;
         $prijavaTeme->save();
 
@@ -178,7 +178,7 @@ class DiplomskiPrijavaService
     public function updateDiplomskiOdbrana(int $odbranaId, array $data, bool $indikatorOdobreno): DiplomskiPrijavaOdbrane
     {
         $prijavaOdbrane = DiplomskiPrijavaOdbrane::findOrFail($odbranaId);
-        $prijavaOdbrane->fill($data);
+        $prijavaOdbrane->fill(collect($data)->only($prijavaOdbrane->getFillable())->toArray());
         $prijavaOdbrane->indikatorOdobreno = (bool) $indikatorOdobreno;
         $prijavaOdbrane->save();
 
@@ -281,7 +281,7 @@ class DiplomskiPrijavaService
     public function updateDiplomskiPolaganje(int $polaganjeId, array $data): DiplomskiPolaganje
     {
         $prijavaPolaganje = DiplomskiPolaganje::findOrFail($polaganjeId);
-        $prijavaPolaganje->fill($data);
+        $prijavaPolaganje->fill(collect($data)->only($prijavaPolaganje->getFillable())->toArray());
         $prijavaPolaganje->save();
 
         return $prijavaPolaganje;
