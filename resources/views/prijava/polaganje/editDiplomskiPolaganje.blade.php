@@ -61,10 +61,10 @@
                         <x-form-input name="nazivTeme" label="Назив теме:" :value="$diplomskiRadPolaganje->nazivTeme" />
                     </div>
                     <x-form-input name="formatDatum" label="Датум"
-                                  value="{{ $diplomskiRadPolaganje->datum->format('d.m.Y.') }}"
+                                  value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadPolaganje->datum)->format('d.m.Y.') }}"
                                   class="dateMask" />
                     <input type="hidden" name="datum" id="datum"
-                           value="{{ $diplomskiRadPolaganje->datum->format('Y-m-d') }}">
+                           value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadPolaganje->datum)->format('Y-m-d') }}">
                     <x-form-input name="vreme" label="Време"
                                   value="{{ substr($diplomskiRadPolaganje->vreme, 0, -3) }}"
                                   class="timeMask" />

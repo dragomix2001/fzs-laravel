@@ -33,7 +33,7 @@
             <form role="form" method="post" action="{{ url('/prijava/updateDiplomskiOdbrana') }}">
                 {{ csrf_field() }}
                 <input type="hidden" name="kandidat_id" id="kandidat_id" value="{{ $kandidat->id }}">
-                <input type="hidden" name="diplomskiTema_id" id="diplomskiTema_id" value="{{ $diplomskiRadTema->id }}">
+                <input type="hidden" name="diplomskiTema_id" id="diplomskiTema_id" value="{{ $diplomskiRadTema?->id }}">
                 <input type="hidden" name="diplomskiRadOdbrana_id" id="diplomskiRadOdbrana_id" value="{{ $diplomskiRadOdbrana->id }}">
                 <input type="hidden" name="tipStudija_id" id="tipStudija_id" value="{{ $kandidat->tipStudija_id }}">
                 <input type="hidden" name="studijskiProgram_id" id="studijskiProgram_id" value="{{ $kandidat->studijskiProgram_id }}">
@@ -63,15 +63,15 @@
                         <x-form-input name="nazivTeme" label="Назив теме:" :value="$diplomskiRadOdbrana->nazivTeme" />
                     </div>
                     <x-form-input name="formatDatum" label="Датум пријаве"
-                                  value="{{ $diplomskiRadOdbrana->datumPrijave->format('d.m.Y.') }}"
+                                  value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadOdbrana->datumPrijave)->format('d.m.Y.') }}"
                                   class="dateMask" />
                     <input type="hidden" name="datumPrijave" id="datum"
-                           value="{{ $diplomskiRadOdbrana->datumPrijave->format('Y-m-d') }}">
+                           value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadOdbrana->datumPrijave)->format('Y-m-d') }}">
                     <x-form-input name="formatDatum2" label="Датум одбране (термин)"
-                                  value="{{ $diplomskiRadOdbrana->datumOdbrane->format('d.m.Y.') }}"
+                                  value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadOdbrana->datumOdbrane)->format('d.m.Y.') }}"
                                   class="dateMask" />
                     <input type="hidden" name="datumOdbrane" id="datum2"
-                           value="{{ $diplomskiRadOdbrana->datumOdbrane->format('Y-m-d') }}">
+                           value="{{ \Illuminate\Support\Carbon::parse($diplomskiRadOdbrana->datumOdbrane)->format('Y-m-d') }}">
                 </div>
 
                 <hr class="my-6 border-secondary-200">
