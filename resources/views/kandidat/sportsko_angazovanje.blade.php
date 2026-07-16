@@ -10,7 +10,7 @@
             <x-slot:header>Додај спортско ангажовање</x-slot:header>
             <form method="post" action="{{ url('/kandidat/sportsko-angazovanje') }}" class="space-y-4">
                 @csrf
-                <x-form-select name="sport" label="Спорт" :options="$sportovi->pluck('naziv', 'id')->toArray()" required />
+                <x-form-select name="sport" label="Спорт" :options="$sport->pluck('naziv', 'id')->toArray()" required />
                 <x-form-input name="klub" label="Клуб" required />
                 <x-form-input name="uzrast" label="Узраст (од - до)" placeholder="нпр. 12-16" />
                 <div class="flex justify-end pt-4">

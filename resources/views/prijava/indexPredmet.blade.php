@@ -1,45 +1,57 @@
 @extends('layouts.layout')
-@section('page_heading','Пријава за полагање испита')
+@section('page_heading','Пријава испита')
 @section('section')
-    <div class="w-full lg:w-10/12">
+    <div class="space-y-4">
         @if (Session::get('flash-error'))
             <x-alert type="danger">
-                @if(Session::get('flash-error') === 'create')
-                    Дошло је до грешке при чувању података! Молимо вас покушајте поново.
-                @endif
+                Дошло је до грешке при чувању података! Молимо вас покушајте поново.
             </x-alert>
         @endif
         @if (Session::get('flash-success'))
             <x-alert type="success">
-                Пријава је успешно забележена!
+                Подаци су успешно сачувани.
             </x-alert>
         @endif
+
+        <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold">Предмет: {{ $predmet?->naziv }}</h3>
+            <a href="{{ url('/prijava/predmetVise/'.$predmet?->id) }}" class="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-800">
+                + Нова пријава - више студената
+            </a>
+        </div>
+
         <x-card>
-            <form role="form" method="post" action="{{ url('/prijava/') }}">
-                {{ csrf_field() }}
-                <input type="hidden" name="prijava_za_predmet" value="1">
-                <input type="hidden" name="predmet_id" value="{{ $predmet->id }}">
-                <input type="hidden" name="tipStudija_id" value="{{ $predmet->tipStudija_id }}">
-                <input type="hidden" name="studijskiProgram_id" value="{{ $predmet->studijskiProgram_id }}">
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div>
-                        <x-form-input name="brojIndeksa" label="Број Индекса" :value="$kandidat->brojIndeksa" disabled />
-                    </div>
-                    <div>
-                        <x-form-select name="rok_id" label="Испитни рок" :options="$ispitniRok->pluck('naziv','id')->toArray()" />
-                    </div>
-                </div>
-
-                <div class="mt-6 text-center">
-                    <x-button variant="success" size="lg">
-                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        Сачувај
-                    </x-button>
-                </div>
-            </form>
+            <x-table>
+                <x-slot:header>
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-secondary-500 uppercase">Кандидат</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-secondary-500 uppercase">Број Индекса</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-secondary-500 uppercase">Рок</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-secondary-500 uppercase">Код професора</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-secondary-500 uppercase">Датум</th>
+                        <th class="px-4 py-3"></th>
+                    </tr>
+                </x-slot:header>
+                @forelse($prijave as $prijava)
+                    <tr>
+                        <td class="px-4 py-3 text-sm">{{ ($prijava->kandidat?->imeKandidata ?? '') . ' ' . ($prijava->kandidat?->prezimeKandidata ?? '') }}</td>
+                        <td class="px-4 py-3 text-sm">{{ $prijava->kandidat?->brojIndeksa ?? '' }}</td>
+                        <td class="px-4 py-3 text-sm">{{ $prijava->rok?->naziv ?? '' }}</td>
+                        <td class="px-4 py-3 text-sm">{{ ($prijava->profesor?->ime ?? '') . ' ' . ($prijava->profesor?->prezime ?? '') }}</td>
+                        <td class="px-4 py-3 text-sm">{{ $prijava->datum?->format('d.m.Y.') }}</td>
+                        <td class="px-4 py-3">
+                            <a class="text-danger-600 hover:text-danger-800 text-sm"
+                               href="{{ url('/prijava/delete/'.$prijava->id) }}?prijava=predmet"
+                               onclick="return confirm('Да ли сте сигурни да желите да обришете ову пријаву?');">Бриши</a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-4 text-center text-sm text-secondary-500">Нема пријављених студената.</td>
+                    </tr>
+                @endforelse
+            </x-table>
         </x-card>
     </div>
+    <script type="text/javascript" src="{{ URL::asset('/js/tabela.js') }}"></script>
 @endsection
