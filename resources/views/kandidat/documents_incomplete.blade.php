@@ -16,12 +16,12 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Недостајућа документа</th>
                     </tr>
                 </x-slot:header>
-                @forelse($kandidati as $kandidat)
+                @forelse($rows as $row)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-900">{{ $kandidat->imeKandidata }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-900">{{ $kandidat->prezimeKandidata }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-500">{{ $kandidat->brojIndeksa }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-500">{{ $kandidat->nedostajucaDokumenta ?? '/' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-900">{{ $row['kandidat']->imeKandidata }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-900">{{ $row['kandidat']->prezimeKandidata }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-500">{{ $row['kandidat']->brojIndeksa ?? '/' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-500">{{ $row['completion']['missing_count'] }}</td>
                     </tr>
                 @empty
                     <tr>
