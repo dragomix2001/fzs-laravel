@@ -107,7 +107,7 @@ class MessagingAndJobCoverageTest extends TestCase
         $kandidat = new Kandidat(['email' => 'kandidat@test.local']);
         (new SendKandidatCreatedNotification)->handle(new KandidatCreated($kandidat));
 
-        Mail::assertSent(KandidatCreatedMail::class, 1);
+        Mail::assertQueued(KandidatCreatedMail::class, 1);
     }
 
     #[Test]

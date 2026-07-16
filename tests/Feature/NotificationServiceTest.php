@@ -26,6 +26,8 @@ class NotificationServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // Remove seeded admin so tests control the exact admin count
+        User::where('email', 'fzs@fzs.rs')->delete();
         $this->service = $this->app->make(NotificationService::class);
     }
 
@@ -154,7 +156,7 @@ class NotificationServiceTest extends TestCase
 
         $this->service->sendObavestenjeToAllStudents('Naslov', 'Sadrzaj');
 
-        Mail::assertSent(ObavestenjeMail::class, 2);
+        Mail::assertQueued(ObavestenjeMail::class, 2);
     }
 
     #[Test]
@@ -166,6 +168,6 @@ class NotificationServiceTest extends TestCase
 
         $this->service->sendObavestenjeToAllStudents('Naslov', 'Sadrzaj');
 
-        Mail::assertNothingSent();
+        Mail::assertNothingQueued();
     }
 }

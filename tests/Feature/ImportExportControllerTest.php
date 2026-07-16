@@ -82,22 +82,20 @@ class ImportExportControllerTest extends TestCase
             ->once()
             ->andThrow(new \Exception('Import failed'));
 
-        // Create a subclass to bypass FormRequest type hint
-        $request = new ImportFileRequest;
-        App::instance(ImportFileRequest::class, $request);
+        // Create request directly via static create (bypasses FormRequest
+        // container resolution which would trigger validation and throw)
+        $fakeFile = \Illuminate\Http\UploadedFile::fake()->create('kandidati.xlsx');
+        $request = ImportFileRequest::create(
+            '/import-export/import',
+            'POST',
+            [],
+            [],
+            ['file' => $fakeFile]
+        );
 
-        // The import method wraps in try-catch - test via controller directly
-        // We mock Excel import to throw to cover the catch block
         $controller = new ImportExportController;
+        $response = $controller->import($request);
 
-        try {
-            // Directly create an ImportFileRequest instance using app container
-            $fakeRequest = $this->app->make(ImportFileRequest::class);
-            $response = $controller->import($fakeRequest);
-            $this->assertNotNull($response);
-        } catch (\Throwable $e) {
-            // If the request creation itself fails, that's OK - we've covered part of the path
-            $this->assertTrue(true);
-        }
+        $this->assertNotNull($response);
     }
 }
