@@ -15,6 +15,7 @@ use App\Http\Requests\UpdateMasterKandidatRequest;
 use App\Services\KandidatEnrollmentService;
 use App\Services\KandidatService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class KandidatController extends Controller
@@ -117,7 +118,7 @@ class KandidatController extends Controller
             Session::flash('flash-error', 'delete');
         }
 
-        return \Redirect::back();
+        return Redirect::back();
     }
 
     public function sport($id)
@@ -215,11 +216,11 @@ class KandidatController extends Controller
         if ($deleted) {
             Session::flash('flash-success', 'delete');
 
-            return \Redirect::back();
+            return Redirect::back();
         } else {
             Session::flash('flash-error', 'delete');
 
-            return \Redirect::back();
+            return Redirect::back();
         }
     }
 

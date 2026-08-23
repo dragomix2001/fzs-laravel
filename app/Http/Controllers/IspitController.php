@@ -82,7 +82,7 @@ class IspitController extends Controller
 
         $this->ispitService->deleteZapisnik((int) $id);
 
-        return \Redirect::back();
+        return Redirect::back();
     }
 
     public function pregledZapisnik($zapisnikId)
@@ -153,7 +153,7 @@ class IspitController extends Controller
             return redirect('/zapisnik');
         }
 
-        return \Redirect::back();
+        return Redirect::back();
     }
 
     public function dodajStudenta(DodajStudentaRequest $request)

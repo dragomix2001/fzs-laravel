@@ -16,8 +16,8 @@ use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganjuIspita;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use PDF;
-use View;
 
 /**
  * PDF generation service for exam-related reports.

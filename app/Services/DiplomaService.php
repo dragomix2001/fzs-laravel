@@ -9,7 +9,7 @@ use App\Models\Kandidat;
 use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
-use View;
+use Illuminate\Support\Facades\View;
 
 class DiplomaService extends BasePdfService
 {

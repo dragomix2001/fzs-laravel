@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use Elibyy\TCPDF\TCPDF;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\View;
 use PDF;
-use View;
 
 class BasePdfService
 {
@@ -23,7 +24,7 @@ class BasePdfService
 
     protected function getPdfSettings(): array
     {
-        return \Config::get('tcpdf');
+        return Config::get('tcpdf');
     }
 
     protected function createPdf()

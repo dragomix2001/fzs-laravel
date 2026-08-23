@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use Illuminate\View\View as IlluminateView;
-use View;
 
 class DiplomskiRadService extends BasePdfService
 {
