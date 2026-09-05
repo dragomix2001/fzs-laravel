@@ -15,9 +15,7 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     protected static bool $databasePrepared = false;
-
     protected bool $disableAutomaticTransactions = false;
-
     private bool $testTransactionStarted = false;
 
     protected function setUp(): void
@@ -66,5 +64,4 @@ abstract class TestCase extends BaseTestCase
 
         return in_array(DatabaseTransactions::class, $traits, true);
     }
-
 }
