@@ -24,5 +24,6 @@ clover*.xml
 # Playwright
 test-results/
 playwright-report/
+playwright/.auth/
 coverage.xml
 .env.docker-backup

@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Database\Seeders\StatusGodineTableSeeder;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
@@ -15,6 +16,10 @@ abstract class TestCase extends BaseTestCase
 
     protected static bool $databasePrepared = false;
 
+    protected bool $disableAutomaticTransactions = false;
+
+    private bool $testTransactionStarted = false;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,7 +28,6 @@ abstract class TestCase extends BaseTestCase
         // against a fully migrated, seeded schema.
         if (! $this->usesRefreshDatabase() && ! self::$databasePrepared) {
             Artisan::call('migrate:fresh', [
-                '--seed' => true,
                 '--force' => true,
             ]);
             self::$databasePrepared = true;
@@ -33,6 +37,20 @@ abstract class TestCase extends BaseTestCase
         if (Schema::hasTable('status_godine') && ! DB::table('status_godine')->where('id', 1)->exists()) {
             $this->seed(StatusGodineTableSeeder::class);
         }
+
+        if (! $this->disableAutomaticTransactions && ! $this->usesRefreshDatabase() && ! $this->usesDatabaseTransactions()) {
+            DB::beginTransaction();
+            $this->testTransactionStarted = true;
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->testTransactionStarted && DB::connection()->transactionLevel() > 0) {
+            DB::rollBack();
+        }
+
+        parent::tearDown();
     }
 
     private function usesRefreshDatabase(): bool
@@ -41,4 +59,12 @@ abstract class TestCase extends BaseTestCase
 
         return in_array(RefreshDatabase::class, $traits, true);
     }
+
+    private function usesDatabaseTransactions(): bool
+    {
+        $traits = class_uses_recursive(static::class);
+
+        return in_array(DatabaseTransactions::class, $traits, true);
+    }
+
 }

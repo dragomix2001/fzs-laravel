@@ -1,10 +1,12 @@
+/// <reference types="node" />
+
 import { defineConfig, devices } from '@playwright/test';
+import { env } from 'node:process';
 
 /**
  * Playwright Configuration for FZS-Laravel Frontend Migration
  * 
- * Purpose: Visual regression testing to ensure UI parity during
- * Bootstrap → Tailwind CSS migration.
+ * Purpose: Browser-level regression coverage for the running application.
  */
 export default defineConfig({
   testDir: './tests/e2e/specs',
@@ -13,13 +15,13 @@ export default defineConfig({
   fullyParallel: true,
   
   /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
+  forbidOnly: !!env.CI,
   
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: env.CI ? 2 : 0,
   
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
@@ -30,7 +32,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:8000',
+    baseURL: env.E2E_BASE_URL ?? 'http://localhost:8080',
     
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -60,8 +62,6 @@ export default defineConfig({
       // Wait for fonts to load
       scale: 'css',
       
-      // Increase timeout for slow pages
-      timeout: 15000,
     },
   },
 
@@ -71,16 +71,25 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'setup',
+      testMatch: /auth\.setup\.ts/,
+    },
+    {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+      },
     },
   ],
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'php artisan serve --port=8000',
+  /* The Docker stack is the default local test server. Set E2E_START_SERVER=true
+   * when a standalone PHP server should be started instead. */
+  webServer: env.E2E_START_SERVER === 'true' ? {
+    command: 'php artisan serve --host=0.0.0.0 --port=8000',
     url: 'http://localhost:8000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000, // 2 minutes
-  },
+    timeout: 120 * 1000,
+  } : undefined,
 });

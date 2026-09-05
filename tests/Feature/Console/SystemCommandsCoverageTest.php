@@ -17,6 +17,14 @@ class SystemCommandsCoverageTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected function tearDown(): void
+    {
+        restore_error_handler();
+        restore_exception_handler();
+
+        parent::tearDown();
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

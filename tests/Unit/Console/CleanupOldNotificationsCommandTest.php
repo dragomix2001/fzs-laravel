@@ -14,6 +14,16 @@ use Tests\TestCase;
 
 class CleanupOldNotificationsCommandTest extends TestCase
 {
+    protected bool $disableAutomaticTransactions = true;
+
+    protected function tearDown(): void
+    {
+        restore_error_handler();
+        restore_exception_handler();
+
+        parent::tearDown();
+    }
+
     public function test_handle_logs_and_reports_deleted_notifications(): void
     {
         $builder = Mockery::mock();

@@ -146,9 +146,13 @@
             padding-left: 20px;
         }
         
-        .sidebar-menu > li.active .submenu li a.active {
+        .sidebar-menu > li.submenu-parent-active .submenu li a.active {
             background: #0d6efd;
             color: #fff;
+        }
+
+        .sidebar-menu > li.submenu-parent-active .submenu {
+            display: block;
         }
         
         .content-card {
@@ -275,136 +279,136 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar" :class="{ 'show': sidebarOpen }">
             <ul class="sidebar-menu" id="side-menu">
-                <li class="{{ Request::is('*kandidat*') || Request::is('*kandidat-dokumentacija*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*kandidat*') || Request::is('*kandidat-dokumentacija*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'kandidatSubmenu')">
                         <i class="fas fa-user"></i>
                         <span>Кандидати</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="kandidatSubmenu">
-                        <li><a href="{{ url('kandidat/create') }}">Додавање</a></li>
-                        <li><a href="{{ url('kandidat?studijskiProgramId=1') }}">Преглед</a></li>
+                        <li><a class="{{ Request::is('kandidat/create') ? 'active' : '' }}" href="{{ url('kandidat/create') }}">Додавање</a></li>
+                        <li><a class="{{ Request::is('kandidat') ? 'active' : '' }}" href="{{ url('kandidat?studijskiProgramId=1') }}">Преглед</a></li>
                         @if(Auth::check() && Auth::user()->role === 'admin')
-                            <li><a href="{{ route('kandidat.documents.incomplete') }}">Преглед документације</a></li>
+                            <li><a class="{{ Request::is('kandidat/documents/incomplete') ? 'active' : '' }}" href="{{ route('kandidat.documents.incomplete') }}">Преглед документације</a></li>
                         @endif
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*master*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*master*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'masterSubmenu')">
                         <i class="fas fa-book"></i>
                         <span>Мастер кандидати</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="masterSubmenu">
-                        <li><a href="{{ url('master/create') }}">Додавање</a></li>
-                        <li><a href="{{ url('master') }}">Преглед</a></li>
+                        <li><a class="{{ Request::is('master/create') ? 'active' : '' }}" href="{{ url('master/create') }}">Додавање</a></li>
+                        <li><a class="{{ Request::is('master') ? 'active' : '' }}" href="{{ url('master') }}">Преглед</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*student*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*student*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'studentiSubmenu')">
                         <i class="fas fa-graduation-cap"></i>
                         <span>Активни студенти</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="studentiSubmenu">
-                        <li><a href="{{ url('student/index/1?godina=1&studijskiProgramId=1') }}">Основне студије</a></li>
-                        <li><a href="{{ url('student/index/2?studijskiProgramId=4') }}">Мастер студије</a></li>
-                        <li><a href="{{ url('student/zamrznuti') }}">Статус мировања</a></li>
-                        <li><a href="{{ url('student/ispisani') }}">Исписани студенти</a></li>
-                        <li><a href="{{ url('student/diplomirani?tipStudijaId=1&studijskiProgramId=1') }}">Дипломирани</a></li>
-                        <li><a href="{{ url('/izvestaji/spiskoviStudenti') }}">Извештаји</a></li>
+                        <li><a class="{{ Request::is('student/index/1') ? 'active' : '' }}" href="{{ url('student/index/1?godina=1&studijskiProgramId=1') }}">Основне студије</a></li>
+                        <li><a class="{{ Request::is('student/index/2') ? 'active' : '' }}" href="{{ url('student/index/2?studijskiProgramId=4') }}">Мастер студије</a></li>
+                        <li><a class="{{ Request::is('student/zamrznuti') ? 'active' : '' }}" href="{{ url('student/zamrznuti') }}">Статус мировања</a></li>
+                        <li><a class="{{ Request::is('student/ispisani') ? 'active' : '' }}" href="{{ url('student/ispisani') }}">Исписани студенти</a></li>
+                        <li><a class="{{ Request::is('student/diplomirani') ? 'active' : '' }}" href="{{ url('student/diplomirani?tipStudijaId=1&studijskiProgramId=1') }}">Дипломирани</a></li>
+                        <li><a class="{{ Request::is('izvestaji/spiskoviStudenti') ? 'active' : '' }}" href="{{ url('/izvestaji/spiskoviStudenti') }}">Извештаји</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*kalendar*') || Request::is('*predmeti*') || Request::is('*zapisnik*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*kalendar*') || Request::is('*predmeti*') || Request::is('*zapisnik*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'ispitiSubmenu')">
                         <i class="fas fa-calendar"></i>
                         <span>Испити</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="ispitiSubmenu">
-                        <li><a href="{{ url('/kalendar/') }}">Календар</a></li>
-                        <li><a href="{{ url('/predmeti/') }}">Пријава испита</a></li>
-                        <li><a href="{{ url('/zapisnik/') }}">Записник</a></li>
+                        <li><a class="{{ Request::is('kalendar*') ? 'active' : '' }}" href="{{ url('/kalendar/') }}">Календар</a></li>
+                        <li><a class="{{ Request::is('predmeti*') || Request::is('prijava/*') ? 'active' : '' }}" href="{{ url('/predmeti/') }}">Пријава испита</a></li>
+                        <li><a class="{{ Request::is('zapisnik*') ? 'active' : '' }}" href="{{ url('/zapisnik/') }}">Записник</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*tipStudija*') || Request::is('*studijskiProgram*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*tipStudija*') || Request::is('*studijskiProgram*') || Request::is('*godinaStudija*') || Request::is('*statusStudiranja*') || Request::is('*semestar*') || Request::is('*ispitniRok*') || Request::is('*oblikNastave*') || Request::is('*tipPredmeta*') || Request::is('*bodovanje*') || Request::is('*statusKandidata*') || Request::is('*statusIspita*') || Request::is('*statusProfesora*') || Request::is('*tipPrijave*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'adminSifarniciSubmenu')">
                         <i class="fas fa-cogs"></i>
                         <span>Админ шифарници</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="adminSifarniciSubmenu">
-                        <li><a href="{{ url('/tipStudija') }}">Тип студија</a></li>
-                        <li><a href="{{ url('/studijskiProgram') }}">Студијски програм</a></li>
-                        <li><a href="{{ url('/godinaStudija') }}">Година студија</a></li>
-                        <li><a href="{{ url('statusStudiranja') }}">Статус студирања</a></li>
-                        <li><a href="{{ url('semestar') }}">Семестар</a></li>
-                        <li><a href="{{ url('ispitniRok') }}">Испитни рок</a></li>
-                        <li><a href="{{ url('oblikNastave') }}">Облик наставе</a></li>
-                        <li><a href="{{ url('tipPredmeta') }}">Тип предмета</a></li>
-                        <li><a href="{{ url('bodovanje') }}">Бодовање</a></li>
-                        <li><a href="{{ url('statusKandidata') }}">Статус године</a></li>
-                        <li><a href="{{ url('statusIspita') }}">Статус испита</a></li>
-                        <li><a href="{{ url('statusProfesora') }}">Статус професора</a></li>
-                        <li><a href="{{ url('tipPrijave') }}">Тип пријаве</a></li>
+                        <li><a class="{{ Request::is('tipStudija*') ? 'active' : '' }}" href="{{ url('/tipStudija') }}">Тип студија</a></li>
+                        <li><a class="{{ Request::is('studijskiProgram*') ? 'active' : '' }}" href="{{ url('/studijskiProgram') }}">Студијски програм</a></li>
+                        <li><a class="{{ Request::is('godinaStudija*') ? 'active' : '' }}" href="{{ url('/godinaStudija') }}">Година студија</a></li>
+                        <li><a class="{{ Request::is('statusStudiranja*') ? 'active' : '' }}" href="{{ url('statusStudiranja') }}">Статус студирања</a></li>
+                        <li><a class="{{ Request::is('semestar*') ? 'active' : '' }}" href="{{ url('semestar') }}">Семестар</a></li>
+                        <li><a class="{{ Request::is('ispitniRok*') ? 'active' : '' }}" href="{{ url('ispitniRok') }}">Испитни рок</a></li>
+                        <li><a class="{{ Request::is('oblikNastave*') ? 'active' : '' }}" href="{{ url('oblikNastave') }}">Облик наставе</a></li>
+                        <li><a class="{{ Request::is('tipPredmeta*') ? 'active' : '' }}" href="{{ url('tipPredmeta') }}">Тип предмета</a></li>
+                        <li><a class="{{ Request::is('bodovanje*') ? 'active' : '' }}" href="{{ url('bodovanje') }}">Бодовање</a></li>
+                        <li><a class="{{ Request::is('statusKandidata*') ? 'active' : '' }}" href="{{ url('statusKandidata') }}">Статус године</a></li>
+                        <li><a class="{{ Request::is('statusIspita*') ? 'active' : '' }}" href="{{ url('statusIspita') }}">Статус испита</a></li>
+                        <li><a class="{{ Request::is('statusProfesora*') ? 'active' : '' }}" href="{{ url('statusProfesora') }}">Статус професора</a></li>
+                        <li><a class="{{ Request::is('tipPrijave*') ? 'active' : '' }}" href="{{ url('tipPrijave') }}">Тип пријаве</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*sport*') || Request::is('*predmet*') || Request::is('*profesor*') ? 'active' : '' }}">
+                <li class="{{ Request::is('sport*') || Request::is('predmet') || Request::is('predmet/*') || Request::is('profesor*') || Request::is('krsnaSlava*') || Request::is('region*') || Request::is('opstina*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'sifarniciSubmenu')">
                         <i class="fas fa-list"></i>
                         <span>Шифарници</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="sifarniciSubmenu">
-                        <li><a href="{{ url('sport') }}">Спортови</a></li>
-                        <li><a href="{{ url('predmet') }}">Предмет</a></li>
-                        <li><a href="{{ url('profesor') }}">Професор</a></li>
-                        <li><a href="{{ url('krsnaSlava') }}">Крсна слава</a></li>
-                        <li><a href="{{ url('region') }}">Регион</a></li>
-                        <li><a href="{{ url('opstina') }}">Општина</a></li>
+                        <li><a class="{{ Request::is('sport*') ? 'active' : '' }}" href="{{ url('sport') }}">Спортови</a></li>
+                        <li><a class="{{ Request::is('predmet*') ? 'active' : '' }}" href="{{ url('predmet') }}">Предмет</a></li>
+                        <li><a class="{{ Request::is('profesor*') ? 'active' : '' }}" href="{{ url('profesor') }}">Професор</a></li>
+                        <li><a class="{{ Request::is('krsnaSlava*') ? 'active' : '' }}" href="{{ url('krsnaSlava') }}">Крсна слава</a></li>
+                        <li><a class="{{ Request::is('region*') ? 'active' : '' }}" href="{{ url('region') }}">Регион</a></li>
+                        <li><a class="{{ Request::is('opstina*') ? 'active' : '' }}" href="{{ url('opstina') }}">Општина</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*prisustvo*') || Request::is('*aktivnost*') || Request::is('*raspored*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*prisustvo*') || Request::is('*aktivnost*') || Request::is('*raspored*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'nastavaSubmenu')">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <span>Настава</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="nastavaSubmenu">
-                        <li><a href="{{ url('/raspored') }}">Распоред</a></li>
-                        <li><a href="{{ url('/prisustvo') }}">Присуство</a></li>
-                        <li><a href="{{ url('/aktivnost') }}">Активности</a></li>
+                        <li><a class="{{ Request::is('raspored*') ? 'active' : '' }}" href="{{ url('/raspored') }}">Распоред</a></li>
+                        <li><a class="{{ Request::is('prisustvo*') ? 'active' : '' }}" href="{{ url('/prisustvo') }}">Присуство</a></li>
+                        <li><a class="{{ Request::is('aktivnost*') ? 'active' : '' }}" href="{{ url('/aktivnost') }}">Активности</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*obavestenja*') || Request::is('*moja-obavestenja*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*obavestenja*') || Request::is('*moja-obavestenja*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'komunikacijaSubmenu')">
                         <i class="fas fa-bullhorn"></i>
                         <span>Комуникација</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="komunikacijaSubmenu">
-                        <li><a href="{{ url('/obavestenja') }}">Обавештења</a></li>
-                        <li><a href="{{ url('/moja-obavestenja') }}">Моја обавештења</a></li>
+                        <li><a class="{{ Request::is('obavestenja*') ? 'active' : '' }}" href="{{ url('/obavestenja') }}">Обавештења</a></li>
+                        <li><a class="{{ Request::is('moja-obavestenja*') ? 'active' : '' }}" href="{{ url('/moja-obavestenja') }}">Моја обавештења</a></li>
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*chatbot*') || Request::is('*prediction*') || Request::is('*dashboard*') ? 'active' : '' }}">
+                <li class="{{ Request::is('*chatbot*') || Request::is('*prediction*') || Request::is('*dashboard*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'analitikaSubmenu')">
                         <i class="fas fa-chart-pie"></i>
                         <span>Аналитика и AI</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </a>
                     <ul class="submenu" id="analitikaSubmenu">
-                        <li><a href="{{ url('/dashboard') }}">Аналитика</a></li>
-                        <li><a href="{{ url('/chatbot') }}">AI Чатбот</a></li>
-                        <li><a href="{{ url('/prediction') }}">AI Предикција</a></li>
+                        <li><a class="{{ Request::is('dashboard*') ? 'active' : '' }}" href="{{ url('/dashboard') }}">Аналитика</a></li>
+                        <li><a class="{{ Request::is('chatbot*') ? 'active' : '' }}" href="{{ url('/chatbot') }}">AI Чатбот</a></li>
+                        <li><a class="{{ Request::is('prediction*') ? 'active' : '' }}" href="{{ url('/prediction') }}">AI Предикција</a></li>
                     </ul>
                 </li>
             </ul>

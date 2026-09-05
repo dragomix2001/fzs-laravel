@@ -63,7 +63,13 @@ class PrijavaService
      */
     public function getPrijaveZaPredmet(int $predmetId): array
     {
-        $predmetProgram = PredmetProgram::where(['predmet_id' => $predmetId])->get();
+        $predmetProgram = PredmetProgram::with([
+            'prijaveIspita.kandidat',
+            'prijaveIspita.rok',
+            'prijaveIspita.profesor',
+        ])
+            ->where(['predmet_id' => $predmetId])
+            ->get();
 
         $prijave = new Collection;
         foreach ($predmetProgram as $predmet) {
@@ -483,7 +489,7 @@ class PrijavaService
      */
     public function vratiKandidataPoBroju(int $kandidatId): string
     {
-        $kandidat = Kandidat::find($kandidatId);
+        $kandidat = Kandidat::with('godinaStudija')->findOrFail($kandidatId);
 
         return '<tr>'.
             "<td><input type='checkbox' name='odabir[]' value='$kandidat->id' checked></td>".

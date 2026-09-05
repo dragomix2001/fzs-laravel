@@ -133,6 +133,10 @@ class PrijavaController extends Controller
 
     public function vratiKandidataPoBroju(Request $request)
     {
+        $request->validate([
+            'id' => ['required', 'integer', 'min:1'],
+        ]);
+
         return $this->prijavaService->vratiKandidataPoBroju((int) $request->id);
     }
 

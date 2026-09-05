@@ -16,7 +16,7 @@ class StudijskiProgramController extends Controller
 
     public function index()
     {
-        $studijskiProgram = StudijskiProgram::all();
+        $studijskiProgram = StudijskiProgram::with('tipStudija')->get();
         $tipStudija = TipStudija::all();
 
         return view('sifarnici.studijskiProgram', compact('studijskiProgram', 'tipStudija'));

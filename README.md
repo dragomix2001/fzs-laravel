@@ -34,10 +34,11 @@ See [docs/ADR/](docs/ADR/) for architectural decision records.
 
 ## 📊 Test Coverage
 
-- **1378 tests, 3426 assertions** — 0 errors, 0 failures
+- **1814 PHPUnit tests, 4640 assertions** — 0 errors, 0 failures
+- **39 Playwright E2E tests** — authenticated, mobile, AJAX, PDF and operational flows
 - **PHPStan level 5** — 0 errors (empty baseline)
 - **Pint** code style: pass
-- CI/CD: GitHub Actions (Laravel CI/CD + CodeQL Advanced) — green
+- CI/CD: GitHub Actions (PHPUnit, Playwright E2E, Pint, PHPStan and CodeQL)
 
 ## Технички стек
 
@@ -46,7 +47,7 @@ See [docs/ADR/](docs/ADR/) for architectural decision records.
 - **Frontend**: Bootstrap 5, jQuery, Tailwind CSS
 - **Database**: MySQL 8.0
 - **Authentication**: Laravel built-in auth
-- **Testing**: PHPUnit, PHPStan, Pint
+- **Testing**: PHPUnit, Playwright, PHPStan, Pint
 
 ## Инсталација
 
@@ -108,7 +109,7 @@ php artisan serve
 
 ## Тестови
 
-Тренутно: **1378 testova**, 3426 asercija, PHPStan level 5 (0 grešaka)
+Тренутно: **1814 PHPUnit тестова**, 4640 асерција и **39 Playwright E2E тестова**.
 
 ```bash
 # Покрени тестове (SEQUENTIALLY ONLY - shared MySQL DB)
@@ -116,6 +117,12 @@ php artisan serve
 
 # Покрени са извештајем
 ./vendor/bin/phpunit --testdox
+
+# Frontend/browser E2E testovi
+npm run test:e2e
+
+# Detaljna dokumentacija testiranja
+# docs/TESTING.md
 
 # PHPStan static analysis
 ./vendor/bin/phpstan analyse

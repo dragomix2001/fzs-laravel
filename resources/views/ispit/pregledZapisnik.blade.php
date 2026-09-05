@@ -24,10 +24,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
                                 <div class="md:col-span-4">
                                     <label for="addStudentList" class="block text-sm font-medium text-secondary-700 mb-1">Студенти</label>
-                                    <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm auto-combobox" id="addStudentList" name="addStudentList">
+                                    <select class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="addStudentList" name="addStudentList">
                                         <option value="0"></option>
                                         @foreach($kandidati as $index => $kandidat)
-                                            <option value="{{$kandidat->id}}">{{$kandidat->brojIndeksa}}</option>
+                                            <option value="{{$kandidat->id}}">{{$kandidat->brojIndeksa}} - {{$kandidat->imeKandidata}} {{$kandidat->prezimeKandidata}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -359,16 +359,23 @@
             });
 
             function addStudentToList() {
+                var studentId = Number($('#addStudentList option:checked').val());
+                if (!Number.isInteger(studentId) || studentId < 1) {
+                    alert('Молимо изаберите студента из листе!');
+                    return;
+                }
+
                 $.ajax({
                     url: '{{"/"}}prijava/vratiKandidataPoBroju',
                     type: 'post',
                     data: {
-                        id: $('#addStudentList').val(),
+                        id: studentId,
                         _token: $('input[name=_token]').val()
                     },
                     success: function (result) {
-                        $("#tabela tr:last").after(result);
+                        $("#addStudentTableBody").append(result);
                         $(".custom-combobox-input").val("");
+                        $('#addStudentList').val('0');
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         alert(errorThrown);

@@ -61,11 +61,17 @@ jobs:
             sleep 1
           done
 
+      - name: Create PHPUnit database
+        run: |
+          mysql -h 127.0.0.1 -P ${{ job.services.mysql.ports['3306'] }} -u root -proot \
+            -e "CREATE DATABASE IF NOT EXISTS fzs_testing"
+
       - name: Create environment file
         run: |
           cp .env.example .env
           php artisan key:generate
           sed -i 's/DB_PASSWORD=/DB_PASSWORD=root/' .env
+          sed -i 's/DB_HOST=mysql/DB_HOST=127.0.0.1/' .env
           sed -i 's/DB_PORT=3306/DB_PORT=${{ job.services.mysql.ports['3306'] }}/' .env
 
       - name: Prepare database
@@ -87,6 +93,88 @@ jobs:
           name: coverage-report
           path: coverage.xml
           retention-days: 30
+
+  e2e:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: fzs
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, xml, gd, pdo_mysql, redis
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist
+          npm ci
+          npm run build
+          npx playwright install --with-deps chromium
+
+      - name: Wait for MySQL to be ready
+        run: |
+          PORT=${{ job.services.mysql.ports['3306'] }}
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -P $PORT -u root -proot --silent 2>/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Create environment file
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          sed -i 's/DB_HOST=mysql/DB_HOST=127.0.0.1/' .env
+          sed -i 's/DB_PASSWORD=/DB_PASSWORD=root/' .env
+          sed -i 's/DB_PORT=3306/DB_PORT=${{ job.services.mysql.ports['3306'] }}/' .env
+          cat >> .env <<'EOF'
+          CACHE_DRIVER=array
+          SESSION_DRIVER=file
+          QUEUE_CONNECTION=sync
+          APP_URL=http://127.0.0.1:8000
+          EOF
+
+      - name: Prepare database
+        run: php artisan migrate:fresh --seed --force
+
+      - name: Start application
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 > /tmp/fzs-e2e.log 2>&1 &
+          for i in {1..30}; do
+            if curl --silent --fail http://127.0.0.1:8000/login > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Run Playwright E2E tests
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8000
+        run: npm run test:e2e
 
   lint:
     runs-on: ubuntu-latest

@@ -49,7 +49,7 @@
                         <td>{{$predmet->naziv}}</td>
                         <td>
                             <div class="inline-flex gap-2">
-                                <a href="prijava/zaPredmet/{{$predmet->id}}"><x-button variant="primary" size="sm">Пријава испита</x-button></a>
+                                <a href="/prijava/zaPredmet/{{$predmet->id}}"><x-button variant="primary" size="sm">Пријава испита</x-button></a>
                             </div>
                         </td>
                     </tr>
