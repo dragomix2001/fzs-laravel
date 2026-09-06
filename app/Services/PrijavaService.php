@@ -38,6 +38,13 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class PrijavaService
 {
+    public function __construct(private ?PrijavaPredmetService $predmetService = null) {}
+
+    private function predmetDataService(): PrijavaPredmetService
+    {
+        return $this->predmetService ??= new PrijavaPredmetService;
+    }
+
     // -------------------------------------------------------------------------
     // region PRIJAVA ISPITA - PREDMET
     // -------------------------------------------------------------------------
@@ -49,11 +56,7 @@ class PrijavaService
      */
     public function getSpisakPredmetaData(): array
     {
-        $tipStudija = TipStudija::all();
-        $predmeti = Predmet::all();
-        $studijskiProgrami = StudijskiProgram::all();
-
-        return compact('tipStudija', 'studijskiProgrami', 'predmeti');
+        return $this->predmetDataService()->getSpisakPredmetaData();
     }
 
     /**
@@ -63,22 +66,7 @@ class PrijavaService
      */
     public function getPrijaveZaPredmet(int $predmetId): array
     {
-        $predmetProgram = PredmetProgram::with([
-            'prijaveIspita.kandidat',
-            'prijaveIspita.rok',
-            'prijaveIspita.profesor',
-        ])
-            ->where(['predmet_id' => $predmetId])
-            ->get();
-
-        $prijave = new Collection;
-        foreach ($predmetProgram as $predmet) {
-            $prijave = $prijave->merge($predmet->prijaveIspita);
-        }
-
-        $predmet = Predmet::find($predmetId);
-
-        return compact('predmet', 'prijave');
+        return $this->predmetDataService()->getPrijaveZaPredmet($predmetId);
     }
 
     /**
@@ -86,35 +74,7 @@ class PrijavaService
      */
     public function getCreatePrijavaIspitaPredmetData(int $predmetProgramId): array
     {
-        $predmet = PredmetProgram::find($predmetProgramId);
-        $kandidat = null;
-
-        $brojeviIndeksa = Kandidat::where([
-            'tipStudija_id' => $predmet->tipStudija_id,
-            'studijskiProgram_id' => $predmet->studijskiProgram_id,
-            'statusUpisa_id' => 1,
-        ])->select('id', 'BrojIndeksa as naziv')->get();
-
-        $studijskiProgram = StudijskiProgram::where(['id' => $predmet->studijskiProgram_id])->get();
-        $godinaStudija = GodinaStudija::all();
-        $tipPredmeta = TipPredmeta::all();
-        $tipStudija = TipStudija::all();
-        $ispitniRok = AktivniIspitniRokovi::where(['indikatorAktivan' => 1])->get();
-
-        $profesorPredmet = ProfesorPredmet::where(['predmet_id' => $predmet->id])->select('profesor_id')->first();
-        if ($profesorPredmet === null) {
-            $profesor = Profesor::all();
-        } else {
-            $profesor = Profesor::where(['id' => $profesorPredmet->profesor_id])->get();
-        }
-
-        $tipPrijave = TipPrijave::all();
-
-        return compact(
-            'kandidat', 'brojeviIndeksa', 'predmet', 'studijskiProgram',
-            'godinaStudija', 'tipPredmeta', 'tipStudija', 'ispitniRok',
-            'profesor', 'tipPrijave'
-        );
+        return $this->predmetDataService()->getCreatePrijavaIspitaPredmetData($predmetProgramId);
     }
 
     /**
@@ -122,42 +82,7 @@ class PrijavaService
      */
     public function getCreatePrijavaIspitaPredmetManyData(int $predmetId): array
     {
-        $predmet = Predmet::find($predmetId);
-
-        $studijskiProgrami = PredmetProgram::where(['predmet_id' => $predmetId])
-            ->pluck('studijskiProgram_id')
-            ->all();
-
-        if (! empty($studijskiProgrami)) {
-            $kandidati = Kandidat::where(['statusUpisa_id' => 1])
-                ->whereIn('studijskiProgram_id', $studijskiProgrami)
-                ->orderBy('brojIndeksa')
-                ->get();
-        } else {
-            $kandidati = Kandidat::where(['statusUpisa_id' => 1])
-                ->orderBy('brojIndeksa')
-                ->get();
-        }
-
-        $kandidatiJson = $kandidati->map(fn ($k) => [
-            'id' => $k->id,
-            'label' => $k->brojIndeksa.' - '.$k->imeKandidata.' '.$k->prezimeKandidata,
-            'value' => $k->id,
-        ]);
-
-        $ispitniRok = AktivniIspitniRokovi::where(['indikatorAktivan' => 1])->get();
-        $profesor = Profesor::all();
-        $godinaStudija = GodinaStudija::all();
-        $tipPredmeta = TipPredmeta::all();
-        $tipStudija = TipStudija::all();
-        $tipPrijave = TipPrijave::all();
-        $studijskiProgram = StudijskiProgram::whereIn('id', $studijskiProgrami)->get();
-
-        return compact(
-            'kandidati', 'kandidatiJson', 'predmet', 'studijskiProgram',
-            'godinaStudija', 'tipPredmeta', 'tipStudija', 'ispitniRok',
-            'profesor', 'tipPrijave'
-        );
+        return $this->predmetDataService()->getCreatePrijavaIspitaPredmetManyData($predmetId);
     }
 
     /**
