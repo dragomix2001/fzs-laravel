@@ -291,6 +291,17 @@ test.describe('Functional application flows', () => {
 test.describe('Responsive functional flows', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
+  test('mobile navigation sidebar opens and closes', async ({ authenticatedPage: page }) => {
+    await page.goto('/dashboard');
+
+    const sidebar = page.locator('#sidebar');
+    await expect(sidebar).not.toHaveClass(/show/);
+    await page.locator('#sidebarToggle').click();
+    await expect(sidebar).toHaveClass(/show/);
+    await page.locator('#sidebarOverlay').evaluate((overlay) => (overlay as HTMLElement).click());
+    await expect(sidebar).not.toHaveClass(/show/);
+  });
+
   test('zapisnik modal remains usable on mobile', async ({ authenticatedPage: page }) => {
     await page.goto('/zapisnik');
     await page.locator('a[href^="/zapisnik/pregled/"]').first().click();
