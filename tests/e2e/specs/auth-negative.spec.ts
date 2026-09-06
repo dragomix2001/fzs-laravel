@@ -39,3 +39,19 @@ test('protected student API rejects unauthenticated requests', async () => {
 
   expect(response.status()).toBe(401);
 });
+
+test('API login returns a token that authenticates the user endpoint', async ({ request }) => {
+  const login = await request.post('/api/v1/auth/login', {
+    data: { email: 'fzs@fzs.rs', password: 'fzs123' },
+  });
+
+  expect(login.ok()).toBeTruthy();
+  const loginPayload = await login.json();
+  expect(loginPayload.token).toBeTruthy();
+
+  const user = await request.get('/api/v1/auth/user', {
+    headers: { Authorization: `Bearer ${loginPayload.token}` },
+  });
+  expect(user.ok()).toBeTruthy();
+  expect((await user.json()).email).toBe('fzs@fzs.rs');
+});

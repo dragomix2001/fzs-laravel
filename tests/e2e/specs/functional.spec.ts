@@ -109,8 +109,9 @@ test.describe('Functional application flows', () => {
       }
       await page.locator('select[name="OpstiUspehSrednjaSkola"]').selectOption({ index: 1 });
       await page.locator('input[name="SrednjaOcenaSrednjaSkola"]').fill('4');
-
-      await page.locator('form:has(input[name="page"][value="2"]) button[type="submit"]').click();
+      const pageTwoForm = page.locator('form:has(input[name="page"][value="2"])');
+      await pageTwoForm.locator('button[type="submit"]').click();
+      await page.waitForURL(/\/kandidat(?:\/\d+\/dokumentacija)?/, { waitUntil: 'domcontentloaded' });
       await page.goto(`/kandidat/${candidateId}`);
       await expect(page).toHaveURL(new RegExp(`/kandidat/${candidateId}$`));
       await expect(page.locator('body')).toContainText(candidateName);
