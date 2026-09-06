@@ -1,6 +1,21 @@
 import { test, expect } from '../fixtures/auth';
 
 test.describe('Functional application flows', () => {
+  test('admin can log out and is returned to login', async ({ authenticatedPage: page }) => {
+    await page.context().clearCookies();
+    await page.goto('/login');
+    await page.fill('input[name="email"]', process.env.E2E_EMAIL ?? 'fzs@fzs.rs');
+    await page.fill('input[name="password"]', process.env.E2E_PASSWORD ?? 'fzs123');
+    await page.click('button[type="submit"]');
+    await page.waitForURL((url) => !url.pathname.endsWith('/login'), { waitUntil: 'commit' });
+    await page.goto('/dashboard');
+    await page.getByText('FZS Admin', { exact: true }).click();
+    await page.locator('form[action$="/logout"] a').click();
+
+    await expect(page).toHaveURL(/\/(login)?$/);
+    await expect(page.locator('input[name="email"]')).toBeVisible();
+  });
+
   test('dashboard renders seeded activity metrics', async ({ authenticatedPage: page }) => {
     await page.goto('/dashboard');
 
@@ -195,6 +210,27 @@ test.describe('Functional application flows', () => {
     const response = await responsePromise;
     expect(response.ok()).toBeTruthy();
     await expect(page.locator('#addStudentTableBody input[name="odabir[]"]')).toHaveValue(candidateId ?? '');
+  });
+
+  test('admin can add and remove a student from an existing zapisnik', async ({ authenticatedPage: page }) => {
+    await page.goto('/zapisnik');
+    await page.locator('a[href^="/zapisnik/pregled/"]').first().click();
+
+    await page.locator('button[onclick="openModal(\'myModal\')"]').click();
+    const candidate = page.locator('#addStudentList option:not([value="0"])').first();
+    const candidateId = await candidate.getAttribute('value');
+    await candidate.evaluate((option) => {
+      (option as HTMLOptionElement).selected = true;
+    });
+    await page.locator('#addStudentButton').click();
+    await page.locator('#myModal form[action*="dodajStudenta"] input[type="submit"]').click();
+
+    await expect(page).toHaveURL(/\/zapisnik\/pregled\/\d+/);
+    const deleteStudentLink = page.locator(`a[href$="/${candidateId}/delete"]`);
+    await expect(deleteStudentLink).toBeVisible();
+    page.once('dialog', (dialog) => dialog.accept());
+    await deleteStudentLink.click();
+    await expect(page).toHaveURL(/\/zapisnik\/pregled\/\d+|\/zapisnik\/?$/);
   });
 });
 

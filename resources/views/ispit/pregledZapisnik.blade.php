@@ -254,7 +254,7 @@
                                 </select>
                             </td>
                             <td>
-                                <x-button variant="danger" size="sm" href="/zapisnik/{{ $ispit->id }}/{{ $ispit->kandidat?->id }}/delete"
+                                <x-button variant="danger" size="sm" href="/zapisnik/pregled/{{ $zapisnik->id }}/{{ $ispit->kandidat?->id }}/delete"
                                    onclick="return confirm('Да ли сте сигурни да желите да обришете овог студента?');">
                                     <div title="Брисање">
                                         <span class="fa fa-trash"></span>
