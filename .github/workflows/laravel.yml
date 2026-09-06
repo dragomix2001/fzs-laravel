@@ -76,7 +76,11 @@ jobs:
 
       - name: Prepare database
         run: |
-          php artisan migrate:fresh --seed --force
+          DB_DATABASE=fzs_testing php artisan migrate:fresh --force
+
+      - name: Check queue health
+        run: |
+          DB_DATABASE=fzs_testing php artisan queue:health-check --warn=10 --fail=50 --verbose
 
       - name: Run tests with coverage
         run: |
@@ -175,6 +179,17 @@ jobs:
         env:
           E2E_BASE_URL: http://127.0.0.1:8000
         run: npm run test:e2e
+
+      - name: Upload E2E diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-diagnostics
+          path: |
+            playwright-report/
+            test-results/
+            /tmp/fzs-e2e.log
+          retention-days: 14
 
   lint:
     runs-on: ubuntu-latest

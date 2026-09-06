@@ -80,6 +80,7 @@ Useful Playwright commands:
 npx playwright test --list
 npx playwright test functional.spec.ts --grep "zapisnik"
 npm run test:e2e:ui
+npm run test:e2e:smoke
 npx playwright show-report
 ```
 
@@ -93,6 +94,11 @@ E2E_BASE_URL=http://127.0.0.1:8000 npm run test:e2e
 Playwright authentication state is generated in `playwright/.auth/` and is
 ignored by Git. Browser artifacts are written to `test-results/` and
 `playwright-report/`.
+
+Document review routes use `/kandidat/documents/incomplete` for the admin list
+and `/kandidat/{id}/documents/review` for an individual candidate. File storage
+and document metadata are covered by PHPUnit service tests; browser tests cover
+the review page and authorization boundary.
 
 ## CI/CD
 
@@ -108,6 +114,9 @@ The workflow has three jobs:
 The E2E job uses file sessions, array cache and the synchronous queue so it does
 not require Redis in CI. The application-level queue job is covered by the
 PHPUnit queue and job tests.
+
+On E2E failure, CI uploads `playwright-report/`, `test-results/` and the local
+Laravel server log as the `playwright-diagnostics` artifact.
 
 ## Current verified baseline
 
