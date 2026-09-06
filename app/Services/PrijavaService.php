@@ -2,10 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\AktivniIspitniRokovi;
-use App\Models\DiplomskiPolaganje;
-use App\Models\DiplomskiPrijavaOdbrane;
-use App\Models\DiplomskiPrijavaTeme;
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
@@ -14,12 +10,9 @@ use App\Models\PredmetProgram;
 use App\Models\PrijavaIspita;
 use App\Models\Profesor;
 use App\Models\ProfesorPredmet;
-use App\Models\StudijskiProgram;
 use App\Models\TipPredmeta;
-use App\Models\TipPrijave;
 use App\Models\TipStudija;
 use App\Models\ZapisnikOPolaganju_Student;
-use App\Models\ZapisnikOPolaganju_StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -38,11 +31,25 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class PrijavaService
 {
-    public function __construct(private ?PrijavaPredmetService $predmetService = null) {}
+    public function __construct(
+        private ?PrijavaPredmetService $predmetService = null,
+        private ?BulkPrijavaService $bulkService = null,
+        private ?PrijavaStudentService $studentService = null,
+    ) {}
 
     private function predmetDataService(): PrijavaPredmetService
     {
         return $this->predmetService ??= new PrijavaPredmetService;
+    }
+
+    private function bulkDataService(): BulkPrijavaService
+    {
+        return $this->bulkService ??= new BulkPrijavaService;
+    }
+
+    private function studentDataService(): PrijavaStudentService
+    {
+        return $this->studentService ??= new PrijavaStudentService;
     }
 
     // -------------------------------------------------------------------------
@@ -103,114 +110,7 @@ class PrijavaService
      */
     public function storePrijavaIspitaPredmetMany(array $data): array
     {
-        $errorArray = [];
-        $duplicateArray = [];
-
-        $zapisnik = null;
-
-        if ($data['withZapisnik']) {
-            $zapisnik = new ZapisnikOPolaganjuIspita;
-            $zapisnik->predmet_id = $data['predmet_id'];
-            $zapisnik->datum = $data['datum'];
-            $zapisnik->datum2 = $data['datum2'] ?? null;
-            $zapisnik->rok_id = $data['rok_id'];
-            $zapisnik->profesor_id = $data['profesor_id'];
-            $zapisnik->save();
-        }
-
-        // Pre-fetch all kandidati by id for O(1) lookups
-        $kandidatiMap = Kandidat::whereIn('id', $data['odabir'])->get()->keyBy('id');
-
-        $uniqueStudijskiProgramIds = $kandidatiMap->pluck('studijskiProgram_id')->unique()->values();
-
-        $predmetProgramMap1 = PredmetProgram::where('predmet_id', $data['predmet_id'])
-            ->whereIn('studijskiProgram_id', $uniqueStudijskiProgramIds)
-            ->get()
-            ->keyBy(fn ($pp) => $pp->tipStudija_id.'_'.$pp->studijskiProgram_id);
-
-        $predmetProgramMap2 = PredmetProgram::where('predmet_id', $data['predmet_id'])
-            ->whereIn('studijskiProgram_id', $uniqueStudijskiProgramIds)
-            ->get()
-            ->keyBy(fn ($pp) => $pp->studijskiProgram_id);
-
-        $smerovi = [];
-
-        foreach ($data['odabir'] as $kandidatId) {
-            $kandidat = $kandidatiMap->get($kandidatId);
-
-            $predmetProgramZaPrijavu = $predmetProgramMap1->get(
-                $kandidat->tipStudija_id.'_'.$kandidat->studijskiProgram_id
-            );
-
-            if ($predmetProgramZaPrijavu === null) {
-                continue;
-            }
-
-            $exists = PrijavaIspita::where([
-                'kandidat_id' => $kandidatId,
-                'rok_id' => $data['rok_id'],
-                'predmet_id' => $predmetProgramZaPrijavu->id,
-            ])->exists();
-
-            if ($exists) {
-                $duplicateArray[] = $kandidat;
-
-                continue;
-            }
-
-            $prijava = new PrijavaIspita;
-            $prijava->kandidat_id = $kandidatId;
-            $prijava->predmet_id = $predmetProgramZaPrijavu->id;
-            $prijava->rok_id = $data['rok_id'];
-            $prijava->profesor_id = $data['profesor_id'];
-            $prijava->brojPolaganja = 1;
-            $prijava->datum = $data['datum'];
-            $prijava->tipPrijave_id = $data['tipPrijave_id'];
-
-            if ($zapisnik !== null) {
-                $zapisnik->predmet_id = $data['predmet_id'];
-                $zapisnik->save();
-            }
-
-            $saved = $prijava->save();
-
-            if ($zapisnik !== null) {
-                $zapisStudent = new ZapisnikOPolaganju_Student;
-                $zapisStudent->zapisnik_id = $zapisnik->id;
-                $zapisStudent->prijavaIspita_id = $prijava->id;
-                $zapisStudent->kandidat_id = $kandidatId;
-                $zapisStudent->save();
-
-                $smerovi[] = $kandidat->studijskiProgram_id;
-
-                /** @var PredmetProgram $predmetProgramForPolozen */
-                $predmetProgramForPolozen = $predmetProgramMap2->get($kandidat->studijskiProgram_id);
-
-                $polozenIspit = new PolozeniIspiti;
-                $polozenIspit->indikatorAktivan = false;
-                $polozenIspit->kandidat_id = $kandidatId;
-                $polozenIspit->predmet_id = $predmetProgramForPolozen->id;
-                $polozenIspit->zapisnik_id = $zapisnik->id;
-                $polozenIspit->prijava_id = $prijava->id;
-                $polozenIspit->save();
-            }
-
-            if (! $saved) {
-                $errorArray[] = $kandidatiMap->get($kandidatId);
-            }
-        }
-
-        if ($zapisnik !== null) {
-            $smerovi = array_unique($smerovi);
-            foreach ($smerovi as $smerId) {
-                $zapisSmer = new ZapisnikOPolaganju_StudijskiProgram;
-                $zapisSmer->zapisnik_id = $zapisnik->id;
-                $zapisSmer->StudijskiProgram_id = $smerId;
-                $zapisSmer->save();
-            }
-        }
-
-        return compact('errorArray', 'duplicateArray');
+        return $this->bulkDataService()->store($data);
     }
 
     // -------------------------------------------------------------------------
@@ -226,34 +126,7 @@ class PrijavaService
      */
     public function getSvePrijaveZaStudenta(int $kandidatId): array
     {
-        $kandidat = Kandidat::find($kandidatId);
-        $prijave = $kandidat->prijaveIspita()->get();
-
-        $diplomskiRadTema = DiplomskiPrijavaTeme::where([
-            'kandidat_id' => $kandidatId,
-            'tipStudija_id' => $kandidat->tipStudija_id,
-        ])->first();
-
-        $diplomskiRadOdbrana = DiplomskiPrijavaOdbrane::where([
-            'kandidat_id' => $kandidatId,
-            'tipStudija_id' => $kandidat->tipStudija_id,
-        ])->first();
-
-        $diplomskiRadPolaganje = DiplomskiPolaganje::where([
-            'kandidat_id' => $kandidatId,
-            'tipStudija_id' => $kandidat->tipStudija_id,
-        ])->first();
-
-        $ispiti = PolozeniIspiti::where([
-            'kandidat_id' => $kandidatId,
-            'indikatorAktivan' => 1,
-        ])->get();
-
-        return compact(
-            'kandidat', 'prijave',
-            'diplomskiRadTema', 'diplomskiRadOdbrana', 'diplomskiRadPolaganje',
-            'ispiti'
-        );
+        return $this->studentDataService()->getSvePrijaveZaStudenta($kandidatId);
     }
 
     /**
@@ -261,44 +134,7 @@ class PrijavaService
      */
     public function getCreatePrijavaIspitaStudentData(int $kandidatId): array
     {
-        $kandidat = Kandidat::find($kandidatId);
-
-        $brojeviIndeksa = Kandidat::where([
-            'statusUpisa_id' => 1,
-            'studijskiProgram_id' => $kandidat->studijskiProgram_id,
-            'tipStudija_id' => $kandidat->tipStudija_id,
-            'godinaStudija_id' => $kandidat->godinaStudija_id,
-        ])->select('id', 'BrojIndeksa as naziv')->get();
-
-        $predmeti = PredmetProgram::where([
-            'studijskiProgram_id' => $kandidat->studijskiProgram_id,
-            'tipStudija_id' => $kandidat->tipStudija_id,
-        ])->orderBy('semestar')->get();
-
-        $studijskiProgram = StudijskiProgram::where(['id' => $kandidat->studijskiProgram_id])->get();
-        $godinaStudija = GodinaStudija::all();
-        $tipPredmeta = TipPredmeta::all();
-        $tipStudija = TipStudija::all();
-        $ispitniRok = AktivniIspitniRokovi::where(['indikatorAktivan' => 1])->get();
-        $profesor = Profesor::all();
-
-        if ($predmeti->isEmpty()) {
-            $profesori = Profesor::all();
-        } else {
-            $profesorPredmet = ProfesorPredmet::where(['predmet_id' => $predmeti->first()->id])
-                ->select('profesor_id')
-                ->get();
-            $ids = array_map(fn (ProfesorPredmet $o) => $o->profesor_id, $profesorPredmet->all());
-            $profesori = Profesor::whereIn('id', $ids)->get();
-        }
-
-        $tipPrijave = TipPrijave::all();
-
-        return compact(
-            'kandidat', 'brojeviIndeksa', 'predmeti', 'studijskiProgram',
-            'godinaStudija', 'tipPredmeta', 'tipStudija', 'ispitniRok',
-            'profesor', 'tipPrijave', 'profesori'
-        );
+        return $this->studentDataService()->getCreatePrijavaIspitaStudentData($kandidatId);
     }
 
     // -------------------------------------------------------------------------
