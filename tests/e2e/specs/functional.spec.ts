@@ -43,6 +43,13 @@ test.describe('Functional application flows', () => {
     await expect(page.locator('input[name="PrezimeKandidata"]')).toHaveAttribute('required', '');
   });
 
+  test('admin documentation review page shows candidate document workflow', async ({ authenticatedPage: page }) => {
+    await page.goto('/kandidat/documents/incomplete');
+
+    await expect(page).toHaveURL(/\/kandidat\/documents\/incomplete/);
+    await expect(page.locator('body')).toContainText('Кандидати са непотпуним документима');
+  });
+
   test('candidate registration rejects a duplicate JMBG', async ({ authenticatedPage: page }) => {
     await page.goto('/kandidat/create');
     await page.locator('select[name="StudijskiProgram"]').selectOption({ index: 1 });
@@ -161,6 +168,20 @@ test.describe('Functional application flows', () => {
     page.once('dialog', (dialog) => dialog.accept());
     await deleteLink.click();
     await expect(page).toHaveURL(/\/zapisnik(\/)?$/);
+  });
+
+  test('admin can archive a zapisnik from the active list', async ({ authenticatedPage: page }) => {
+    await page.goto('/zapisnik');
+
+    const archiveLink = page.locator('a[href^="/zapisnik/arhiviraj/"]').first();
+    await expect(archiveLink).toBeVisible();
+    const archivedId = await archiveLink.getAttribute('href');
+    await archiveLink.click();
+
+    await expect(page).toHaveURL(/\/zapisnik(\/)?$/);
+    if (archivedId) {
+      await expect(page.locator(`a[href="${archivedId}"]`)).toHaveCount(0);
+    }
   });
 
   test('admin can save a grade from the zapisnik form', async ({ authenticatedPage: page }) => {

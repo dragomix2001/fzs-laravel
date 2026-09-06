@@ -11,3 +11,10 @@ test('invalid login stays on the login page', async ({ page }) => {
   await expect(page).toHaveURL(/\/login/);
   await expect(page.locator('input[name="email"]')).toBeVisible();
 });
+
+test('guest cannot access the admin users page', async ({ page }) => {
+  await page.goto('/users');
+
+  await expect(page).toHaveURL(/\/login/);
+  await expect(page.locator('input[name="email"]')).toBeVisible();
+});
