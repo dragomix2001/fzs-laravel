@@ -43,6 +43,39 @@ test.describe('Functional application flows', () => {
     await expect(page.locator('input[name="PrezimeKandidata"]')).toHaveAttribute('required', '');
   });
 
+  test('candidate registration rejects a duplicate JMBG', async ({ authenticatedPage: page }) => {
+    await page.goto('/kandidat/create');
+    await page.locator('select[name="StudijskiProgram"]').selectOption({ index: 1 });
+    await page.locator('select[name="SkolskeGodineUpisa"]').selectOption({ index: 1 });
+    await page.locator('input[name="ImeKandidata"]').fill('Duplicate');
+    await page.locator('input[name="PrezimeKandidata"]').fill('Candidate');
+    await page.locator('input[name="JMBG"]').fill('0101990000100');
+    await page.locator('form:has(input[name="page"][value="1"]) button[type="submit"]').click();
+
+    await expect(page).toHaveURL(/\/kandidat\/create|\/kandidat$/);
+    await expect(page.locator('body')).toContainText('ЈМБГ мора бити уникатан');
+  });
+
+  test('candidate AJAX endpoint rejects an invalid ID', async ({ authenticatedPage: page }) => {
+    await page.goto('/dashboard');
+    const responseStatus = await page.evaluate(async () => {
+      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+      const response = await fetch('/prijava/vratiKandidataPoBroju', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRF-TOKEN': token,
+          Accept: 'application/json',
+        },
+        body: new URLSearchParams({ id: '0', _token: token }),
+      });
+
+      return response.status;
+    });
+
+    expect(responseStatus).toBe(422);
+  });
+
   test('admin can complete the two-step candidate registration flow', async ({ authenticatedPage: page }) => {
     const uniqueJmbg = `99${Date.now()}`.slice(-13);
     const candidateName = `E2E${Date.now()}`;
