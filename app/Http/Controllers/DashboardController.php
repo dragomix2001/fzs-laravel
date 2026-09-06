@@ -122,7 +122,7 @@ class DashboardController extends Controller
             $query->where('skolskaGodinaUpisa_id', $godinaId);
         }
 
-        $studenti = $query->with(['program', 'godinaUpisa'])->get();
+        $studenti = $query->with(['studijskiProgram', 'godinaUpisa'])->get();
         $programi = StudijskiProgram::all();
         $godine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
 

@@ -46,6 +46,10 @@ class GradeManagementService
     public function createGradesForKandidat(int $kandidatId, array $grades): void
     {
         foreach ($grades as $grade) {
+            if ($grade['uspeh'] === null || $grade['ocena'] === null) {
+                continue;
+            }
+
             UspehSrednjaSkola::create([
                 'kandidat_id' => $kandidatId,
                 'opstiUspeh_id' => $grade['uspeh'],

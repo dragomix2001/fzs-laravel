@@ -28,6 +28,44 @@ test.describe('Functional application flows', () => {
     await expect(page.locator('input[name="PrezimeKandidata"]')).toHaveAttribute('required', '');
   });
 
+  test('admin can complete the two-step candidate registration flow', async ({ authenticatedPage: page }) => {
+    const uniqueJmbg = `99${Date.now()}`.slice(-13);
+    const candidateName = `E2E${Date.now()}`;
+    let candidateId: string | undefined;
+
+    try {
+      await page.goto('/kandidat/create');
+      const programSelect = page.locator('select[name="StudijskiProgram"]');
+      await programSelect.selectOption({ index: 1 });
+      await page.locator('select[name="SkolskeGodineUpisa"]').selectOption({ index: 1 });
+      await page.locator('input[name="ImeKandidata"]').fill(candidateName);
+      await page.locator('input[name="PrezimeKandidata"]').fill('Testovic');
+      await page.locator('input[name="JMBG"]').fill(uniqueJmbg);
+
+      await page.locator('form:has(input[name="page"][value="1"]) button[type="submit"]').click();
+      candidateId = await page.locator('input[name="insertedId"]').inputValue();
+      await expect(page.locator('input[name="page"][value="2"]')).toBeAttached();
+
+      for (const grade of ['prvi', 'drugi', 'treci', 'cetvrti']) {
+        await page.locator(`select[name="${grade}Razred"]`).selectOption({ index: 1 });
+      }
+      for (const grade of ['1', '2', '3', '4']) {
+        await page.locator(`input[name="SrednjaOcena${grade}"]`).fill('4');
+      }
+      await page.locator('select[name="OpstiUspehSrednjaSkola"]').selectOption({ index: 1 });
+      await page.locator('input[name="SrednjaOcenaSrednjaSkola"]').fill('4');
+
+      await page.locator('form:has(input[name="page"][value="2"]) button[type="submit"]').click();
+      await page.goto(`/kandidat/${candidateId}`);
+      await expect(page).toHaveURL(new RegExp(`/kandidat/${candidateId}$`));
+      await expect(page.locator('body')).toContainText(candidateName);
+    } finally {
+      if (candidateId) {
+        await page.goto(`/kandidat/${candidateId}/delete`);
+      }
+    }
+  });
+
   test('admin can open a seeded subject and see exam registrations', async ({ authenticatedPage: page }) => {
     await page.goto('/predmeti/');
 
@@ -88,7 +126,12 @@ test.describe('Functional application flows', () => {
     await gradeForm.locator('select[name^="statusIspita["]').first().selectOption({ index: 1 });
     await gradeForm.locator('button[type="submit"]').click();
 
+    const zapisnikUrl = page.url();
     await expect(page).toHaveURL(/\/zapisnik\/pregled\/\d+/);
+    await page.reload();
+    await expect(page.locator('form[action*="/zapisnik/polozeniIspit"] input[name^="brojBodova["]').first()).toHaveValue('88');
+    await expect(page.locator('form[action*="/zapisnik/polozeniIspit"] select[name^="konacnaOcena["]').first()).toHaveValue('9');
+    expect(zapisnikUrl).toMatch(/\/zapisnik\/pregled\/\d+/);
   });
 
   test('admin can request a zapisnik PDF', async ({ authenticatedPage: page }) => {

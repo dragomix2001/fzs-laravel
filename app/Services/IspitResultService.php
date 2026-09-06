@@ -204,6 +204,7 @@ class IspitResultService
                     });
                 }
             })
+            ->whereNotNull('brojIndeksa')
             ->orderByRaw('SUBSTR(brojIndeksa, 5)')
             ->orderBy('brojIndeksa')
             ->get();

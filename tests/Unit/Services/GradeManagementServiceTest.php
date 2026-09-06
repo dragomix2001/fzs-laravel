@@ -59,7 +59,7 @@ class GradeManagementServiceTest extends TestCase
 
         $this->service->createGradesForKandidat($kandidat->id, $grades);
 
-        $this->assertDatabaseCount('uspeh_srednja_skola', 4);
+        $this->assertSame(4, UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->count());
         $this->assertEquals(4, UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->count());
     }
 
@@ -190,7 +190,7 @@ class GradeManagementServiceTest extends TestCase
 
         $this->service->createGradesForKandidat($kandidat->id, $grades);
 
-        $this->assertDatabaseCount('uspeh_srednja_skola', 1);
+        $this->assertSame(1, UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->count());
         $grade = UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->first();
         $this->assertNotNull($grade);
         $this->assertEquals(1, $grade->RedniBrojRazreda);
@@ -220,7 +220,7 @@ class GradeManagementServiceTest extends TestCase
         ];
         $this->service->updateGradesForKandidat($kandidat->id, $updatedGrades);
 
-        $this->assertDatabaseCount('uspeh_srednja_skola', 4);
+        $this->assertSame(4, UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->count());
         $grade1 = UspehSrednjaSkola::where(['kandidat_id' => $kandidat->id, 'RedniBrojRazreda' => 1])->first();
         $this->assertEquals(2, $grade1->opstiUspeh_id);
         $this->assertEquals(4.0, $grade1->srednja_ocena);
@@ -239,7 +239,7 @@ class GradeManagementServiceTest extends TestCase
         ];
         $this->service->createGradesForKandidat($kandidat->id, $grades);
 
-        $this->assertDatabaseCount('uspeh_srednja_skola', 1);
+        $this->assertSame(1, UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->count());
 
         $allGrades = [
             ['razred' => 1, 'uspeh' => 1, 'ocena' => 3.5],
@@ -249,7 +249,7 @@ class GradeManagementServiceTest extends TestCase
         ];
         $this->service->updateGradesForKandidat($kandidat->id, $allGrades);
 
-        $this->assertDatabaseCount('uspeh_srednja_skola', 4);
+        $this->assertSame(4, UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->count());
         $this->assertEquals(4, UspehSrednjaSkola::where('kandidat_id', $kandidat->id)->count());
     }
 
