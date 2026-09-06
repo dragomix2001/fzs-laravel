@@ -7,8 +7,6 @@ use App\Models\Kandidat;
 use App\Models\PolozeniIspiti;
 use App\Models\PredmetProgram;
 use App\Models\PrijavaIspita;
-use App\Models\ZapisnikOPolaganju_Student;
-use App\Models\ZapisnikOPolaganju_StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
 
 /**
@@ -34,7 +32,8 @@ class IspitService
         protected IspitZapisnikService $ispitZapisnikService,
         protected IspitResultService $ispitResultService,
         protected IspitMembershipService $ispitMembershipService,
-        protected IspitZapisnikCreationService $ispitZapisnikCreationService
+        protected IspitZapisnikCreationService $ispitZapisnikCreationService,
+        protected IspitCleanupService $ispitCleanupService
     ) {}
 
     // -------------------------------------------------------------------------
@@ -204,9 +203,7 @@ class IspitService
      */
     public function deleteZapisnikWithChildren(int $id): void
     {
-        ZapisnikOPolaganju_Student::where(['zapisnik_id' => $id])->delete();
-        ZapisnikOPolaganju_StudijskiProgram::where(['zapisnik_id' => $id])->delete();
-        ZapisnikOPolaganjuIspita::destroy($id);
+        $this->ispitCleanupService->deleteZapisnik($id);
     }
 
     /**
@@ -225,38 +222,12 @@ class IspitService
 
     public function deletePolozeniIspit(int $id, int $brisiZapisnik): void
     {
-        $ispit = PolozeniIspiti::find($id);
-
-        if ($brisiZapisnik == 1) {
-            ZapisnikOPolaganju_Student::where([
-                'zapisnik_id' => $ispit->zapisnik_id,
-                'kandidat_id' => $ispit->kandidat_id,
-            ])->delete();
-
-            PolozeniIspiti::destroy($id);
-
-            $zapisnikProvera = ZapisnikOPolaganju_Student::where([
-                'zapisnik_id' => $ispit->zapisnik_id,
-            ])->get();
-
-            if ($zapisnikProvera->count() == 0) {
-                ZapisnikOPolaganjuIspita::destroy($ispit->zapisnik_id);
-            }
-        } else {
-            $ispit->indikatorAktivan = false;
-            $ispit->ocenaPismeni = 0;
-            $ispit->ocenaUsmeni = 0;
-            $ispit->konacnaOcena = 0;
-            $ispit->brojBodova = 0;
-            $ispit->statusIspita = 0;
-            $ispit->save();
-        }
+        $this->ispitCleanupService->deletePolozeniIspit($id, $brisiZapisnik);
     }
 
     public function deletePrivremeniIspit(int $id): void
     {
-        $polozenIspit = PolozeniIspiti::find($id);
-        $polozenIspit->delete();
+        $this->ispitCleanupService->deletePrivremeniIspit($id);
     }
 
     // -------------------------------------------------------------------------
