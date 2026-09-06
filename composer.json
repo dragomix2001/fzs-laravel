@@ -46,6 +46,8 @@
         "test": [
             "@php vendor/bin/phpunit --testdox"
         ],
+        "test:unit": "@php vendor/bin/phpunit --testsuite Unit --no-coverage --testdox",
+        "test:feature": "@php vendor/bin/phpunit --testsuite Feature --no-coverage --testdox",
         "lint": [
             "@php vendor/bin/pint"
         ],

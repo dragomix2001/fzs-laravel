@@ -29,6 +29,8 @@ Run the complete backend suite with the Composer script:
 
 ```bash
 composer test
+composer test:unit
+composer test:feature
 ```
 
 To run PHPUnit against the Docker MySQL test database explicitly:
