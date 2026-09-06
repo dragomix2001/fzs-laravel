@@ -124,7 +124,7 @@ The current local baseline is:
 
 ```text
 PHPUnit: 1814 tests, 4640 assertions, 0 failures, 0 errors
-Playwright: 39 E2E tests passed
+Playwright: 89 E2E tests discovered and passed in the full local suite
 ```
 
 When adding a new user-facing workflow, add a focused Playwright test and keep
