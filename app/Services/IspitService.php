@@ -33,7 +33,8 @@ class IspitService
     public function __construct(
         protected IspitZapisnikService $ispitZapisnikService,
         protected IspitResultService $ispitResultService,
-        protected IspitMembershipService $ispitMembershipService
+        protected IspitMembershipService $ispitMembershipService,
+        protected IspitZapisnikCreationService $ispitZapisnikCreationService
     ) {}
 
     // -------------------------------------------------------------------------
@@ -111,49 +112,7 @@ class IspitService
      */
     public function createZapisnik(array $data, array $odabir): ZapisnikOPolaganjuIspita
     {
-        $zapisnik = new ZapisnikOPolaganjuIspita($data);
-        $zapisnik->save();
-
-        $smerovi = [];
-
-        $kandidatiMap = Kandidat::whereIn('id', $odabir)->get()->keyBy('id');
-
-        $studijskiProgramIds = $kandidatiMap->pluck('studijskiProgram_id')->unique()->all();
-        $predmetProgramMap = PredmetProgram::where('predmet_id', $data['predmet_id'])
-            ->whereIn('studijskiProgram_id', $studijskiProgramIds)
-            ->get()
-            ->keyBy('studijskiProgram_id');
-
-        foreach ($odabir as $id) {
-            $zapisStudent = new ZapisnikOPolaganju_Student;
-            $zapisStudent->zapisnik_id = $zapisnik->id;
-            $zapisStudent->prijavaIspita_id = $zapisnik->prijavaIspita_id;
-            $zapisStudent->kandidat_id = $id;
-            $zapisStudent->save();
-
-            $kandidat = $kandidatiMap->get($id);
-            $smerovi[] = $kandidat->studijskiProgram_id;
-
-            $predmetProgramRecord = $predmetProgramMap->get($kandidat->studijskiProgram_id);
-
-            $polozenIspit = new PolozeniIspiti;
-            $polozenIspit->indikatorAktivan = false;
-            $polozenIspit->kandidat_id = $id;
-            $polozenIspit->predmet_id = $predmetProgramRecord->id;
-            $polozenIspit->zapisnik_id = $zapisnik->id;
-            $polozenIspit->prijava_id = $zapisnik->prijavaIspita_id;
-            $polozenIspit->save();
-        }
-
-        $smerovi = array_unique($smerovi);
-        foreach ($smerovi as $id) {
-            $zapisSmer = new ZapisnikOPolaganju_StudijskiProgram;
-            $zapisSmer->zapisnik_id = $zapisnik->id;
-            $zapisSmer->StudijskiProgram_id = $id;
-            $zapisSmer->save();
-        }
-
-        return $zapisnik;
+        return $this->ispitZapisnikCreationService->create($data, $odabir);
     }
 
     /**
