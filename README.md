@@ -19,15 +19,15 @@ For detailed domain concepts, see [docs/DOMAIN.md](docs/DOMAIN.md).
 ## 🏗️ Architecture
 
 **Application Structure:**
-- Controllers: HTTP request handlers (thin layer)
-- Services: 21 business logic services (KandidatService, IspitService, PrijavaService, UpisService, StudentListService, BasePdfService, IspitPdfService, KandidatEnrollmentService, and 13 more)
-- Models: 56 Eloquent ORM models
+- Controllers: HTTP request handlers
+- Services: domain services split by candidate, enrollment, exam, registration, PDF, document and notification concerns
+- Models: Eloquent ORM models for candidates, programs, exams, enrollment and documents
 - Requests: 31 Form Request validators
 - Policies: Authorization
 
 **Known Technical Debt:**
-- KandidatService (662 lines) — partially decomposed, 5 helper services extracted
-- IspitService (614 lines) — IspitPdfService extracted
+- KandidatService — decomposed with dedicated grade, sports, document and enrollment services
+- IspitService — decomposed with dedicated zapisnik creation, cleanup, membership, result, listing and PDF services
 - Direct Facade usage (Cache, Storage, DB) — accepted, see ADR-003
 
 See [docs/ADR/](docs/ADR/) for architectural decision records.
@@ -35,7 +35,7 @@ See [docs/ADR/](docs/ADR/) for architectural decision records.
 ## 📊 Test Coverage
 
 - **1814 PHPUnit tests, 4640 assertions** — 0 errors, 0 failures
-- **39 Playwright E2E tests** — authenticated, mobile, AJAX, PDF and operational flows
+- **89 Playwright E2E tests** — authenticated, mobile, AJAX, API, PDF, menu and operational flows
 - **PHPStan level 5** — 0 errors (empty baseline)
 - **Pint** code style: pass
 - CI/CD: GitHub Actions (PHPUnit, Playwright E2E, Pint, PHPStan and CodeQL)
@@ -44,7 +44,7 @@ See [docs/ADR/](docs/ADR/) for architectural decision records.
 
 - **Backend**: Laravel 13.x
 - **PHP**: 8.3+
-- **Frontend**: Bootstrap 5, jQuery, Tailwind CSS
+- **Frontend**: Laravel Blade, Tailwind CSS, Alpine.js, jQuery and selected legacy Bootstrap styles
 - **Database**: MySQL 8.0
 - **Authentication**: Laravel built-in auth
 - **Testing**: PHPUnit, Playwright, PHPStan, Pint
@@ -109,11 +109,15 @@ php artisan serve
 
 ## Тестови
 
-Тренутно: **1814 PHPUnit тестова**, 4640 асерција и **39 Playwright E2E тестова**.
+Тренутно: **1814 PHPUnit тестова**, 4640 асерција и **89 Playwright E2E тестова**.
 
 ```bash
-# Покрени тестове (SEQUENTIALLY ONLY - shared MySQL DB)
+# Покрени све PHPUnit тестове
 ./vendor/bin/phpunit
+
+# Покрени samo Unit ili Feature suite
+composer test:unit
+composer test:feature
 
 # Покрени са извештајем
 ./vendor/bin/phpunit --testdox
@@ -140,7 +144,7 @@ npm run test:e2e
 - `/student/*` - Студентске руте
 - `/kandidat/*` - Кандидати
 - `/kandidat-dokumentacija` - Admin преглед кандидата са непотпуном документацијом
-- `/kandidat/{kandidat}/dokumentacija` - Admin review по кандидату
+- `/kandidat/{kandidat}/documents/review` - Admin review по кандидату
 - `/ispit/*` - Ispiti
 - `/predmet/*` - Predmeti
 - `/profesor/*` - Profesori

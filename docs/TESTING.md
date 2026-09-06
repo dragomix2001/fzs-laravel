@@ -107,9 +107,9 @@ the review page and authorization boundary.
 GitHub Actions is defined in `.github/workflows/laravel.yml` and runs on pushes
 and pull requests targeting `main` or `master`.
 
-The workflow has three jobs:
+The workflow has three job groups:
 
-1. `laravel-tests` starts MySQL, creates `fzs_testing`, migrates and seeds the application database, then runs PHPUnit with coverage.
+1. `laravel-tests` runs a Unit/Feature matrix. Each job starts MySQL, creates `fzs_testing`, migrates it, and runs its PHPUnit suite with coverage.
 2. `e2e` starts a clean MySQL service, installs Chromium, starts Laravel on port `8000`, and runs the Playwright suite with `E2E_BASE_URL` set to that server.
 3. `lint` runs Pint and PHPStan.
 

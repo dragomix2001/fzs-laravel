@@ -428,9 +428,11 @@ vendor/bin/phpunit --stop-on-error
 - 23 smoke tests replaced with real assertions (+22 assertions)
 - StudentListService DRY refactor: 408→323 LOC via BasePdfService
 - KandidatService: 733 → 662 lines
-- Final state: 1378 tests, 3426 assertions, 0 errors
+- Historical checkpoint: 1378 tests, 3426 assertions, 0 errors
 - CI/CD: All green ✅
 
 ---
 
-**Ready for next session! Start with this roadmap and ADR-001 for full context.**
+The refactor continued after this checkpoint. Current service boundaries and
+test commands are documented in [TESTING.md](../TESTING.md) and the current
+README.

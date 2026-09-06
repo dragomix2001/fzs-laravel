@@ -2,19 +2,16 @@
 
 ## CSS Framework Strategy
 
-This project uses **both Bootstrap 5 and Tailwind CSS 4** with clear separation of concerns:
+This project uses **Tailwind CSS 4 as the active utility layer**, with jQuery/Alpine.js for existing interactions and selected legacy Bootstrap styles.
 
-### Bootstrap 5 (Primary Framework)
-- **Usage**: Legacy UI, main application layout, forms, cards, modals
-- **Scope**: 1900+ class usages across blade templates
-- **Components**: Grids (`col-*`, `row`), Buttons (`btn-*`), Cards, Navbars, Modals
-- **Purpose**: Provides consistent, production-ready components for rapid development
+### Tailwind CSS 4 (Active UI Layer)
+- **Usage**: Current layouts, forms, cards, tables, alerts and responsive navigation
+- **Components**: Blade components, utility classes and Alpine.js interactions
+- **Purpose**: Current default for new and recently refactored UI
 
-### Tailwind CSS 4 (Utility Layer)
-- **Usage**: Modern utility components, Alpine.js-enhanced elements
-- **Scope**: ~300 utility class usages
-- **Components**: Alert component, Layout header, Modern UI elements
-- **Purpose**: Fine-grained control for specific modern components
+### Legacy Bootstrap Styles
+- **Usage**: Older templates and imported compatibility styles
+- **Purpose**: Kept temporarily to avoid visual regressions during incremental migration
 
 ## Why Both?
 
@@ -24,10 +21,9 @@ This project uses **both Bootstrap 5 and Tailwind CSS 4** with clear separation 
 - High risk of visual bugs
 - Estimated effort: 2-3 weeks
 
-**Current Strategy**: Maintain both frameworks with clear boundaries:
-- **New components** → Prefer Tailwind for flexibility
-- **Existing UI** → Keep Bootstrap for stability
-- **No mixing** → One component uses one framework
+**Current Strategy**: Prefer Tailwind for new work, preserve legacy styles where
+rewriting would create visual or workflow risk, and keep component boundaries
+clear when legacy classes remain.
 
 ## Build Configuration
 
@@ -64,8 +60,8 @@ When considering full migration:
 ## Developer Guidelines
 
 ### For New Features
-- **Dashboard, Forms, Tables** → Bootstrap
-- **Interactive components, Animations** → Tailwind + Alpine.js
+- **Dashboard, Forms, Tables** → Tailwind Blade components
+- **Interactive components, Animations** → Tailwind + Alpine.js/jQuery
 - **API responses, JSON views** → Unstyled or minimal Tailwind
 
 ### Component Checklist
@@ -77,5 +73,5 @@ Before adding a new component, ask:
 
 ---
 
-**Last Updated**: June 24, 2026  
-**Status**: Dual-framework strategy - active and maintained
+**Last Updated**: September 6, 2026
+**Status**: Tailwind-first incremental frontend migration

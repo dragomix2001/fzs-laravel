@@ -1,6 +1,7 @@
 # FZS Laravel API Documentation
 
-Base URL: `http://localhost:8000/api/v1`
+Base URL: `http://localhost:8080/api/v1` locally. CI can override the host and
+port with `E2E_BASE_URL` or its own API base URL.
 
 ## Authentication
 
@@ -109,7 +110,7 @@ Change user password. Requires authentication.
 ### Kandidati (Candidates)
 
 #### GET /api/v1/kandidati
-List all candidates. Requires authentication.
+List all candidates. This is a public read-only endpoint protected by rate limiting.
 
 **Response:**
 ```json
@@ -149,7 +150,7 @@ Create a new candidate. Requires authentication.
 ```
 
 #### GET /api/v1/kandidati/{id}
-Get a specific candidate. Requires authentication.
+Get a specific candidate. Public read-only endpoint with rate limiting.
 
 #### PUT /api/v1/kandidati/{id}
 Update a candidate. Requires authentication.
@@ -162,7 +163,7 @@ Delete a candidate. Requires authentication.
 ### Ispiti (Exams)
 
 #### GET /api/v1/ispiti
-List all exams. Requires authentication.
+List all exams. Public read-only endpoint with rate limiting.
 
 **Response:**
 ```json
@@ -179,7 +180,7 @@ List all exams. Requires authentication.
 Create a new exam. Requires authentication.
 
 #### GET /api/v1/ispiti/{id}
-Get a specific exam. Requires authentication.
+Get a specific exam. Public read-only endpoint with rate limiting.
 
 #### PUT /api/v1/ispiti/{id}
 Update an exam. Requires authentication.
@@ -314,7 +315,8 @@ Get my activities. Requires authentication.
 
 ## Rate Limiting
 
-The API is rate limited to 60 requests per minute per user.
+Public read-only endpoints allow 60 requests per minute. Protected read/write
+groups use 60 or 120 requests per minute depending on the route group.
 
 ---
 

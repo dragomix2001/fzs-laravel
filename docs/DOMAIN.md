@@ -89,10 +89,14 @@ Documents submitted by candidates during application.
 Status of candidate application.
 
 **Statuses:**
-1. Prijavljen (Applied)
-2. U obradi (In progress)
-3. Upisan (Enrolled)
-4. Odbijen (Rejected)
+The application stores study status in `status_studiranja` and year/enrollment
+status separately in `status_godine`. The demo dataset includes:
+
+- `status_studiranja`: Aktivan, Mirovanje, Zavrsio studije
+- `status_godine`: upisan, odustao, nije upisan, obnovio, zavrsio
+
+Do not assume numeric IDs across environments; use the lookup names or seeded
+references when writing tests.
 
 ---
 
@@ -173,7 +177,7 @@ Enrolled students get brojIndeksa (student index number).
 - **indikatorAktivan**: Soft delete flag (1 = active, 0 = inactive)
 - **DB transactions**: Used in KandidatService, IspitService for data consistency
 - **Cache**: Active studijski program cached for 1 hour
-- **Storage disk 'uploads'**: File storage for images, PDFs, and candidate documents (`images/`, `pdf/`, `documents/{kandidatId}/`)
+- **Storage disk `uploads`**: File storage for images, PDFs, and candidate documents (`images/`, `pdf/`, `documents/{kandidatId}/`)
 
 ---
 
