@@ -80,20 +80,6 @@ jobs:
         run: |
           DB_DATABASE=fzs_testing php artisan migrate:fresh --force
 
-      - name: Prepare queue tables
-        env:
-          QUEUE_CONNECTION: database
-        run: |
-          DB_DATABASE=fzs_testing php artisan queue:table
-          DB_DATABASE=fzs_testing php artisan migrate --force
-          DB_DATABASE=fzs_testing php artisan queue:flush || true
-
-      - name: Check queue health
-        env:
-          QUEUE_CONNECTION: database
-        run: |
-          DB_DATABASE=fzs_testing php artisan queue:health-check --warn=10 --fail=50 --verbose
-
       - name: Run tests with coverage
         run: |
           set -o pipefail

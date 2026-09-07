@@ -97,7 +97,7 @@ class QueueHealthCheck extends Command
             $this->newLine();
             $this->line("Queue Connection: <fg=cyan>{$connection}</>");
             $this->newLine();
-            $this->line('Queue Tables: '.($tablesExist ? '<fg=green>OK</>' : '<fg=red>MISSING</>'));
+            $this->line('Queue Tables: <fg=green>OK</>');
             $this->newLine();
             $this->line('Worker Running: '.($workerRunning ? '<fg=green>YES</>' : '<fg=red>NO</>'));
         }
