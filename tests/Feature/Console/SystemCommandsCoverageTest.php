@@ -59,6 +59,7 @@ class SystemCommandsCoverageTest extends TestCase
 
     public function test_queue_health_check_returns_warning_when_failed_jobs_exceed_warn_threshold(): void
     {
+        config()->set('queue.default', 'database');
         DB::table('failed_jobs')->truncate();
 
         for ($i = 0; $i < 3; $i++) {
@@ -85,6 +86,7 @@ class SystemCommandsCoverageTest extends TestCase
 
     public function test_queue_health_check_returns_failure_when_failed_jobs_exceed_fail_threshold(): void
     {
+        config()->set('queue.default', 'database');
         DB::table('failed_jobs')->truncate();
 
         for ($i = 0; $i < 5; $i++) {
@@ -107,6 +109,21 @@ class SystemCommandsCoverageTest extends TestCase
         );
 
         $this->assertSame(1, $exitCode);
+    }
+
+    public function test_queue_health_check_skips_when_queue_driver_is_sync(): void
+    {
+        config()->set('queue.default', 'sync');
+
+        $command = app(QueueHealthCheck::class);
+        $command->setLaravel($this->app);
+
+        $exitCode = $command->run(
+            new ArrayInput(['--warn' => 10, '--fail' => 50]),
+            new BufferedOutput
+        );
+
+        $this->assertSame(0, $exitCode);
     }
 
     public function test_cleanup_orphaned_records_runs_in_dry_run_mode(): void

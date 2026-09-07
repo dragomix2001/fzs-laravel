@@ -34,6 +34,15 @@ class QueueHealthCheck extends Command
         $warnThreshold = (int) $this->option('warn') ?: 10;
         $failThreshold = (int) $this->option('fail') ?: 50;
 
+        $connection = config('queue.default', 'database');
+
+        if ($connection === 'sync') {
+            $this->info('🔍 Queue driver is sync; skipping database-based queue health checks.');
+            $this->info('✅ Queue health check PASSED');
+
+            return self::SUCCESS;
+        }
+
         $this->info('🔍 Checking Queue System Health...');
         $this->newLine();
 
@@ -45,9 +54,6 @@ class QueueHealthCheck extends Command
 
         // Check if queue worker is running (basic check)
         $workerRunning = $this->checkWorkerStatus();
-
-        // Get queue connection info
-        $connection = config('queue.default', 'database');
 
         // Determine health status
         $status = self::SUCCESS;

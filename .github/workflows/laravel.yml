@@ -81,6 +81,8 @@ jobs:
           DB_DATABASE=fzs_testing php artisan migrate:fresh --force
 
       - name: Check queue health
+        env:
+          QUEUE_CONNECTION: database
         run: |
           DB_DATABASE=fzs_testing php artisan queue:health-check --warn=10 --fail=50 --verbose
 
