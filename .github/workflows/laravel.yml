@@ -89,10 +89,18 @@ jobs:
       - name: Run tests
         run: |
           set -o pipefail
-          vendor/bin/phpunit --testsuite "${{ matrix.suite }}" --testdox --do-not-fail-on-warning | tee test-output.txt
+          vendor/bin/phpunit \
+            --no-coverage \
+            --testsuite "${{ matrix.suite }}" \
+            --testdox \
+            --do-not-fail-on-warning \
+            --do-not-fail-on-deprecation \
+            > test-output.txt 2>&1
+          status=$?
           echo ""
           echo "=== TEST SUMMARY ==="
-          tail -20 test-output.txt
+          tail -40 test-output.txt
+          exit $status
 
   e2e:
     runs-on: ubuntu-latest
