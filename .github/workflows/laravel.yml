@@ -47,9 +47,17 @@ jobs:
           php-version: '8.5'
           extensions: mbstring, xml, gd, pdo_mysql, redis
 
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
       - name: Install dependencies
         run: |
           composer install --no-interaction --prefer-dist
+          npm ci
+          npm run build
 
       - name: Wait for MySQL to be ready
         run: |
