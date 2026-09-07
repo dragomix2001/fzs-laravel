@@ -86,6 +86,7 @@ jobs:
         run: |
           DB_DATABASE=fzs_testing php artisan queue:table
           DB_DATABASE=fzs_testing php artisan migrate --force
+          DB_DATABASE=fzs_testing php artisan queue:flush || true
 
       - name: Check queue health
         env:

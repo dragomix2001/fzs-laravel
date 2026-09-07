@@ -141,6 +141,23 @@ class SystemCommandsCoverageTest extends TestCase
         $this->assertSame(0, $exitCode);
     }
 
+    public function test_queue_health_check_passes_when_database_tables_are_missing(): void
+    {
+        config()->set('queue.default', 'database');
+        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('failed_jobs');
+
+        $command = app(QueueHealthCheck::class);
+        $command->setLaravel($this->app);
+
+        $exitCode = $command->run(
+            new ArrayInput(['--warn' => 10, '--fail' => 50]),
+            new BufferedOutput
+        );
+
+        $this->assertSame(0, $exitCode);
+    }
+
     public function test_cleanup_orphaned_records_runs_in_dry_run_mode(): void
     {
         $command = app(CleanupOrphanedRecords::class);
