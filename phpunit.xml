@@ -23,10 +23,10 @@
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="DB_HOST" value="127.0.0.1"/>
-        <env name="DB_PORT" value="3306"/>
+        <env name="DB_PORT" value="3307"/>
         <env name="DB_DATABASE" value="fzs_testing"/>
-        <env name="DB_USERNAME" value="fzs"/>
-        <env name="DB_PASSWORD" value="fzs123"/>
+        <env name="DB_USERNAME" value="root"/>
+        <env name="DB_PASSWORD" value="root123"/>
         <env name="DB_SQLITE_DATABASE" value=":memory:"/>
         <env name="DB_FOREIGN_KEYS" value="true"/>
         <env name="MAIL_MAILER" value="array"/>
