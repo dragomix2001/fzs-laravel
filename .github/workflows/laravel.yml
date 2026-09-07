@@ -80,6 +80,13 @@ jobs:
         run: |
           DB_DATABASE=fzs_testing php artisan migrate:fresh --force
 
+      - name: Prepare queue tables
+        env:
+          QUEUE_CONNECTION: database
+        run: |
+          DB_DATABASE=fzs_testing php artisan queue:table
+          DB_DATABASE=fzs_testing php artisan migrate --force
+
       - name: Check queue health
         env:
           QUEUE_CONNECTION: database

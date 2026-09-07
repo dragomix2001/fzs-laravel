@@ -36,8 +36,8 @@ class QueueHealthCheck extends Command
 
         $connection = config('queue.default', 'database');
 
-        if ($connection === 'sync') {
-            $this->info('🔍 Queue driver is sync; skipping database-based queue health checks.');
+        if (! in_array($connection, ['database'], true)) {
+            $this->info(sprintf('🔍 Queue driver is %s; skipping database-based queue health checks.', $connection));
             $this->info('✅ Queue health check PASSED');
 
             return self::SUCCESS;

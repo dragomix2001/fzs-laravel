@@ -126,6 +126,21 @@ class SystemCommandsCoverageTest extends TestCase
         $this->assertSame(0, $exitCode);
     }
 
+    public function test_queue_health_check_skips_when_queue_driver_is_redis(): void
+    {
+        config()->set('queue.default', 'redis');
+
+        $command = app(QueueHealthCheck::class);
+        $command->setLaravel($this->app);
+
+        $exitCode = $command->run(
+            new ArrayInput(['--warn' => 10, '--fail' => 50]),
+            new BufferedOutput
+        );
+
+        $this->assertSame(0, $exitCode);
+    }
+
     public function test_cleanup_orphaned_records_runs_in_dry_run_mode(): void
     {
         $command = app(CleanupOrphanedRecords::class);
