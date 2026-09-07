@@ -1,21 +1,6 @@
 import { test, expect } from '../fixtures/auth';
 
 test.describe('Functional application flows', () => {
-  test('admin can log out and is returned to login', async ({ authenticatedPage: page }) => {
-    await page.context().clearCookies();
-    await page.goto('/login');
-    await page.fill('input[name="email"]', process.env.E2E_EMAIL ?? 'fzs@fzs.rs');
-    await page.fill('input[name="password"]', process.env.E2E_PASSWORD ?? 'fzs123');
-    await page.click('button[type="submit"]');
-    await page.waitForURL((url) => !url.pathname.endsWith('/login'), { waitUntil: 'commit' });
-    await page.goto('/dashboard');
-    await page.getByText('FZS Admin', { exact: true }).click();
-    await page.locator('form[action$="/logout"] a').click();
-
-    await expect(page).toHaveURL(/\/(login)?$/);
-    await expect(page.locator('input[name="email"]')).toBeVisible();
-  });
-
   test('dashboard renders seeded activity metrics', async ({ authenticatedPage: page }) => {
     await page.goto('/dashboard');
 
@@ -462,4 +447,13 @@ test.describe('Operational pages', () => {
       await expect(page.locator('body')).not.toContainText('Страница коју тражите не постоји');
     });
   }
+});
+
+test('admin can log out and is returned to login', async ({ authenticatedPage: page }) => {
+  await page.goto('/dashboard');
+  await page.getByText('FZS Admin', { exact: true }).click();
+  await page.locator('form[action$="/logout"] a').click();
+
+  await expect(page).toHaveURL(/\/(login)?$/);
+  await expect(page.locator('input[name="email"]')).toBeVisible();
 });
