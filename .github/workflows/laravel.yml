@@ -87,8 +87,18 @@ jobs:
           DB_DATABASE=fzs_testing php artisan migrate:fresh --force
 
       - name: Run tests
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_DATABASE: fzs_testing
+          DB_USERNAME: root
+          DB_PASSWORD: root
+          CACHE_DRIVER: array
+          SESSION_DRIVER: array
+          QUEUE_CONNECTION: sync
         run: |
           set -o pipefail
+          set +e
           vendor/bin/phpunit \
             --no-coverage \
             --testsuite "${{ matrix.suite }}" \
