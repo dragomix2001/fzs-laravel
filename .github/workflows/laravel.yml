@@ -72,9 +72,16 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
-          sed -i 's/DB_PASSWORD=/DB_PASSWORD=root/' .env
           sed -i 's/DB_HOST=mysql/DB_HOST=127.0.0.1/' .env
           sed -i 's/DB_PORT=3306/DB_PORT=${{ job.services.mysql.ports['3306'] }}/' .env
+          sed -i 's/DB_DATABASE=fzs/DB_DATABASE=fzs_testing/' .env
+          sed -i 's/DB_USERNAME=fzs/DB_USERNAME=root/' .env
+          sed -i 's/DB_PASSWORD=fzs123/DB_PASSWORD=root/' .env
+          cat >> .env <<'EOF'
+          CACHE_DRIVER=array
+          SESSION_DRIVER=file
+          QUEUE_CONNECTION=sync
+          EOF
 
       - name: Prepare database
         run: |
@@ -151,8 +158,9 @@ jobs:
           cp .env.example .env
           php artisan key:generate
           sed -i 's/DB_HOST=mysql/DB_HOST=127.0.0.1/' .env
-          sed -i 's/DB_PASSWORD=/DB_PASSWORD=root/' .env
           sed -i 's/DB_PORT=3306/DB_PORT=${{ job.services.mysql.ports['3306'] }}/' .env
+          sed -i 's/DB_USERNAME=fzs/DB_USERNAME=root/' .env
+          sed -i 's/DB_PASSWORD=fzs123/DB_PASSWORD=root/' .env
           cat >> .env <<'EOF'
           CACHE_DRIVER=array
           SESSION_DRIVER=file
