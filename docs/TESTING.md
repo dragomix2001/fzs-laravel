@@ -16,6 +16,23 @@ docker compose up -d app mysql redis queue
 
 The local application is available at `http://localhost:8080`.
 
+## Database configuration by execution context
+
+The same MySQL instance has different addresses depending on where the command
+runs. Do not copy values between these contexts.
+
+| Command location | Host | Port | Database | Username | Password |
+| --- | --- | --- | --- | --- | --- |
+| Host machine PHPUnit | `127.0.0.1` | `3307` | `fzs_testing` | `root` | `root123` |
+| Docker application and local Playwright | `mysql` | `3306` | `fzs` | `fzs` | `fzs123` |
+| GitHub Actions PHPUnit | `127.0.0.1` | GitHub service port | `fzs_testing` | `root` | `root` |
+
+`mysql:3306` is reachable only from containers on the Docker Compose network.
+`127.0.0.1:3307` is the host-machine mapping for that same local MySQL
+container. PHPUnit defaults are defined in `phpunit.xml`; use the explicit
+environment below when running tests from the host to avoid inheriting values
+from `.env`.
+
 The default seeded administrator is:
 
 ```text
@@ -41,7 +58,7 @@ DB_PORT=3307 \
 DB_DATABASE=fzs_testing \
 DB_USERNAME=root \
 DB_PASSWORD=root123 \
-./vendor/bin/phpunit --testdox --do-not-fail-on-warning
+./vendor/bin/phpunit --no-coverage --testdox --do-not-fail-on-warning --do-not-fail-on-deprecation
 ```
 
 The test harness migrates a clean database for tests that do not use Laravel's
@@ -69,7 +86,9 @@ coverage, dashboard pages, operational pages and reference screens.
 Run it against the Docker application:
 
 ```bash
-npm run test:e2e
+docker compose up -d app mysql redis queue
+docker compose exec -T app php artisan cache:clear
+E2E_BASE_URL=http://127.0.0.1:8080 npm run test:e2e
 ```
 
 The suite authenticates once in `tests/e2e/specs/auth.setup.ts` and reuses the
@@ -97,6 +116,10 @@ Playwright authentication state is generated in `playwright/.auth/` and is
 ignored by Git. Browser artifacts are written to `test-results/` and
 `playwright-report/`.
 
+The logout test runs last because logout invalidates the server-side session
+stored in the shared Playwright authentication state. Keep destructive
+authentication scenarios last or give them a distinct test user/session.
+
 Document review routes use `/kandidat/documents/incomplete` for the admin list
 and `/kandidat/{id}/documents/review` for an individual candidate. File storage
 and document metadata are covered by PHPUnit service tests; browser tests cover
@@ -109,13 +132,19 @@ and pull requests targeting `main` or `master`.
 
 The workflow has three job groups:
 
-1. `laravel-tests` runs a Unit/Feature matrix. Each job starts MySQL, creates `fzs_testing`, migrates it, and runs its PHPUnit suite with coverage.
+1. `laravel-tests` runs a Unit/Feature matrix. Each job starts MySQL, creates `fzs_testing`, migrates it, builds Vite assets, and runs PHPUnit without coverage.
 2. `e2e` starts a clean MySQL service, installs Chromium, starts Laravel on port `8000`, and runs the Playwright suite with `E2E_BASE_URL` set to that server.
 3. `lint` runs Pint and PHPStan.
 
 The E2E job uses file sessions, array cache and the synchronous queue so it does
 not require Redis in CI. The application-level queue job is covered by the
 PHPUnit queue and job tests.
+
+The PHPUnit matrix explicitly overrides the global workflow variables with the
+CI test database values. This is required because process environment variables
+take precedence over `.env`, and migrations and PHPUnit must target the same
+`fzs_testing` database. Vite must be built before Feature tests because Blade
+views load `public/build/manifest.json`.
 
 On E2E failure, CI uploads `playwright-report/`, `test-results/` and the local
 Laravel server log as the `playwright-diagnostics` artifact.
@@ -125,7 +154,8 @@ Laravel server log as the `playwright-diagnostics` artifact.
 The current local baseline is:
 
 ```text
-PHPUnit: 1814 tests, 4640 assertions, 0 failures, 0 errors
+Unit PHPUnit: 335 tests, 1092 assertions, exit 0
+Feature PHPUnit: 1482 tests, 3551 assertions, exit 0
 Playwright: 89 E2E tests discovered and passed in the full local suite
 ```
 

@@ -123,9 +123,9 @@ composer test:feature
 ./vendor/bin/phpunit --testdox
 
 # Frontend/browser E2E testovi
-npm run test:e2e
+E2E_BASE_URL=http://127.0.0.1:8080 npm run test:e2e
 
-# Detaljna dokumentacija testiranja
+# Konfiguracija host PHPUnit, Docker E2E i GitHub Actions testova
 # docs/TESTING.md
 
 # PHPStan static analysis
@@ -168,6 +168,7 @@ npm run test:e2e
 ## 📖 Documentation
 
 - [Domain Glossary](docs/DOMAIN.md) - Business entities and workflows
+- [Testing Guide](docs/TESTING.md) - Local PHPUnit, Docker E2E and GitHub Actions configuration
 - [Improvements Roadmap](README_IMPROVEMENTS.md) - Remaining architectural improvements
 - [Architecture Decision Records](docs/ADR/) - Technical debt documentation
   - [ADR-001: God Services](docs/ADR/001-god-services.md)
