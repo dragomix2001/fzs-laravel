@@ -1,15 +1,13 @@
 import { test, expect } from '../fixtures/auth';
 
 /**
- * Baseline Screenshot Tests - PRE-MIGRATION Reference
- * 
- * Purpose: Capture visual state of all critical UI before Bootstrap → Tailwind migration.
- * These screenshots serve as the "source of truth" for visual regression testing.
+ * Visual Regression Screenshot Tests
+ *
+ * Screenshots are the expected UI references for the tested routes and viewports.
  * 
  * Run:
  *   npx playwright test baseline --update-snapshots
  * 
- * IMPORTANT: Run this BEFORE starting any frontend migration work!
  */
 
 test.describe('Baseline Screenshots - Desktop (1920x1080)', () => {
@@ -206,8 +204,8 @@ test.describe('Baseline Screenshots - Interactive Elements', () => {
     await page.goto('/kandidat');
     await page.waitForLoadState('networkidle');
     
-    // Hover over first action button
-    const firstButton = page.locator('a.btn, button.btn').first();
+    // Hover over the first action button in the page content
+    const firstButton = page.locator('main button').first();
     await firstButton.hover();
     await page.waitForTimeout(300); // Wait for hover transition
     
