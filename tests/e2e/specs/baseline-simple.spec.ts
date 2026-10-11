@@ -1,10 +1,8 @@
 import { test, expect } from '../fixtures/auth';
 
 /**
- * SIMPLIFIED Baseline Screenshots - Critical Pages Only
- * 
- * Purpose: Capture visual state of core UI before Bootstrap → Tailwind migration
- * Scope: Reduced to 15 most critical pages for faster execution
+ * Visual regression references for critical desktop and mobile pages.
+ * Scope: 11 desktop pages and 3 mobile pages.
  */
 
 test.describe('Baseline Screenshots - Core Pages', () => {

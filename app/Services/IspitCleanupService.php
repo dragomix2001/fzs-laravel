@@ -11,6 +11,7 @@ class IspitCleanupService
 {
     public function deleteZapisnik(int $id): void
     {
+        PolozeniIspiti::where('zapisnik_id', $id)->delete();
         ZapisnikOPolaganju_Student::where('zapisnik_id', $id)->delete();
         ZapisnikOPolaganju_StudijskiProgram::where('zapisnik_id', $id)->delete();
         ZapisnikOPolaganjuIspita::destroy($id);

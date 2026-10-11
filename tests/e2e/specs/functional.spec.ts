@@ -1,4 +1,44 @@
 import { test, expect } from '../fixtures/auth';
+import type { Page } from '@playwright/test';
+
+async function createZapisnik(page: Page): Promise<string> {
+  await page.goto('/zapisnik');
+  const reviewLinks = page.locator('a[href^="/zapisnik/pregled/"]');
+  const existingHrefs = await reviewLinks.evaluateAll((links) =>
+    links.map((link) => link.getAttribute('href'))
+  );
+
+  await page.goto('/zapisnik/create');
+  await page.locator('#ajaxSubmitPrijava').click();
+  await expect(page.locator('input[name^="odabir["]')).not.toHaveCount(0);
+  await page.locator('#vreme').fill('10:00');
+  await page.locator('#ucionica').fill(`E2E ${Date.now()}`);
+  await page.locator('form[action*="/zapisnik/storeZapisnik"] button[type="submit"]').click();
+  await expect(page).toHaveURL(/\/zapisnik\/?$/);
+
+  const createdHref = await reviewLinks.evaluateAll((links, previousHrefs) =>
+    links.map((link) => link.getAttribute('href')).find((href) => href && !previousHrefs.includes(href)),
+    existingHrefs
+  );
+  expect(createdHref).toBeTruthy();
+
+  return createdHref!.split('/').pop()!;
+}
+
+async function deleteZapisnik(page: Page, zapisnikId: string): Promise<void> {
+  const deleteSelector = `a[href="/zapisnik/delete/${zapisnikId}"]`;
+  await page.goto('/zapisnik');
+
+  if (!(await page.locator(deleteSelector).isVisible())) {
+    await page.goto('/zapisnik/arhiva');
+  }
+
+  const deleteLink = page.locator(deleteSelector);
+  if (await deleteLink.isVisible()) {
+    page.once('dialog', (dialog) => dialog.accept());
+    await deleteLink.click();
+  }
+}
 
 test.describe('Functional application flows', () => {
   test('dashboard renders seeded activity metrics', async ({ authenticatedPage: page }) => {
@@ -140,71 +180,66 @@ test.describe('Functional application flows', () => {
   });
 
   test('admin can create and then remove a zapisnik student', async ({ authenticatedPage: page }) => {
-    await page.goto('/zapisnik/create');
-    await page.locator('#ajaxSubmitPrijava').click();
-    await expect(page.locator('input[name^="odabir["]')).not.toHaveCount(0);
-
-    await page.locator('#vreme').fill('10:00');
-    await page.locator('#ucionica').fill('Sala E2E');
-    await page.locator('form[action*="/zapisnik/storeZapisnik"] button[type="submit"]').click();
-    await expect(page).toHaveURL(/\/zapisnik\/?$/);
-
-    const deleteLink = page.locator('a[href*="/zapisnik/"][href*="/delete"]').last();
-    await expect(deleteLink).toBeVisible();
-    page.once('dialog', (dialog) => dialog.accept());
-    await deleteLink.click();
+    const zapisnikId = await createZapisnik(page);
+    await deleteZapisnik(page, zapisnikId);
     await expect(page).toHaveURL(/\/zapisnik(\/)?$/);
   });
 
   test('admin can archive a zapisnik from the active list', async ({ authenticatedPage: page }) => {
-    await page.goto('/zapisnik');
+    const zapisnikId = await createZapisnik(page);
 
-    const archiveLink = page.locator('a[href^="/zapisnik/arhiviraj/"]').first();
-    await expect(archiveLink).toBeVisible();
-    const archivedId = await archiveLink.getAttribute('href');
-    await archiveLink.click();
-
-    await expect(page).toHaveURL(/\/zapisnik(\/)?$/);
-    if (archivedId) {
-      await expect(page.locator(`a[href="${archivedId}"]`)).toHaveCount(0);
+    try {
+      await page.goto('/zapisnik');
+      const archiveLink = page.locator(`a[href="/zapisnik/arhiviraj/${zapisnikId}"]`);
+      await expect(archiveLink).toBeVisible();
+      await archiveLink.click();
+      await expect(page.locator(`a[href="/zapisnik/arhiviraj/${zapisnikId}"]`)).toHaveCount(0);
+    } finally {
+      await deleteZapisnik(page, zapisnikId);
     }
   });
 
   test('admin can save a grade from the zapisnik form', async ({ authenticatedPage: page }) => {
-    await page.goto('/zapisnik');
-    await page.locator('a[href^="/zapisnik/pregled/"]').first().click();
+    const zapisnikId = await createZapisnik(page);
 
-    const gradeForm = page.locator('form[action*="/zapisnik/polozeniIspit"]');
-    await expect(gradeForm).toBeVisible();
-    await gradeForm.locator('input[name^="brojBodova["]').first().fill('88');
-    await gradeForm.locator('select[name^="konacnaOcena["]').first().selectOption('9');
-    await gradeForm.locator('select[name^="statusIspita["]').first().selectOption({ index: 1 });
-    await gradeForm.locator('button[type="submit"]').click();
+    try {
+      await page.goto(`/zapisnik/pregled/${zapisnikId}`);
+      const gradeForm = page.locator('form[action*="/zapisnik/polozeniIspit"]');
+      await expect(gradeForm).toBeVisible();
+      await gradeForm.locator('input[name^="brojBodova["]').first().fill('88');
+      await gradeForm.locator('select[name^="konacnaOcena["]').first().selectOption('9');
+      await gradeForm.locator('select[name^="statusIspita["]').first().selectOption({ index: 1 });
+      await gradeForm.locator('button[type="submit"]').click();
 
-    const zapisnikUrl = page.url();
-    await expect(page).toHaveURL(/\/zapisnik\/pregled\/\d+/);
-    await page.reload();
-    await expect(page.locator('form[action*="/zapisnik/polozeniIspit"] input[name^="brojBodova["]').first()).toHaveValue('88');
-    await expect(page.locator('form[action*="/zapisnik/polozeniIspit"] select[name^="konacnaOcena["]').first()).toHaveValue('9');
-    expect(zapisnikUrl).toMatch(/\/zapisnik\/pregled\/\d+/);
+      await expect(page).toHaveURL(`/zapisnik/pregled/${zapisnikId}`);
+      await page.reload();
+      await expect(page.locator('form[action*="/zapisnik/polozeniIspit"] input[name^="brojBodova["]').first()).toHaveValue('88');
+      await expect(page.locator('form[action*="/zapisnik/polozeniIspit"] select[name^="konacnaOcena["]').first()).toHaveValue('9');
+    } finally {
+      await deleteZapisnik(page, zapisnikId);
+    }
   });
 
   test('admin can request a zapisnik PDF', async ({ authenticatedPage: page }) => {
-    await page.goto('/zapisnik');
-    await page.locator('a[href^="/zapisnik/pregled/"]').first().click();
+    const zapisnikId = await createZapisnik(page);
 
-    const printForm = page.locator('form[action*="/izvestaji/zapisnikStampa/"]');
-    await expect(printForm).toBeVisible();
-    await printForm.evaluate((form) => {
-      (form as HTMLFormElement).target = '_self';
-    });
-    const pdfResponsePromise = page.waitForResponse((response) =>
-      response.url().includes('/izvestaji/zapisnikStampa/') && response.request().method() === 'POST'
-    );
-    await printForm.locator('input[type="submit"]').click();
-    const pdfResponse = await pdfResponsePromise;
-    expect(pdfResponse.ok()).toBeTruthy();
-    expect(pdfResponse.headers()['content-type']).toContain('application/pdf');
+    try {
+      await page.goto(`/zapisnik/pregled/${zapisnikId}`);
+      const printForm = page.locator('form[action*="/izvestaji/zapisnikStampa/"]');
+      await expect(printForm).toBeVisible();
+      await printForm.evaluate((form) => {
+        (form as HTMLFormElement).target = '_self';
+      });
+      const pdfResponsePromise = page.waitForResponse((response) =>
+        response.url().includes('/izvestaji/zapisnikStampa/') && response.request().method() === 'POST'
+      );
+      await printForm.locator('input[type="submit"]').click();
+      const pdfResponse = await pdfResponsePromise;
+      expect(pdfResponse.ok()).toBeTruthy();
+      expect(pdfResponse.headers()['content-type']).toContain('application/pdf');
+    } finally {
+      await deleteZapisnik(page, zapisnikId);
+    }
   });
 
   test('bulk exam-registration form exposes the seeded student search', async ({ authenticatedPage: page }) => {
@@ -223,54 +258,58 @@ test.describe('Functional application flows', () => {
   });
 
   test('zapisnik shows enrolled students and available modal candidates', async ({ authenticatedPage: page }) => {
-    await page.goto('/zapisnik');
+    const zapisnikId = await createZapisnik(page);
 
-    const pregledLink = page.locator('a[href^="/zapisnik/pregled/"]').first();
-    await expect(pregledLink).toBeVisible();
-    await pregledLink.click();
-    await expect(page).toHaveURL(/\/zapisnik\/pregled\/\d+/);
+    try {
+      await page.goto(`/zapisnik/pregled/${zapisnikId}`);
+      const openModalButton = page.locator('button[onclick="openModal(\'myModal\')"]');
+      await expect(openModalButton).toBeVisible();
+      await openModalButton.click();
+      await expect(page.locator('#myModal')).toBeVisible();
 
-    const openModalButton = page.locator('button[onclick="openModal(\'myModal\')"]');
-    await expect(openModalButton).toBeVisible();
-    await openModalButton.click();
-    await expect(page.locator('#myModal')).toBeVisible();
+      const candidateOptions = page.locator('#addStudentList option:not([value="0"])');
+      await expect(candidateOptions).not.toHaveCount(0);
+      await expect(candidateOptions.first()).toContainText(/\d{3}\/\d{4} - .+/);
 
-    const candidateOptions = page.locator('#addStudentList option:not([value="0"])');
-    await expect(candidateOptions).not.toHaveCount(0);
-    await expect(candidateOptions.first()).toContainText(/\d{3}\/\d{4} - .+/);
-
-    await candidateOptions.first().evaluate((option) => {
-      (option as HTMLOptionElement).selected = true;
-    });
-    const candidateId = await candidateOptions.first().getAttribute('value');
-    const responsePromise = page.waitForResponse((response) =>
-      response.url().includes('/prijava/vratiKandidataPoBroju') && response.request().method() === 'POST'
-    );
-    await page.locator('#addStudentButton').click();
-    const response = await responsePromise;
-    expect(response.ok()).toBeTruthy();
-    await expect(page.locator('#addStudentTableBody input[name="odabir[]"]')).toHaveValue(candidateId ?? '');
+      await candidateOptions.first().evaluate((option) => {
+        (option as HTMLOptionElement).selected = true;
+      });
+      const candidateId = await candidateOptions.first().getAttribute('value');
+      const responsePromise = page.waitForResponse((response) =>
+        response.url().includes('/prijava/vratiKandidataPoBroju') && response.request().method() === 'POST'
+      );
+      await page.locator('#addStudentButton').click();
+      const response = await responsePromise;
+      expect(response.ok()).toBeTruthy();
+      await expect(page.locator('#addStudentTableBody input[name="odabir[]"]')).toHaveValue(candidateId ?? '');
+    } finally {
+      await deleteZapisnik(page, zapisnikId);
+    }
   });
 
   test('admin can add and remove a student from an existing zapisnik', async ({ authenticatedPage: page }) => {
-    await page.goto('/zapisnik');
-    await page.locator('a[href^="/zapisnik/pregled/"]').first().click();
+    const zapisnikId = await createZapisnik(page);
 
-    await page.locator('button[onclick="openModal(\'myModal\')"]').click();
-    const candidate = page.locator('#addStudentList option:not([value="0"])').first();
-    const candidateId = await candidate.getAttribute('value');
-    await candidate.evaluate((option) => {
-      (option as HTMLOptionElement).selected = true;
-    });
-    await page.locator('#addStudentButton').click();
-    await page.locator('#myModal form[action*="dodajStudenta"] input[type="submit"]').click();
+    try {
+      await page.goto(`/zapisnik/pregled/${zapisnikId}`);
+      await page.locator('button[onclick="openModal(\'myModal\')"]').click();
+      const candidate = page.locator('#addStudentList option:not([value="0"])').first();
+      const candidateId = await candidate.getAttribute('value');
+      await candidate.evaluate((option) => {
+        (option as HTMLOptionElement).selected = true;
+      });
+      await page.locator('#addStudentButton').click();
+      await page.locator('#myModal form[action*="dodajStudenta"] input[type="submit"]').click();
 
-    await expect(page).toHaveURL(/\/zapisnik\/pregled\/\d+/);
-    const deleteStudentLink = page.locator(`a[href$="/${candidateId}/delete"]`);
-    await expect(deleteStudentLink).toBeVisible();
-    page.once('dialog', (dialog) => dialog.accept());
-    await deleteStudentLink.click();
-    await expect(page).toHaveURL(/\/zapisnik\/pregled\/\d+|\/zapisnik\/?$/);
+      await expect(page).toHaveURL(`/zapisnik/pregled/${zapisnikId}`);
+      const deleteStudentLink = page.locator(`a[href$="/${candidateId}/delete"]`);
+      await expect(deleteStudentLink).toBeVisible();
+      page.once('dialog', (dialog) => dialog.accept());
+      await deleteStudentLink.click();
+      await expect(page).toHaveURL(new RegExp(`/zapisnik/pregled/${zapisnikId}|/zapisnik/?$`));
+    } finally {
+      await deleteZapisnik(page, zapisnikId);
+    }
   });
 });
 
@@ -289,15 +328,19 @@ test.describe('Responsive functional flows', () => {
   });
 
   test('zapisnik modal remains usable on mobile', async ({ authenticatedPage: page }) => {
-    await page.goto('/zapisnik');
-    await page.locator('a[href^="/zapisnik/pregled/"]').first().click();
+    const zapisnikId = await createZapisnik(page);
 
-    const openModalButton = page.locator('button[onclick="openModal(\'myModal\')"]');
-    await expect(openModalButton).toBeVisible();
-    await openModalButton.click();
+    try {
+      await page.goto(`/zapisnik/pregled/${zapisnikId}`);
+      const openModalButton = page.locator('button[onclick="openModal(\'myModal\')"]');
+      await expect(openModalButton).toBeVisible();
+      await openModalButton.click();
 
-    await expect(page.locator('#myModal')).toBeVisible();
-    await expect(page.locator('#addStudentList option:not([value="0"])')).not.toHaveCount(0);
+      await expect(page.locator('#myModal')).toBeVisible();
+      await expect(page.locator('#addStudentList option:not([value="0"])')).not.toHaveCount(0);
+    } finally {
+      await deleteZapisnik(page, zapisnikId);
+    }
   });
 });
 

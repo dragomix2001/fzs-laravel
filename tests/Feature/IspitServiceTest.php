@@ -332,6 +332,10 @@ class IspitServiceTest extends TestCase
         $kandidat = Kandidat::factory()->create();
 
         $this->createZapisnikStudent($zapisnik, $kandidat);
+        $ispit = $this->createPolozeniIspit([
+            'kandidat_id' => $kandidat->id,
+            'zapisnik_id' => $zapisnik->id,
+        ]);
         ZapisnikOPolaganju_StudijskiProgram::create([
             'zapisnik_id' => $zapisnik->id,
             'StudijskiProgram_id' => StudijskiProgram::factory()->create()->id,
@@ -342,6 +346,7 @@ class IspitServiceTest extends TestCase
         $this->assertDatabaseMissing('zapisnik_o_polaganju_ispita', ['id' => $zapisnik->id]);
         $this->assertDatabaseMissing('zapisnik_o_polaganju__student', ['zapisnik_id' => $zapisnik->id]);
         $this->assertDatabaseMissing('zapisnik_o_polaganju__studijski_program', ['zapisnik_id' => $zapisnik->id]);
+        $this->assertDatabaseMissing('polozeni_ispiti', ['id' => $ispit->id]);
     }
 
     public function test_delete_zapisnik_with_children_removes_all_related_records(): void
