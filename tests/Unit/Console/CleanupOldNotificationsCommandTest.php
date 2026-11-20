@@ -30,6 +30,7 @@ class CleanupOldNotificationsCommandTest extends TestCase
         $builder->shouldReceive('where')->once()->andReturnSelf();
         $builder->shouldReceive('delete')->once()->andReturn(5);
 
+        DB::shouldReceive('getConnections')->once()->andReturn([]);
         DB::shouldReceive('table')->once()->with('notifications')->andReturn($builder);
         Log::shouldReceive('info')->once();
 
@@ -49,6 +50,7 @@ class CleanupOldNotificationsCommandTest extends TestCase
         $builder->shouldReceive('where')->once()->andReturnSelf();
         $builder->shouldReceive('delete')->once()->andReturn(0);
 
+        DB::shouldReceive('getConnections')->once()->andReturn([]);
         DB::shouldReceive('table')->once()->with('notifications')->andReturn($builder);
         Log::shouldReceive('info')->once();
 
@@ -76,6 +78,7 @@ class CleanupOldNotificationsCommandTest extends TestCase
 
     public function test_handle_returns_error_code_when_exception_occurs(): void
     {
+        DB::shouldReceive('getConnections')->once()->andReturn([]);
         DB::shouldReceive('table')->once()->with('notifications')->andThrow(new \Exception('db failure'));
         Log::shouldReceive('error')->once();
 
