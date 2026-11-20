@@ -118,6 +118,13 @@ jobs:
           echo ""
           echo "=== TEST SUMMARY ==="
           tail -40 test-output.txt
+          if [ "$status" -ne 0 ]; then
+            echo ""
+            echo "=== TEST FAILURE DETAILS ==="
+            grep -a -n -A 40 -B 2 \
+              -E '✘|ERRORS!|There (was|were) [0-9]+ (error|failure)' \
+              test-output.txt | head -n 240 || true
+          fi
           exit $status
 
   e2e:
