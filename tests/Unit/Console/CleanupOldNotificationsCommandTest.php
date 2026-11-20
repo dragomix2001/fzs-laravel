@@ -62,6 +62,18 @@ class CleanupOldNotificationsCommandTest extends TestCase
         $this->assertStringContainsString('No notifications older than 90 days found.', $output->fetch());
     }
 
+    public function test_handle_rejects_non_integer_days_option(): void
+    {
+        $command = app(CleanupOldNotifications::class);
+        $command->setLaravel($this->app);
+
+        $output = new BufferedOutput;
+        $exitCode = $command->run(new ArrayInput(['--days' => 'invalid']), $output);
+
+        $this->assertSame(1, $exitCode);
+        $this->assertStringContainsString('The days option must be an integer.', $output->fetch());
+    }
+
     public function test_handle_returns_error_code_when_exception_occurs(): void
     {
         DB::shouldReceive('table')->once()->with('notifications')->andThrow(new \Exception('db failure'));

@@ -15,7 +15,13 @@ class ArchiveCompletedZapisnici extends Command
     public function handle()
     {
         try {
-            $months = $this->option('months');
+            $months = filter_var($this->option('months'), FILTER_VALIDATE_INT);
+            if ($months === false) {
+                $this->error('The months option must be an integer.');
+
+                return 1;
+            }
+
             $cutoffDate = now()->subMonths($months);
 
             $archivedCount = ZapisnikOPolaganjuIspita::where('datum', '<', $cutoffDate)

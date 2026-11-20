@@ -15,7 +15,13 @@ class CleanupOldNotifications extends Command
     public function handle()
     {
         try {
-            $days = $this->option('days');
+            $days = filter_var($this->option('days'), FILTER_VALIDATE_INT);
+            if ($days === false) {
+                $this->error('The days option must be an integer.');
+
+                return 1;
+            }
+
             $cutoffDate = now()->subDays($days);
 
             $deletedCount = DB::table('notifications')
