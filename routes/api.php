@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\ObavestenjeController;
 use App\Http\Controllers\Api\PredictionController;
 use App\Http\Controllers\Api\RasporedController;
 use App\Http\Controllers\Api\StudentController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,9 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/user', [AuthController::class, 'user']);
 });
 
 Route::prefix('v1')->group(function () {
