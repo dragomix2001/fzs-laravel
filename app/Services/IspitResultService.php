@@ -57,11 +57,11 @@ class IspitResultService
 
         foreach ($ispitIds as $index => $ispitId) {
             $polozeniIspit = PolozeniIspiti::findOrFail($ispitId);
-            $polozeniIspit->ocenaPismeni = $ocenePismeni[$index] ?? null;
-            $polozeniIspit->ocenaUsmeni = $oceneUsmeni[$index] ?? null;
-            $polozeniIspit->konacnaOcena = $konacneOcene[$index] ?? null;
-            $polozeniIspit->brojBodova = $brojBodova[$index] ?? null;
-            $polozeniIspit->statusIspita = $statusIspita[$index] ?? null;
+            $polozeniIspit->ocenaPismeni = $this->nullIfBlank($ocenePismeni[$index] ?? null);
+            $polozeniIspit->ocenaUsmeni = $this->nullIfBlank($oceneUsmeni[$index] ?? null);
+            $polozeniIspit->konacnaOcena = $this->nullIfBlank($konacneOcene[$index] ?? null);
+            $polozeniIspit->brojBodova = $this->nullIfBlank($brojBodova[$index] ?? null);
+            $polozeniIspit->statusIspita = $this->nullIfBlank($statusIspita[$index] ?? null);
             $polozeniIspit->indikatorAktivan = true;
             $polozeniIspit->save();
 
@@ -69,6 +69,11 @@ class IspitResultService
         }
 
         return $zapisnikId;
+    }
+
+    private function nullIfBlank(mixed $value): mixed
+    {
+        return is_string($value) && trim($value) === '' ? null : $value;
     }
 
     public function updateZapisnikDetails(int $zapisnikId, array $data): void

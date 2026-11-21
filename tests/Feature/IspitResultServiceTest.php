@@ -381,7 +381,7 @@ class IspitResultServiceTest extends TestCase
         $this->assertDatabaseHas('polozeni_ispiti', ['id' => $ispit2->id, 'konacnaOcena' => 9]);
     }
 
-    public function test_save_polozeni_ispiti_sets_missing_values_to_null_but_activates_record(): void
+    public function test_save_polozeni_ispiti_sets_blank_values_to_null_and_activates_record(): void
     {
         $fixtures = $this->createZapisnikFixtures();
         $ispit = $this->createPolozeniIspit(
@@ -392,7 +392,14 @@ class IspitResultServiceTest extends TestCase
             ['ocenaPismeni' => 50, 'ocenaUsmeni' => 50, 'konacnaOcena' => 6]
         );
 
-        $this->ispitResultService->savePolozeniIspiti([$ispit->id], [], [], [], [], []);
+        $this->ispitResultService->savePolozeniIspiti(
+            [$ispit->id],
+            [''],
+            [''],
+            [''],
+            [''],
+            ['']
+        );
 
         $this->assertDatabaseHas('polozeni_ispiti', [
             'id' => $ispit->id,
