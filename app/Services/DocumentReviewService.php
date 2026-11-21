@@ -22,7 +22,7 @@ class DocumentReviewService
      */
     public function getIncompleteCandidatesReviewList(): array
     {
-        return Kandidat::query()
+        $kandidati = Kandidat::query()
             ->with([
                 'program',
                 'tipStudija',
@@ -32,8 +32,23 @@ class DocumentReviewService
             ])
             ->orderBy('prezimeKandidata')
             ->orderBy('imeKandidata')
-            ->get()
-            ->map(fn (Kandidat $kandidat) => $this->buildCandidateReviewRow($kandidat))
+            ->get();
+
+        $requiredDocumentsByGroup = $kandidati
+            ->map(fn (Kandidat $kandidat) => $this->resolveRequiredDocumentGroupId($kandidat))
+            ->filter(fn (?int $groupId) => $groupId !== null)
+            ->unique()
+            ->mapWithKeys(fn (int $groupId) => [$groupId => $this->getRequiredDocumentsForGroup($groupId)]);
+
+        return $kandidati
+            ->map(function (Kandidat $kandidat) use ($requiredDocumentsByGroup): array {
+                $groupId = $this->resolveRequiredDocumentGroupId($kandidat);
+                $requiredDocuments = $groupId === null
+                    ? collect()
+                    : ($requiredDocumentsByGroup->get($groupId) ?? collect());
+
+                return $this->buildCandidateReviewRow($kandidat, $requiredDocuments);
+            })
             ->filter(fn (array $row) => ! $row['is_complete'])
             ->values()
             ->all();
@@ -71,13 +86,13 @@ class DocumentReviewService
     /**
      * @return array<string, mixed>
      */
-    public function getKandidatDocumentCompletion(Kandidat|int $kandidat): array
+    public function getKandidatDocumentCompletion(Kandidat|int $kandidat, ?Collection $requiredDocuments = null): array
     {
         $resolvedKandidat = $kandidat instanceof Kandidat
             ? $kandidat->loadMissing('program', 'tipStudija', 'godinaStudija', 'kandidatDokumenta.dokument', 'kandidatDokumenta.reviewer')
             : Kandidat::query()->with(['program', 'tipStudija', 'godinaStudija', 'kandidatDokumenta.dokument', 'kandidatDokumenta.reviewer'])->findOrFail($kandidat);
 
-        $requiredDocuments = $this->getRequiredDocumentsForKandidat($resolvedKandidat);
+        $requiredDocuments ??= $this->getRequiredDocumentsForKandidat($resolvedKandidat);
         $requiredDocumentIds = $requiredDocuments->pluck('id')->all();
         $requiredAttachments = $resolvedKandidat->kandidatDokumenta
             ->whereIn('prilozenaDokumenta_id', $requiredDocumentIds)
@@ -174,9 +189,9 @@ class DocumentReviewService
         return $trimmed === '' ? null : $trimmed;
     }
 
-    private function buildCandidateReviewRow(Kandidat $kandidat): array
+    private function buildCandidateReviewRow(Kandidat $kandidat, ?Collection $requiredDocuments = null): array
     {
-        $completion = $this->getKandidatDocumentCompletion($kandidat);
+        $completion = $this->getKandidatDocumentCompletion($kandidat, $requiredDocuments);
 
         return [
             'kandidat' => $kandidat,
@@ -193,6 +208,11 @@ class DocumentReviewService
             return collect();
         }
 
+        return $this->getRequiredDocumentsForGroup($groupId);
+    }
+
+    private function getRequiredDocumentsForGroup(int $groupId): Collection
+    {
         return PrilozenaDokumenta::query()
             ->where('skolskaGodina_id', (string) $groupId)
             ->orderBy('redniBrojDokumenta')

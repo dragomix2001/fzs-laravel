@@ -8,14 +8,17 @@ use App\Http\Requests\DocumentReviewRequest;
 use App\Models\Kandidat;
 use App\Models\KandidatPrilozenaDokumenta;
 use App\Models\User;
+use App\Services\AuditService;
 use App\Services\DocumentReviewService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class DocumentReviewController extends Controller
 {
-    public function __construct(private readonly DocumentReviewService $documentReviewService)
-    {
+    public function __construct(
+        private readonly DocumentReviewService $documentReviewService,
+        private readonly AuditService $auditService,
+    ) {
         $this->middleware(['auth', 'role:admin']);
     }
 
@@ -28,6 +31,8 @@ class DocumentReviewController extends Controller
 
     public function show(Kandidat $kandidat): View
     {
+        $this->auditService->log(request(), 'VIEW', 'kandidat', $kandidat->id);
+
         return view('kandidat.documents_review', $this->documentReviewService->getReviewPageData($kandidat));
     }
 

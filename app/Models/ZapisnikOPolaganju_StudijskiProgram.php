@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ZapisnikOPolaganju_StudijskiProgram extends Model
 {
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
     protected $table = 'zapisnik_o_polaganju__studijski_program';
+
+    protected $fillable = ['zapisnik_id', 'StudijskiProgram_id'];
 }

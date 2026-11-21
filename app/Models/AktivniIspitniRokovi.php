@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AktivniIspitniRokovi extends Model
 {
-    use HasFactory;
-
-    protected $guarded = ['id', 'created_at', 'updated_at'];
+    use Auditable, HasFactory;
 
     protected $table = 'aktivni_ispitni_rokovi';
 
@@ -26,13 +25,12 @@ class AktivniIspitniRokovi extends Model
         return $this->belongsTo(IspitniRok::class, 'rok_id');
     }
 
-    public static function tipRoka($id)
+    public static function tipRoka(int $id): string
     {
-        switch ($id) {
-            case 1: return 'Редовни';
-            case 2: return 'Ванредни';
-        }
-
-        return '';
+        return match ($id) {
+            1 => 'Редовни',
+            2 => 'Ванредни',
+            default => '',
+        };
     }
 }

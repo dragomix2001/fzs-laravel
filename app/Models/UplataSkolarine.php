@@ -13,7 +13,13 @@ class UplataSkolarine extends Model
         'datum' => 'date',
     ];
 
-    protected $guarded = ['formatDatum'];
+    protected $fillable = [
+        'skolarina_id',
+        'kandidat_id',
+        'iznos',
+        'naziv',
+        'datum',
+    ];
 
     public function kandidat(): BelongsTo
     {

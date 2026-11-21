@@ -22,6 +22,7 @@ use App\Models\TipPredmeta;
 use App\Models\TipStudija;
 use App\Models\User;
 use App\Models\ZapisnikOPolaganjuIspita;
+use App\Services\DocumentReviewService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
@@ -356,6 +357,9 @@ class DashboardTest extends TestCase
         $response->assertViewHas('prijavljeniIspiti', 2);
         $response->assertViewHas('aktivnaObavestenja', $this->expectedAktivnaObavestenja);
         $response->assertViewHas('prolaznost', 100.0);
+        $response->assertViewHas('predstojeciRokovi');
+        $response->assertViewHas('prijavePredstojecihRokova');
+        $response->assertViewHas('nepotpunaDokumentacija');
         $response->assertViewHas('skolskaGodinaId', $this->godinaUpisa2024->id);
         $response->assertViewHas('studentiPoProgramu', function ($programi) {
             return $programi->pluck('broj', 'studijskiProgram_id')->sortKeys()->all() === [
@@ -396,7 +400,41 @@ class DashboardTest extends TestCase
             'studenti_po_godini' => false,
             'prolaznost' => false,
             'neuspesni_predmeti' => false,
+            'operativni_pregled' => false,
         ]);
+    }
+
+    public function test_dashboard_operational_overview_includes_next_month_deadlines_and_applications(): void
+    {
+        $rok = AktivniIspitniRokovi::factory()->create([
+            'naziv' => 'Test rok u narednih 30 dana',
+            'pocetak' => now()->addDays(3)->toDateString(),
+            'kraj' => now()->addDays(10)->toDateString(),
+            'indikatorAktivan' => 1,
+        ]);
+        $priorApplications = PrijavaIspita::query()
+            ->whereDate('datum', '>=', now()->toDateString())
+            ->whereDate('datum', '<=', now()->addDays(30)->toDateString())
+            ->count();
+        PrijavaIspita::factory()->create([
+            'kandidat_id' => $this->studentA->id,
+            'rok_id' => $rok->id,
+            'datum' => now()->addDays(5)->toDateString(),
+            'datum2' => now()->addDays(5)->toDateString(),
+        ]);
+
+        $this->mock(DocumentReviewService::class, function ($mock) {
+            $mock->shouldReceive('getIncompleteCandidatesReviewList')
+                ->once()
+                ->andReturn([[], [], []]);
+        });
+
+        $response = $this->get('/dashboard');
+
+        $response->assertOk();
+        $response->assertViewHas('predstojeciRokovi', fn ($rokovi) => $rokovi->contains('id', $rok->id));
+        $response->assertViewHas('prijavePredstojecihRokova', $priorApplications + 1);
+        $response->assertViewHas('nepotpunaDokumentacija', 3);
     }
 
     public function test_dashboard_studenti_filters_by_program_and_year(): void
@@ -440,5 +478,59 @@ class DashboardTest extends TestCase
                 && (int) $fiziologija->polozeni === 0
                 && (float) $fiziologija->prosek === 5.0;
         });
+    }
+
+    public function test_dashboard_ispiti_filters_records_to_the_selected_calendar_year(): void
+    {
+        $year = $this->currentYear;
+        $prijava = PrijavaIspita::query()->where('kandidat_id', $this->studentA->id)->firstOrFail();
+        $zapisnik = ZapisnikOPolaganjuIspita::query()->where('kandidat_id', $this->studentA->id)->firstOrFail();
+        $dates = [
+            sprintf('%d-12-31 23:59:59', $year - 1),
+            sprintf('%d-01-01 00:00:00', $year),
+            sprintf('%d-01-01 00:00:00', $year + 1),
+        ];
+
+        foreach ($dates as $date) {
+            PrijavaIspita::create([
+                'kandidat_id' => $this->studentA->id,
+                'predmet_id' => $this->predmetProgramA->id,
+                'profesor_id' => $this->profesor->id,
+                'rok_id' => $this->ispitniRok->id,
+                'brojPolaganja' => 1,
+                'datum' => substr($date, 0, 10),
+                'created_at' => $date,
+                'updated_at' => $date,
+            ]);
+
+            PolozeniIspiti::create([
+                'prijava_id' => $prijava->id,
+                'zapisnik_id' => $zapisnik->id,
+                'kandidat_id' => $this->studentA->id,
+                'predmet_id' => $this->predmetProgramA->id,
+                'konacnaOcena' => 8,
+                'created_at' => $date,
+                'updated_at' => $date,
+            ]);
+        }
+
+        $response = $this->get('/dashboard/ispiti?godina='.$year);
+
+        $response->assertOk();
+        $response->assertViewHas('polozeniPoMesecima', function ($months): bool {
+            return (int) $months->firstWhere('mesec', 1)->broj === 2
+                && (int) $months->sum('broj') === 3;
+        });
+        $response->assertViewHas('prijavePoMesecima', function ($months): bool {
+            return (int) $months->firstWhere('mesec', 1)->broj === 2
+                && (int) $months->sum('broj') === 3;
+        });
+    }
+
+    public function test_dashboard_ispiti_rejects_invalid_year(): void
+    {
+        $response = $this->get('/dashboard/ispiti?godina=not-a-year');
+
+        $response->assertSessionHasErrors('godina');
     }
 }

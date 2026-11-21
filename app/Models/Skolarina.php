@@ -8,9 +8,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Skolarina extends Model
 {
-    protected $guarded = [];
-
     protected $table = 'skolarina';
+
+    protected $fillable = [
+        'kandidat_id',
+        'iznos',
+        'komentar',
+        'godinaStudija_id',
+        'tipStudija_id',
+        'studijskiProgram_id',
+    ];
 
     protected $casts = ['datum' => 'date'];
 

@@ -163,6 +163,55 @@
         </div>
         @endif
     </div>
+
+    @if($widgets['operativni_pregled'])
+    <section class="mt-4 rounded-lg border border-secondary-200 bg-white p-4 shadow-sm">
+        <div class="mb-4">
+            <h3 class="text-base font-semibold text-secondary-900">Оперативни преглед — наредних 30 дана</h3>
+            <p class="mt-1 text-sm text-secondary-500">Предстојећи рокови, испитне пријаве и документација за допуну.</p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <a href="{{ url('/kalendar/indexRok/') }}" class="rounded-lg bg-primary-50 p-4 hover:bg-primary-100">
+                <span class="text-sm font-medium text-primary-800">Рокови у наредних 30 дана</span>
+                <span class="mt-2 block text-2xl font-bold text-primary-900">{{ $predstojeciRokovi->count() }}</span>
+            </a>
+            <a href="{{ url('/predmeti/') }}" class="rounded-lg bg-warning-50 p-4 hover:bg-warning-100">
+                <span class="text-sm font-medium text-warning-800">Пријаве за испите у наредних 30 дана</span>
+                <span class="mt-2 block text-2xl font-bold text-warning-900">{{ $prijavePredstojecihRokova }}</span>
+            </a>
+            <a href="{{ route('kandidat.documents.incomplete') }}" class="rounded-lg bg-cyan-50 p-4 hover:bg-cyan-100">
+                <span class="text-sm font-medium text-cyan-800">Кандидати са непотпуном документацијом</span>
+                <span class="mt-2 block text-2xl font-bold text-cyan-900">{{ $nepotpunaDokumentacija }}</span>
+            </a>
+        </div>
+
+        <div class="mt-4">
+            <h4 class="mb-2 text-sm font-semibold text-secondary-800">Најближи активни испитни рокови</h4>
+            <x-table>
+                <x-slot:header>
+                    <tr>
+                        <th>Рок</th>
+                        <th>Почетак</th>
+                        <th>Крај</th>
+                    </tr>
+                </x-slot:header>
+                @forelse($predstojeciRokovi as $rok)
+                    <tr>
+                        <td>{{ $rok->naziv }}</td>
+                        <td>{{ \Illuminate\Support\Carbon::parse($rok->pocetak)->format('d.m.Y') }}</td>
+                        <td>{{ \Illuminate\Support\Carbon::parse($rok->kraj)->format('d.m.Y') }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="py-4 text-center text-sm text-secondary-500">Нема предстојећих активних рокова.</td>
+                    </tr>
+                @endforelse
+            </x-table>
+        </div>
+    </section>
+    @endif
+
     <div class="mt-4 flex gap-2">
         <x-button variant="primary" size="md" href="{{ route('dashboard.studenti') }}">Детаљни преглед студената</x-button>
         <x-button variant="info" size="md" href="{{ route('dashboard.ispiti') }}">Аналитика испита</x-button>
@@ -216,6 +265,10 @@
                         <label class="flex items-center">
                             <input type="checkbox" name="neuspesni_predmeti" {{ $widgets['neuspesni_predmeti'] ? 'checked' : '' }} class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500">
                             <span class="ml-2 text-sm text-secondary-700">Неуспешни предмети</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="operativni_pregled" {{ $widgets['operativni_pregled'] ? 'checked' : '' }} class="rounded border-secondary-300 text-primary-600 focus:ring-primary-500">
+                            <span class="ml-2 text-sm text-secondary-700">Оперативни преглед рокова и документације</span>
                         </label>
                     </div>
                 </div>

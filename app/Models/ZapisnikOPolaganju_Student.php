@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ZapisnikOPolaganju_Student extends Model
 {
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
     protected $table = 'zapisnik_o_polaganju__student';
+
+    protected $fillable = ['kandidat_id', 'prijavaIspita_id', 'zapisnik_id'];
 
     public function prijava(): BelongsTo
     {

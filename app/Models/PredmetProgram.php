@@ -11,9 +11,22 @@ class PredmetProgram extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
     protected $table = 'predmet_program';
+
+    protected $fillable = [
+        'studijskiProgram_id',
+        'godinaStudija_id',
+        'semestar',
+        'predmet_id',
+        'tipPredmeta_id',
+        'tipStudija_id',
+        'espb',
+        'statusPredmeta',
+        'predavanja',
+        'vezbe',
+        'skolskaGodina_id',
+        'indikatorAktivan',
+    ];
 
     public function predmet(): BelongsTo
     {

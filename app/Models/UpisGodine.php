@@ -11,9 +11,19 @@ class UpisGodine extends Model
 {
     use Auditable, HasFactory;
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
     protected $table = 'upis_godine';
+
+    protected $fillable = [
+        'kandidat_id',
+        'godina',
+        'pokusaj',
+        'tipStudija_id',
+        'statusGodine_id',
+        'studijskiProgram_id',
+        'skolskaGodina_id',
+        'datumUpisa',
+        'datumPromene',
+    ];
 
     protected $casts = [
         'datumUpisa' => 'datetime',

@@ -399,7 +399,7 @@
                     </ul>
                 </li>
                 
-                <li class="{{ Request::is('*chatbot*') || Request::is('*prediction*') || Request::is('*dashboard*') ? 'submenu-parent-active' : '' }}">
+                <li class="{{ Request::is('*chatbot*') || Request::is('*prediction*') || Request::is('*dashboard*') || Request::is('audit-logs*') ? 'submenu-parent-active' : '' }}">
                     <a href="#" onclick="toggleSubmenu(event, 'analitikaSubmenu')">
                         <i class="fas fa-chart-pie"></i>
                         <span>Аналитика и AI</span>
@@ -409,6 +409,9 @@
                         <li><a class="{{ Request::is('dashboard*') ? 'active' : '' }}" href="{{ url('/dashboard') }}">Аналитика</a></li>
                         <li><a class="{{ Request::is('chatbot*') ? 'active' : '' }}" href="{{ url('/chatbot') }}">AI Чатбот</a></li>
                         <li><a class="{{ Request::is('prediction*') ? 'active' : '' }}" href="{{ url('/prediction') }}">AI Предикција</a></li>
+                        @if(Auth::check() && Auth::user()->role === 'admin')
+                            <li><a class="{{ Request::is('audit-logs*') ? 'active' : '' }}" href="{{ route('audit.index') }}">Аудит лог</a></li>
+                        @endif
                     </ul>
                 </li>
             </ul>

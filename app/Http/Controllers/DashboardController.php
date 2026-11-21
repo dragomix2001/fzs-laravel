@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AktivniIspitniRokovi;
 use App\Models\Kandidat;
 use App\Models\Obavestenje;
 use App\Models\PolozeniIspiti;
@@ -9,12 +10,17 @@ use App\Models\PrijavaIspita;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
 use App\Models\ZapisnikOPolaganjuIspita;
+use App\Services\DocumentReviewService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function __construct(private readonly DocumentReviewService $documentReviewService) {}
+
+    public function index(Request $request): View
     {
         $skolskaGodinaId = $request->skolska_godina_id ??
             Cache::remember('active_skolska_godina', 3600, function () {
@@ -35,8 +41,16 @@ class DashboardController extends Controller
             ->with('program')
             ->get();
 
-        $polozeniIspiti = PolozeniIspiti::whereYear('created_at', date('Y'))->count();
-        $prijavljeniIspiti = PrijavaIspita::whereYear('created_at', date('Y'))->count();
+        $yearStart = now()->startOfYear();
+        $nextYearStart = $yearStart->copy()->addYear();
+        $polozeniIspiti = PolozeniIspiti::query()
+            ->where('created_at', '>=', $yearStart)
+            ->where('created_at', '<', $nextYearStart)
+            ->count();
+        $prijavljeniIspiti = PrijavaIspita::query()
+            ->where('created_at', '>=', $yearStart)
+            ->where('created_at', '<', $nextYearStart)
+            ->count();
 
         $aktivnaObavestenja = Obavestenje::aktivna()->count();
 
@@ -46,14 +60,16 @@ class DashboardController extends Controller
         }
 
         $ispitiPoRoku = ZapisnikOPolaganjuIspita::selectRaw('rok_id, COUNT(*) as broj')
-            ->whereYear('datum', date('Y'))
+            ->where('datum', '>=', $yearStart->toDateString())
+            ->where('datum', '<', $nextYearStart->toDateString())
             ->groupBy('rok_id')
             ->with('ispitniRok')
             ->get();
 
         $najcesciNeuspesni = PolozeniIspiti::selectRaw('predmet_id, COUNT(*) as broj')
             ->where('konacnaOcena', '<', 6)
-            ->whereYear('created_at', date('Y'))
+            ->where('created_at', '>=', $yearStart)
+            ->where('created_at', '<', $nextYearStart)
             ->groupBy('predmet_id')
             ->orderByDesc('broj')
             ->limit(5)
@@ -62,7 +78,22 @@ class DashboardController extends Controller
 
         $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->limit(5)->get();
 
-        $widgets = session('dashboard_widgets', [
+        $today = now()->toDateString();
+        $nextThirtyDays = now()->addDays(30)->toDateString();
+        $predstojeciRokovi = AktivniIspitniRokovi::query()
+            ->where('indikatorAktivan', true)
+            ->where('kraj', '>=', $today)
+            ->where('pocetak', '<=', $nextThirtyDays)
+            ->orderBy('pocetak')
+            ->limit(5)
+            ->get();
+        $prijavePredstojecihRokova = PrijavaIspita::query()
+            ->where('datum', '>=', $today)
+            ->where('datum', '<=', $nextThirtyDays)
+            ->count();
+        $nepotpunaDokumentacija = count($this->documentReviewService->getIncompleteCandidatesReviewList());
+
+        $defaultWidgets = [
             'studenti_ukupno' => true,
             'polozeni_ispiti' => true,
             'prijavljeni_ispiti' => true,
@@ -71,7 +102,9 @@ class DashboardController extends Controller
             'studenti_po_godini' => true,
             'prolaznost' => true,
             'neuspesni_predmeti' => true,
-        ]);
+            'operativni_pregled' => true,
+        ];
+        $widgets = array_merge($defaultWidgets, session('dashboard_widgets', []));
 
         return view('dashboard.index', compact(
             'ukupnoStudenata',
@@ -83,13 +116,16 @@ class DashboardController extends Controller
             'prolaznost',
             'ispitiPoRoku',
             'najcesciNeuspesni',
+            'predstojeciRokovi',
+            'prijavePredstojecihRokova',
+            'nepotpunaDokumentacija',
             'skolskeGodine',
             'skolskaGodinaId',
             'widgets'
         ));
     }
 
-    public function saveWidgets(Request $request)
+    public function saveWidgets(Request $request): RedirectResponse
     {
         $widgets = [
             'studenti_ukupno' => $request->has('studenti_ukupno'),
@@ -100,6 +136,7 @@ class DashboardController extends Controller
             'studenti_po_godini' => $request->has('studenti_po_godini'),
             'prolaznost' => $request->has('prolaznost'),
             'neuspesni_predmeti' => $request->has('neuspesni_predmeti'),
+            'operativni_pregled' => $request->has('operativni_pregled'),
         ];
 
         session(['dashboard_widgets' => $widgets]);
@@ -107,7 +144,7 @@ class DashboardController extends Controller
         return redirect()->route('dashboard.index');
     }
 
-    public function studenti(Request $request)
+    public function studenti(Request $request): View
     {
         $programId = $request->program_id;
         $godinaId = $request->godina_id;
@@ -129,18 +166,25 @@ class DashboardController extends Controller
         return view('dashboard.studenti', compact('studenti', 'programi', 'godine', 'programId', 'godinaId'));
     }
 
-    public function ispiti(Request $request)
+    public function ispiti(Request $request): View
     {
-        $godina = $request->godina ?? date('Y');
+        $validated = $request->validate([
+            'godina' => ['sometimes', 'integer', 'between:1000,9998'],
+        ]);
+        $godina = (string) ($validated['godina'] ?? now()->year);
+        $yearStart = now()->setDate((int) $godina, 1, 1)->startOfDay();
+        $nextYearStart = $yearStart->copy()->addYear();
 
         $polozeniPoMesecima = PolozeniIspiti::selectRaw('MONTH(created_at) as mesec, COUNT(*) as broj')
-            ->whereYear('created_at', $godina)
+            ->where('created_at', '>=', $yearStart)
+            ->where('created_at', '<', $nextYearStart)
             ->groupBy('mesec')
             ->orderBy('mesec')
             ->get();
 
         $prijavePoMesecima = PrijavaIspita::selectRaw('MONTH(created_at) as mesec, COUNT(*) as broj')
-            ->whereYear('created_at', $godina)
+            ->where('created_at', '>=', $yearStart)
+            ->where('created_at', '<', $nextYearStart)
             ->groupBy('mesec')
             ->orderBy('mesec')
             ->get();
@@ -149,7 +193,8 @@ class DashboardController extends Controller
             COUNT(*) as ukupno,
             SUM(CASE WHEN konacnaOcena >= 6 THEN 1 ELSE 0 END) as polozeni,
             AVG(konacnaOcena) as prosek')
-            ->whereYear('created_at', $godina)
+            ->where('created_at', '>=', $yearStart)
+            ->where('created_at', '<', $nextYearStart)
             ->groupBy('predmet_id')
             ->with('predmet')
             ->orderByDesc('ukupno')

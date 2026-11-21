@@ -11,9 +11,9 @@ class Predmet extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
     protected $table = 'predmet';
+
+    protected $fillable = ['naziv'];
 
     public function godinaStudija(): BelongsTo
     {

@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PrijavaIspita extends Model
 {
-    use HasFactory;
-
-    protected $guarded = ['id', 'created_at', 'updated_at'];
+    use Auditable, HasFactory;
 
     protected $table = 'prijava_ispita';
 
@@ -40,13 +39,10 @@ class PrijavaIspita extends Model
         return $this->belongsTo(Profesor::class, 'profesor_id');
     }
 
-    public static function nazivRokaPoId($idRoka)
+    public static function nazivRokaPoId(int $idRoka): ?string
     {
-        $rok = AktivniIspitniRokovi::find($idRoka);
-        if ($rok == null) {
-            return null;
-        }
+        $naziv = AktivniIspitniRokovi::query()->whereKey($idRoka)->value('naziv');
 
-        return $rok->naziv;
+        return is_string($naziv) ? $naziv : null;
     }
 }

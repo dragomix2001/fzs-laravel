@@ -184,6 +184,71 @@ class AuditLogControllerTest extends TestCase
         $this->assertEquals($auditUser1->id, $logs->first()->user_id);
     }
 
+    public function test_filter_by_action_record_and_date_range_works(): void
+    {
+        $admin = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin_'.uniqid().'@test.com',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
+        $actor = User::factory()->create();
+        $matchingLog = AuditLog::factory()->create([
+            'user_id' => $actor->id,
+            'action' => 'UPDATE',
+            'table_name' => 'kandidat',
+            'record_id' => 42,
+            'created_at' => now()->startOfDay()->addHours(10),
+        ]);
+        AuditLog::factory()->create([
+            'user_id' => $actor->id,
+            'action' => 'DELETE',
+            'table_name' => 'kandidat',
+            'record_id' => 42,
+        ]);
+        AuditLog::factory()->create([
+            'user_id' => $actor->id,
+            'action' => 'UPDATE',
+            'table_name' => 'kandidat',
+            'record_id' => 43,
+        ]);
+
+        $response = $this->actingAs($admin)->get('/audit-logs?'.http_build_query([
+            'user_id' => $actor->id,
+            'action' => 'UPDATE',
+            'record_id' => 42,
+            'date_from' => now()->toDateString(),
+            'date_to' => now()->toDateString(),
+        ]));
+
+        $response->assertOk();
+        $this->assertCount(1, $response->viewData('logs'));
+        $this->assertTrue($response->viewData('logs')->first()->is($matchingLog));
+    }
+
+    public function test_audit_details_hide_personal_information_from_legacy_entries(): void
+    {
+        $admin = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin_'.uniqid().'@test.com',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
+        AuditLog::factory()->create([
+            'action' => 'update',
+            'table_name' => 'kandidat',
+            'old_values' => ['jmbg' => '1234567890123', 'statusUpisa_id' => 1],
+            'new_values' => ['jmbg' => '9876543210987', 'statusUpisa_id' => 2],
+        ]);
+
+        $response = $this->actingAs($admin)->get('/audit-logs');
+
+        $response->assertOk();
+        $response->assertSee('statusUpisa_id');
+        $response->assertDontSee('1234567890123');
+        $response->assertDontSee('9876543210987');
+    }
+
     /**
      * Test index orders logs by created_at descending
      */

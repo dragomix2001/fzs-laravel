@@ -12,6 +12,7 @@ use App\Models\ProfesorPredmet;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as IlluminateView;
@@ -53,7 +54,9 @@ class DiplomskiRadService extends BasePdfService
             $prijava->predmet_id = $data->predmetId;
             $prijava->nazivTeme = $data->naziv;
             $prijava->profesor_id = $data->mentorId;
-            $prijava->datum = $data->datumPrijave;
+            $prijava->datum = $data->datumPrijave === null || $data->datumPrijave === ''
+                ? null
+                : Carbon::parse($data->datumPrijave);
             $prijava->indikatorOdobreno = false;
             $prijava->save();
         });

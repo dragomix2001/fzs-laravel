@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\AuditLog;
+use App\Models\Kandidat;
 use App\Models\User;
 use App\Services\AuditService;
 use Illuminate\Database\Eloquent\Model;
@@ -64,7 +65,7 @@ class AuditServiceTest extends TestCase
         $this->assertEquals(1, $log->record_id);
         $this->assertEquals('192.168.1.1', $log->ip_address);
         $this->assertNotNull($log->user_agent);
-        $this->assertEquals(['name' => 'John Doe', 'email' => 'john@test.com'], $log->new_values);
+        $this->assertSame([], $log->new_values);
     }
 
     /**
@@ -238,6 +239,32 @@ class AuditServiceTest extends TestCase
             $this->assertNotNull($log);
             $this->assertEquals($action, $log->action);
         }
+    }
+
+    public function test_model_audit_records_only_changed_non_sensitive_fields(): void
+    {
+        $kandidat = Kandidat::factory()->create([
+            'jmbg' => '1234567890123',
+            'brojBodovaTest' => 10,
+        ]);
+
+        $kandidat->forceFill([
+            'jmbg' => '9876543210987',
+            'brojBodovaTest' => 20,
+        ])->save();
+
+        $log = AuditLog::query()
+            ->where('table_name', 'kandidat')
+            ->where('record_id', $kandidat->id)
+            ->where('action', 'update')
+            ->latest('id')
+            ->firstOrFail();
+
+        $this->assertArrayNotHasKey('jmbg', $log->old_values);
+        $this->assertArrayNotHasKey('jmbg', $log->new_values);
+        $this->assertSame(10, (int) $log->old_values['brojBodovaTest']);
+        $this->assertSame(20, (int) $log->new_values['brojBodovaTest']);
+        $this->assertArrayNotHasKey('jmbg', $log->changes());
     }
 
     // ======================== getLogs() Tests ========================

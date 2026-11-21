@@ -7,12 +7,12 @@
             <form method="get" action="{{ url('/pretraga') }}">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1">
-                        <label class="block text-sm font-medium text-secondary-700">Претрага студената (име, презиме, број индекса, ЈМБГ)</label>
-                        <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="pretraga" name="pretraga" value="{{ $request->pretraga ?? '' }}">
+                        <label class="block text-sm font-medium text-secondary-700">Студенти (почетак имена, презимена или броја индекса; тачан ЈМБГ)</label>
+                        <input type="search" autocomplete="off" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="pretraga" name="pretraga" value="{{ $request->pretraga ?? '' }}">
                     </div>
                     <div class="space-y-1">
-                        <label class="block text-sm font-medium text-secondary-700">Претрага предмета (назив, шифра)</label>
-                        <input type="text" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="pretraga_predmet" name="pretraga_predmet" value="{{ $request->pretraga_predmet ?? '' }}">
+                        <label class="block text-sm font-medium text-secondary-700">Предмети (почетак назива)</label>
+                        <input type="search" autocomplete="off" class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm" id="pretraga_predmet" name="pretraga_predmet" value="{{ $request->pretraga_predmet ?? '' }}">
                     </div>
                 </div>
                 
@@ -74,10 +74,16 @@
             </form>
         </x-card>
         
-        @if(isset($studenti) || isset($predmeti))
-            @if(isset($studenti) && $studenti->count() > 0)
+        @unless($hasSearch)
+            <div class="rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm text-cyan-800">
+                Унесите име, презиме, број индекса или ЈМБГ студента, назив предмета, или изаберите филтер.
+            </div>
+        @endunless
+
+        @if($studentSearchRequested)
+            @if($studenti->total() > 0)
             <x-card>
-                <x-slot:title>Резултати претраге - Студенти ({{ $studenti->count() }})</x-slot:title>
+                <x-slot:title>Резултати претраге - Студенти ({{ $studenti->total() }})</x-slot:title>
                 <x-table>
                     <thead>
                         <tr>
@@ -122,34 +128,37 @@
                         @endforeach
                     </tbody>
                 </x-table>
+                <div class="mt-4">{{ $studenti->links() }}</div>
             </x-card>
-            @elseif(isset($studenti))
+            @else
             <div class="flex items-center gap-2 bg-cyan-50 border border-cyan-200 text-cyan-800 px-4 py-3 rounded-lg text-sm">
                 <i class="fas fa-info-circle text-cyan-500"></i>
                 Нема резултата за претрагу студената.
             </div>
             @endif
+        @endif
             
-            @if(isset($predmeti) && $predmeti->count() > 0)
+        @if($subjectSearchRequested)
+            @if($predmeti->total() > 0)
             <x-card>
-                <x-slot:title>Резултати претраге - Предмети ({{ $predmeti->count() }})</x-slot:title>
+                <x-slot:title>Резултати претраге - Предмети ({{ $predmeti->total() }})</x-slot:title>
                 <x-table>
                     <thead>
                         <tr>
-                            <th>Шифра</th>
                             <th>Назив</th>
                             <th>ЕСПБ</th>
+                            <th>Студијски програм</th>
                             <th>Акције</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($predmeti as $predmet)
                             <tr>
-                                <td>{{$predmet->sifraPredmeta}}</td>
-                                <td>{{$predmet->naziv}}</td>
+                                <td>{{ $predmet->predmet->naziv ?? '-' }}</td>
                                 <td>{{$predmet->espb}}</td>
+                                <td>{{ $predmet->studijskiProgram->naziv ?? '-' }}</td>
                                 <td>
-                                    <x-button variant="warning" size="xs" href="/predmet/{{ $predmet->id }}/edit">
+                                    <x-button variant="warning" size="xs" href="/predmet/{{ $predmet->predmet_id }}/edit">
                                         <i class="fas fa-edit mr-1"></i> Измени
                                     </x-button>
                                 </td>
@@ -157,8 +166,9 @@
                         @endforeach
                     </tbody>
                 </x-table>
+                <div class="mt-4">{{ $predmeti->links() }}</div>
             </x-card>
-            @elseif(isset($predmeti))
+            @else
             <div class="flex items-center gap-2 bg-cyan-50 border border-cyan-200 text-cyan-800 px-4 py-3 rounded-lg text-sm">
                 <i class="fas fa-info-circle text-cyan-500"></i>
                 Нема резултата за претрагу предмета.

@@ -27,8 +27,8 @@ class AuditService
             'action' => $action,
             'table_name' => $tableName,
             'record_id' => $recordId,
-            'old_values' => $oldValues,
-            'new_values' => $newValues,
+            'old_values' => AuditLog::sanitizeValues($oldValues),
+            'new_values' => AuditLog::sanitizeValues($newValues),
             'ip_address' => $ipAddress,
             'user_agent' => $userAgent,
         ]);

@@ -7,18 +7,21 @@ use Illuminate\Support\Facades\Auth;
 
 trait Auditable
 {
-    public static function bootAuditable()
+    public static function bootAuditable(): void
     {
         static::created(function ($model) {
-            $model->logAudit('create', null, $model->toArray());
+            $model->logAudit('create', null, $model->getAttributes());
         });
 
         static::updated(function ($model) {
-            $model->logAudit('update', $model->getOriginal(), $model->getChanges());
+            $changes = $model->getChanges();
+            $oldValues = array_intersect_key($model->getOriginal(), $changes);
+
+            $model->logAudit('update', $oldValues, $changes);
         });
 
         static::deleted(function ($model) {
-            $model->logAudit('delete', $model->toArray(), null);
+            $model->logAudit('delete', $model->getAttributes(), null);
         });
     }
 
@@ -36,9 +39,9 @@ trait Auditable
             'user_id' => $userId,
             'action' => $action,
             'table_name' => $tableName,
-            'record_id' => $this->id ?? null,
-            'old_values' => $oldValues,
-            'new_values' => $newValues,
+            'record_id' => $this->getKey(),
+            'old_values' => AuditLog::sanitizeValues($oldValues),
+            'new_values' => AuditLog::sanitizeValues($newValues),
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);

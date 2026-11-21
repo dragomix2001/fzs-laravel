@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
-use App\Models\Predmet;
+use App\Models\PredmetProgram;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StatusGodine;
 use App\Models\StudijskiProgram;
@@ -14,12 +14,7 @@ class SearchController extends Controller
 {
     public function search()
     {
-        $studijskiProgrami = StudijskiProgram::all();
-        $godineStudija = GodinaStudija::all();
-        $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
-        $statusi = StatusGodine::all();
-
-        return view('search.index', compact('studijskiProgrami', 'godineStudija', 'skolskeGodine', 'statusi'));
+        return $this->searchResult(request());
     }
 
     public function searchResult(Request $request)
@@ -38,20 +33,34 @@ class SearchController extends Controller
         $skolskeGodine = SkolskaGodUpisa::orderBy('naziv', 'desc')->get();
         $statusi = StatusGodine::all();
 
-        // Student search — only run query if at least one filter is provided
-        $studenti = collect();
-        $hasFilter = array_filter($validated);
+        $studentSearchRequested = collect([
+            'pretraga',
+            'studijski_program_id',
+            'godina_studija_id',
+            'status_upisa_id',
+            'skolska_godina_id',
+        ])->contains(fn (string $key): bool => isset($validated[$key]) && $validated[$key] !== '');
+        $subjectSearchRequested = ! empty($validated['pretraga_predmet']);
 
-        if ($hasFilter) {
-            $query = Kandidat::query();
+        $studenti = collect();
+
+        if ($studentSearchRequested) {
+            $query = Kandidat::query()->with(['program', 'godinaStudija', 'statusUpisa']);
 
             if (! empty($validated['pretraga'])) {
                 $term = $validated['pretraga'];
-                $query->where(function ($q) use ($term) {
-                    $q->where('imeKandidata', 'LIKE', '%'.$term.'%')
-                        ->orWhere('prezimeKandidata', 'LIKE', '%'.$term.'%')
-                        ->orWhere('brojIndeksa', 'LIKE', '%'.$term.'%')
-                        ->orWhere('jmbg', 'LIKE', '%'.$term.'%');
+                $terms = preg_split('/\s+/', trim($term), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+                $query->where(function ($q) use ($term, $terms) {
+                    $q->where(function ($nameQuery) use ($terms) {
+                        foreach ($terms as $nameTerm) {
+                            $nameQuery->where(function ($query) use ($nameTerm) {
+                                $query->where('imeKandidata', 'LIKE', $nameTerm.'%')
+                                    ->orWhere('prezimeKandidata', 'LIKE', $nameTerm.'%');
+                            });
+                        }
+                    })
+                        ->orWhere('brojIndeksa', 'LIKE', $term.'%')
+                        ->orWhere('jmbg', $term);
                 });
             }
 
@@ -71,19 +80,39 @@ class SearchController extends Controller
                 $query->where('skolskaGodinaUpisa_id', $validated['skolska_godina_id']);
             }
 
-            $studenti = $query->orderBy('prezimeKandidata')->orderBy('imeKandidata')->limit(500)->get();
+            $studenti = $query
+                ->orderBy('prezimeKandidata')
+                ->orderBy('imeKandidata')
+                ->paginate(25, ['*'], 'student_page')
+                ->withQueryString();
         }
 
-        // Predmet search
-        $predmeti = [];
-        if (! empty($validated['pretraga_predmet'])) {
+        $predmeti = collect();
+        if ($subjectSearchRequested) {
             $term = $validated['pretraga_predmet'];
-            $predmeti = Predmet::where('naziv', 'LIKE', '%'.$term.'%')
-                ->orWhere('sifraPredmeta', 'LIKE', '%'.$term.'%')
-                ->limit(200)
-                ->get();
+            $predmeti = PredmetProgram::query()
+                ->with(['predmet', 'studijskiProgram'])
+                ->whereHas('predmet', function ($query) use ($term) {
+                    $query->where('naziv', 'LIKE', $term.'%');
+                })
+                ->orderBy('predmet_id')
+                ->paginate(25, ['*'], 'subject_page')
+                ->withQueryString();
         }
 
-        return view('search.index', compact('studenti', 'predmeti', 'studijskiProgrami', 'godineStudija', 'skolskeGodine', 'statusi', 'request'));
+        $hasSearch = $studentSearchRequested || $subjectSearchRequested;
+
+        return view('search.index', compact(
+            'studenti',
+            'predmeti',
+            'studijskiProgrami',
+            'godineStudija',
+            'skolskeGodine',
+            'statusi',
+            'request',
+            'studentSearchRequested',
+            'subjectSearchRequested',
+            'hasSearch'
+        ));
     }
 }

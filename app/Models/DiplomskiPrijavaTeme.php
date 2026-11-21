@@ -10,13 +10,11 @@ class DiplomskiPrijavaTeme extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $table = 'diplomski_prijava_teme';
 
-    public $table = 'diplomski_prijava_teme';
+    protected $casts = ['datum' => 'date'];
 
-    public $dates = ['datum'];
-
-    public $fillable = ['kandidat_id', 'tipStudija_id', 'studijskiProgram_id', 'predmet_id', 'nazivTeme', 'datum', 'indikatorOdobreno', 'profesor_id'];
+    protected $fillable = ['kandidat_id', 'tipStudija_id', 'studijskiProgram_id', 'predmet_id', 'nazivTeme', 'datum', 'indikatorOdobreno', 'profesor_id'];
 
     public function predmet(): BelongsTo
     {

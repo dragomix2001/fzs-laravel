@@ -70,6 +70,12 @@ class DocumentReviewControllerTest extends TestCase
         $response->assertViewIs('kandidat.documents_review');
         $response->assertViewHas('kandidat', fn (Kandidat $kandidat) => $kandidat->is($this->kandidat));
         $response->assertViewHas('dokumenta', fn ($dokumenta) => $dokumenta->contains('id', $this->attachment->id));
+        $this->assertDatabaseHas('audit_logs', [
+            'user_id' => $this->admin->id,
+            'action' => 'VIEW',
+            'table_name' => 'kandidat',
+            'record_id' => $this->kandidat->id,
+        ]);
     }
 
     public function test_admin_can_view_incomplete_document_list(): void
