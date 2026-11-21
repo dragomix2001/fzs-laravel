@@ -12,18 +12,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <input type="hidden" value="{{$student->id}}">
-                    <x-button variant="primary" size="md" href="{{" target="_blank">id}}">
+                    <x-button variant="primary" size="md" href="{{ url('/izvestaji/diplomaStampa/' . $student->id) }}" target="_blank">
                         <span class="fa fa-print mr-2"></span> Штампа уверења
                     </x-button>
                 </div>
                 <div>
-                    <x-button variant="primary" size="md" href="{{" target="_blank">id}}">
+                    <x-button variant="primary" size="md" href="{{ url('/izvestaji/komisijaStampa/' . $student->id) }}" target="_blank">
                         <span class="fa fa-print mr-2"></span> Комисија
                     </x-button>
                 </div>
 
                 <div>
-                    <x-button variant="primary" size="md" href="{{" target="_blank">id}}">
+                    <x-button variant="primary" size="md" href="{{ url('/izvestaji/polozeniStampa/' . $student->id) }}" target="_blank">
                         <span class="fa fa-print mr-2"></span> Уверење о положеним испитима
                     </x-button>
                 </div>

@@ -89,13 +89,13 @@
                             <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}/upis">
                                 Статус
                             </x-button>
-                            <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}">
+                            <x-button variant="primary" size="xs" href="{{ url('/prijava/zaStudenta/' . $kandidat->id) }}">
                                 Испити
                             </x-button>
-                            <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}">
+                            <x-button variant="primary" size="xs" href="{{ url('/izvestaji/potvrdeStudent/' . $kandidat->id) }}">
                                 Потврде
                             </x-button>
-                            <x-button variant="primary" size="xs" href="/student/{{ $kandidat->id }}">
+                            <x-button variant="primary" size="xs" href="{{ url('/skolarina/' . $kandidat->id) }}">
                                 Школарина
                             </x-button>
                         </div>

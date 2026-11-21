@@ -107,13 +107,13 @@
                                 <x-button variant="primary" size="xs" href="{{ url('student/' . $kandidat->id . '/upis') }}">
                                     <i class="fas fa-user-plus mr-1"></i> Упис
                                 </x-button>
-                                <x-button variant="info" size="xs" href="{{ url('student/' . $kandidat->id) }}">
+                                <x-button variant="info" size="xs" href="{{ url('/prijava/zaStudenta/' . $kandidat->id) }}">
                                     <i class="fas fa-file-alt mr-1"></i> Пријаве
                                 </x-button>
                                 <x-button variant="secondary" size="xs" href="{{ url('/izvestaji/potvrdeStudent/' . $kandidat->id) }}">
                                     <i class="fas fa-file-pdf mr-1"></i> Потврда
                                 </x-button>
-                                <x-button variant="success" size="xs" href="{{ url('student/' . $kandidat->id . '/skolarina') }}">
+                                <x-button variant="success" size="xs" href="{{ url('/skolarina/' . $kandidat->id) }}">
                                     <i class="fas fa-money-bill mr-1"></i> Школарина
                                 </x-button>
                             </div>

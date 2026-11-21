@@ -4,14 +4,15 @@ namespace App\Services;
 
 use App\DTOs\DiplomskiAddData;
 use App\Models\DiplomskiPolaganje;
+use App\Models\DiplomskiPrijavaOdbrane;
 use App\Models\DiplomskiPrijavaTeme;
 use App\Models\DiplomskiRad;
 use App\Models\Kandidat;
 use App\Models\Profesor;
-use App\Models\ProfesorPredmet;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
@@ -64,30 +65,31 @@ class DiplomskiRadService extends BasePdfService
         return redirect('/student');
     }
 
-    public function komisijaStampa(Kandidat $student): ?RedirectResponse
+    public function komisijaStampa(Kandidat $student): Response
     {
-        $diplomski = DiplomskiRad::where('kandidat_id', $student->id)->first();
-
-        if (! $diplomski) {
-            return redirect()->back()->with('error', 'Дипломски рад није пронађен');
-        }
-
-        $profPredmet = ProfesorPredmet::where('predmet_id', $diplomski->predmet_id)->get();
+        $student->loadMissing('program');
+        $diplomski = DiplomskiPolaganje::with(['predsednik', 'profesor', 'clan'])
+            ->where('kandidat_id', $student->id)
+            ->first();
+        $podaci = DiplomskiPrijavaOdbrane::where('kandidat_id', $student->id)->first();
+        $datum = now()->format('d.m.Y');
 
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.komisijaStampa')
             ->with('student', $student)
             ->with('diplomski', $diplomski)
-            ->with('profPredmet', $profPredmet);
+            ->with('podaci', $podaci)
+            ->with('podaci2', $diplomski)
+            ->with('datum', $datum);
 
         $contents = $view->render();
         $pdf->SetTitle('Одлука о формирању комисије');
+        $pdf->SetMargins(12, 2, 12, true);
         $pdf->AddPage();
         $pdf->SetFont('freeserif', '', 12);
         $pdf->WriteHtml($contents, true);
-        $pdf->Output('Komisija.pdf');
 
-        return null;
+        return $this->pdfResponse($pdf->Output('Komisija.pdf', 'S'), 'Komisija.pdf');
     }
 
     public function zapisnikDiplomski(Kandidat $student): ?RedirectResponse

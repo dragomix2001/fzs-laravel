@@ -13,7 +13,6 @@ use App\Models\StudijskiProgram;
 use App\Models\TipStudija;
 use App\Services\DiplomaService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Exceptions\UrlGenerationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -63,6 +62,28 @@ class DiplomaServiceTest extends TestCase
     }
 
     #[Test]
+    public function potvrde_student_returns_confirmation_view_with_print_links(): void
+    {
+        $kandidat = $this->makeKandidat();
+
+        $result = $this->service->potvrdeStudent($kandidat);
+
+        $this->assertInstanceOf(View::class, $result);
+        $this->assertSame($kandidat->id, $result->getData()['student']->id);
+
+        $html = $result->render();
+
+        foreach ([
+            "/izvestaji/diplomaStampa/{$kandidat->id}",
+            "/izvestaji/komisijaStampa/{$kandidat->id}",
+            "/izvestaji/polozeniStampa/{$kandidat->id}",
+        ] as $path) {
+            $this->assertStringContainsString('href="'.url($path).'"', $html);
+        }
+        $this->assertGreaterThanOrEqual(3, substr_count($html, 'target="_blank"'));
+    }
+
+    #[Test]
     public function diploma_unos_returns_view_with_student(): void
     {
         $kandidat = $this->makeKandidat();
@@ -106,13 +127,13 @@ class DiplomaServiceTest extends TestCase
     }
 
     #[Test]
-    public function diploma_stampa_redirects_with_error_when_diploma_not_found(): void
+    public function diploma_stampa_returns_pdf_when_required_records_are_missing(): void
     {
         $kandidat = $this->makeKandidat();
 
         $result = $this->service->diplomaStampa($kandidat);
 
-        $this->assertInstanceOf(RedirectResponse::class, $result);
-        $this->assertEquals('Диплома није пронађена', session('error'));
+        $this->assertSame('application/pdf', $result->headers->get('Content-Type'));
+        $this->assertStringStartsWith('%PDF-', $result->getContent());
     }
 }

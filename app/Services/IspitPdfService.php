@@ -15,6 +15,7 @@ use App\Models\StudijskiProgram;
 use App\Models\ZapisnikOPolaganju_Student;
 use App\Models\ZapisnikOPolaganjuIspita;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use PDF;
@@ -156,42 +157,47 @@ class IspitPdfService extends BasePdfService
         PDF::Output('Zapisnik.pdf');
     }
 
-    public function polozeniStampa($id)
+    public function polozeniStampa($id): Response
     {
         try {
-            $student = Kandidat::find($id);
+            $student = Kandidat::with('program.tipStudija')->findOrFail($id);
 
             $ispiti = DB::table('polozeni_ispiti')
-                ->where(['polozeni_ispiti.kandidat_id' => $id])
-                ->join('prijava_ispita', 'polozeni_ispiti.prijava_id', '=', 'prijava_ispita.id')
-                ->join('predmet_program', 'prijava_ispita.predmet_id', '=', 'predmet_program.id')
+                ->where('polozeni_ispiti.kandidat_id', $student->id)
+                ->join('predmet_program', 'polozeni_ispiti.predmet_id', '=', 'predmet_program.id')
                 ->join('predmet', 'predmet_program.predmet_id', '=', 'predmet.id')
-                ->join('profesor', 'prijava_ispita.profesor_id', '=', 'profesor.id')
                 ->select(
-                    'predmet.naziv as predmet',
-                    'profesor.ime as ime',
-                    'profesor.prezime as prezime',
-                    'polozeni_ispiti.brojBodova as poeni',
-                    'polozeni_ispiti.konacnaOcena as ocena'
+                    'predmet.naziv as naziv',
+                    'predmet_program.espb as espb',
+                    'polozeni_ispiti.konacnaOcena as konacnaOcena'
                 )
+                ->orderBy('predmet_program.semestar')
                 ->get();
         } catch (QueryException $e) {
             report($e);
             throw new \RuntimeException('Грешка при учитавању положених испита: '.$e->getMessage(), 0, $e);
         }
 
+        $prosek = (float) ($ispiti->avg('konacnaOcena') ?? 0);
+        $datum = now()->format('d.m.Y');
+
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.polozeniStampa')
             ->with('student', $student)
-            ->with('ispiti', $ispiti);
+            ->with('ispiti', $ispiti)
+            ->with('datum', $datum)
+            ->with('prosek', $prosek)
+            ->with('totalIspiti', $ispiti->count());
 
         $contents = $view->render();
         $pdf->SetAutoPageBreak(true, 5);
         $pdf->SetTitle('Уверење о положеним испитима');
+        $pdf->SetMargins(12, 2, 12, true);
         $pdf->AddPage();
         $pdf->SetFont('freeserif', '', 10);
         $pdf->WriteHtml($contents, true);
-        $pdf->Output('Ispiti.pdf');
+
+        return $this->pdfResponse($pdf->Output('Ispiti.pdf', 'S'), 'Ispiti.pdf');
     }
 
     public function nastavniPlan(NastavniPlanData $data)

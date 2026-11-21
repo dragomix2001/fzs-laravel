@@ -194,18 +194,10 @@ class IspitPdfServiceTest extends TestCase
             'skolskaGodinaUpisa_id' => $skolskaGod->id,
         ]);
 
-        ob_start();
-        try {
-            $this->service->polozeniStampa($kandidat->id);
-        } catch (\Exception $e) {
-            ob_end_clean();
-            $this->assertTrue(true);
+        $response = $this->service->polozeniStampa($kandidat->id);
 
-            return;
-        }
-        ob_end_clean();
-
-        $this->assertTrue(true);
+        $this->assertSame('application/pdf', $response->headers->get('Content-Type'));
+        $this->assertStringStartsWith('%PDF-', $response->getContent());
     }
 
     public function test_nastavni_plan_loads_plan_data(): void

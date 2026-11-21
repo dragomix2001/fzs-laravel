@@ -17,6 +17,7 @@ use App\Services\DiplomskiRadService;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 use View;
 
@@ -225,13 +226,15 @@ class DiplomskiRadServiceTest extends TestCase
     // komisijaStampa() tests (mocked PDF)
     // =========================================================================
 
-    public function test_komisija_stampa_returns_redirect_when_diplomski_not_found()
+    public function test_komisija_stampa_returns_pdf_when_committee_data_is_missing()
     {
         $student = Kandidat::factory()->create();
 
         $response = $this->service->komisijaStampa($student);
 
-        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('application/pdf', $response->headers->get('Content-Type'));
+        $this->assertStringStartsWith('%PDF-', $response->getContent());
     }
 
     public function test_komisija_stampa_queried_with_correct_student_id()
@@ -279,14 +282,9 @@ class DiplomskiRadServiceTest extends TestCase
         $this->assertNotNull($polaganje);
     }
 
-    public function test_komisija_stampa_returns_null_when_pdf_is_generated()
+    public function test_komisija_stampa_returns_pdf_response()
     {
         $student = Kandidat::factory()->create();
-        $predmetProgram = PredmetProgram::factory()->create();
-        DiplomskiRad::factory()->create([
-            'kandidat_id' => $student->id,
-            'predmet_id' => $predmetProgram->id,
-        ]);
 
         $fakeView = new class
         {
@@ -315,6 +313,11 @@ class DiplomskiRadServiceTest extends TestCase
                 $this->calls[] = ['SetTitle', $title];
             }
 
+            public function SetMargins($left, $top, $right, $keepmargins = false)
+            {
+                $this->calls[] = ['SetMargins', $left, $top, $right, $keepmargins];
+            }
+
             public function AddPage()
             {
                 $this->calls[] = ['AddPage'];
@@ -330,9 +333,11 @@ class DiplomskiRadServiceTest extends TestCase
                 $this->calls[] = ['WriteHtml', $contents, $arg];
             }
 
-            public function Output($filename)
+            public function Output($filename, $destination)
             {
-                $this->calls[] = ['Output', $filename];
+                $this->calls[] = ['Output', $filename, $destination];
+
+                return '%PDF-fake';
             }
         };
 
@@ -348,8 +353,10 @@ class DiplomskiRadServiceTest extends TestCase
 
         $response = $service->komisijaStampa($student);
 
-        $this->assertNull($response);
-        $this->assertContains(['Output', 'Komisija.pdf'], $fakePdf->calls);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('application/pdf', $response->headers->get('Content-Type'));
+        $this->assertSame('%PDF-fake', $response->getContent());
+        $this->assertContains(['Output', 'Komisija.pdf', 'S'], $fakePdf->calls);
     }
 
     public function test_zapisnik_diplomski_returns_null_when_pdf_is_generated()

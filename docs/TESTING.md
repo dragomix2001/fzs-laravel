@@ -15,6 +15,16 @@ docker compose up -d app mysql redis queue
 ```
 
 The local application is available at `http://localhost:8080`.
+If Docker reports a permission error, prefix Docker commands with `sudo`;
+membership in the `docker` group grants root-equivalent access.
+On a new MySQL volume, Compose also creates the isolated `fzs_testing`
+database. If the `mysql_data` volume already existed before this setup, create
+it once with:
+
+```bash
+docker compose exec -T mysql mysql -uroot -proot123 -e \
+  "CREATE DATABASE IF NOT EXISTS fzs_testing; GRANT ALL PRIVILEGES ON fzs_testing.* TO 'fzs'@'%';"
+```
 
 ## Database configuration by execution context
 
@@ -23,15 +33,15 @@ runs. Do not copy values between these contexts.
 
 | Command location | Host | Port | Database | Username | Password |
 | --- | --- | --- | --- | --- | --- |
-| Host machine PHPUnit | `127.0.0.1` | `3307` | `fzs_testing` | `root` | `root123` |
-| Docker application and local Playwright | `mysql` | `3306` | `fzs` | `fzs` | `fzs123` |
+| Host machine PHPUnit | `127.0.0.1` | `3307` | `fzs_testing` | `fzs` | `fzs123` |
+| Docker application and PHPUnit | `mysql` | `3306` | `fzs_testing` for tests, `fzs` otherwise | `fzs` | `fzs123` |
 | GitHub Actions PHPUnit | `127.0.0.1` | GitHub service port | `fzs_testing` | `root` | `root` |
 
 `mysql:3306` is reachable only from containers on the Docker Compose network.
 `127.0.0.1:3307` is the host-machine mapping for that same local MySQL
-container. PHPUnit defaults are defined in `phpunit.xml`; use the explicit
-environment below when running tests from the host to avoid inheriting values
-from `.env`.
+container. PHPUnit forces `APP_ENV=testing` and `DB_DATABASE=fzs_testing`, but
+inherits the host, port and credentials from the environment so it works both
+on the host and inside Compose without targeting the development database.
 
 The default seeded administrator is:
 
@@ -50,14 +60,13 @@ composer test:unit
 composer test:feature
 ```
 
-To run PHPUnit against the Docker MySQL test database explicitly:
+To run PHPUnit from the host against the Docker MySQL test database:
 
 ```bash
 DB_HOST=127.0.0.1 \
 DB_PORT=3307 \
-DB_DATABASE=fzs_testing \
-DB_USERNAME=root \
-DB_PASSWORD=root123 \
+DB_USERNAME=fzs \
+DB_PASSWORD=fzs123 \
 ./vendor/bin/phpunit --no-coverage --testdox --do-not-fail-on-warning --do-not-fail-on-deprecation
 ```
 
@@ -65,6 +74,36 @@ The test harness migrates a clean database for tests that do not use Laravel's
 `RefreshDatabase` or `DatabaseTransactions` traits. The development demo data
 is not loaded into every PHPUnit test. `DemoDataSeederTest` seeds the demo data
 explicitly when it tests the seeder itself.
+
+The repeatable demo dataset is loaded by the normal seeding command and by the
+E2E CI job. To recreate it locally in the app database, run this only when it is
+safe to erase that database:
+
+```bash
+docker compose exec -T app php artisan migrate:fresh --seed --force
+```
+
+`TestDataSeeder` is idempotent and provides 60 OAS/MAS students covering all
+seven enrollment statuses. The default OAS / Sport and Physical Education /
+first-year list contains 20 active students. The dataset includes exam
+applications, passed results, pending registrations, and three complete
+thesis/defense/committee and diploma records. Each graduated demo student has
+at least three passed exams, so the diploma, committee, and passed-exam PDFs
+can be exercised with the same student.
+
+To add or refresh these records in an existing local app database without
+dropping its tables, run:
+
+```bash
+php artisan db:seed --class=TestDataSeeder
+```
+
+For the isolated PHPUnit database instead, run:
+
+```bash
+docker compose exec -T app sh -lc \
+  'DB_DATABASE=fzs_testing php artisan migrate:fresh --seed --force'
+```
 
 Useful focused commands:
 

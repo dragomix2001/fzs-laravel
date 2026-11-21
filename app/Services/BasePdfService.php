@@ -3,12 +3,21 @@
 namespace App\Services;
 
 use Elibyy\TCPDF\TCPDF;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
 use PDF;
 
 class BasePdfService
 {
+    protected function pdfResponse(string $contents, string $filename): Response
+    {
+        return response($contents, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.basename($filename).'"',
+        ]);
+    }
+
     protected function renderPdf(string $view, array $data, string $title): void
     {
         $view = View::make($view)->with($data);

@@ -210,6 +210,18 @@ class StudentControllerTest extends TestCase
         $response->assertViewHas('tipStudija', 2);
     }
 
+    public function test_student_list_actions_link_to_registered_routes(): void
+    {
+        $oasResponse = $this->get('/student/index/1?godina=1&studijskiProgramId='.$this->osnovniProgram->id);
+        $oasResponse->assertSee('/prijava/zaStudenta/'.$this->osnovniStudent->id, false)
+            ->assertSee('/skolarina/'.$this->osnovniStudent->id, false);
+
+        $masterResponse = $this->get('/student/index/2?studijskiProgramId='.$this->masterProgram->id);
+        $masterResponse->assertSee('/prijava/zaStudenta/'.$this->masterStudent->id, false)
+            ->assertSee('/izvestaji/potvrdeStudent/'.$this->masterStudent->id, false)
+            ->assertSee('/skolarina/'.$this->masterStudent->id, false);
+    }
+
     public function test_index_defaults_invalid_godina_to_first_year(): void
     {
         $response = $this->get('/student/index/1?godina=9&studijskiProgramId='.$this->osnovniProgram->id);

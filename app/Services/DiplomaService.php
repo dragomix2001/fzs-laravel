@@ -4,27 +4,22 @@ namespace App\Services;
 
 use App\DTOs\DiplomaAddData;
 use App\Models\Diploma;
+use App\Models\DiplomskiPrijavaOdbrane;
 use App\Models\GodinaStudija;
 use App\Models\Kandidat;
+use App\Models\PolozeniIspiti;
 use App\Models\Profesor;
 use App\Models\SkolskaGodUpisa;
 use App\Models\StudijskiProgram;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 
 class DiplomaService extends BasePdfService
 {
     public function potvrdeStudent(Kandidat $student)
     {
-        $pdf = $this->createPdf();
-        $view = View::make('izvestaji.potvrdeStudent')
+        return View::make('izvestaji.potvrdeStudent')
             ->with('student', $student);
-
-        $contents = $view->render();
-        $pdf->SetTitle('Потврда о студирању');
-        $pdf->AddPage();
-        $pdf->SetFont('freeserif', '', 12);
-        $pdf->WriteHtml($contents);
-        $pdf->Output('Potvrda.pdf');
     }
 
     public function diplomaUnos(Kandidat $student)
@@ -61,24 +56,27 @@ class DiplomaService extends BasePdfService
         return redirect()->route('student.index');
     }
 
-    public function diplomaStampa(Kandidat $student)
+    public function diplomaStampa(Kandidat $student): Response
     {
+        $student->loadMissing(['program.tipStudija', 'godinaUpisa', 'godinaStudija']);
         $diploma = Diploma::where('kandidat_id', $student->id)->first();
-
-        if (! $diploma) {
-            return redirect()->back()->with('error', 'Диплома није пронађена');
-        }
+        $diplomski = DiplomskiPrijavaOdbrane::where('kandidat_id', $student->id)->first();
+        $prosek = (float) (PolozeniIspiti::where('kandidat_id', $student->id)->avg('konacnaOcena') ?? 0);
 
         $pdf = $this->createPdf();
         $view = View::make('izvestaji.diplomaStampa')
             ->with('student', $student)
-            ->with('diploma', $diploma);
+            ->with('diploma', $diploma)
+            ->with('diplomski', $diplomski)
+            ->with('prosek', $prosek);
 
         $contents = $view->render();
-        $pdf->SetTitle('Диплома');
+        $pdf->SetTitle('Уверење');
+        $pdf->SetMargins(12, 2, 12, true);
         $pdf->AddPage();
         $pdf->SetFont('freeserif', '', 12);
         $pdf->WriteHtml($contents, true);
-        $pdf->Output('Diploma.pdf');
+
+        return $this->pdfResponse($pdf->Output('Uverenje.pdf', 'S'), 'Uverenje.pdf');
     }
 }

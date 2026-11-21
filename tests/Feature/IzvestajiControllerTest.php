@@ -255,7 +255,7 @@ class IzvestajiControllerTest extends TestCase
         $this->mock(DiplomskiRadService::class, function ($mock) {
             $mock->shouldReceive('komisijaStampa')
                 ->once()
-                ->andReturn(null);
+                ->andReturn(new Response('%PDF-test', 200, ['Content-Type' => 'application/pdf']));
         });
 
         $response = $this->actingAs($this->adminUser())->get("izvestaji/komisijaStampa/{$student->id}");
@@ -270,7 +270,7 @@ class IzvestajiControllerTest extends TestCase
             $mock->shouldReceive('polozeniStampa')
                 ->once()
                 ->with((string) $student->id)
-                ->andReturn(null);
+                ->andReturn(new Response('%PDF-test', 200, ['Content-Type' => 'application/pdf']));
         });
 
         $response = $this->actingAs($this->adminUser())->get("izvestaji/polozeniStampa/{$student->id}");

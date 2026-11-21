@@ -2,7 +2,7 @@
     <img src="{{"/"}}images/zaglavlje.png" alt="test alt attribute" width="250" height="65" border="0"/>
 </div>
 <hr>
-@if($ispiti != null)
+@if($ispiti->isNotEmpty())
     <div style="text-align: left"><label>___________________</label> <br/>
         <label>Датум: {{$datum}}</label>
     </div>
@@ -44,7 +44,7 @@
             </thead>
             @foreach($ispiti as $index => $ispit)
                 <tr>
-                    <td style="border: 1px solid black; width:35px;">{{$totalIspiti}}</td>
+                    <td style="border: 1px solid black; width:35px;">{{$index + 1}}</td>
                     <td style="border: 1px solid black; width:300px;">{{$ispit->naziv}}</td>
                     <td style="border: 1px solid black; width:50px; text-align: center;">{{$ispit->espb}}</td>
                     <td style="border: 1px solid black; width:50px; text-align: center;">{{$ispit->konacnaOcena}}</td>

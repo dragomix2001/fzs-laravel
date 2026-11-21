@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Services\BasePdfService;
 use Elibyy\TCPDF\TCPDF;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use Mockery;
 use PDF;
@@ -17,6 +18,25 @@ class BasePdfServiceTest extends TestCase
     {
         $service = new BasePdfService;
         $this->assertInstanceOf(BasePdfService::class, $service);
+    }
+
+    #[Test]
+    public function pdf_response_returns_inline_pdf_content(): void
+    {
+        $service = new class extends BasePdfService
+        {
+            public function respond(string $contents, string $filename): Response
+            {
+                return $this->pdfResponse($contents, $filename);
+            }
+        };
+
+        $response = $service->respond('%PDF-1.7 sample', 'sample.pdf');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/pdf', $response->headers->get('Content-Type'));
+        $this->assertSame('inline; filename="sample.pdf"', $response->headers->get('Content-Disposition'));
+        $this->assertSame('%PDF-1.7 sample', $response->getContent());
     }
 
     #[Test]
